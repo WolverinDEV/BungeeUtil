@@ -4,12 +4,12 @@
 <meta charset='utf-8'>
 <meta http-equiv="X-UA-Compatible" content="chrome=1">
 
-<link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css"
-	media="screen">
-<link rel="stylesheet" type="text/css"
-	href="stylesheets/github-dark.css" media="screen">
-<link rel="stylesheet" type="text/css" href="stylesheets/print.css"
-	media="print">
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src='javascripts/nprogress.js'></script>
+<link rel="stylesheet" type="text/css" href="stylesheets/nprogress.css" media="screen">
+<link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+<link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+<link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
 
 <title>BungeeUtil by WolverinDEV</title>
 </head>
@@ -47,7 +47,11 @@
 			</p>
 		</section>
 	</div>
-
+  <script>
+    $('body').show();
+    NProgress.start();
+    setTimeout(function() { NProgress.done(); $('.fade').removeClass('out'); }, 1000);
+  </script>
 
 </body>
 </html>
