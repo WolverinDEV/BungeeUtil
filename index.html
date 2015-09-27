@@ -14,7 +14,8 @@
 <title>BungeeUtil by WolverinDEV</title>
 </head>
 
-<body>
+<body style='display: none'>
+    <div id="side" style='display: none'>
 	<header>
 		<div class="container">
 			<h1>BungeeUtil</h1>
@@ -46,10 +47,11 @@
 			</p>
 		</section>
 	</div>
+	</div>
   <script>
-  $('body').hide();
+    $('body').show();
     NProgress.start();
-    setTimeout(function() { NProgress.done(); $('.fade').removeClass('out'); $('body').show();}, 1000);
+    setTimeout(function() { NProgress.done(); $('.fade').removeClass('out');$('.fade').show();}, 1000);
   </script>
 
 </body>
