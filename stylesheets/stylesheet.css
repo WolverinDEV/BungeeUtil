@@ -261,8 +261,8 @@ a {
 }
 
 .title_bungeeutil:before {
-	content: "BungeeUtil";
-	  font-size: 30px;
+  content: "./BungeeUtil";
+  font-size: 30px;
   line-height: 1.5;
   margin: 0 0 0 -40px;
   font-weight: bold;
@@ -273,4 +273,10 @@ a {
                0 0 10px rgba(181, 232, 83, 0.1);
   letter-spacing: -1px;
   -webkit-font-smoothing: antialiased;
+}
+.title_bungeeutil_disc:before {
+	content: "BungeeUtil is a ProtocollLib for BungeeCord with some Extras";
+	  font-size: 18px;
+  font-weight: 300;
+  color: #666;
 }
