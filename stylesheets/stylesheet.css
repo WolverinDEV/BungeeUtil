@@ -273,3 +273,7 @@ a {
 .cf {
   zoom:1;
 }
+
+.title_bungeeutil:before {
+	content: "BungeeUtil";
+}
