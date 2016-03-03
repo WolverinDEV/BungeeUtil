@@ -1,0 +1,28 @@
+####################################### 
+#              Timings:               # 
+#         Loging timings on/off       # 
+#                                     # 
+#              Updater:               # 
+#           Enable outo update        # 
+#                                     # 
+#             ByteBuffType:           # 
+#  The Used Buffer type for Packets   # 
+#  Avariable:                         # 
+#    - 'direct'                       # 
+#    - 'heap'                         # 
+#                                     # 
+#               Terminal:             # 
+#      Colors in terminal on/off      # 
+#                                     # 
+####################################### 
+timings: true
+updater: true
+byteBuffType: direct
+terminal:
+  colored: true
+debug:
+  ram-statistics: true
+loading:
+  inject:
+    buffer-size: 65536
+  fastboot: false
