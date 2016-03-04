@@ -25,15 +25,8 @@ import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 
 public class NormalPacketCreator extends AbstractPacketCreator {
 	@SuppressWarnings("unchecked")
-	private Constructor<? extends Packet>[] packetsId = new Constructor[((BigClientVersion.values().length & 0x0F) << 16) | ((Protocol.values().length & 0x0F) << 12) | ((Direction.values().length & 0x0F) << 8) | 0xFF]; // Calculate
-	                                                                                                                                                                   // max
-	                                                                                                                                                                   // packet
-	                                                                                                                                                                   // compressed
-	                                                                                                                                                                   // id.
-	                                                                                                                                                                   // (0xFF
-	                                                                                                                                                                   // =
-	                                                                                                                                                                   // Max
-	                                                                                                                                                                   // ID)
+	private Constructor<? extends Packet>[] packetsId = new Constructor[((BigClientVersion.values().length & 0x0F) << 16) | ((Protocol.values().length & 0x0F) << 12) | ((Direction.values().length & 0x0F) << 8) | 0xFF]; // Calculate max packet compressed id. (0xFF = Max ID)
+	@SuppressWarnings("unchecked")
 	private HashMap<Class<? extends Packet>, Integer>[] classToId = new HashMap[BigClientVersion.values().length];
 	
 	private List<Class<? extends Packet>> registerPackets = new ArrayList<>();

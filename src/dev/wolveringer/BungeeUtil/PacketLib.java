@@ -41,8 +41,7 @@ public class PacketLib {
 								if(clazz != Packet.class)
 									list.add(clazz);
 					super.put((Class<? extends Packet>) paramObject, list);
-				}catch (Exception e){
-				}
+				}catch (Exception e){ }
 			return super.get(paramObject);
 		}
 	};

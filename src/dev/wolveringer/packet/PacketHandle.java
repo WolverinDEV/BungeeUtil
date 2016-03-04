@@ -29,6 +29,7 @@ import dev.wolveringer.BungeeUtil.packets.PacketPlayInChat;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInCloseWindow;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInPosition;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInPositionLook;
+import dev.wolveringer.BungeeUtil.packets.PacketPlayInUpdateSign;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInWindowClick;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutChat;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutEntityDestroy;
@@ -46,6 +47,7 @@ import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardTeam.Action;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutSetSlot;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutStatistic;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutTransaction;
+import dev.wolveringer.BungeeUtil.packets.PacketPlayOutUpdateSign;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutWindowItems;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOutEntityAbstract;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayXXXHeldItemSlot;
@@ -342,8 +344,8 @@ public class PacketHandle {
 		if(pack instanceof PacketPlayOutChat){
 			//System.out.print(((PacketPlayOutChat)p).toString());
 		}
-		if(pack instanceof PacketPlayOutEntityMetadata){
-			//System.out.print(((PacketPlayOutEntityMetadata)p).toString());
+		if(pack instanceof PacketPlayOutUpdateSign){
+			System.out.print(Arrays.asList(((PacketPlayOutUpdateSign)pack).getLines()));
 		}
 		if(pack instanceof PacketPlayOutNamedEntitySpawn){
 			System.out.print("X:"+((PacketPlayOutNamedEntitySpawn)pack).toString());

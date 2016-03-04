@@ -27,7 +27,6 @@ public abstract class Packet {
 	}
 	
 	static {
-		System.out.println("");
 		registerPacket(Protocol.LOGIN, Direction.TO_CLIENT, 0x00,0x00, PacketLoginDisconnect.class);
 		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x02,0x0F, PacketPlayOutChat.class); //->0x0F
@@ -61,6 +60,7 @@ public abstract class Packet {
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x38,0x2D, PacketPlayOutPlayerInfo.class);//-> 0x2D
 		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x09,0x37, PacketPlayOutHeldItemSlot.class);//-> 0x37
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x33, 0x46, PacketPlayOutUpdateSign.class);
 		
 		//TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x0E, PacketPlayOutEntityAbstract.class);//Delete dont needed?
 		//TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x0F, PacketPlayOutEntityAbstract.class);//Delete dont needed?

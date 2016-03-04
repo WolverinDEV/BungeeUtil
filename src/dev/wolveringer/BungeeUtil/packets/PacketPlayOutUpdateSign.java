@@ -18,8 +18,6 @@ public class PacketPlayOutUpdateSign extends Packet implements PacketPlayOut{
 		this.lines = lines;
 	}
 
-
-
 	@Override
 	public void read(PacketDataSerializer s) {
 		loc = s.readBlockPosition();
