@@ -5,9 +5,9 @@ import dev.wolveringer.api.position.Location;
 import dev.wolveringer.packet.PacketDataSerializer;
 
 public class PacketPlayInPositionLook extends PacketPlayInPosition {
-	public PacketPlayInPositionLook() {
-		super(0x06);
-	}
+	
+	public PacketPlayInPositionLook() {}
+	
 	@Override
 	public void read(PacketDataSerializer s) {
 		Double x = s.readDouble();

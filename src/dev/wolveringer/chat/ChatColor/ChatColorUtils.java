@@ -3,14 +3,15 @@ package dev.wolveringer.chat.ChatColor;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import net.md_5.bungee.api.ChatColor;
+
 import com.google.common.collect.Maps;
 
 import dev.wolveringer.chat.ChatModifier;
-import net.md_5.bungee.api.ChatColor;
 
 public class ChatColorUtils {
 	private final static Map<Character, ChatColor> BY_CHAR = Maps.newHashMap();
-	public static final char COLOR_CHAR = '\u00A7';
+	public static final char COLOR_CHAR = '§';//\u00A7
 	private static final Pattern STRIP_FORMAT_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[A-FK-OR]");
 	private static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9]");
 	static{

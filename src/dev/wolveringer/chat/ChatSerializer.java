@@ -4,6 +4,10 @@ import java.lang.reflect.Type;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -17,9 +21,6 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import dev.wolveringer.chat.ChatColor.ChatColorUtils;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.chat.ComponentSerializer;
 
 @SuppressWarnings("rawtypes")
 public class ChatSerializer implements JsonDeserializer, JsonSerializer {
@@ -99,15 +100,15 @@ public class ChatSerializer implements JsonDeserializer, JsonSerializer {
 
 	public static IChatBaseComponent fromMessage(String s) {
 		ChatComponentText comp = new ChatComponentText("");
-		if(!s.startsWith("§"))
-			s = "§f" + s;
+		if(!s.startsWith(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+""))
+			s = ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"f" + s;
 		ChatColor color = ChatColor.WHITE;
 		boolean bold = false;
 		boolean italic = false;
 		boolean underlined = false;
 		boolean strikethrough = false;
 		boolean obfuscated = false;
-		String[] all = s.split("§");
+		String[] all = s.split(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"");
 		for(int i = 0;i < all.length;i++){
 			if(i + 1 < all.length){
 				ChatColor c = ChatColor.getByChar(all[i + 1].charAt(0));

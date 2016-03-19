@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardDisplayObjective;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardDisplayObjective.Position;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardObjective;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardScore;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardObjective.Action;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardObjective.Type;
+import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardScore;
 
 public final class Objektive {
 	protected Scoreboard owner;

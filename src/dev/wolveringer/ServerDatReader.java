@@ -7,17 +7,23 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.util.UUID;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.Proxy.Type;
+import java.net.Socket;
 
+import net.md_5.bungee.api.ChatColor;
+import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.nbt.NBTBase;
 import dev.wolveringer.nbt.NBTCompressedStreamTools;
 import dev.wolveringer.nbt.NBTTagCompound;
 import dev.wolveringer.nbt.NBTTagList;
 import dev.wolveringer.nbt.NBTTagString;
-import net.md_5.bungee.api.ChatColor;
 
 public class ServerDatReader {
 	public static void main(String[] args) throws Exception {
+		if(true)
+			return;
 		File f = new File("/home/wolverindev/.minecraft/servers.dat");
 		FileInputStream in = new FileInputStream(f);
 		NBTTagCompound base = NBTCompressedStreamTools.read(new DataInputStream(new BufferedInputStream(in)));
@@ -25,7 +31,7 @@ public class ServerDatReader {
 		for(NBTBase comp : list.asList()){
 			NBTTagCompound c = (NBTTagCompound) comp;
 			c.set("name", new NBTTagString("§a§l§n"+reset(c.getString("name"))));
-			System.out.println(comp);
+			Main.sendMessage(comp.toString());
 		}
 		FileOutputStream out = new FileOutputStream(f);
 		write(base, out);
@@ -48,4 +54,5 @@ public class ServerDatReader {
 			}
 		}
 	}
+	
 }

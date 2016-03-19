@@ -1,9 +1,10 @@
 package dev.wolveringer.network;
 
+import io.netty.buffer.ByteBuf;
+
 import java.lang.reflect.Field;
 import java.util.concurrent.TimeUnit;
 
-import io.netty.buffer.ByteBuf;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.ServerConnection;
 import net.md_5.bungee.UserConnection;
@@ -11,6 +12,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.config.ListenerInfo;
 import net.md_5.bungee.connection.InitialHandler;
+import net.md_5.bungee.netty.PipelineUtils;
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.packet.Kick;
 import net.md_5.bungee.protocol.packet.LoginSuccess;
@@ -90,7 +92,7 @@ public abstract class IInitialHandler extends InitialHandler {
 	}
 
 	public void disconnect(Exception e) {
-		String message = "§4Error Message: §b" + e.getLocalizedMessage() + "\n";
+		String message = ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"4Error Message: "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"b" + e.getLocalizedMessage() + "\n";
 		int deep = 10;
 		for(int i = 0;i < (e.getStackTrace().length > deep ? deep : e.getStackTrace().length);i++){
 			StackTraceElement ex = e.getStackTrace()[i];
@@ -145,7 +147,7 @@ public abstract class IInitialHandler extends InitialHandler {
 	}
 
 	private String format(StackTraceElement e) {
-		return "§eat §5" + e.getClassName() + ".§b" + e.getMethodName() + (e.getFileName() != null ? "(§a" + e.getFileName() + "§b)" : (e.getFileName() != null) && (e.getLineNumber() >= 0) ? "(§a" + e.getFileName() + "§b:§c" + e.getLineNumber() + "§b)" : e.isNativeMethod() ? "§1(Native Method)" : "§c(Unknown Source)");
+		return ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"eat "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"5" + e.getClassName() + "."+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"b" + e.getMethodName() + (e.getFileName() != null ? "("+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"a" + e.getFileName() + ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"b)" : (e.getFileName() != null) && (e.getLineNumber() >= 0) ? "("+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"a" + e.getFileName() + ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"b:"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"c" + e.getLineNumber() + ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"b)" : e.isNativeMethod() ? ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"1(Native Method)" : ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"c(Unknown Source)");
 	}
 
 	@Deprecated
@@ -236,7 +238,7 @@ public abstract class IInitialHandler extends InitialHandler {
 	@Override
 	public String toString() {
 		if(Configuration.isTerminalColored())
-			return "[" + (getHandshake().getRequestedProtocol() == 2 ? "§aGAME" : "§ePING") + "§7][" + (getHandshake().getRequestedProtocol() == 0 ? "§6" + getName() : "§c" + getAddress().getHostString()) + "§7]";
+			return "[" + (getHandshake().getRequestedProtocol() == 2 ? ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"aGAME" : ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"ePING") + ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7][" + (getHandshake().getRequestedProtocol() == 0 ? ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"6" + getName() : ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"c" + getAddress().getHostString()) + ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7]";
 		else
 			return super.toString();
 	}

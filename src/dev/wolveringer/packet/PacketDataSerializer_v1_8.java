@@ -1,14 +1,5 @@
 package dev.wolveringer.packet;
 
-import com.google.common.base.Charsets;
-
-import dev.wolveringer.BungeeUtil.item.Item;
-import dev.wolveringer.api.position.BlockPosition;
-import dev.wolveringer.chat.ChatSerializer;
-import dev.wolveringer.chat.IChatBaseComponent;
-import dev.wolveringer.nbt.NBTCompressedStreamTools;
-import dev.wolveringer.nbt.NBTReadLimiter;
-import dev.wolveringer.nbt.NBTTagCompound;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
@@ -19,6 +10,16 @@ import java.io.DataOutput;
 import java.util.UUID;
 
 import net.md_5.bungee.protocol.DefinedPacket;
+
+import com.google.common.base.Charsets;
+
+import dev.wolveringer.BungeeUtil.item.Item;
+import dev.wolveringer.api.position.BlockPosition;
+import dev.wolveringer.chat.ChatSerializer;
+import dev.wolveringer.chat.IChatBaseComponent;
+import dev.wolveringer.nbt.NBTCompressedStreamTools;
+import dev.wolveringer.nbt.NBTReadLimiter;
+import dev.wolveringer.nbt.NBTTagCompound;
 
 public class PacketDataSerializer_v1_8 extends PacketDataSerializer {
 	public PacketDataSerializer_v1_8(byte pid) {

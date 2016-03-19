@@ -8,7 +8,7 @@ import dev.wolveringer.BungeeUtil.OperationCalback;
 import dev.wolveringer.BungeeUtil.gameprofile.GameProfile;
 import dev.wolveringer.BungeeUtil.gameprofile.GameProfileSerializer;
 import dev.wolveringer.BungeeUtil.gameprofile.Skin;
-import dev.wolveringer.BungeeUtil.gameprofile.SkinCash;
+import dev.wolveringer.BungeeUtil.gameprofile.SkinFactory;
 import dev.wolveringer.BungeeUtil.gameprofile.UUIDFetcher;
 import dev.wolveringer.BungeeUtil.item.Item;
 import dev.wolveringer.nbt.NBTTagCompound;
@@ -34,7 +34,7 @@ public class SkullMeta extends CraftItemMeta {
 		if(p == null)
 			p = new GameProfile(owner, "");
 		p.setId(owner);
-		SkinCash.getSkin(owner, new OperationCalback<Skin>() {
+		SkinFactory.getSkin(owner, new OperationCalback<Skin>() {
 			public void done(Skin response) {
 				setSkin(response);
 			};

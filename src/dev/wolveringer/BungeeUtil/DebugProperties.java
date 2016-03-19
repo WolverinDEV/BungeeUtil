@@ -1,7 +1,6 @@
 package dev.wolveringer.BungeeUtil;
 
 public class DebugProperties {
-	public static final boolean RAM_LOGGER = true;
 	public static final boolean CONSOHLE_COLORED_OUTPUT = true;
 	public static final boolean CONSOHLE_CONNECTION_INFORMATION = true;
 	public static final boolean PACKET_ERROR_DISCCONNECT = true;

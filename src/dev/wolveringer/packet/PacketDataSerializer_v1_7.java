@@ -1,8 +1,6 @@
 package dev.wolveringer.packet;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufProcessor;
-import io.netty.buffer.Unpooled;
 
 import java.util.UUID;
 

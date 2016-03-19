@@ -13,9 +13,10 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
 
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
+
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
-import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import dev.wolveringer.configuration.Configuration;
 import dev.wolveringer.configuration.InvalidConfigurationException;

@@ -81,4 +81,9 @@ public class PacketPlayInUseEntity extends Packet implements PacketPlayIn {
 	/**
 	 *  
 	 */
+
+	@Override
+	public String toString() {
+		return "PacketPlayInUseEntity [target=" + target + ", action=" + action + ", location=" + location + ", hand=" + hand + "]";
+	}
 }

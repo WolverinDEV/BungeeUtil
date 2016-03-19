@@ -1,19 +1,21 @@
 package dev.wolveringer.network.channel.init;
 
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelInitializer;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import dev.wolveringer.network.IIInitialHandler;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.netty.PipelineUtils;
+import dev.wolveringer.BungeeUtil.Main;
+import dev.wolveringer.network.IIInitialHandler;
 
 public abstract class ChannelInizializer extends ChannelInitializer<Channel> {
 	private static ChannelInizializer init;
 	
 	public static void setChannelInitializer(ChannelInizializer init) {
-		System.out.println("Set channel inizializer to "+init.getClass().getName());
+		Main.sendMessage("Set channel inizializer to "+init.getClass().getName());
 		ChannelInizializer.init = init;
 	}
 	
@@ -37,8 +39,8 @@ public abstract class ChannelInizializer extends ChannelInitializer<Channel> {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			BungeeCord.getInstance().getConsole().sendMessage("§e§7[BungeeUntil§7] §cError while loading ProtocolLIB §4Code: 002");
-			BungeeCord.getInstance().getConsole().sendMessage("§e§7[BungeeUntil§7] §cDisable ProtocolLIB");
+			BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"e"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cError while loading ProtocolLIB "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"4Code: 002");
+			BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"e"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cDisable ProtocolLIB");
 		}
 	}
 	

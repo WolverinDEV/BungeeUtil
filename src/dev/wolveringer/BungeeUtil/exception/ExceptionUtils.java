@@ -38,6 +38,21 @@ public class ExceptionUtils {
 		return null;
 	}
 
+	public static StackTraceElement getCallerStackTraceElement() {
+		StackTraceElement[] _currunt = Thread.currentThread().getStackTrace();
+		for(int i = 0;i<_currunt.length;i++){
+			StackTraceElement e = _currunt[i];
+			if(e != null && !e.getClassName().equals(class_name) && !e.getMethodName().equalsIgnoreCase("getStackTrace")){
+				if(i+1<_currunt.length){
+					return null;
+				}
+				else
+					return _currunt[i+1];
+			}
+		}
+		return null;
+	}
+	
 	public static Throwable replaceCurruntStackTraceElement(Throwable in) {
 		return replaceStackTraceElement(in, getCurruntMethodeStackTraceElement(), null);
 	}

@@ -1,17 +1,12 @@
 package dev.wolveringer.BungeeUtil.packets;
 
+import io.netty.buffer.ByteBuf;
+
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import dev.wolveringer.BungeeUtil.ClientVersion;
-import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
-import dev.wolveringer.BungeeUtil.Main;
-import dev.wolveringer.BungeeUtil.Player;
-import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayIn;
-import dev.wolveringer.network.IIInitialHandler;
-import io.netty.buffer.ByteBuf;
 import javassist.CannotCompileException;
 import javassist.ClassClassPath;
 import javassist.ClassPool;
@@ -22,6 +17,12 @@ import javassist.bytecode.Bytecode;
 import javassist.bytecode.ConstPool;
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
+import dev.wolveringer.BungeeUtil.ClientVersion;
+import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
+import dev.wolveringer.BungeeUtil.Main;
+import dev.wolveringer.BungeeUtil.Player;
+import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayIn;
+import dev.wolveringer.network.IIInitialHandler;
 
 public class NormalPacketCreator extends AbstractPacketCreator {
 	@SuppressWarnings("unchecked")
@@ -94,7 +95,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 	}
 	
 	public int loadPacket(BigClientVersion version,Protocol p, Direction d, Integer id, Class<? extends Packet> clazz) {
-		clazz = getPacketWithDefaultConstructor(clazz);
+		//clazz = getPacketWithDefaultConstructor(clazz);
 		int compressedId = calculate(version,p, d, id);
 		classToId[version.ordinal()].put(clazz, compressedId);
 		return compressedId;
@@ -102,10 +103,13 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 	
 	
 	public void registerPacket(Protocol p, Direction d, Integer v1_8_id, Integer v1_9_id, Class<? extends Packet> clazz) {
-		clazz = getPacketWithDefaultConstructor(clazz);
+		//clazz = getPacketWithDefaultConstructor(clazz);
 		try {
+			if(v1_8_id != null){
 			packetsId[loadPacket(BigClientVersion.v1_7,p, d, v1_8_id, clazz)] = (Constructor<? extends Packet>) clazz.getConstructor();
 			packetsId[loadPacket(BigClientVersion.v1_8,p, d, v1_8_id, clazz)] = (Constructor<? extends Packet>) clazz.getConstructor();
+			}
+			if(v1_9_id != null)
 			packetsId[loadPacket(BigClientVersion.v1_9,p, d, v1_9_id, clazz)] = (Constructor<? extends Packet>) clazz.getConstructor();
 		}
 		catch (NoSuchMethodException | SecurityException ex) {
@@ -114,6 +118,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		changed = true;
 	}
 	
+	/*
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	private Class<? extends Packet> getPacketWithDefaultConstructor(Class<? extends Packet> in) {
 		try {
@@ -129,8 +134,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 			Main.sendMessage("Adding default constructor to class: " + in.getName());
 			ClassPool pool = IIInitialHandler.pool();
 			pool.insertClassPath(new ClassClassPath(in));
-			pool.insertClassPath(new ClassClassPath(PacketPlayIn.class));
-			CtClass ct_in = pool.get(in.getName());// ;
+			CtClass ct_in = pool.get(in.getName());
 			ct_in.setName(in.getName() + "$-1");
 			ct_in.addConstructor(defaultConstructor(ct_in));
 			return ct_in.toClass(IIInitialHandler.getClassLoader());
@@ -159,6 +163,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		cons.getMethodInfo2().setCodeAttribute(code.toCodeAttribute());
 		return cons;
 	}
+	*/
 	
 	public void unregisterPacket(BigClientVersion version,Protocol p, Direction d, Integer id) {
 		packetsId[calculate(version,p, d, id)] = null;

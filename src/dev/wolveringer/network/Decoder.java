@@ -1,27 +1,26 @@
 package dev.wolveringer.network;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+
 import java.lang.reflect.Field;
 import java.util.List;
 
-import dev.wolveringer.BungeeUtil.ClientVersion;
-import dev.wolveringer.BungeeUtil.PacketHandleEvent;
-import dev.wolveringer.BungeeUtil.PacketLib;
-import dev.wolveringer.BungeeUtil.Propeties;
-import dev.wolveringer.BungeeUtil.packets.Packet;
-import dev.wolveringer.network.channel.init.ChannelInizializer;
-import dev.wolveringer.packet.ByteBuffCreator;
-import dev.wolveringer.packet.PacketHandle;
-import dev.wolveringer.profiler.Profiler;
-import dev.wolveringer.strings.Messages;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerContext;
 import net.md_5.bungee.protocol.BadPacketException;
 import net.md_5.bungee.protocol.DefinedPacket;
 import net.md_5.bungee.protocol.MinecraftDecoder;
 import net.md_5.bungee.protocol.PacketWrapper;
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
+import dev.wolveringer.BungeeUtil.ClientVersion;
+import dev.wolveringer.BungeeUtil.PacketHandleEvent;
+import dev.wolveringer.BungeeUtil.PacketLib;
+import dev.wolveringer.BungeeUtil.Propeties;
+import dev.wolveringer.BungeeUtil.packets.Packet;
+import dev.wolveringer.packet.ByteBuffCreator;
+import dev.wolveringer.packet.PacketHandle;
+import dev.wolveringer.profiler.Profiler;
+import dev.wolveringer.strings.Messages;
 
 public class Decoder extends MinecraftDecoder {
 	private static final Field field_protocol = getField(MinecraftDecoder.class, "protocol");
@@ -161,7 +160,7 @@ public class Decoder extends MinecraftDecoder {
 						Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.read")); //$NON-NLS-1$
 						throw new BadPacketException("Did not read all bytes from packet " + bungeePacket.getClass() + " " + packetId + " Protocol " + this.getProtocolVersion() + " Direction " + prot+"! Left bytes: "+in.readableBytes());
 					}
-					//System.out.println("Decode: " + bungeePacket);
+					//Main.sendMessage("Decode: " + bungeePacket);
 				}else{
 					in.skipBytes(in.readableBytes());
 				}

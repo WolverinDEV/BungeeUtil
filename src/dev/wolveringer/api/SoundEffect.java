@@ -1,6 +1,36 @@
 package dev.wolveringer.api;
 
+import java.util.ArrayList;
+
+import dev.wolveringer.BungeeUtil.ClientVersion;
+import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
+
 public class SoundEffect {
+	public static enum SoundCategory {
+		MASTER("master"),
+		MUSIC("music"),
+		RECORDS("record"),
+		WEATHER("weather"),
+		BLOCKS("block"),
+		HOSTILE("hostile"),
+		NEUTRAL("neutral"),
+		PLAYERS("player"),
+		AMBIENT("ambient"),
+		VOICE("voice");
+		
+		private String name;
+		private SoundCategory(String name) {
+			this.name = name;
+		}
+		public String getName() {
+			return name;
+		}
+	}
+	
+	private static ArrayList<SoundEffect> sounds = new ArrayList<SoundEffect>();
+	private static int v1_9_id = 0;
+	
+	/*
 	public static final SoundEffect FIREWORKS_BLAST_FAR1 = new SoundEffect("fireworks.blast_far1");
 	public static final SoundEffect FIREWORKS_BLAST1 = new SoundEffect("fireworks.blast1");
 	public static final SoundEffect FIREWORKS_LARGEBLAST_FAR1 = new SoundEffect("fireworks.largeBlast_far1");
@@ -159,12 +189,503 @@ public class SoundEffect {
 	public static final SoundEffect STEP_WOOD = new SoundEffect("step.wood");
 	public static final SoundEffect TILE_PISTON_IN = new SoundEffect("tile.piston.in");
 	public static final SoundEffect TILE_PISTON_OUT = new SoundEffect("tile.piston.out");
+	*/
+	
+	static {
+		 	addSound("ambient.cave",BigClientVersion.v1_9);
+		    addSound("block.anvil.break",BigClientVersion.v1_9);
+		    addSound("block.anvil.destroy",BigClientVersion.v1_9);
+		    addSound("block.anvil.fall",BigClientVersion.v1_9);
+		    addSound("block.anvil.hit",BigClientVersion.v1_9);
+		    addSound("block.anvil.land",BigClientVersion.v1_9);
+		    addSound("block.anvil.place",BigClientVersion.v1_9);
+		    addSound("block.anvil.step",BigClientVersion.v1_9);
+		    addSound("block.anvil.use",BigClientVersion.v1_9);
+		    addSound("block.brewing_stand.brew",BigClientVersion.v1_9);
+		    addSound("block.chest.close",BigClientVersion.v1_9);
+		    addSound("block.chest.locked",BigClientVersion.v1_9);
+		    addSound("block.chest.open",BigClientVersion.v1_9);
+		    addSound("block.chorus_flower.death",BigClientVersion.v1_9);
+		    addSound("block.chorus_flower.grow",BigClientVersion.v1_9);
+		    addSound("block.cloth.break",BigClientVersion.v1_9);
+		    addSound("block.cloth.fall",BigClientVersion.v1_9);
+		    addSound("block.cloth.hit",BigClientVersion.v1_9);
+		    addSound("block.cloth.place",BigClientVersion.v1_9);
+		    addSound("block.cloth.step",BigClientVersion.v1_9);
+		    addSound("block.comparator.click",BigClientVersion.v1_9);
+		    addSound("block.dispenser.dispense",BigClientVersion.v1_9);
+		    addSound("block.dispenser.fail",BigClientVersion.v1_9);
+		    addSound("block.dispenser.launch",BigClientVersion.v1_9);
+		    addSound("block.end_gateway.spawn",BigClientVersion.v1_9);
+		    addSound("block.enderchest.close",BigClientVersion.v1_9);
+		    addSound("block.enderchest.open",BigClientVersion.v1_9);
+		    addSound("block.fence_gate.close",BigClientVersion.v1_9);
+		    addSound("block.fence_gate.open",BigClientVersion.v1_9);
+		    addSound("block.fire.ambient",BigClientVersion.v1_9);
+		    addSound("block.fire.extinguish",BigClientVersion.v1_9);
+		    addSound("block.furnace.fire_crackle",BigClientVersion.v1_9);
+		    addSound("block.glass.break",BigClientVersion.v1_9);
+		    addSound("block.glass.fall",BigClientVersion.v1_9);
+		    addSound("block.glass.hit",BigClientVersion.v1_9);
+		    addSound("block.glass.place",BigClientVersion.v1_9);
+		    addSound("block.glass.step",BigClientVersion.v1_9);
+		    addSound("block.grass.break",BigClientVersion.v1_9);
+		    addSound("block.grass.fall",BigClientVersion.v1_9);
+		    addSound("block.grass.hit",BigClientVersion.v1_9);
+		    addSound("block.grass.place",BigClientVersion.v1_9);
+		    addSound("block.grass.step",BigClientVersion.v1_9);
+		    addSound("block.gravel.break",BigClientVersion.v1_9);
+		    addSound("block.gravel.fall",BigClientVersion.v1_9);
+		    addSound("block.gravel.hit",BigClientVersion.v1_9);
+		    addSound("block.gravel.place",BigClientVersion.v1_9);
+		    addSound("block.gravel.step",BigClientVersion.v1_9);
+		    addSound("block.iron_door.close",BigClientVersion.v1_9);
+		    addSound("block.iron_door.open",BigClientVersion.v1_9);
+		    addSound("block.iron_trapdoor.close",BigClientVersion.v1_9);
+		    addSound("block.iron_trapdoor.open",BigClientVersion.v1_9);
+		    addSound("block.ladder.break",BigClientVersion.v1_9);
+		    addSound("block.ladder.fall",BigClientVersion.v1_9);
+		    addSound("block.ladder.hit",BigClientVersion.v1_9);
+		    addSound("block.ladder.place",BigClientVersion.v1_9);
+		    addSound("block.ladder.step",BigClientVersion.v1_9);
+		    addSound("block.lava.ambient",BigClientVersion.v1_9);
+		    addSound("block.lava.extinguish",BigClientVersion.v1_9);
+		    addSound("block.lava.pop",BigClientVersion.v1_9);
+		    addSound("block.lever.click",BigClientVersion.v1_9);
+		    addSound("block.metal.break",BigClientVersion.v1_9);
+		    addSound("block.metal.fall",BigClientVersion.v1_9);
+		    addSound("block.metal.hit",BigClientVersion.v1_9);
+		    addSound("block.metal.place",BigClientVersion.v1_9);
+		    addSound("block.metal.step",BigClientVersion.v1_9);
+		    addSound("block.metal_pressureplate.click_off",BigClientVersion.v1_9);
+		    addSound("block.metal_pressureplate.click_on",BigClientVersion.v1_9);
+		    addSound("block.note.basedrum",BigClientVersion.v1_9);
+		    addSound("block.note.bass",BigClientVersion.v1_9);
+		    addSound("block.note.harp",BigClientVersion.v1_9);
+		    addSound("block.note.hat",BigClientVersion.v1_9);
+		    addSound("block.note.pling",BigClientVersion.v1_9);
+		    addSound("block.note.snare",BigClientVersion.v1_9);
+		    addSound("block.piston.contract",BigClientVersion.v1_9);
+		    addSound("block.piston.extend",BigClientVersion.v1_9);
+		    addSound("block.portal.ambient",BigClientVersion.v1_9);
+		    addSound("block.portal.travel",BigClientVersion.v1_9);
+		    addSound("block.portal.trigger",BigClientVersion.v1_9);
+		    addSound("block.redstone_torch.burnout",BigClientVersion.v1_9);
+		    addSound("block.sand.break",BigClientVersion.v1_9);
+		    addSound("block.sand.fall",BigClientVersion.v1_9);
+		    addSound("block.sand.hit",BigClientVersion.v1_9);
+		    addSound("block.sand.place",BigClientVersion.v1_9);
+		    addSound("block.sand.step",BigClientVersion.v1_9);
+		    addSound("block.slime.break",BigClientVersion.v1_9);
+		    addSound("block.slime.fall",BigClientVersion.v1_9);
+		    addSound("block.slime.hit",BigClientVersion.v1_9);
+		    addSound("block.slime.place",BigClientVersion.v1_9);
+		    addSound("block.slime.step",BigClientVersion.v1_9);
+		    addSound("block.snow.break",BigClientVersion.v1_9);
+		    addSound("block.snow.fall",BigClientVersion.v1_9);
+		    addSound("block.snow.hit",BigClientVersion.v1_9);
+		    addSound("block.snow.place",BigClientVersion.v1_9);
+		    addSound("block.snow.step",BigClientVersion.v1_9);
+		    addSound("block.stone.break",BigClientVersion.v1_9);
+		    addSound("block.stone.fall",BigClientVersion.v1_9);
+		    addSound("block.stone.hit",BigClientVersion.v1_9);
+		    addSound("block.stone.place",BigClientVersion.v1_9);
+		    addSound("block.stone.step",BigClientVersion.v1_9);
+		    addSound("block.stone_button.click_off",BigClientVersion.v1_9);
+		    addSound("block.stone_button.click_on",BigClientVersion.v1_9);
+		    addSound("block.stone_pressureplate.click_off",BigClientVersion.v1_9);
+		    addSound("block.stone_pressureplate.click_on",BigClientVersion.v1_9);
+		    addSound("block.tripwire.attach",BigClientVersion.v1_9);
+		    addSound("block.tripwire.click_off",BigClientVersion.v1_9);
+		    addSound("block.tripwire.click_on",BigClientVersion.v1_9);
+		    addSound("block.tripwire.detach",BigClientVersion.v1_9);
+		    addSound("block.water.ambient",BigClientVersion.v1_9);
+		    addSound("block.waterlily.place",BigClientVersion.v1_9);
+		    addSound("block.wood.break",BigClientVersion.v1_9);
+		    addSound("block.wood.fall",BigClientVersion.v1_9);
+		    addSound("block.wood.hit",BigClientVersion.v1_9);
+		    addSound("block.wood.place",BigClientVersion.v1_9);
+		    addSound("block.wood.step",BigClientVersion.v1_9);
+		    addSound("block.wood_button.click_off",BigClientVersion.v1_9);
+		    addSound("block.wood_button.click_on",BigClientVersion.v1_9);
+		    addSound("block.wood_pressureplate.click_off",BigClientVersion.v1_9);
+		    addSound("block.wood_pressureplate.click_on",BigClientVersion.v1_9);
+		    addSound("block.wooden_door.close",BigClientVersion.v1_9);
+		    addSound("block.wooden_door.open",BigClientVersion.v1_9);
+		    addSound("block.wooden_trapdoor.close",BigClientVersion.v1_9);
+		    addSound("block.wooden_trapdoor.open",BigClientVersion.v1_9);
+		    addSound("enchant.thorns.hit",BigClientVersion.v1_9);
+		    addSound("entity.armorstand.break",BigClientVersion.v1_9);
+		    addSound("entity.armorstand.fall",BigClientVersion.v1_9);
+		    addSound("entity.armorstand.hit",BigClientVersion.v1_9);
+		    addSound("entity.armorstand.place",BigClientVersion.v1_9);
+		    addSound("entity.arrow.hit",BigClientVersion.v1_9);
+		    addSound("entity.arrow.hit_player",BigClientVersion.v1_9);
+		    addSound("entity.arrow.shoot",BigClientVersion.v1_9);
+		    addSound("entity.bat.ambient",BigClientVersion.v1_9);
+		    addSound("entity.bat.death",BigClientVersion.v1_9);
+		    addSound("entity.bat.hurt",BigClientVersion.v1_9);
+		    addSound("entity.bat.loop",BigClientVersion.v1_9);
+		    addSound("entity.bat.takeoff",BigClientVersion.v1_9);
+		    addSound("entity.blaze.ambient",BigClientVersion.v1_9);
+		    addSound("entity.blaze.burn",BigClientVersion.v1_9);
+		    addSound("entity.blaze.death",BigClientVersion.v1_9);
+		    addSound("entity.blaze.hurt",BigClientVersion.v1_9);
+		    addSound("entity.blaze.shoot",BigClientVersion.v1_9);
+		    addSound("entity.bobber.splash",BigClientVersion.v1_9);
+		    addSound("entity.bobber.throw",BigClientVersion.v1_9);
+		    addSound("entity.cat.ambient",BigClientVersion.v1_9);
+		    addSound("entity.cat.death",BigClientVersion.v1_9);
+		    addSound("entity.cat.hiss",BigClientVersion.v1_9);
+		    addSound("entity.cat.hurt",BigClientVersion.v1_9);
+		    addSound("entity.cat.purr",BigClientVersion.v1_9);
+		    addSound("entity.cat.purreow",BigClientVersion.v1_9);
+		    addSound("entity.chicken.ambient",BigClientVersion.v1_9);
+		    addSound("entity.chicken.death",BigClientVersion.v1_9);
+		    addSound("entity.chicken.egg",BigClientVersion.v1_9);
+		    addSound("entity.chicken.hurt",BigClientVersion.v1_9);
+		    addSound("entity.chicken.step",BigClientVersion.v1_9);
+		    addSound("entity.cow.ambient",BigClientVersion.v1_9);
+		    addSound("entity.cow.death",BigClientVersion.v1_9);
+		    addSound("entity.cow.hurt",BigClientVersion.v1_9);
+		    addSound("entity.cow.milk",BigClientVersion.v1_9);
+		    addSound("entity.cow.step",BigClientVersion.v1_9);
+		    addSound("entity.creeper.death",BigClientVersion.v1_9);
+		    addSound("entity.creeper.hurt",BigClientVersion.v1_9);
+		    addSound("entity.creeper.primed",BigClientVersion.v1_9);
+		    addSound("entity.donkey.ambient",BigClientVersion.v1_9);
+		    addSound("entity.donkey.angry",BigClientVersion.v1_9);
+		    addSound("entity.donkey.chest",BigClientVersion.v1_9);
+		    addSound("entity.donkey.death",BigClientVersion.v1_9);
+		    addSound("entity.donkey.hurt",BigClientVersion.v1_9);
+		    addSound("entity.egg.throw",BigClientVersion.v1_9);
+		    addSound("entity.elder_guardian.ambient",BigClientVersion.v1_9);
+		    addSound("entity.elder_guardian.ambient_land",BigClientVersion.v1_9);
+		    addSound("entity.elder_guardian.curse",BigClientVersion.v1_9);
+		    addSound("entity.elder_guardian.death",BigClientVersion.v1_9);
+		    addSound("entity.elder_guardian.death_land",BigClientVersion.v1_9);
+		    addSound("entity.elder_guardian.hurt",BigClientVersion.v1_9);
+		    addSound("entity.elder_guardian.hurt_land",BigClientVersion.v1_9);
+		    addSound("entity.enderdragon.ambient",BigClientVersion.v1_9);
+		    addSound("entity.enderdragon.death",BigClientVersion.v1_9);
+		    addSound("entity.enderdragon.flap",BigClientVersion.v1_9);
+		    addSound("entity.enderdragon.growl",BigClientVersion.v1_9);
+		    addSound("entity.enderdragon.hurt",BigClientVersion.v1_9);
+		    addSound("entity.enderdragon.shoot",BigClientVersion.v1_9);
+		    addSound("entity.enderdragon_fireball.explode",BigClientVersion.v1_9);
+		    addSound("entity.endereye.launch",BigClientVersion.v1_9);
+		    addSound("entity.endermen.ambient",BigClientVersion.v1_9);
+		    addSound("entity.endermen.death",BigClientVersion.v1_9);
+		    addSound("entity.endermen.hurt",BigClientVersion.v1_9);
+		    addSound("entity.endermen.scream",BigClientVersion.v1_9);
+		    addSound("entity.endermen.stare",BigClientVersion.v1_9);
+		    addSound("entity.endermen.teleport",BigClientVersion.v1_9);
+		    addSound("entity.endermite.ambient",BigClientVersion.v1_9);
+		    addSound("entity.endermite.death",BigClientVersion.v1_9);
+		    addSound("entity.endermite.hurt",BigClientVersion.v1_9);
+		    addSound("entity.endermite.step",BigClientVersion.v1_9);
+		    addSound("entity.enderpearl.throw",BigClientVersion.v1_9);
+		    addSound("entity.experience_bottle.throw",BigClientVersion.v1_9);
+		    addSound("entity.experience_orb.pickup",BigClientVersion.v1_9);
+		    addSound("entity.experience_orb.touch",BigClientVersion.v1_9);
+		    addSound("entity.firework.blast",BigClientVersion.v1_9);
+		    addSound("entity.firework.blast_far",BigClientVersion.v1_9);
+		    addSound("entity.firework.large_blast",BigClientVersion.v1_9);
+		    addSound("entity.firework.large_blast_far",BigClientVersion.v1_9);
+		    addSound("entity.firework.launch",BigClientVersion.v1_9);
+		    addSound("entity.firework.shoot",BigClientVersion.v1_9);
+		    addSound("entity.firework.twinkle",BigClientVersion.v1_9);
+		    addSound("entity.firework.twinkle_far",BigClientVersion.v1_9);
+		    addSound("entity.generic.big_fall",BigClientVersion.v1_9);
+		    addSound("entity.generic.burn",BigClientVersion.v1_9);
+		    addSound("entity.generic.death",BigClientVersion.v1_9);
+		    addSound("entity.generic.drink",BigClientVersion.v1_9);
+		    addSound("entity.generic.eat",BigClientVersion.v1_9);
+		    addSound("entity.generic.explode",BigClientVersion.v1_9);
+		    addSound("entity.generic.extinguish_fire",BigClientVersion.v1_9);
+		    addSound("entity.generic.hurt",BigClientVersion.v1_9);
+		    addSound("entity.generic.small_fall",BigClientVersion.v1_9);
+		    addSound("entity.generic.splash",BigClientVersion.v1_9);
+		    addSound("entity.generic.swim",BigClientVersion.v1_9);
+		    addSound("entity.ghast.ambient",BigClientVersion.v1_9);
+		    addSound("entity.ghast.death",BigClientVersion.v1_9);
+		    addSound("entity.ghast.hurt",BigClientVersion.v1_9);
+		    addSound("entity.ghast.scream",BigClientVersion.v1_9);
+		    addSound("entity.ghast.shoot",BigClientVersion.v1_9);
+		    addSound("entity.ghast.warn",BigClientVersion.v1_9);
+		    addSound("entity.guardian.ambient",BigClientVersion.v1_9);
+		    addSound("entity.guardian.ambient_land",BigClientVersion.v1_9);
+		    addSound("entity.guardian.attack",BigClientVersion.v1_9);
+		    addSound("entity.guardian.death",BigClientVersion.v1_9);
+		    addSound("entity.guardian.death_land",BigClientVersion.v1_9);
+		    addSound("entity.guardian.flop",BigClientVersion.v1_9);
+		    addSound("entity.guardian.hurt",BigClientVersion.v1_9);
+		    addSound("entity.guardian.hurt_land",BigClientVersion.v1_9);
+		    addSound("entity.horse.ambient",BigClientVersion.v1_9);
+		    addSound("entity.horse.angry",BigClientVersion.v1_9);
+		    addSound("entity.horse.armor",BigClientVersion.v1_9);
+		    addSound("entity.horse.breathe",BigClientVersion.v1_9);
+		    addSound("entity.horse.death",BigClientVersion.v1_9);
+		    addSound("entity.horse.eat",BigClientVersion.v1_9);
+		    addSound("entity.horse.gallop",BigClientVersion.v1_9);
+		    addSound("entity.horse.hurt",BigClientVersion.v1_9);
+		    addSound("entity.horse.jump",BigClientVersion.v1_9);
+		    addSound("entity.horse.land",BigClientVersion.v1_9);
+		    addSound("entity.horse.saddle",BigClientVersion.v1_9);
+		    addSound("entity.horse.step",BigClientVersion.v1_9);
+		    addSound("entity.horse.step_wood",BigClientVersion.v1_9);
+		    addSound("entity.hostile.big_fall",BigClientVersion.v1_9);
+		    addSound("entity.hostile.death",BigClientVersion.v1_9);
+		    addSound("entity.hostile.hurt",BigClientVersion.v1_9);
+		    addSound("entity.hostile.small_fall",BigClientVersion.v1_9);
+		    addSound("entity.hostile.splash",BigClientVersion.v1_9);
+		    addSound("entity.hostile.swim",BigClientVersion.v1_9);
+		    addSound("entity.irongolem.attack",BigClientVersion.v1_9);
+		    addSound("entity.irongolem.death",BigClientVersion.v1_9);
+		    addSound("entity.irongolem.hurt",BigClientVersion.v1_9);
+		    addSound("entity.irongolem.step",BigClientVersion.v1_9);
+		    addSound("entity.item.break",BigClientVersion.v1_9);
+		    addSound("entity.item.pickup",BigClientVersion.v1_9);
+		    addSound("entity.itemframe.add_item",BigClientVersion.v1_9);
+		    addSound("entity.itemframe.break",BigClientVersion.v1_9);
+		    addSound("entity.itemframe.place",BigClientVersion.v1_9);
+		    addSound("entity.itemframe.remove_item",BigClientVersion.v1_9);
+		    addSound("entity.itemframe.rotate_item",BigClientVersion.v1_9);
+		    addSound("entity.leashknot.break",BigClientVersion.v1_9);
+		    addSound("entity.leashknot.place",BigClientVersion.v1_9);
+		    addSound("entity.lightning.impact",BigClientVersion.v1_9);
+		    addSound("entity.lightning.thunder",BigClientVersion.v1_9);
+		    addSound("entity.lingeringpotion.throw",BigClientVersion.v1_9);
+		    addSound("entity.magmacube.death",BigClientVersion.v1_9);
+		    addSound("entity.magmacube.hurt",BigClientVersion.v1_9);
+		    addSound("entity.magmacube.jump",BigClientVersion.v1_9);
+		    addSound("entity.magmacube.squish",BigClientVersion.v1_9);
+		    addSound("entity.minecart.inside",BigClientVersion.v1_9);
+		    addSound("entity.minecart.riding",BigClientVersion.v1_9);
+		    addSound("entity.mooshroom.shear",BigClientVersion.v1_9);
+		    addSound("entity.mule.ambient",BigClientVersion.v1_9);
+		    addSound("entity.mule.death",BigClientVersion.v1_9);
+		    addSound("entity.mule.hurt",BigClientVersion.v1_9);
+		    addSound("entity.painting.break",BigClientVersion.v1_9);
+		    addSound("entity.painting.place",BigClientVersion.v1_9);
+		    addSound("entity.pig.ambient",BigClientVersion.v1_9);
+		    addSound("entity.pig.death",BigClientVersion.v1_9);
+		    addSound("entity.pig.hurt",BigClientVersion.v1_9);
+		    addSound("entity.pig.saddle",BigClientVersion.v1_9);
+		    addSound("entity.pig.step",BigClientVersion.v1_9);
+		    addSound("entity.player.attack.crit",BigClientVersion.v1_9);
+		    addSound("entity.player.attack.knockback",BigClientVersion.v1_9);
+		    addSound("entity.player.attack.nodamage",BigClientVersion.v1_9);
+		    addSound("entity.player.attack.strong",BigClientVersion.v1_9);
+		    addSound("entity.player.attack.sweep",BigClientVersion.v1_9);
+		    addSound("entity.player.attack.weak",BigClientVersion.v1_9);
+		    addSound("entity.player.big_fall",BigClientVersion.v1_9);
+		    addSound("entity.player.breath",BigClientVersion.v1_9);
+		    addSound("entity.player.burp",BigClientVersion.v1_9);
+		    addSound("entity.player.death",BigClientVersion.v1_9);
+		    addSound("entity.player.hurt",BigClientVersion.v1_9);
+		    addSound("entity.player.levelup",BigClientVersion.v1_9);
+		    addSound("entity.player.small_fall",BigClientVersion.v1_9);
+		    addSound("entity.player.splash",BigClientVersion.v1_9);
+		    addSound("entity.player.swim",BigClientVersion.v1_9);
+		    addSound("entity.rabbit.ambient",BigClientVersion.v1_9);
+		    addSound("entity.rabbit.attack",BigClientVersion.v1_9);
+		    addSound("entity.rabbit.death",BigClientVersion.v1_9);
+		    addSound("entity.rabbit.hurt",BigClientVersion.v1_9);
+		    addSound("entity.rabbit.jump",BigClientVersion.v1_9);
+		    addSound("entity.sheep.ambient",BigClientVersion.v1_9);
+		    addSound("entity.sheep.death",BigClientVersion.v1_9);
+		    addSound("entity.sheep.hurt",BigClientVersion.v1_9);
+		    addSound("entity.sheep.shear",BigClientVersion.v1_9);
+		    addSound("entity.sheep.step",BigClientVersion.v1_9);
+		    addSound("entity.shulker.ambient",BigClientVersion.v1_9);
+		    addSound("entity.shulker.close",BigClientVersion.v1_9);
+		    addSound("entity.shulker.death",BigClientVersion.v1_9);
+		    addSound("entity.shulker.hurt",BigClientVersion.v1_9);
+		    addSound("entity.shulker.hurt_closed",BigClientVersion.v1_9);
+		    addSound("entity.shulker.open",BigClientVersion.v1_9);
+		    addSound("entity.shulker.shoot",BigClientVersion.v1_9);
+		    addSound("entity.shulker.teleport",BigClientVersion.v1_9);
+		    addSound("entity.shulker_bullet.hit",BigClientVersion.v1_9);
+		    addSound("entity.shulker_bullet.hurt",BigClientVersion.v1_9);
+		    addSound("entity.silverfish.ambient",BigClientVersion.v1_9);
+		    addSound("entity.silverfish.death",BigClientVersion.v1_9);
+		    addSound("entity.silverfish.hurt",BigClientVersion.v1_9);
+		    addSound("entity.silverfish.step",BigClientVersion.v1_9);
+		    addSound("entity.skeleton.ambient",BigClientVersion.v1_9);
+		    addSound("entity.skeleton.death",BigClientVersion.v1_9);
+		    addSound("entity.skeleton.hurt",BigClientVersion.v1_9);
+		    addSound("entity.skeleton.shoot",BigClientVersion.v1_9);
+		    addSound("entity.skeleton.step",BigClientVersion.v1_9);
+		    addSound("entity.skeleton_horse.ambient",BigClientVersion.v1_9);
+		    addSound("entity.skeleton_horse.death",BigClientVersion.v1_9);
+		    addSound("entity.skeleton_horse.hurt",BigClientVersion.v1_9);
+		    addSound("entity.slime.attack",BigClientVersion.v1_9);
+		    addSound("entity.slime.death",BigClientVersion.v1_9);
+		    addSound("entity.slime.hurt",BigClientVersion.v1_9);
+		    addSound("entity.slime.jump",BigClientVersion.v1_9);
+		    addSound("entity.slime.squish",BigClientVersion.v1_9);
+		    addSound("entity.small_magmacube.death",BigClientVersion.v1_9);
+		    addSound("entity.small_magmacube.hurt",BigClientVersion.v1_9);
+		    addSound("entity.small_magmacube.squish",BigClientVersion.v1_9);
+		    addSound("entity.small_slime.death",BigClientVersion.v1_9);
+		    addSound("entity.small_slime.hurt",BigClientVersion.v1_9);
+		    addSound("entity.small_slime.jump",BigClientVersion.v1_9);
+		    addSound("entity.small_slime.squish",BigClientVersion.v1_9);
+		    addSound("entity.snowball.throw",BigClientVersion.v1_9);
+		    addSound("entity.snowman.ambient",BigClientVersion.v1_9);
+		    addSound("entity.snowman.death",BigClientVersion.v1_9);
+		    addSound("entity.snowman.hurt",BigClientVersion.v1_9);
+		    addSound("entity.snowman.shoot",BigClientVersion.v1_9);
+		    addSound("entity.spider.ambient",BigClientVersion.v1_9);
+		    addSound("entity.spider.death",BigClientVersion.v1_9);
+		    addSound("entity.spider.hurt",BigClientVersion.v1_9);
+		    addSound("entity.spider.step",BigClientVersion.v1_9);
+		    addSound("entity.splash_potion.break",BigClientVersion.v1_9);
+		    addSound("entity.splash_potion.throw",BigClientVersion.v1_9);
+		    addSound("entity.squid.ambient",BigClientVersion.v1_9);
+		    addSound("entity.squid.death",BigClientVersion.v1_9);
+		    addSound("entity.squid.hurt",BigClientVersion.v1_9);
+		    addSound("entity.tnt.primed",BigClientVersion.v1_9);
+		    addSound("entity.villager.ambient",BigClientVersion.v1_9);
+		    addSound("entity.villager.death",BigClientVersion.v1_9);
+		    addSound("entity.villager.hurt",BigClientVersion.v1_9);
+		    addSound("entity.villager.no",BigClientVersion.v1_9);
+		    addSound("entity.villager.trading",BigClientVersion.v1_9);
+		    addSound("entity.villager.yes",BigClientVersion.v1_9);
+		    addSound("entity.witch.ambient",BigClientVersion.v1_9);
+		    addSound("entity.witch.death",BigClientVersion.v1_9);
+		    addSound("entity.witch.drink",BigClientVersion.v1_9);
+		    addSound("entity.witch.hurt",BigClientVersion.v1_9);
+		    addSound("entity.witch.throw",BigClientVersion.v1_9);
+		    addSound("entity.wither.ambient",BigClientVersion.v1_9);
+		    addSound("entity.wither.break_block",BigClientVersion.v1_9);
+		    addSound("entity.wither.death",BigClientVersion.v1_9);
+		    addSound("entity.wither.hurt",BigClientVersion.v1_9);
+		    addSound("entity.wither.shoot",BigClientVersion.v1_9);
+		    addSound("entity.wither.spawn",BigClientVersion.v1_9);
+		    addSound("entity.wolf.ambient",BigClientVersion.v1_9);
+		    addSound("entity.wolf.death",BigClientVersion.v1_9);
+		    addSound("entity.wolf.growl",BigClientVersion.v1_9);
+		    addSound("entity.wolf.howl",BigClientVersion.v1_9);
+		    addSound("entity.wolf.hurt",BigClientVersion.v1_9);
+		    addSound("entity.wolf.pant",BigClientVersion.v1_9);
+		    addSound("entity.wolf.shake",BigClientVersion.v1_9);
+		    addSound("entity.wolf.step",BigClientVersion.v1_9);
+		    addSound("entity.wolf.whine",BigClientVersion.v1_9);
+		    addSound("entity.zombie.ambient",BigClientVersion.v1_9);
+		    addSound("entity.zombie.attack_door_wood",BigClientVersion.v1_9);
+		    addSound("entity.zombie.attack_iron_door",BigClientVersion.v1_9);
+		    addSound("entity.zombie.break_door_wood",BigClientVersion.v1_9);
+		    addSound("entity.zombie.death",BigClientVersion.v1_9);
+		    addSound("entity.zombie.hurt",BigClientVersion.v1_9);
+		    addSound("entity.zombie.infect",BigClientVersion.v1_9);
+		    addSound("entity.zombie.step",BigClientVersion.v1_9);
+		    addSound("entity.zombie_horse.ambient",BigClientVersion.v1_9);
+		    addSound("entity.zombie_horse.death",BigClientVersion.v1_9);
+		    addSound("entity.zombie_horse.hurt",BigClientVersion.v1_9);
+		    addSound("entity.zombie_pig.ambient",BigClientVersion.v1_9);
+		    addSound("entity.zombie_pig.angry",BigClientVersion.v1_9);
+		    addSound("entity.zombie_pig.death",BigClientVersion.v1_9);
+		    addSound("entity.zombie_pig.hurt",BigClientVersion.v1_9);
+		    addSound("entity.zombie_villager.ambient",BigClientVersion.v1_9);
+		    addSound("entity.zombie_villager.converted",BigClientVersion.v1_9);
+		    addSound("entity.zombie_villager.cure",BigClientVersion.v1_9);
+		    addSound("entity.zombie_villager.death",BigClientVersion.v1_9);
+		    addSound("entity.zombie_villager.hurt",BigClientVersion.v1_9);
+		    addSound("entity.zombie_villager.step",BigClientVersion.v1_9);
+		    addSound("item.armor.equip_chain",BigClientVersion.v1_9);
+		    addSound("item.armor.equip_diamond",BigClientVersion.v1_9);
+		    addSound("item.armor.equip_generic",BigClientVersion.v1_9);
+		    addSound("item.armor.equip_gold",BigClientVersion.v1_9);
+		    addSound("item.armor.equip_iron",BigClientVersion.v1_9);
+		    addSound("item.armor.equip_leather",BigClientVersion.v1_9);
+		    addSound("item.bottle.fill",BigClientVersion.v1_9);
+		    addSound("item.bottle.fill_dragonbreath",BigClientVersion.v1_9);
+		    addSound("item.bucket.empty",BigClientVersion.v1_9);
+		    addSound("item.bucket.empty_lava",BigClientVersion.v1_9);
+		    addSound("item.bucket.fill",BigClientVersion.v1_9);
+		    addSound("item.bucket.fill_lava",BigClientVersion.v1_9);
+		    addSound("item.chorus_fruit.teleport",BigClientVersion.v1_9);
+		    addSound("item.firecharge.use",BigClientVersion.v1_9);
+		    addSound("item.flintandsteel.use",BigClientVersion.v1_9);
+		    addSound("item.hoe.till",BigClientVersion.v1_9);
+		    addSound("item.shield.block",BigClientVersion.v1_9);
+		    addSound("item.shield.break",BigClientVersion.v1_9);
+		    addSound("item.shovel.flatten",BigClientVersion.v1_9);
+		    addSound("music.creative",BigClientVersion.v1_9);
+		    addSound("music.credits",BigClientVersion.v1_9);
+		    addSound("music.dragon",BigClientVersion.v1_9);
+		    addSound("music.end",BigClientVersion.v1_9);
+		    addSound("music.game",BigClientVersion.v1_9);
+		    addSound("music.menu",BigClientVersion.v1_9);
+		    addSound("music.nether",BigClientVersion.v1_9);
+		    addSound("record.11",BigClientVersion.v1_9);
+		    addSound("record.13",BigClientVersion.v1_9);
+		    addSound("record.blocks",BigClientVersion.v1_9);
+		    addSound("record.cat",BigClientVersion.v1_9);
+		    addSound("record.chirp",BigClientVersion.v1_9);
+		    addSound("record.far",BigClientVersion.v1_9);
+		    addSound("record.mall",BigClientVersion.v1_9);
+		    addSound("record.mellohi",BigClientVersion.v1_9);
+		    addSound("record.stal",BigClientVersion.v1_9);
+		    addSound("record.strad",BigClientVersion.v1_9);
+		    addSound("record.wait",BigClientVersion.v1_9);
+		    addSound("record.ward",BigClientVersion.v1_9);
+		    addSound("ui.button.click",BigClientVersion.v1_9);
+		    addSound("weather.rain",BigClientVersion.v1_9);
+		    addSound("weather.rain.above",BigClientVersion.v1_9);
+	}
+	
+	private static void addSound(String name,BigClientVersion version){
+		if(version == BigClientVersion.v1_9){
+			SoundEffect e = new SoundEffect(name, v1_9_id++);
+			e.avariableVersions.add(version);
+			sounds.add(e);
+		}
+		else
+		{
+			SoundEffect currunt = getEffect(name);
+			if(currunt == null){
+				currunt = new SoundEffect(name, -1);
+				sounds.add(currunt);
+			}
+			currunt.avariableVersions.add(version);
+		}
+	}
+	
+	public static SoundEffect getEffect(String name){
+		for(SoundEffect e : sounds)
+			if(e.name.equalsIgnoreCase(name))
+				return e;
+		return null;
+	}
+	
+	public static SoundEffect getEffect(int id){
+		for(SoundEffect e : sounds)
+			if(e.id == id)
+				return e;
+		return null;
+	}
 	
 	private String name;
-	public SoundEffect(String name) {
+	private int id;
+	
+	private ArrayList<ClientVersion.BigClientVersion> avariableVersions = new ArrayList<ClientVersion.BigClientVersion>();
+	
+	SoundEffect(String name,int id) {
 		this.name = name;
+		this.id = id;
 	}
+	
+	public boolean isAvariable(BigClientVersion version){
+		return avariableVersions.contains(version);
+	}
+	
 	public String getName(){
 		return name;
+	}
+	public int getId() {
+		return id;
 	}
 }

@@ -1,6 +1,5 @@
 package dev.wolveringer.BungeeUtil.packets;
 
-import dev.wolveringer.BungeeUtil.Player;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.packet.PacketDataSerializer;
 

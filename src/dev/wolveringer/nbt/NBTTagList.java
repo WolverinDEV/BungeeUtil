@@ -3,9 +3,7 @@ package dev.wolveringer.nbt;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class NBTTagList extends NBTBase {
 	private List<NBTBase> list = new ArrayList<NBTBase>();

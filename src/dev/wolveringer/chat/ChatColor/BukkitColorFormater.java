@@ -3,9 +3,9 @@ package dev.wolveringer.chat.ChatColor;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.fusesource.jansi.Ansi;
-
 import net.md_5.bungee.api.ChatColor;
+
+import org.fusesource.jansi.Ansi;
 
 public class BukkitColorFormater {
 	

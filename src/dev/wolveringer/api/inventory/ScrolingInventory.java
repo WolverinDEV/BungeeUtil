@@ -6,16 +6,18 @@ import java.util.List;
 import dev.wolveringer.BungeeUtil.Material;
 import dev.wolveringer.BungeeUtil.item.Item;
 import dev.wolveringer.BungeeUtil.item.ItemStack;
+import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 
 public class ScrolingInventory extends Inventory {
 
 	public ScrolingInventory(int rows, String name) {
 		super(rows * 9 + 18, name);
 		this.rows = rows;
-		nextitem.getItemMeta().setDisplayName("§7next Side §b-->");
-		backitem.getItemMeta().setDisplayName("§b<-- §7previous Side");
-		lineitem.getItemMeta().setDisplayName("§a");
-		nothinkitem.getItemMeta().setDisplayName("§cKein Item verfügbar");
+		nextitem.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR+"7next Side "+ChatColorUtils.COLOR_CHAR+"b-->");
+		backitem.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR+"b<-- "+ChatColorUtils.COLOR_CHAR+"7previous Side");
+		lineitem.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR+"a");
+		lineitem.getItemMeta().setGlow(true);
+		nothinkitem.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR+"cKein Item verf"+ChatColorUtils.COLOR_CHAR+"gbar");
 		update();
 	}
 
@@ -82,6 +84,7 @@ public class ScrolingInventory extends Inventory {
 				backSide();
 			}
 		};
+		update();
 	}
 
 	public void setLineItem(Item i) {
@@ -90,6 +93,7 @@ public class ScrolingInventory extends Inventory {
 			public void click(Click p) {
 			}
 		};
+		update();
 	}
 
 	public void setNothinkitem(Item nothinkitem) {
@@ -97,6 +101,7 @@ public class ScrolingInventory extends Inventory {
 			@Override
 			public void click(Click c) {}
 		};
+		update();
 	}
 
 	/**

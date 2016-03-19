@@ -72,9 +72,9 @@ public class ChatComponentText extends ChatBaseComponent{
 			}
 			return builder.append("}").toString().replaceAll(", \\}", "").replaceAll(", \\]", "");
 		}else if(m == StringMethode.MESSAGE_COLORED){
-			return ChatSerializer.toMessage(this, "§f");
+			return ChatSerializer.toMessage(this, ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"f");
 		}else if(m == StringMethode.MESSAGE_UNCOLORED){
-			return ChatColor.stripColor(ChatSerializer.toMessage(this, "§f"));
+			return ChatColor.stripColor(ChatSerializer.toMessage(this, ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"f"));
 		}else if(m == StringMethode.JSON){
 			return ChatSerializer.toJSONString(this);
 		}

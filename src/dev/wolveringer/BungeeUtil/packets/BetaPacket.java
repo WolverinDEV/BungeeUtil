@@ -1,8 +1,9 @@
 package dev.wolveringer.BungeeUtil.packets;
 
+import io.netty.buffer.ByteBuf;
+
 import javax.naming.OperationNotSupportedException;
 
-import io.netty.buffer.ByteBuf;
 import dev.wolveringer.BungeeUtil.ClientVersion;
 import dev.wolveringer.BungeeUtil.DebugProperties;
 

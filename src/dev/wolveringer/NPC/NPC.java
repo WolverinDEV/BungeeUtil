@@ -2,25 +2,28 @@ package dev.wolveringer.NPC;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
+import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
 import dev.wolveringer.BungeeUtil.PacketHandleEvent;
 import dev.wolveringer.BungeeUtil.PacketHandler;
 import dev.wolveringer.BungeeUtil.PacketLib;
 import dev.wolveringer.BungeeUtil.Player;
 import dev.wolveringer.BungeeUtil.PlayerInfoData;
-import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
 import dev.wolveringer.BungeeUtil.gameprofile.GameProfile;
+import dev.wolveringer.BungeeUtil.gameprofile.Skin;
 import dev.wolveringer.BungeeUtil.packets.Packet;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInUseEntity;
+import dev.wolveringer.BungeeUtil.packets.PacketPlayInUseEntity.Action;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutEntityDestroy;
+import dev.wolveringer.BungeeUtil.packets.PacketPlayOutEntityHeadRotation;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutEntityTeleport;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutNamedEntitySpawn;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutPlayerInfo;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayInUseEntity.Action;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutPlayerInfo.EnumPlayerInfoAction;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardTeam.NameTag;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardTeam;
+import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardTeam.NameTag;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.api.datawatcher.DataWatcher;
 import dev.wolveringer.api.datawatcher.HumanDataWatcher;
@@ -28,13 +31,13 @@ import dev.wolveringer.api.position.Location;
 import dev.wolveringer.chat.IChatBaseComponent;
 
 public final class NPC {
+	private static final Random RND_NAME = new Random();
 	private static ArrayList<String> base_names = new ArrayList<>();
 	private static int npc_count = 1000;
-	private PacketPlayOutNamedEntitySpawn p1;
 	private PacketPlayOutEntityDestroy p2;
 
 	private int ID;
-	private HumanDataWatcher datawatcher = new HumanDataWatcher(new DataWatcher());
+	private NPCData datawatcher = new NPCData();
 
 	private ArrayList<Player> viewer = new ArrayList<Player>();
 	private NameSpliter name;
@@ -56,7 +59,7 @@ public final class NPC {
 	private Equipment equipment = new Equipment(this);
 
 	public NPC() {
-		this(System.currentTimeMillis()+"");
+		this((System.currentTimeMillis()+"_0x"+Integer.toHexString(RND_NAME.nextInt())+"00000000000000000").substring(0, 16));
 	}
 	
 	public NPC(String base_name) {
@@ -83,7 +86,7 @@ public final class NPC {
 						if(packet.getAction() == Action.ATTACK)
 							for(InteractListener listener : (List<InteractListener>) NPC.this.listener.clone())
 								listener.leftClick(e.getPlayer());
-						else if(packet.getAction() == Action.INTERACT_AT)
+						else if(packet.getAction() == Action.INTERACT_AT && packet.getHand() == 0) //1.9 sends 2 Packets (Hand 0 and hand 1)
 							for(InteractListener listener : (List<InteractListener>) NPC.this.listener.clone())
 								listener.rightClick(e.getPlayer());
 						e.setCancelled(true);
@@ -144,6 +147,7 @@ public final class NPC {
 		this.location = location;
 		rebuild();
 		brotcastPacket(new PacketPlayOutEntityTeleport(ID, location));
+		brotcastPacket(new PacketPlayOutEntityHeadRotation(ID, location.getYaw()));
 	}
 
 	public HumanDataWatcher getDatawatcher() {
@@ -154,6 +158,11 @@ public final class NPC {
 		return profile;
 	}
 
+	public void setSkin(Skin skin){
+		skin.applay(this.profile);
+		setProfile(this.profile);
+	}
+	
 	public void setProfile(GameProfile profile) {
 		this.profile = profile;
 		if(this.profile == null)
@@ -219,15 +228,15 @@ public final class NPC {
 			pl.sendPacket((PacketPlayOut) p);
 	}
 
-	private void sendSpawn(Player p) {
+	private void sendSpawn(final Player p) {
 		if(p.getVersion().getBigVersion() == BigClientVersion.v1_8 || p.getVersion().getBigVersion() == BigClientVersion.v1_9){
 			p.sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.ADD_PLAYER, new PlayerInfoData(profile, ping, 0, (IChatBaseComponent) tabname)));
-			p.sendPacket(p1);
+			p.sendPacket(new PacketPlayOutNamedEntitySpawn(ID, profile, location, 0, datawatcher.getWatcher(p.getVersion().getBigVersion())));
 
 			PacketPlayOutScoreboardTeam team = new PacketPlayOutScoreboardTeam();
 			team.setTeam(base_name);
-			team.setDisplayName("Error (NCP): 002");
-			team.setAction(dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardTeam.Action.CREATE);
+			team.setDisplayName("Error (NCP-Team): 002");
+			team.setAction(PacketPlayOutScoreboardTeam.Action.CREATE);
 			team.setPrefix(name.getPrefix());
 			team.setSuffix(name.getSuffix());
 			team.setFriendlyFire(0);
@@ -235,6 +244,8 @@ public final class NPC {
 			team.setTag(NameTag.VISIABLE);
 			p.sendPacket(team);
 
+			p.sendPacket(new PacketPlayOutEntityHeadRotation(ID, p.getLocation().getYaw()));
+			
 			if(!tab)
 				p.sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.REMOVE_PLAYER, new PlayerInfoData(profile, ping, 0, tabname)));
 			else
@@ -258,9 +269,8 @@ public final class NPC {
 			p.sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.REMOVE_PLAYER, new PlayerInfoData(profile, ping, 0, (IChatBaseComponent) null)));
 		PacketPlayOutScoreboardTeam team = new PacketPlayOutScoreboardTeam();
 		team.setTeam(base_name);
-		team.setAction(dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardTeam.Action.REMOVE);
+		team.setAction(PacketPlayOutScoreboardTeam.Action.REMOVE);
 		p.sendPacket(team);
-
 		p.sendPacket(p2);
 	}
 
@@ -269,23 +279,6 @@ public final class NPC {
 			System.err.print("NPC Profile is null. it will crash the Client");
 			this.profile = new GameProfile(UUID.randomUUID(), this.name.getMain());
 		}
-		DataWatcher datawatcher = new DataWatcher();
-		datawatcher.setValue(7, (Object)((Integer) 0)); //Air
-		datawatcher.setValue(2, (Object)((String) "Hello")); //Name
-		datawatcher.setValue(3, (Object)((Boolean) true)); //Costum name
-		datawatcher.setValue(4, (Object)((Boolean) true)); //slient
-		
-		datawatcher.setValue(6, (Object)((Float) 20F)); //health
-		datawatcher.setValue(7, (Object)((Integer) 0xFF0000)); //Potion color
-		datawatcher.setValue(8, (Object)((Boolean) true)); //Potion active
-		datawatcher.setValue(9, (Object)((Integer) 1)); //Arrows
-		
-		datawatcher.setValue(10, (Object)((Float) 10F)); //Additional Hearts
-		datawatcher.setValue(11, (Object)((Integer) 0)); //Score
-		datawatcher.setValue(12, (Object)((Byte) new Byte((byte) 0))); //Skin flags
-		datawatcher.setValue(13, (Object)((Byte) new Byte((byte) 0))); //Hand
-		
-		p1 = new PacketPlayOutNamedEntitySpawn(ID, profile, location, 0, datawatcher); //
 		p2 = new PacketPlayOutEntityDestroy(ID);
 	}
 

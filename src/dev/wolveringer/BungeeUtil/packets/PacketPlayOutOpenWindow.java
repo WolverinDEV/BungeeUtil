@@ -73,7 +73,6 @@ public class PacketPlayOutOpenWindow extends Packet implements PacketPlayOut{
 			if(type.equalsIgnoreCase("EntityHorse"))
 				this.horesID = s.readInt();
 		}
-		System.out.println(toString());
 	}
 
 	public void setHoresID(int horesID) {

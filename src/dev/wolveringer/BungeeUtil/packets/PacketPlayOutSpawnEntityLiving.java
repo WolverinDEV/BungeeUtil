@@ -14,7 +14,7 @@ public class PacketPlayOutSpawnEntityLiving extends BetaPacket implements Packet
 	private int headRotation;
 	private Vector vector = new Vector();
 	private int id;
-	private DataWatcher meta = new DataWatcher();
+	private DataWatcher meta;
 	public PacketPlayOutSpawnEntityLiving(byte type, Location location, int yaw, int pitch, int headRotation, Vector vector) {
 		this();
 		this.type = type;
@@ -39,7 +39,7 @@ public class PacketPlayOutSpawnEntityLiving extends BetaPacket implements Packet
 		headRotation = s.readByte();
 		if(headRotation > 0)
 			vector = new Vector(s.readShort(), s.readShort(), s.readShort());
-		meta = new DataWatcher(getBigVersion(),s);
+		meta = DataWatcher.createDataWatcher(getBigVersion(),s);
 	}
 
 	@Override
@@ -57,7 +57,9 @@ public class PacketPlayOutSpawnEntityLiving extends BetaPacket implements Packet
 			s.writeShort(vector.getBlockY());
 			s.writeShort(vector.getBlockZ());
 		}
-		meta.write(getBigVersion(),s);
+		if(meta == null)
+			meta = DataWatcher.createDataWatcher(getBigVersion());
+		meta.write(s);
 	}
 
 	public boolean isItemFrame() {

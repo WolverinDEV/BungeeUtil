@@ -5,14 +5,8 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collections;
 
-import dev.wolveringer.BungeeUtil.PacketHandleEvent;
-import dev.wolveringer.BungeeUtil.PacketHandler;
-import dev.wolveringer.BungeeUtil.PacketLib;
 import dev.wolveringer.BungeeUtil.packets.Packet;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayOutChat;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayOutCloseWindow;
 import dev.wolveringer.chat.ChatSerializer;
-import dev.wolveringer.chat.IChatBaseComponent;
 
 public class TEST {
 	public static void main(String[] args) {
@@ -20,7 +14,7 @@ public class TEST {
 		/*
 		PacketHandler h = new PacketHandler() {
 			public void handle(PacketHandleEvent e) {
-				System.out.println(e.getPacket());
+				Main.sendMessage(e.getPacket());
 			};
 		};
 

@@ -99,10 +99,15 @@ public class CraftItemMeta implements ItemMeta {
 																		// in
 																		// update
 				return;
-		if (listener.size() != 0)
+		if (listener.size() != 0){
+			try{
 			for (MetaListener l : new ArrayList<>(listener))
 				if (l != null)
 					l.onUpdate(item);
+			}catch(NegativeArraySizeException e){
+				System.out.println("NegativeArraySizeException from ArrayList?! I´m craz! sie()->"+listener.size());
+			}
+		}
 	}
 
 	public void addMetaListener(MetaListener listener) {

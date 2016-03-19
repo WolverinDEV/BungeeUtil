@@ -3,8 +3,8 @@ package dev.wolveringer.BungeeUtil.packets;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutEntityProperties.EntityProperty.EntityPropertyModifier;
+import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.packet.PacketDataSerializer;
 
 public class PacketPlayOutEntityProperties extends Packet implements PacketPlayOut{

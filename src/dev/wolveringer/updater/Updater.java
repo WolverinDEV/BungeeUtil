@@ -3,16 +3,19 @@ package dev.wolveringer.updater;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
+import java.util.jar.JarInputStream;
 
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ProxyServer;
@@ -22,30 +25,38 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dev.wolveringer.BungeeUtil.Main;
+import dev.wolveringer.BungeeUtil.configuration.Configuration;
+import dev.wolveringer.chat.ChatColor.ChatColorUtils;
+import dev.wolveringer.util.MathUtil;
 
 public class Updater {
-	String url;
-	JSONObject data;
-	long last;
+	
+	private String url;
+	private JSONObject data;
+	private long last;
+	
 	public Updater(String url) {
 		this.url = url;
 	}
 
 	public boolean check() {
 		updateData();
-		Main.sendMessage("Â§aChecking for Plugin updates");
+		Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aChecking for Plugin updates");
 		if(data == null)
 			throw new NullPointerException("HTTP Data is null. Invpoke getData() first");
 		JSONObject plugins = data.getJSONObject("plugins");
 		if(plugins.has(Main.getMain().getDescription().getName())){
 			if(check(Main.getMain().getDescription().getName(), plugins.getJSONObject(Main.getMain().getDescription().getName()))){
-				Main.sendMessage("Â§aRestart for install");
 				BungeeCord.getInstance().stop();
 				return true;
+			}else{
+				if(Main.getMain().getDescription().getVersion().equalsIgnoreCase(plugins.getJSONObject(Main.getMain().getDescription().getName()).getString("version")))
+					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aNo plugin update found! Your version is alredy the newest! ("+plugins.getJSONObject(Main.getMain().getDescription().getName()).getString("version")+")");
+				else
+					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aYou plugin version is newer than the currunt public version. I think i´m a dev build... All bugs will be ignored");
+			}
 			}else
-				Main.sendMessage("Â§aNo plugin update found! Your version is alredy the newest! ("+plugins.getJSONObject(Main.getMain().getDescription().getName()).getString("version")+")");
-		}else
-			Main.sendMessage("Â§cPlugin not found!");
+				Main.sendMessage(ChatColorUtils.COLOR_CHAR+"cPlugin not found!");
 		return false;
 	}
 
@@ -65,21 +76,23 @@ public class Updater {
 		String url = plugin.getString("url");
 		String version = plugin.getString("version");
 		File f = new File(Main.getMain().getDataFolder().getAbsoluteFile().getAbsolutePath() + ".jar");
-		if(ProxyServer.getInstance().getPluginManager().getPlugin(name) == null){
-			if(!f.exists()){
-				downloadPlugin(url, f, name);
-				return true;
-			}else{
-				Main.sendMessage("Â§eDas Plugin Â§6" + name + " Â§eist nicht geladen.\nÂ§cDie Version konnte nicht Â§berprÂ§ft werden.");
-				return false;
+		return checkVersion(plugin,ProxyServer.getInstance().getPluginManager().getPlugin(name), version, url, f, name);
+	}
+	
+	private void editChangeLog(JSONObject obj,String name,String version){
+		JSONArray changes = obj.getJSONArray("changeLog");
+		for(int i = 0;i<changes.length();i++){
+			JSONObject ver = changes.getJSONObject(i);
+			if(ver.getString("version").equalsIgnoreCase(version)){
+				Configuration.setVersionFeature(Arrays.asList(ver.getString("changes").split("<br>")));
 			}
-		}else
-			return checkVersion(ProxyServer.getInstance().getPluginManager().getPlugin(name), version, url, f, name);
+		}
 	}
 
-	private boolean checkVersion(Plugin plugin, String version, String url2, File f, String name) {
+	private boolean checkVersion(JSONObject root,Plugin plugin, String version, String url2, File f, String name) {
 		if(checkVersion(plugin.getDescription().getVersion(), version)){
-			Main.sendMessage("Â§aUpdate das Plugin Â§6" + name + " Â§avon der Verion Â§e" + plugin.getDescription().getVersion() + " Â§aauf die Version Â§1" + version + "Â§a ab.");
+			Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aUpdate das Plugin "+ChatColorUtils.COLOR_CHAR+"6" + name + " "+ChatColorUtils.COLOR_CHAR+"avon der Verion "+ChatColorUtils.COLOR_CHAR+"e" + plugin.getDescription().getVersion() + " "+ChatColorUtils.COLOR_CHAR+"aauf die Version "+ChatColorUtils.COLOR_CHAR+"1" + version + ChatColorUtils.COLOR_CHAR+"a ab.");
+			editChangeLog(root,name,version);
 			downloadPlugin(url2, f, name);
 			return true;
 		}
@@ -107,30 +120,84 @@ public class Updater {
 		return false;
 	}
 
-	public void downloadPlugin(String url, File f, String name) {
-		Main.sendMessage("Â§aStarte Download von dem Plugin Â§6" + name);
-		if(f.exists())
-			f.delete();
+	private void downloadPlugin(String url, File f, String name) {
+		Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aStarte Download von dem Plugin "+ChatColorUtils.COLOR_CHAR+"6" + name);
 		try{
-			f.createNewFile();
-		}catch (IOException e){
-			e.printStackTrace();
-		}
-		try{
+			Main.setInformation("§aDownloading update §7[§e000%§7]");
 			BufferedInputStream in = null;
 			FileOutputStream fout = null;
 			try{
-				in = new BufferedInputStream(new URL(url).openStream());
-				fout = new FileOutputStream(f);
+				URLConnection com = new URL(url).openConnection();
+				int fileLength = com.getContentLength();
+				in = new BufferedInputStream(com.getInputStream());
+				File df;
+				if(f.exists()){
+					fout = new FileOutputStream(df = new File(f.toString()+".download"));
+					df.deleteOnExit();
+				}else
+					fout = new FileOutputStream(df = f);
 				final byte data[] = new byte[1024];
 				int count;
-				while ((count = in.read(data, 0, 1024)) != -1){
+				int readed = 0;
+				while (true){
+					count = in.read(data, 0, 1024);
+					if(count == -1)
+						break;
 					fout.write(data, 0, count);
+					readed+=count;
+					String p = "000"+MathUtil.calculatePercent(readed, fileLength);
+					p = p.substring(0, p.indexOf("."));
+					p = p.substring(p.length()-3, p.length());
+					Main.setInformation("§aDownloading update §7[§e"+p+"%§7]");
 				}
-				Main.sendMessage("Â§aDownloaden von dem Plugin Â§6" + name + " Â§adone");
+				fout.close();
+				in.close();
+				Main.setInformation("§aDownload done!");
+				if(f.exists())
+					f.delete();
+				try{
+					f.createNewFile();
+				}catch (IOException e){
+					e.printStackTrace();
+				}
+				Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aDownloaden von dem Plugin "+ChatColorUtils.COLOR_CHAR+"6" + name + " "+ChatColorUtils.COLOR_CHAR+"aabgeshlossen");
+				Main.setInformation("§aCheck update for errors!");
+				Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aTeste update auf fehler...");
+				try{
+					JarInputStream is = new JarInputStream(new FileInputStream(df));
+					while(null != is.getNextJarEntry()) {}
+					is.close();
+				}catch(Exception e){
+					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"cError beim überprüfen des Updates (Message: "+e.getLocalizedMessage()+")");
+					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"cLösche das update");
+					try{
+						df.delete();
+					}catch(Exception ex){}
+					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"cUpdate rückgängig gemacht.");
+					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aRestarte den BungeeCord");
+					return;
+				}
+				Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aTeste erfolgreich abgeschlossen.");
+				Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aUpdate plugin");
+				Main.setInformation("§aInstalling update");
+				if(!f.delete()){
+					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"6Konnte das alte plugin nicht löschen. Überschreibe das alte Plugin.");
+				}
+				f.createNewFile();
+				FileInputStream fis = new FileInputStream(df);
+				FileOutputStream fos = new FileOutputStream(f);
+				while ((count = fis.read(data, 0, 1024)) != -1){
+					fos.write(data, 0, count);
+				}
+				fis.close();
+				fos.close();
+				if(!df.delete())
+					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"6Konnte junk Files nicht löschen..");
+				Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aRestarte den BungeeCord");
+				Main.setInformation("§aUpdate installed!");
 			}catch (Exception e){
 				e.printStackTrace();
-				Main.sendMessage("Â§cError beim Downloaden vom Plugin Â§4" + name);
+				Main.sendMessage(ChatColorUtils.COLOR_CHAR+"cError beim Downloaden vom Plugin "+ChatColorUtils.COLOR_CHAR+"4" + name);
 			}finally{
 				if(in != null){
 					in.close();
@@ -141,7 +208,7 @@ public class Updater {
 			}
 		}catch (Exception e){
 			e.printStackTrace();
-			Main.sendMessage("Â§cError beim Downloaden vom Plugin Â§4" + name);
+			Main.sendMessage(ChatColorUtils.COLOR_CHAR+"cError beim Downloaden vom Plugin "+ChatColorUtils.COLOR_CHAR+"4" + name);
 		}
 	}
 
@@ -152,7 +219,7 @@ public class Updater {
 
 	public Updater loadData() {
 		last = System.currentTimeMillis();
-		Main.sendMessage("Â§aGetting Update data!");
+		Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aGetting Update data!");
 		try{
 			URL i = new URL(url);
 			HttpURLConnection c = (HttpURLConnection) i.openConnection();
@@ -183,7 +250,7 @@ public class Updater {
 		JSONObject plugins = data.getJSONObject("plugins");
 		if(plugins.has(Main.getMain().getDescription().getName())){
 			JSONObject o = plugins.getJSONObject(Main.getMain().getDescription().getName());
-			if(o.has("whitelist")){
+			if(o.has("whitelist")){ //TODO kick out. not longer needed
 				JSONArray a = o.getJSONArray("whitelist");
 				String host = "null";
 				String hostadress = "null";
@@ -199,9 +266,9 @@ public class Updater {
 					if(a.get(i).toString().equalsIgnoreCase(host) || a.get(i).toString().equalsIgnoreCase(hostadress))
 						return true;
 				}
-				BungeeCord.getInstance().getConsole().sendMessage("Â§aYour Host: Â§e" + host);
-				BungeeCord.getInstance().getConsole().sendMessage("Â§aYour Host-Adress: Â§e" + hostadress);
-				BungeeCord.getInstance().getConsole().sendMessage("Â§cBoth Host's are not whitelisted.");
+				BungeeCord.getInstance().getConsole().sendMessage(ChatColorUtils.COLOR_CHAR+"aYour Host: "+ChatColorUtils.COLOR_CHAR+"e" + host);
+				BungeeCord.getInstance().getConsole().sendMessage(ChatColorUtils.COLOR_CHAR+"aYour Host-Adress: "+ChatColorUtils.COLOR_CHAR+"e" + hostadress);
+				BungeeCord.getInstance().getConsole().sendMessage(ChatColorUtils.COLOR_CHAR+"cBoth Host's are not whitelisted.");
 				return false;
 			}
 		}

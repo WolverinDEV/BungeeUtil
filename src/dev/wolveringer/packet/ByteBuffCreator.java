@@ -1,8 +1,8 @@
 package dev.wolveringer.packet;
 
-import dev.wolveringer.BungeeUtil.configuration.Configuration;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import dev.wolveringer.BungeeUtil.configuration.Configuration;
 
 public class ByteBuffCreator {
 	@SuppressWarnings("serial")

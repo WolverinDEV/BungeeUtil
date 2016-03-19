@@ -5,9 +5,9 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import dev.wolveringer.BungeeUtil.item.Item;
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
+import dev.wolveringer.BungeeUtil.item.Item;
 
 @SuppressWarnings({ "deprecation", "rawtypes" })
 public class MetaFactory {

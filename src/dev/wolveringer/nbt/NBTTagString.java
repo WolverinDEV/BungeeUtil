@@ -3,6 +3,7 @@ package dev.wolveringer.nbt;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 
 import com.google.common.base.Charsets;
@@ -16,8 +17,8 @@ public class NBTTagString extends NBTBase {
 
 	public NBTTagString(String string) {
 		if(string == null || string.length() == 0)
-			throw new IllegalArgumentException("Empty string not allowed");
-		final_data = string.getBytes();
+			throw new IllegalArgumentException("Empty string not allowed"); //Todo remove?
+		final_data = string.getBytes(Charsets.UTF_8);
 	}
 
 	void write(DataOutput paramDataOutput) {

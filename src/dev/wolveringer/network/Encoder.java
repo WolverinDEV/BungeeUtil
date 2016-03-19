@@ -1,5 +1,13 @@
 package dev.wolveringer.network;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandlerContext;
+import net.md_5.bungee.protocol.DefinedPacket;
+import net.md_5.bungee.protocol.MinecraftEncoder;
+import net.md_5.bungee.protocol.Protocol;
+import net.md_5.bungee.protocol.ProtocolConstants.Direction;
+import net.md_5.bungee.protocol.packet.LoginSuccess;
 import dev.wolveringer.BungeeUtil.ClientVersion;
 import dev.wolveringer.BungeeUtil.PacketHandleEvent;
 import dev.wolveringer.BungeeUtil.PacketLib;
@@ -9,14 +17,6 @@ import dev.wolveringer.packet.ByteBuffCreator;
 import dev.wolveringer.packet.PacketHandle;
 import dev.wolveringer.profiler.Profiler;
 import dev.wolveringer.strings.Messages;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerContext;
-import net.md_5.bungee.protocol.DefinedPacket;
-import net.md_5.bungee.protocol.MinecraftEncoder;
-import net.md_5.bungee.protocol.Protocol;
-import net.md_5.bungee.protocol.ProtocolConstants.Direction;
-import net.md_5.bungee.protocol.packet.LoginSuccess;
 
 public class Encoder extends MinecraftEncoder {
 

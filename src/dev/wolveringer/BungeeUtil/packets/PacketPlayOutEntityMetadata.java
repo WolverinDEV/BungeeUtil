@@ -20,7 +20,7 @@ public class PacketPlayOutEntityMetadata extends Packet implements PacketPlayOut
 
 	public void read(PacketDataSerializer packetdataserializer) {
 		this.id = packetdataserializer.readInt();
-		this.meta = new DataWatcher(getBigVersion(),packetdataserializer);
+		this.meta = DataWatcher.createDataWatcher(getBigVersion(),packetdataserializer);
 	}
 
 	public void write(PacketDataSerializer packetdataserializer) {
@@ -29,7 +29,7 @@ public class PacketPlayOutEntityMetadata extends Packet implements PacketPlayOut
 		}else{
 			packetdataserializer.writeVarInt(this.id);
 		}
-		meta.write(getBigVersion(),packetdataserializer);
+		meta.write(packetdataserializer);
 	}
 
 	@Override

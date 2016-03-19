@@ -7,6 +7,7 @@ import dev.wolveringer.BungeeUtil.Material;
 import dev.wolveringer.BungeeUtil.MaterialData;
 import dev.wolveringer.BungeeUtil.item.itemmeta.ItemMeta;
 import dev.wolveringer.BungeeUtil.item.itemmeta.MetaFactory;
+import dev.wolveringer.configuration.serialization.ConfigurationSerializable;
 import dev.wolveringer.nbt.NBTTagCompound;
 
 public class Item{

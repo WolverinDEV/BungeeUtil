@@ -2,8 +2,8 @@ package dev.wolveringer.animations.text;
 
 import java.util.concurrent.TimeUnit;
 
-import dev.wolveringer.BungeeUtil.Main;
 import net.md_5.bungee.BungeeCord;
+import dev.wolveringer.BungeeUtil.Main;
 
 public abstract class RunningTextFormater {
 	private int PID = -1;
@@ -42,7 +42,7 @@ public abstract class RunningTextFormater {
 		//  - width --> The maximung with of the scroler
 		//  - space --> Space between repeating
 		//  - time --> time per step in ms
-		RunningTextFormater scrooler = new RunningTextFormater("<scroller width=10  space=0 time=100>HELL§nO THIS IS A§a TEST§a STRING!</scroller>XX<scroller width=10  space=0 time=150>HELLO THIS IS A TEST STRING!</scroller>XX<scroller width=10  space=0 time=200>HELLO THIS IS A TEST STRING!</scroller>") {
+		RunningTextFormater scrooler = new RunningTextFormater("<scroller width=10  space=0 time=100>HELL"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"nO THIS IS A"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"a TEST"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"a STRING!</scroller>XX<scroller width=10  space=0 time=150>HELLO THIS IS A TEST STRING!</scroller>XX<scroller width=10  space=0 time=200>HELLO THIS IS A TEST STRING!</scroller>") {
 			@Override
 			public void update(String newText) {
 				//this methode will run when the text is updating

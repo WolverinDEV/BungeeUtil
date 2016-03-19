@@ -7,9 +7,9 @@ import java.util.List;
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 import dev.wolveringer.BungeeUtil.ClientVersion;
+import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
 import dev.wolveringer.BungeeUtil.CostumPrintStream;
 import dev.wolveringer.BungeeUtil.Player;
-import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.packet.ByteBuffCreator;
 import dev.wolveringer.packet.PacketDataSerializer;
@@ -32,6 +32,10 @@ public abstract class Packet {
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x02,0x0F, PacketPlayOutChat.class); //->0x0F
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x47,0x48, PacketPlayOutPlayerListHeaderFooter.class);//->0x48
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x08,0x2E, PacketPlayOutPosition.class); //Changed -> 0x2E
+		
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x18,0x4A, PacketPlayOutEntityTeleport.class); //Changed -> 0x2E
+		
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x19,0x34, PacketPlayOutEntityHeadRotation.class);
 		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x32,0x11, PacketPlayOutTransaction.class); //-> 0x11
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x2E,0x12, PacketPlayOutCloseWindow.class); //-> 0x12
@@ -67,7 +71,7 @@ public abstract class Packet {
 		//TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x10, PacketPlayOutEntityAbstract.class);//Delete dont needed?
 		//TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x11, PacketPlayOutEntityAbstract.class);//Delete dont needed?
 		
-		//TODO Make it working! loadPacket(Protocol.GAME, Direction.TO_CLIENT, 0x29, PacketPlayOutNamedSoundEffect.class); //Changed
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x29,0x19, PacketPlayOutNamedSoundEffect.class); //Changed
 		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x0C,0x05, PacketPlayOutNamedEntitySpawn.class);
 		// registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x21, PacketPlayOutMapChunk.class); //TODO Chunk Serelizer (Premium bungee src)

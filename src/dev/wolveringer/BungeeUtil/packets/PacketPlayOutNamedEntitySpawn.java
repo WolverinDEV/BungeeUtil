@@ -6,7 +6,6 @@ import java.util.UUID;
 import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
 import dev.wolveringer.BungeeUtil.gameprofile.GameProfile;
 import dev.wolveringer.BungeeUtil.gameprofile.Property;
-import dev.wolveringer.BungeeUtil.item.Item;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOutEntityAbstract;
 import dev.wolveringer.api.datawatcher.DataWatcher;
@@ -16,7 +15,7 @@ import dev.wolveringer.packet.PacketDataSerializer;
 import dev.wolveringer.packet.PacketDataSerializer_v1_7;
 
 public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutEntityAbstract implements PacketPlayOut{
-	private GameProfile p = new GameProfile(UUID.randomUUID(), "§cError: 201");
+	private GameProfile p = new GameProfile(UUID.randomUUID(), ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cError: 201");
 	private UUID uuid;
 	private Location loc;
 	private byte yaw; // yaw / 256*360
@@ -28,7 +27,6 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutEntityAbstract i
 		super(0x0C);
 	}
 
-	@SuppressWarnings("deprecation")
 	public PacketPlayOutNamedEntitySpawn(int id, UUID uuid, Location loc, int hand, DataWatcher w) {
 		super(0x0C);
 		setId(id);
@@ -38,7 +36,7 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutEntityAbstract i
 		this.pitch = ((byte) (int) (loc.getPitch() * 256.0F / 360.0F));
 		this.item_id = hand;
 		this.data = w;
-		this.p = new GameProfile(uuid, "§cError:-202");
+		this.p = new GameProfile(uuid, ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cError:-202");
 	}
 
 	@SuppressWarnings("deprecation")
@@ -95,7 +93,7 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutEntityAbstract i
 		this.pitch = paramPacketDataSerializer.readByte();
 		if(getBigVersion() != BigClientVersion.v1_9)
 			this.item_id = paramPacketDataSerializer.readShort();
-		this.data = new DataWatcher(getBigVersion(),paramPacketDataSerializer);
+		this.data = DataWatcher.createDataWatcher(getBigVersion(),paramPacketDataSerializer);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -131,7 +129,7 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutEntityAbstract i
 		paramPacketDataSerializer.writeByte(this.pitch);
 		if(getBigVersion() != BigClientVersion.v1_9)
 			paramPacketDataSerializer.writeShort(this.item_id);
-		this.data.write(getBigVersion(),paramPacketDataSerializer);
+		this.data.write(paramPacketDataSerializer);
 	}
 
 	public DataWatcher getData() {

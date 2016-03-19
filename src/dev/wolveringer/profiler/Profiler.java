@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.md_5.bungee.BungeeCord;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.Material;
 import dev.wolveringer.BungeeUtil.configuration.Configuration;
@@ -17,7 +18,6 @@ import dev.wolveringer.nbt.NBTCompressedStreamTools;
 import dev.wolveringer.nbt.NBTTagCompound;
 import dev.wolveringer.nbt.NBTTagList;
 import dev.wolveringer.nbt.NBTTagLong;
-import net.md_5.bungee.BungeeCord;
 
 public class Profiler {
 	protected static final DecimalFormat TIME_FORMAT = new DecimalFormat("#000,000,000");
@@ -170,7 +170,7 @@ public class Profiler {
 	public Profiler(String name) {
 		profilers.add(this);
 		this.name = name;
-		String n = "§aTimings §7(§5§l" + getName() + "§7)";
+		String n = ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"aTimings "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7("+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"5"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"l" + getName() + ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7)";
 		inv = new ScrolingInventory(4, n);
 	}
 
@@ -236,7 +236,7 @@ public class Profiler {
 				p.getPlayer().openInventory(profile.getInventory());
 			}
 		};
-		is.getItemMeta().setDisplayName("§bMethode: §b" + profile.getName());
+		is.getItemMeta().setDisplayName(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"bMethode: "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"b" + profile.getName());
 		return is;
 	}
 

@@ -1,6 +1,8 @@
 package dev.wolveringer.api.inventory;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import dev.wolveringer.BungeeUtil.Player;
 import dev.wolveringer.BungeeUtil.item.Item;
@@ -21,7 +23,7 @@ public class Inventory {
 
 	protected ItemContainer container;
 	protected String name;
-	protected ArrayList<Player> viewer = new ArrayList<Player>();
+	protected List<Player> viewer = (List<Player>) Collections.synchronizedList(new ArrayList<Player>());
 	protected InventoryType type;
 	protected boolean autoUpdate = true;
 	protected boolean clickable = true;
@@ -162,7 +164,7 @@ public class Inventory {
 		setItem(i, getItemStack(item));
 	}
 
-	public ArrayList<Player> getViewer() {
+	public List<Player> getViewer() {
 		return viewer;
 	}
 
@@ -175,7 +177,7 @@ public class Inventory {
 
 	public void resize(int size) {
 		if(type != InventoryType.Chest)
-			throw new IllegalStateException("Inventorytype isn´t a Chest!");
+			throw new IllegalStateException("Inventorytype isn�t a Chest!");
 		container.resize(size);
 		if(autoUpdate){
 			Item[] items = container.getContains();
@@ -226,7 +228,7 @@ public class Inventory {
 
 	@Override
 	public String toString() {
-		return "Inventory{name=\"§r" + getName() + "§r\" viewer=" + getViewer() + " ObjektID=\"" + super.toString().split("@")[1] + "\"}";
+		return "Inventory{name=\""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"r" + getName() + ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"r\" viewer=" + getViewer() + " ObjektID=\"" + super.toString().split("@")[1] + "\"}";
 	}
 
 	public void setContains(ItemStack[] contains) {

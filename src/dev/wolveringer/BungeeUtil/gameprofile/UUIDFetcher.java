@@ -5,17 +5,32 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class UUIDFetcher implements Callable<Map<String, UUID>> {
+	
+	private static LoadingCache<String, UUID> uuidCache = CacheBuilder.newBuilder().maximumSize(500).expireAfterWrite(4, TimeUnit.HOURS).build(new CacheLoader<String, UUID>() {
+		public UUID load(String name) throws Exception {
+			return new UUIDFetcher(Arrays.asList(name)).call().get(name);
+		};
+	});
+	
     private static final double PROFILES_PER_REQUEST = 100;
     private static final String PROFILE_URL = "https://api.mojang.com/profiles/minecraft";
     private final JsonParser jsonParser = new JsonParser();
@@ -96,6 +111,6 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
     }
  
     public static UUID getUUIDOf(String name) throws Exception {
-        return new UUIDFetcher(Arrays.asList(name)).call().get(name);
+        return uuidCache.get(name);
     }
 }

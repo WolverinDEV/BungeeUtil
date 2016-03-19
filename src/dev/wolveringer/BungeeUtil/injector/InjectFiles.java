@@ -13,12 +13,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import dev.wolveringer.BungeeUtil.Main;
-import dev.wolveringer.BungeeUtil.configuration.Configuration;
 import javassist.ClassPool;
 import javassist.CtClass;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.UserConnection;
+import dev.wolveringer.BungeeUtil.Main;
+import dev.wolveringer.BungeeUtil.configuration.Configuration;
 
 public class InjectFiles {
 	public static int inject() {
@@ -28,8 +28,8 @@ public class InjectFiles {
 			if(!Modifier.isFinal(modifier) && Modifier.isPublic(modifier)){
 				return -1;
 			}
-			Main.sendMessage("§7[§eBungeeUntil§7] §aStarting BungeeUtil injection.");
-			Main.sendMessage("§7[§eBungeeUntil§7] §aSet modifiers for class UserConnection.class to \"public\"");
+			Main.sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7["+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"eBungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"aStarting BungeeUtil injection.");
+			Main.sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7["+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"eBungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"aSet modifiers for class UserConnection.class to \"public\"");
 
 			String[] names = { "net.md_5.bungee.UserConnection.class" };
 			ClassPool cp = ClassPool.getDefault();
@@ -71,7 +71,7 @@ public class InjectFiles {
 		if(renameOk != 1)
 			System.out.print("Warn: Cant create temp file. Use .copy file");
 		byte[] buf = new byte[Configuration.getLoadingBufferSize()];
-		Main.sendMessage("§7[§eBungeeUntil§7] §aBuffer size: §e"+buf.length);
+		Main.sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7["+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"eBungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"aBuffer size: "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"e"+buf.length);
 		ZipInputStream zin = new ZipInputStream(new FileInputStream(tempFile));
 		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile));
 

@@ -1,17 +1,19 @@
 package dev.wolveringer.BungeeUtil.packets;
 
+import io.netty.buffer.ByteBuf;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
+import net.md_5.bungee.protocol.Protocol;
+import net.md_5.bungee.protocol.ProtocolConstants.Direction;
+import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
 import dev.wolveringer.BungeeUtil.CostumPrintStream;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.Player;
-import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
-import io.netty.buffer.ByteBuf;
-import net.md_5.bungee.protocol.Protocol;
-import net.md_5.bungee.protocol.ProtocolConstants.Direction;
+import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 
 public abstract class AbstractPacketCreator {
 	public int calculate(BigClientVersion version,Protocol p, Direction d, Integer id) {
@@ -52,13 +54,13 @@ public abstract class AbstractPacketCreator {
 		}
 		
 		for (Class<? extends Packet> packet : getRegisteredPackets()) {
-			int compressed = getPacketId(BigClientVersion.v1_8,packet); //TODO list bouth id's
+			int compressed = getPacketId(BigClientVersion.v1_9,packet); //TODO list bouth id's
 			packets.get(getProtocoll(compressed)).get(getDirection(compressed)).put(getPacketId(compressed), packet);
 		}
 		
-		out.println("§cPackete:");
+		out.println(ChatColorUtils.COLOR_CHAR+"cPackete:");
 		for (Protocol x : Protocol.values()) {
-			out.println(" §eProtocol: §5" + x.name());
+			out.println(" "+ChatColorUtils.COLOR_CHAR+"eProtocol: "+ChatColorUtils.COLOR_CHAR+"5" + x.name());
 			ArrayList typs = new ArrayList();
 			
 			for (Direction d : Direction.values())
@@ -75,11 +77,11 @@ public abstract class AbstractPacketCreator {
 			for (Direction d : Direction.values()) {
 				TreeMap<Integer, String> a = new TreeMap<Integer, String>();
 				for (Integer c : packets.get(x).get(d).keySet()) {
-					String s = "  §6PacketName: §a";
+					String s = "  "+ChatColorUtils.COLOR_CHAR+"6PacketName: "+ChatColorUtils.COLOR_CHAR+"a";
 					if (packets.get(x).get(d).get(c) == null) continue;
 					String name = packets.get(x).get(d).get(c).getName().replace("$-1", "");
-					s += right( name.replaceAll(name.split("\\.")[name.split("\\.").length - 1], "§b" + name.split("\\.")[name.split("\\.").length - 1])+(packets.get(x).get(d).get(c).getName().endsWith("$-1") ? " (Redefined)" : ""), i).replaceAll(" \\(Redefined\\)", " §c(Redefined)"); //§c(Redefined)
-					s += "  §6ID: §e" + right("0x" + (Integer.toHexString(c).length() == 1 ? "0" + Integer.toHexString(c) : Integer.toHexString(c)).toUpperCase(), 4) + " §6Direction: §5" + d.toString().toUpperCase();
+					s += right( name.replaceAll(name.split("\\.")[name.split("\\.").length - 1], ChatColorUtils.COLOR_CHAR+"b" + name.split("\\.")[name.split("\\.").length - 1]), i); //"+COLOR_CHAR+"c(Redefined)
+					s += "  "+ChatColorUtils.COLOR_CHAR+"6ID: "+ChatColorUtils.COLOR_CHAR+"e" + right("0x" + (Integer.toHexString(c).length() == 1 ? "0" + Integer.toHexString(c) : Integer.toHexString(c)).toUpperCase(), 4) + " "+ChatColorUtils.COLOR_CHAR+"6Direction: "+ChatColorUtils.COLOR_CHAR+"5" + d.toString().toUpperCase();
 					a.put(c, s);
 				}
 				for (Integer c : a.keySet())

@@ -2,10 +2,10 @@ package dev.wolveringer.api.scoreboard;
 
 import java.util.ArrayList;
 
+import net.md_5.bungee.api.ChatColor;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardTeam;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardTeam.Action;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardTeam.NameTag;
-import net.md_5.bungee.api.ChatColor;
 
 public final class Team {
 	protected Scoreboard owner;

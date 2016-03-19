@@ -5,6 +5,7 @@ import dev.wolveringer.BungeeUtil.item.Item;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayIn;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.api.SoundEffect;
+import dev.wolveringer.api.SoundEffect.SoundCategory;
 import dev.wolveringer.api.inventory.Inventory;
 import dev.wolveringer.api.inventory.PlayerInventory;
 import dev.wolveringer.api.position.Location;
@@ -14,11 +15,6 @@ import dev.wolveringer.network.IInitialHandler;
 
 public interface Player extends ProxiedPlayer {
 	public IInitialHandler getInitialHandler();
-
-	public void playEffect(SoundEffect effect, Location loc, float volume);
-
-	public void playEffect(SoundEffect effect, Location loc, float volume, float pitch);
-
 	
 	public Location getLocation();
 	
@@ -47,7 +43,9 @@ public interface Player extends ProxiedPlayer {
 
 	public Item getCursorItem();
 
+	public Item getHandItem();
 	
+	public Item getOffHandItem();
 
 	public ClientVersion getVersion();
 
@@ -70,4 +68,14 @@ public interface Player extends ProxiedPlayer {
 	public Scoreboard getScoreboard();
 
 	public void disconnect(Exception e);
+	
+	/**
+	 * @param effect
+	 * @param location
+	 * @param volume
+	 * @param pitch (0-360)
+	 */
+	public void playSound(SoundEffect effect,Location location,float volume,float pitch);
+
+	public void playSound(SoundEffect effect, SoundCategory blocks, Location location, float f, float g);
 }

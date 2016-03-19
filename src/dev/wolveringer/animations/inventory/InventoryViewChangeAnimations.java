@@ -3,17 +3,18 @@ package dev.wolveringer.animations.inventory;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import net.md_5.bungee.BungeeCord;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.Material;
 import dev.wolveringer.BungeeUtil.item.Item;
 import dev.wolveringer.api.inventory.Inventory;
 import dev.wolveringer.api.inventory.ItemContainer;
-import net.md_5.bungee.BungeeCord;
 
 public class InventoryViewChangeAnimations {
 	public static enum AnimationType {
 		SCROLL_DOWN,
-		SCROLL_UP;
+		SCROLL_UP,
+		SCROLL_LEFT;
 	}
 
 	public static void runAnimation(AnimationType type, Inventory base, ItemContainer new_contains) {
@@ -25,12 +26,19 @@ public class InventoryViewChangeAnimations {
 	}
 
 	public static void runAnimation(AnimationType type, Inventory base, ItemContainer new_contains, String new_name, Item spacer) {
-		if(type == AnimationType.SCROLL_DOWN)
-			runScroolUpAnimation(base, new_contains, new_name, spacer,250);
-		else if(type == AnimationType.SCROLL_UP)
-			runScroolDownAnimation(base, new_contains, new_name, spacer, 150);
+		runAnimation(type, base, new_contains, new_name, spacer, 200);
 	}
 
+	public static void runAnimation(AnimationType type, Inventory base, ItemContainer new_contains, String new_name, Item spacer,int delay) {
+		if(type == AnimationType.SCROLL_DOWN)
+			runScroolUpAnimation(base, new_contains, new_name, spacer,delay);
+		else if(type == AnimationType.SCROLL_UP)
+			runScroolDownAnimation(base, new_contains, new_name, spacer, delay);
+	}
+	
+	private static void runScroolLeftAnimation(final Inventory base, final ItemContainer new_contains, final String new_name, final Item space,int delay) {
+		
+	}
 
 	private static void runScroolUpAnimation(final Inventory base, final ItemContainer new_contains, final String new_name, final Item space,int delay) {
 		final Item[][] old_rows = buildCollums(base);
@@ -173,39 +181,5 @@ public class InventoryViewChangeAnimations {
 			for(int y = 0;y < rows[0].length;y++)
 				rows[x][y] = container.getItem(x * 9 + y);
 		return rows;
-	}
-}
-
-abstract class LimetedScheduller implements Runnable {
-	protected int limit;
-	protected int count;
-	private int repeat_time;
-	private TimeUnit unit;
-	private int ID;
-
-	public LimetedScheduller(int limit, int repeat_time, TimeUnit unit) {
-		this.limit = limit;
-		this.repeat_time = repeat_time;
-		this.unit = unit;
-	}
-
-	@Override
-	public void run() {
-		run(count);
-		count++;
-		if(count > limit){
-			BungeeCord.getInstance().getScheduler().cancel(ID);
-			done();
-		}
-	}
-
-	public abstract void run(int count);
-
-	public void done() {
-
-	}
-
-	public void start() {
-		ID = BungeeCord.getInstance().getScheduler().schedule(Main.getMain(), this, 0, repeat_time, unit).getId();
 	}
 }

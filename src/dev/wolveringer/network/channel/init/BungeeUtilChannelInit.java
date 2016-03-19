@@ -1,17 +1,15 @@
 package dev.wolveringer.network.channel.init;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-
-import dev.wolveringer.BungeeUtil.Main;
-import dev.wolveringer.network.Decoder;
-import dev.wolveringer.network.Encoder;
-import dev.wolveringer.network.channel.ChannelHandler;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelException;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ListenerInfo;
@@ -22,9 +20,13 @@ import net.md_5.bungee.netty.PipelineUtils;
 import net.md_5.bungee.protocol.KickStringWriter;
 import net.md_5.bungee.protocol.LegacyDecoder;
 import net.md_5.bungee.protocol.Protocol;
+import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 import net.md_5.bungee.protocol.Varint21FrameDecoder;
 import net.md_5.bungee.protocol.Varint21LengthFieldPrepender;
-import net.md_5.bungee.protocol.ProtocolConstants.Direction;
+import dev.wolveringer.BungeeUtil.Main;
+import dev.wolveringer.network.Decoder;
+import dev.wolveringer.network.Encoder;
+import dev.wolveringer.network.channel.ChannelHandler;
 
 public class BungeeUtilChannelInit <T extends InitialHandler> extends ChannelInizializer {
 	protected Varint21LengthFieldPrepender framePrepender;
@@ -94,7 +96,6 @@ public class BungeeUtilChannelInit <T extends InitialHandler> extends ChannelIni
 		catch (ChannelException ex) {
 		}
 		ch.config().setAllocator(PooledByteBufAllocator.DEFAULT);
-		
 		ch.pipeline().addLast("timeout", new ReadTimeoutHandler(BungeeCord.getInstance().config.getTimeout(), java.util.concurrent.TimeUnit.MILLISECONDS));
 		ch.pipeline().addLast("frame-decoder", new Varint21FrameDecoder());
 		ch.pipeline().addLast("frame-prepender", framePrepender);
@@ -103,23 +104,23 @@ public class BungeeUtilChannelInit <T extends InitialHandler> extends ChannelIni
 	
 	@SuppressWarnings("deprecation")
 	public void throwClassNotFoundError() {
-		BungeeCord.getInstance().getConsole().sendMessage("§7[BungeeUntil§7] §cBungeeUntil cant load some Classes!");
-		BungeeCord.getInstance().getConsole().sendMessage("§7[BungeeUntil§7] §cDisable BungeeUntil!");
+		BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cBungeeUntil cant load some Classes!");
+		BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cDisable BungeeUntil!");
 		try {
 			setStaticFinalValue(PipelineUtils.class.getDeclaredField("SERVER_CHILD"), dinti);
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
-			BungeeCord.getInstance().getConsole().sendMessage("§7[BungeeUntil§7] §cError while setting default ConnectionHandler.");
-			BungeeCord.getInstance().getConsole().sendMessage("§7[BungeeUntil§7] §cRestarting BungeeCord!");
+			BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cError while setting default ConnectionHandler.");
+			BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cRestarting BungeeCord!");
 			BungeeCord.getInstance().stop();
 			return;
 		}
 		BungeeCord.getInstance().getPluginManager().unregisterListeners(Main.getMain());
 		Main.getMain().onDisable();
 		for (ProxiedPlayer p : BungeeCord.getInstance().getPlayers())
-			p.disconnect("§cBungeeUntil Class error");
-		BungeeCord.getInstance().getConsole().sendMessage("§7[BungeeUntil§7] §cBungeeUntil is disabled!");
+			p.disconnect(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cBungeeUntil Class error");
+		BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cBungeeUntil is disabled!");
 	}
 	
 	public T createInitialHandler(Channel ch, Encoder e, Decoder d) throws Exception {

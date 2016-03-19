@@ -1,13 +1,13 @@
 package dev.wolveringer.profiler;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 import dev.wolveringer.BungeeUtil.Material;
-import dev.wolveringer.BungeeUtil.item.MultiClickItemStack;
 import dev.wolveringer.BungeeUtil.item.ItemStack;
+import dev.wolveringer.BungeeUtil.item.MultiClickItemStack;
+import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 import dev.wolveringer.util.apache.ArrayUtils;
 
 public class Timings {
@@ -106,7 +106,7 @@ public class Timings {
 
 	public void rebuild() {
 		int steps = 10;
-		item.getItemMeta().setDisplayName("§bTiming: §b" + getName());
+		item.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR+"bTiming: "+ChatColorUtils.COLOR_CHAR+"b" + getName());
 
 		Long max = getHighestValue(getTimings()) + 10;
 		Long min = 0L;
@@ -121,7 +121,7 @@ public class Timings {
 		ArrayList<String> a = new ArrayList<String>();
 		double count_step = d / steps;
 		for(int i = 0;i < steps;i++)
-			a.add("§c" + fromat(count_step * i) + " ms§7: ");
+			a.add(ChatColorUtils.COLOR_CHAR+"c" + fromat(count_step * i) + " ms"+ChatColorUtils.COLOR_CHAR+"7: ");
 		String[] var1 = a.toArray(new String[a.size()]);
 		ArrayUtils.reverse(var1);
 		addVertical(out, var1);
@@ -135,7 +135,7 @@ public class Timings {
 	private String fromat(double d) {
 		String out = Profiler.TIME_FORMAT.format(d).replaceAll(",", ".");
 		if(out.indexOf(".") != -1)
-			out = out.substring(0, out.indexOf(".")) + "§c" + out.substring(out.indexOf("."), out.length());
+			out = out.substring(0, out.indexOf(".")) + ChatColorUtils.COLOR_CHAR+"c" + out.substring(out.indexOf("."), out.length());
 		return out;
 	}
 
@@ -154,11 +154,11 @@ public class Timings {
 		for(int i = steps - 1;i >= 0;i--){
 			if(count_step * i <= var)
 				if(((count_step * i) + count_step * 0.5D) <= var)
-					out[i] = "§a█";
+					out[i] = "§aX";//""+ChatColorUtils.COLOR_CHAR+"a▅";
 				else
-					out[i] = "§a▄";
+					out[i] = "§aX";//ChatColorUtils.COLOR_CHAR+"a█";
 			else
-				out[i] = "§0█";
+				out[i] = "§0X";//ChatColorUtils.COLOR_CHAR+"0█";
 		}
 		ArrayUtils.reverse(out);
 		return out;

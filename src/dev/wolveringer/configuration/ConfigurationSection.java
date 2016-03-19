@@ -1,10 +1,8 @@
 package dev.wolveringer.configuration;
 
-import java.awt.Color;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 /**
  * Represents a section of a {@link Configuration}

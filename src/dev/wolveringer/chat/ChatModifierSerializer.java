@@ -2,6 +2,8 @@ package dev.wolveringer.chat;
 
 import java.lang.reflect.Type;
 
+import net.md_5.bungee.api.ChatColor;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -9,8 +11,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-
-import net.md_5.bungee.api.ChatColor;
 
 @SuppressWarnings({ "rawtypes" })
 public class ChatModifierSerializer implements JsonDeserializer, JsonSerializer {

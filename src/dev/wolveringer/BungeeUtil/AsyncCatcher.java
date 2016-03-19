@@ -2,14 +2,27 @@ package dev.wolveringer.BungeeUtil;
 
 import java.util.ArrayList;
 
+import dev.wolveringer.BungeeUtil.configuration.Configuration;
+import dev.wolveringer.BungeeUtil.exception.ExceptionUtils;
+import jline.WindowsTerminal.ConsoleMode;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class AsyncCatcher {
-	private static boolean enabled = true;
-	private static ArrayList<ThreadGroup> unchecked_threads= new ArrayList<ThreadGroup>();
+	
+	public static enum AsyncCatcherMode {
+		DISABLED,
+		EXCEPTION,
+		ERROR;
+		
+		private AsyncCatcherMode() {}
+	}
+	
+	private static AsyncCatcherMode mode = AsyncCatcherMode.EXCEPTION;
+	private static ArrayList<ThreadGroup> unchecked_threads = new ArrayList<ThreadGroup>();
 	private static ArrayList<Plugin> unchecked_plugins = new ArrayList<Plugin>();
+	
 	public static void catchOp(String reason) {
-		if(enabled){
+		if(mode != AsyncCatcherMode.DISABLED){
 			if(unchecked_threads.size() != 0)
 				for(Plugin p : unchecked_plugins)
 					if(p.getDescription().getName().contains(Thread.currentThread().getThreadGroup().getName()))
@@ -17,24 +30,38 @@ public class AsyncCatcher {
 			if(unchecked_threads.size() != 0)
 				if(unchecked_threads.contains(Thread.currentThread().getThreadGroup()))
 					return;
-			throw new IllegalStateException("Asynchronous " + reason + "!"); 
+			if(mode == AsyncCatcherMode.EXCEPTION)
+				throw new IllegalStateException("Asynchronous " + reason + "!"); 
+			else if(mode == AsyncCatcherMode.ERROR){
+				StackTraceElement e = ExceptionUtils.getCurruntMethodeStackTraceElement();
+				if(e == null)
+					System.out.println("Async catcher catched from underknown src. Message: "+reason);
+				else
+					System.out.println("Async catcher catched from "+e.getClassName()+"#"+e.getMethodName()+"("+e.getLineNumber()+"). Message: "+reason);
+			}
 		}
 	}
 	
-	public static void enable(Plugin plugin){
-		if(!unchecked_threads.contains(Thread.currentThread().getThreadGroup()))
+	public static void disable(Plugin plugin){
+		if(unchecked_threads.contains(Thread.currentThread().getThreadGroup()))
 			throw new UnsupportedOperationException("Thread alredy unregistered!");
 		unchecked_threads.add(Thread.currentThread().getThreadGroup());
 		unchecked_plugins.add(plugin);
 	}
-	public static void disable(Plugin plugin){
-		if(unchecked_threads.contains(Thread.currentThread().getThreadGroup()))
+	public static void enable(Plugin plugin){
+		if(!unchecked_threads.contains(Thread.currentThread().getThreadGroup()))
 			throw new UnsupportedOperationException("Thread alredy registered!");
 		unchecked_plugins.remove(plugin);
 		unchecked_threads.remove(Thread.currentThread().getThreadGroup());
 	}
 	@Deprecated
 	public static void disableAll(){
-		enabled = false;
+		mode = AsyncCatcherMode.DISABLED;
+	}
+
+	public static void init() {
+		mode = Configuration.getAsyncMode();
+		if(mode == null)
+			throw new RuntimeException("Async catcher mode not found!");
 	}
 }

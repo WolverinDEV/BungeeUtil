@@ -1,7 +1,7 @@
 package dev.wolveringer.chat;
 
-import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 import net.md_5.bungee.api.ChatColor;
+import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 
 public class ChatTextBuilder {
 	IChatBaseComponent base;

@@ -1,6 +1,25 @@
 package dev.wolveringer.network;
 
+import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.util.internal.PlatformDependent;
+
 import java.lang.reflect.Field;
+
+import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.BungeeServerInfo;
+import net.md_5.bungee.UserConnection;
+import net.md_5.bungee.api.Callback;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.ServerConnectEvent;
+import net.md_5.bungee.connection.InitialHandler;
+import net.md_5.bungee.netty.ChannelWrapper;
+import net.md_5.bungee.netty.PipelineUtils;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
@@ -18,6 +37,7 @@ import dev.wolveringer.BungeeUtil.packets.PacketPlayOutWindowItems;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayIn;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.api.SoundEffect;
+import dev.wolveringer.api.SoundEffect.SoundCategory;
 import dev.wolveringer.api.inventory.Inventory;
 import dev.wolveringer.api.inventory.InventoryType;
 import dev.wolveringer.api.inventory.PlayerInventory;
@@ -27,23 +47,6 @@ import dev.wolveringer.bungee.AbstraktUserConnection;
 import dev.wolveringer.chat.IChatBaseComponent;
 import dev.wolveringer.network.inject.XChannelFutureListener;
 import dev.wolveringer.network.inject.XChannelInitializer;
-import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.util.internal.PlatformDependent;
-import net.md_5.bungee.BungeeCord;
-import net.md_5.bungee.BungeeServerInfo;
-import net.md_5.bungee.UserConnection;
-import net.md_5.bungee.api.Callback;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.event.ServerConnectEvent;
-import net.md_5.bungee.connection.InitialHandler;
-import net.md_5.bungee.netty.ChannelWrapper;
-import net.md_5.bungee.netty.PipelineUtils;
 
 public class ProxiedPlayerUserConnection extends AbstraktUserConnection implements Player {
 	private IInitialHandler i;
@@ -66,14 +69,6 @@ public class ProxiedPlayerUserConnection extends AbstraktUserConnection implemen
 
 	public IInitialHandler getInitialHandler() {
 		return i;
-	}
-
-	public void playEffect(SoundEffect effect, Location loc, float volume) {
-		playEffect(effect, loc, volume, 255F);
-	}
-
-	public void playEffect(SoundEffect effect, Location loc, float volume, float pitch) {
-		sendPacket(new PacketPlayOutNamedSoundEffect(loc, effect.getName(), volume, pitch));
 	}
 
 	public void closeInventory() {
@@ -139,6 +134,10 @@ public class ProxiedPlayerUserConnection extends AbstraktUserConnection implemen
 		return cursor;
 	}
 
+	public Item getOffHandItem() {
+		return getPlayerInventory().getItem(45);
+	}
+	
 	public PlayerInventory getPlayerInventory() {
 		return p_inv;
 	}
@@ -192,7 +191,7 @@ public class ProxiedPlayerUserConnection extends AbstraktUserConnection implemen
 
 	@Override
 	public String toString() {
-		return "Player{name=\"§r" + getName() + "§r\" DisplayName=\"§r" + getDisplayName() + "§r\" ping=\"" + getPing() + "\"}";
+		return "Player{name=\""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"r" + getName() + ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"r\" DisplayName=\""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"r" + getDisplayName() + ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"r\" ping=\"" + getPing() + "\"}";
 	}
 
 	@Override
@@ -255,5 +254,25 @@ public class ProxiedPlayerUserConnection extends AbstraktUserConnection implemen
 	@Override
 	public boolean isConnected() {
 		return getUserconnection().isConnected();
+	}
+
+	@Override
+	public Item getHandItem() {
+		return getPlayerInventory().getItem(36+slot);
+	}
+	@Override
+	public void playSound(SoundEffect effect, Location location, float volume, float pitch) {
+		playSound(effect, SoundCategory.MASTER, location, volume, pitch);
+	}
+
+	public void playSound(SoundEffect effect,SoundCategory category, Location location, float volume, float pitch) {
+		if(!effect.isAvariable(getVersion().getBigVersion()))
+			throw new RuntimeException("Sound not avariable for client version");
+		PacketPlayOutNamedSoundEffect packet = new PacketPlayOutNamedSoundEffect();
+		packet.setLoc(location);
+		packet.setVolume(volume);
+		packet.setSoundCategory(category.ordinal());
+		packet.setSound(effect.getName());
+		sendPacket(packet);
 	}
 }

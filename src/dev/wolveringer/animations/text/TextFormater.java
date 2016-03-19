@@ -7,7 +7,7 @@ import org.jsoup.nodes.Element;
 
 /**
  * Usage:<br>
- * Base-Text: <br>{@code <scroller width=10  space=0 time=100>HELLO THIS IS A§a TEST§a STRING!</scroller>XX<scroller width=10  space=0 time=150>HELLO THIS IS A TEST STRING!</scroller>XX<scroller width=10  space=0 time=200>HELLO THIS IS A TEST STRING!</scroller>}<br>
+ * Base-Text: <br>{@code <scroller width=10  space=0 time=100>HELLO THIS IS A"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"a TEST"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"a STRING!</scroller>XX<scroller width=10  space=0 time=150>HELLO THIS IS A TEST STRING!</scroller>XX<scroller width=10  space=0 time=200>HELLO THIS IS A TEST STRING!</scroller>}<br>
  * Start scroler with: {@code <scroller width=<Text With>  space=<Space between end and start> time=<time per step>>}<br>
  * @author wolverindev
  *
@@ -18,7 +18,7 @@ public class TextFormater {
 	private long kgn;
 
 	public TextFormater(String raw) {
-		this.raw = loadElement(Jsoup.parse(raw.replaceAll("&", "§")));
+		this.raw = loadElement(Jsoup.parse(raw.replaceAll("&", ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"")));
 	}
 	private String loadElement(Element e) {
 		long[] l = new long[e.getElementsByTag("scroller").size()];
@@ -56,7 +56,7 @@ class SpecScroll extends Scroller {
 	private String now;
 
 	public SpecScroll(String message, int width, int spaceBetween, int tics) {
-		super(message, width, spaceBetween, '§');
+		super(message, width, spaceBetween, dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR);
 		t = ft = tics;
 		now = super.next();
 	}

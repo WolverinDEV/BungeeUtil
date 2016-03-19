@@ -4,7 +4,6 @@ import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.api.position.Location;
 import dev.wolveringer.packet.PacketDataSerializer;
-
 public class PacketPlayOutPosition extends Packet implements PacketPlayOut{
 	private boolean ground;
 	private Location loc;

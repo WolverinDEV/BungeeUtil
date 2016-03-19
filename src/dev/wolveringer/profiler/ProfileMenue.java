@@ -5,10 +5,11 @@ import java.util.concurrent.TimeUnit;
 import net.md_5.bungee.BungeeCord;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.Material;
-import dev.wolveringer.BungeeUtil.item.MultiClickItemStack;
 import dev.wolveringer.BungeeUtil.item.ItemStack;
+import dev.wolveringer.BungeeUtil.item.MultiClickItemStack;
 import dev.wolveringer.api.inventory.Inventory;
 import dev.wolveringer.api.inventory.ScrolingInventory;
+import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 
 public class ProfileMenue {
 	private static ProfileMenue menue = new ProfileMenue();
@@ -20,8 +21,8 @@ public class ProfileMenue {
 		return menue;
 	}
 
-	private ScrolingInventory inv = new ScrolingInventory(4, "§aTimings");
-	private Inventory inv_disabled = new Inventory(9, "§cTimings Disabled");
+	private ScrolingInventory inv = new ScrolingInventory(4, ""+ChatColorUtils.COLOR_CHAR+"aTimings");
+	private Inventory inv_disabled = new Inventory(9, ""+ChatColorUtils.COLOR_CHAR+"cTimings Disabled");
 
 	public ProfileMenue() {
 		rebuild();
@@ -32,7 +33,7 @@ public class ProfileMenue {
 			}
 		}, 1, 5, TimeUnit.SECONDS);
 		ItemStack is = new MultiClickItemStack(Material.BARRIER);
-		is.getItemMeta().setDisplayName("§cTimings are §c§nDisabled");
+		is.getItemMeta().setDisplayName(""+ChatColorUtils.COLOR_CHAR+"cTimings are "+ChatColorUtils.COLOR_CHAR+"c"+ChatColorUtils.COLOR_CHAR+"nDisabled");
 		inv_disabled.setItem(4, is);
 	}
 
@@ -55,7 +56,7 @@ public class ProfileMenue {
 				p.getPlayer().openInventory(profile.getInventory());
 			}
 		};
-		is.getItemMeta().setDisplayName("§bProfiler: §5" + profile.getName());
+		is.getItemMeta().setDisplayName(""+ChatColorUtils.COLOR_CHAR+"bProfiler: "+ChatColorUtils.COLOR_CHAR+"5" + profile.getName());
 		return is;
 	}
 

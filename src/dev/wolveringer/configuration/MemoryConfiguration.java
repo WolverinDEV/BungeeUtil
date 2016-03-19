@@ -2,8 +2,6 @@ package dev.wolveringer.configuration;
 
 import java.util.Map;
 
-import javax.naming.OperationNotSupportedException;
-
 import dev.wolveringer.util.apache.Validate;
 
 /**

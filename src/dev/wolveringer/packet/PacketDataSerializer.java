@@ -17,7 +17,6 @@ import java.util.UUID;
 
 import dev.wolveringer.BungeeUtil.ClientVersion;
 import dev.wolveringer.BungeeUtil.item.Item;
-import dev.wolveringer.api.datawatcher.DataWatcher;
 import dev.wolveringer.api.position.BlockPosition;
 import dev.wolveringer.chat.IChatBaseComponent;
 import dev.wolveringer.nbt.NBTTagCompound;

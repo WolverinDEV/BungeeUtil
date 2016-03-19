@@ -1,7 +1,5 @@
 package dev.wolveringer.network.inject;
 
-import dev.wolveringer.network.Decoder;
-import dev.wolveringer.network.IInitialHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import net.md_5.bungee.BungeeCord;
@@ -14,6 +12,8 @@ import net.md_5.bungee.netty.PipelineUtils;
 import net.md_5.bungee.protocol.MinecraftEncoder;
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
+import dev.wolveringer.network.Decoder;
+import dev.wolveringer.network.IInitialHandler;
 
 public class XChannelInitializer extends ChannelInitializer<Channel> {
 	UserConnection conn;

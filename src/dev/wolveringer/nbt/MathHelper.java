@@ -161,32 +161,6 @@ public class MathHelper {
 		return d0 < i ? i - 1 : i;
 	}
 
-	public static double g(double d0) {
-		d0 %= 360.0D;
-		if(d0 >= 180.0D){
-			d0 -= 360.0D;
-		}
-
-		if(d0 < -180.0D){
-			d0 += 360.0D;
-		}
-
-		return d0;
-	}
-
-	public static float g(float f) {
-		f %= 360.0F;
-		if(f >= 180.0F){
-			f -= 360.0F;
-		}
-
-		if(f < -180.0F){
-			f += 360.0F;
-		}
-
-		return f;
-	}
-
 	public static int nextInt(Random random, int min, int max) {
 		return min >= max ? min : random.nextInt(max - min + 1) + min;
 	}

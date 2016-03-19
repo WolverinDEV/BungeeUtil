@@ -10,8 +10,8 @@ public class NBTReadLimiter {
 		this.limit = limit;
 	}
 
-	public void readBytes(long bytes) {
-		this.readed += bytes / 8L;
+	public void readBytes(long bits) {
+		this.readed += bits / 8L;
 		if(this.readed > this.limit){
 			throw new RuntimeException("Tried to read NBT tag that was too big; tried to allocate: " + this.readed + "bytes where max allowed: " + this.limit);
 		}

@@ -1,20 +1,26 @@
-####################################### 
-#              Timings:               # 
-#         Loging timings on/off       # 
-#                                     # 
-#              Updater:               # 
-#           Enable outo update        # 
-#                                     # 
-#             ByteBuffType:           # 
-#  The Used Buffer type for Packets   # 
-#  Avariable:                         # 
-#    - 'direct'                       # 
-#    - 'heap'                         # 
-#                                     # 
-#               Terminal:             # 
-#      Colors in terminal on/off      # 
-#                                     # 
-####################################### 
+######################################## 
+#              Timings:                # 
+#         Loging timings on/off        # 
+#                                      # 
+#              Updater:                # 
+#           Enable outo update         # 
+#                                      # 
+#             ByteBuffType:            # 
+#  The Used Buffer type for Packets    # 
+#              Avariable:              # 
+#    - 'direct'                        # 
+#    - 'heap'                          # 
+#                                      # 
+#               Terminal:              # 
+#      Colors in terminal on/off       # 
+#                                      # 
+#            Async-Catcher:            # 
+#  Enable it for more packet security  # 
+#        The catcher has 2 modes:      # 
+# - EXCEPTION (will throw a exception) # 
+# - WARNING (will print a warn message)# 
+#                                      # 
+######################################## 
 timings: true
 updater: true
 byteBuffType: direct
@@ -26,3 +32,6 @@ loading:
   inject:
     buffer-size: 65536
   fastboot: false
+async-catcher:
+  enabled: true
+  mode: EXCEPTION

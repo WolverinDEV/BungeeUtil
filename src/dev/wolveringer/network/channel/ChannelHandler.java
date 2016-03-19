@@ -6,11 +6,6 @@ import io.netty.handler.timeout.ReadTimeoutException;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import com.google.common.base.Preconditions;
-
-import dev.wolveringer.BungeeUtil.configuration.Configuration;
-import dev.wolveringer.chat.ChatColor.ChatColorUtils;
-import dev.wolveringer.strings.Messages;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.connection.CancelSendSignal;
 import net.md_5.bungee.connection.InitialHandler;
@@ -20,6 +15,12 @@ import net.md_5.bungee.netty.HandlerBoss;
 import net.md_5.bungee.netty.PacketHandler;
 import net.md_5.bungee.protocol.BadPacketException;
 import net.md_5.bungee.protocol.PacketWrapper;
+
+import com.google.common.base.Preconditions;
+
+import dev.wolveringer.BungeeUtil.configuration.Configuration;
+import dev.wolveringer.chat.ChatColor.ChatColorUtils;
+import dev.wolveringer.strings.Messages;
 
 public class ChannelHandler extends HandlerBoss {
 	private ChannelWrapper channel;

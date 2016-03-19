@@ -1,8 +1,5 @@
 package dev.wolveringer.network.channel;
 
-import java.lang.reflect.Field;
-import java.net.SocketAddress;
-
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -14,6 +11,10 @@ import io.netty.channel.ChannelPromise;
 import io.netty.util.Attribute;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.EventExecutor;
+
+import java.lang.reflect.Field;
+import java.net.SocketAddress;
+
 import net.md_5.bungee.compress.PacketCompressor;
 import net.md_5.bungee.compress.PacketDecompressor;
 import net.md_5.bungee.netty.PipelineUtils;
@@ -24,7 +25,6 @@ import net.md_5.bungee.protocol.Protocol;
 
 import com.google.common.base.Preconditions;
 
-import dev.wolveringer.BungeeUtil.packets.Packet;
 import dev.wolveringer.Reflect.Until;
 import dev.wolveringer.network.Decoder;
 import dev.wolveringer.network.Encoder;

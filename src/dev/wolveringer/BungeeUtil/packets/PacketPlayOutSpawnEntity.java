@@ -30,7 +30,7 @@ public class PacketPlayOutSpawnEntity extends Packet implements PacketPlayOut{
 		eid = s.readVarInt();
 		type = s.readByte();
 		location = new Location(s.readInt(), s.readInt(), s.readInt());
-		data = new DataWatcher(getBigVersion(),s);
+		data = DataWatcher.createDataWatcher(getBigVersion(),s);
 	}
 	@Override
 	public void write(PacketDataSerializer s) {
@@ -39,7 +39,7 @@ public class PacketPlayOutSpawnEntity extends Packet implements PacketPlayOut{
 		s.writeInt(location.getBlockX());
 		s.writeInt(location.getBlockY());
 		s.writeInt(location.getBlockZ());
-		data.write(getBigVersion(),s);
+		data.write(s);
 	}
 
 	public Location getLocation() {

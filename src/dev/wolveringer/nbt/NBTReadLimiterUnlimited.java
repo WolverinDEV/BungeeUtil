@@ -6,6 +6,5 @@ final class NBTReadLimiterUnlimited extends NBTReadLimiter {
 	}
 
 	@Override
-	public void readBytes(long i) {
-	}
+	public void readBytes(long i) {}
 }

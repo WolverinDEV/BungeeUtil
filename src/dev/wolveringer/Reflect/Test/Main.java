@@ -1,12 +1,6 @@
 package dev.wolveringer.Reflect.Test;
 
-import java.util.ArrayList;
-
-import dev.wolveringer.BungeeUtil.packets.Packet;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayInPosition;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayInPositionLook;
 import dev.wolveringer.api.position.Location;
-import dev.wolveringer.packet.MathHelper_v1_8;
 
 public class Main {
     static class Friend {

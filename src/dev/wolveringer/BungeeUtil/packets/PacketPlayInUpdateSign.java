@@ -1,9 +1,7 @@
 package dev.wolveringer.BungeeUtil.packets;
 
-import dev.wolveringer.BungeeUtil.ClientVersion;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayIn;
 import dev.wolveringer.api.position.BlockPosition;
-import dev.wolveringer.api.position.Location;
 import dev.wolveringer.chat.IChatBaseComponent;
 import dev.wolveringer.packet.PacketDataSerializer;
 

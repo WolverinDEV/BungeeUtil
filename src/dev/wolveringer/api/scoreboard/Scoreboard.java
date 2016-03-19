@@ -9,7 +9,7 @@ import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardObjective.Type;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardTeam;
 
 public final class Scoreboard {
-	@SuppressWarnings("serial")
+	@SuppressWarnings({ "serial", "unused" })
 	private static class ScoreboardAlredyExistException extends RuntimeException {
 		public ScoreboardAlredyExistException(String message) {
 			super(message);

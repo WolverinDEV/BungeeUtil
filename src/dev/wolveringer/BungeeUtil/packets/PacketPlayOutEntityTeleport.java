@@ -1,5 +1,6 @@
 package dev.wolveringer.BungeeUtil.packets;
 
+import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.api.position.Location;
 import dev.wolveringer.packet.PacketDataSerializer;
@@ -15,7 +16,7 @@ public class PacketPlayOutEntityTeleport extends Packet implements PacketPlayOut
 
 	public PacketPlayOutEntityTeleport(int id, Location loc) {
 		this();
-		this.loc = loc.clone().multiply(32D);
+		this.loc = loc.clone();
 		this.id = id;
 	}
 
@@ -29,7 +30,10 @@ public class PacketPlayOutEntityTeleport extends Packet implements PacketPlayOut
 			id = s.readInt();
 		else
 			id = s.readVarInt();
-		loc = new Location(s.readInt(), s.readInt(), s.readInt(), s.readByte(), s.readByte());
+		if(getBigVersion() == BigClientVersion.v1_9)
+			loc = new Location(s.readDouble(), s.readDouble(), s.readDouble(),((float)s.readByte())/ 256.0F * 360.0F,((float)s.readByte())/ 256.0F * 360.0F);
+		else
+			loc = new Location(s.readInt(), s.readInt(), s.readInt(), ((float)s.readByte())/ 256.0F * 360.0F,((float)s.readByte())/ 256.0F * 360.0F).dividide(32D);
 		if(getVersion().getVersion() >= 22){
 			onGround = s.readBoolean();
 		}
@@ -42,22 +46,34 @@ public class PacketPlayOutEntityTeleport extends Packet implements PacketPlayOut
 		}else{
 			s.writeVarInt(id);
 		}
-		s.writeInt(loc.getBlockX());
-		s.writeInt(loc.getBlockY());
-		s.writeInt(loc.getBlockZ());
-		s.writeByte((int) loc.getYaw());
-		s.writeByte((int) loc.getPitch());
-		if(getVersion().getVersion() >= 22){
-			s.writeBoolean(this.onGround);
+		if(getBigVersion() == BigClientVersion.v1_9){
+			s.writeDouble(loc.getX());
+			s.writeDouble(loc.getY());
+			s.writeDouble(loc.getZ());
+			
+			s.writeByte((int) (loc.getYaw() * 256.0F / 360.0F));
+			s.writeByte((int) (loc.getPitch() * 256.0F / 360.0F));
 		}
+		else
+		{
+			loc = loc.multiply(32D);
+			s.writeInt(loc.getBlockX());
+			s.writeInt(loc.getBlockY());
+			s.writeInt(loc.getBlockZ());
+
+			s.writeByte((int) (loc.getYaw() * 256.0F / 360.0F));
+			s.writeByte((int) (loc.getPitch() * 256.0F / 360.0F));
+		}
+		if(getVersion().getVersion() >= 22)
+			s.writeBoolean(this.onGround);
 	}
 
 	public Location getLocation() {
-		return loc.dividide(32D);
+		return loc.clone();
 	}
 
 	public void setLocation(Location loc) {
-		this.loc = loc.multiply(32D);
+		this.loc = loc.clone();
 	}
 
 	public int getId() {
@@ -76,6 +92,10 @@ public class PacketPlayOutEntityTeleport extends Packet implements PacketPlayOut
 		this.onGround = onGround;
 	}
 	
-	
+	public static void main(String[] args) {
+		float a = (int) (180F * 256.0F / 360.0F);
+		float b = (int) (a / 256.0F * 360.0F);
+		System.out.println("X: "+a+" Y: "+b);
+	}
 
 }
