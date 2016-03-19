@@ -1,12 +1,15 @@
 package dev.wolveringer.api.scoreboard;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardDisplayObjective;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardDisplayObjective.Position;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardObjective;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardObjective.Action;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardObjective.Type;
+import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardScore;
 
 public final class Objektive {
@@ -41,16 +44,25 @@ public final class Objektive {
 		return 0;
 	}
 
+	public List<String> getScores(){
+		ArrayList<String> out = new ArrayList<>();
+		for(Score s : scores)
+			out.add(s.name);
+		return Collections.unmodifiableList(out);
+	}
+	
 	public void removeScore(String scoreName) {
 		Score x = null;
 		for(Score s : scores)
-			if(s.getName().equals(name)){
+			if(s.getName().equals(scoreName)){
 				x = s;
 			}
-		if(x == null)
+		if(x == null){
+			System.out.println("Removing not existing score ("+scoreName+ChatColorUtils.COLOR_CHAR+"r)");
 			return;
+		}
 		scores.remove(x);
-		owner.player.sendPacket(new PacketPlayOutScoreboardScore(x.name, getName(), -1, dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardScore.Action.REMOVE));
+		owner.player.sendPacket(new PacketPlayOutScoreboardScore(x.name, getName(), -1, PacketPlayOutScoreboardScore.Action.REMOVE));
 	}
 
 	public void setDisplayName(String displayName) {
@@ -92,7 +104,7 @@ public final class Objektive {
 			this.owner = owner;
 			this.name = name;
 			this.value = value;
-			owner.owner.player.sendPacket(new PacketPlayOutScoreboardScore(name, owner.getName(), value, dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardScore.Action.CREATE));
+			owner.owner.player.sendPacket(new PacketPlayOutScoreboardScore(name, owner.getName(), value, PacketPlayOutScoreboardScore.Action.CREATE));
 		}
 
 		public void setValue(int value) {
@@ -109,7 +121,7 @@ public final class Objektive {
 		}
 
 		private void sendUpdate() {
-			owner.owner.player.sendPacket(new PacketPlayOutScoreboardScore(name, owner.getName(), value, dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardScore.Action.UPDATE));
+			owner.owner.player.sendPacket(new PacketPlayOutScoreboardScore(name, owner.getName(), value, PacketPlayOutScoreboardScore.Action.UPDATE));
 		}
 	}
 }

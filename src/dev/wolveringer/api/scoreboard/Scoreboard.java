@@ -1,7 +1,10 @@
 package dev.wolveringer.api.scoreboard;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+import dev.wolveringer.BungeeUtil.AsyncCatcher;
 import dev.wolveringer.BungeeUtil.Player;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardObjective;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardObjective.Action;
@@ -52,9 +55,19 @@ public final class Scoreboard {
 		Objektive o = getObjektive(name);
 		if(o == null)
 			return;
-		objs.remove(o);
-		server_objs.remove(o);
+		AsyncCatcher.catchOp("Async scoreboard changing");
 		player.sendPacket(new PacketPlayOutScoreboardObjective(name, Action.REMOVE, o.getDisplayName(), Type.INTEGER));
+		if(objs.remove(o) && !server_objs.remove(o)){ //Check if proxy side board
+			for(Objektive var0 : server_objs)
+				if(var0.getPosition() == o.getPosition()){
+					var0.display(o.getPosition());
+					break;
+				}
+		}
+	}
+	
+	public List<Objektive> getObjektives(){
+		return Collections.unmodifiableList(objs);
 	}
 
 	public Team createTeam(String name) {
@@ -85,6 +98,10 @@ public final class Scoreboard {
 		return null;
 	}
 
+	public List<Team> getTeams(){
+		return Collections.unmodifiableList(teams);
+	}
+	
 	@Override
 	public String toString() {
 		return "Scoreboard [Owner="+player.getName()+",Objekt-Count="+(objs.size()+server_objs.size())+"(Bungee: "+objs.size()+"/Server: "+server_objs.size()+"),Team-Count="+(teams.size()+server_teams.size())+"(Bungee:"+teams.size()+"/Server:"+server_teams.size()+")]";
