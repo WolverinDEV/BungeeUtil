@@ -30,4 +30,10 @@ public class PacketPlayInPositionLook extends PacketPlayInPosition {
 		packetdataserializer.writeFloat(getLocation().getPitch());
 		packetdataserializer.writeByte(onGound()?1:0);
 	}
+
+	@Override
+	public String toString() {
+		return "PacketPlayInPositionLook [onground=" + onground + ", hasLook=" + hasLook + ", hasPos=" + hasPos + ", loc=" + loc + ", stance=" + stance + "]";
+	}
+
 }

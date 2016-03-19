@@ -6,10 +6,10 @@ import dev.wolveringer.packet.PacketDataSerializer;
 
 public class PacketPlayInFlying extends Packet implements PacketPlayIn {
 
-	private boolean onground;
-	private boolean hasLook = false;
-	private boolean hasPos = false;
-	private Location loc = new Location(0, 0, 0);
+	protected boolean onground;
+	protected boolean hasLook = false;
+	protected boolean hasPos = false;
+	protected Location loc = new Location(0, 0, 0);
 	protected double stance;
 
 	public PacketPlayInFlying() {
@@ -61,4 +61,10 @@ public class PacketPlayInFlying extends Packet implements PacketPlayIn {
 	protected void setOnground(boolean flag) {
 		this.onground = flag;
 	}
+
+	@Override
+	public String toString() {
+		return "PacketPlayInFlying [onground=" + onground + ", hasLook=" + hasLook + ", hasPos=" + hasPos + ", loc=" + loc + ", stance=" + stance + "]";
+	}
+	
 }
