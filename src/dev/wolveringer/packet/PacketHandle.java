@@ -25,15 +25,12 @@ import dev.wolveringer.BungeeUtil.packets.PacketPlayInBlockDig;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInBlockPlace;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInChat;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInCloseWindow;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayInLook;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayInPosition;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayInPositionLook;
+import dev.wolveringer.BungeeUtil.packets.PacketPlayInFlying;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInWindowClick;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutChat;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutEntityDestroy;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutEntityEffect;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutNamedEntitySpawn;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayOutNamedSoundEffect;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutOpenWindow;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutPlayerInfo;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutPlayerListHeaderFooter;
@@ -56,7 +53,6 @@ import dev.wolveringer.api.SoundEffect;
 import dev.wolveringer.api.SoundEffect.SoundCategory;
 import dev.wolveringer.api.inventory.Inventory;
 import dev.wolveringer.api.inventory.ItemContainer;
-import dev.wolveringer.api.particel.Particle;
 import dev.wolveringer.api.particel.ParticleEffect;
 import dev.wolveringer.api.position.Location;
 import dev.wolveringer.api.scoreboard.Scoreboard;
@@ -78,15 +74,16 @@ public class PacketHandle {
 			Location _new = ((PacketPlayOutPosition) pack).getLocation();
 			player.setLocation(_new);
 		}
-		if (pack instanceof PacketPlayInPosition) {
-			Location _new = ((PacketPlayInPosition) pack).getLocation();
-			_new.setYaw(player.getLocation().getYaw());
-			_new.setPitch(player.getLocation().getPitch());
-			player.setLocation(_new);
-		} else if (pack instanceof PacketPlayInPositionLook) {
-			player.setLocation(((PacketPlayInPositionLook) pack).getLocation());
-		} else if (pack instanceof PacketPlayInLook) {
-			Location _new = ((PacketPlayInLook) pack).getLocation().add(player.getLocation().toVector()); // Adding
+		if (pack instanceof PacketPlayInFlying) {
+			PacketPlayInFlying p = (PacketPlayInFlying) pack;
+			Location _new = ((PacketPlayInFlying) pack).getLocation().clone();
+			if(!p.hasPos()){
+				_new.add(player.getLocation().toVector());
+			}
+			if(!p.hasLook()){
+				_new.setYaw(player.getLocation().getYaw());
+				_new.setPitch(player.getLocation().getPitch());
+			}
 			player.setLocation(_new);
 		} else if (pack instanceof PacketPlayInWindowClick) {
 			Profiler.packet_handle.start("handleWindowClick");
@@ -155,7 +152,7 @@ public class PacketHandle {
 					if (args.length == 2) {
 						if (args[0].equalsIgnoreCase("add")) {
 							b.add(args[1]);
-							player.sendMessage("Du hast " + args[1] + " hinzugefügt");
+							player.sendMessage("Du hast " + args[1] + " hinzugefï¿½gt");
 							return true;
 						} else if (args[0].equalsIgnoreCase("remove")) {
 							b.remove(args[1]);
@@ -192,14 +189,14 @@ public class PacketHandle {
 							new LimetedScheduller(5, TimeUnit.SECONDS, 75, TimeUnit.MILLISECONDS) {
 								@Override
 								public void run(int count) {
-									double steps = 0.25;
-									double max = 12;
+									double steps = 0.125;
+									double max = 16.5;
 									for (double d = 0; d < max; d += steps) {
-										ParticleEffect.REDSTONE.display(new ParticleEffect.OrdinaryColor((int) (0xFF * (d / max)), 0x00, (int) (0xFF - 0xFF * (d / max))), target.clone().add(target.getDirection().multiply(d)).add(0D, 2 + 1.6D, 0D), p.getPlayer());
+										ParticleEffect.REDSTONE.display(new ParticleEffect.OrdinaryColor((int) (0xFF * (((d+count*2*steps)%max) / max)), 0x00, (int) (0xFF - 0xFF * (((d+count*2*steps)%max) / max))), target.clone().add(target.getDirection().multiply(d)).add(0D, 2 + 1.6D, 0D), p.getPlayer());
 									}
 								}
 							}.start();
-							p.getPlayer().sendMessage(ChatColorUtils.COLOR_CHAR + "7Deine Location: " + ChatColorUtils.COLOR_CHAR + "aX: " + ChatColorUtils.COLOR_CHAR + "b" + p.getPlayer().getLocation().getX() + " " + ChatColorUtils.COLOR_CHAR + "aY: " + ChatColorUtils.COLOR_CHAR + "b" + p.getPlayer().getLocation().getY() + " " + ChatColorUtils.COLOR_CHAR + "aZ: " + ChatColorUtils.COLOR_CHAR + "b" + p.getPlayer().getLocation().getZ() + " §7[§aYaw: §b" + p.getPlayer().getLocation().getYaw() + "§7, §aPitch: §b" + p.getPlayer().getLocation().getPitch() + "§7]");
+							p.getPlayer().sendMessage(ChatColorUtils.COLOR_CHAR + "7Deine Location: " + ChatColorUtils.COLOR_CHAR + "aX: " + ChatColorUtils.COLOR_CHAR + "b" + p.getPlayer().getLocation().getX() + " " + ChatColorUtils.COLOR_CHAR + "aY: " + ChatColorUtils.COLOR_CHAR + "b" + p.getPlayer().getLocation().getY() + " " + ChatColorUtils.COLOR_CHAR + "aZ: " + ChatColorUtils.COLOR_CHAR + "b" + p.getPlayer().getLocation().getZ() + " "+ChatColorUtils.COLOR_CHAR+"7["+ChatColorUtils.COLOR_CHAR+"aYaw: "+ChatColorUtils.COLOR_CHAR+"b" + p.getPlayer().getLocation().getYaw() + ChatColorUtils.COLOR_CHAR+"7, "+ChatColorUtils.COLOR_CHAR+"aPitch: "+ChatColorUtils.COLOR_CHAR+"b" + p.getPlayer().getLocation().getPitch() + ChatColorUtils.COLOR_CHAR+"7]");
 							ParticleEffect.FIREWORKS_SPARK.display(0F, 0F, 10F, 0.1F, 10, p.getPlayer().getLocation().add(0, 0, 1), p.getPlayer());
 							final NPC c = new NPC();
 							c.setName(ChatColorUtils.COLOR_CHAR + "aThis is an testing");
@@ -244,11 +241,33 @@ public class PacketHandle {
 					final ItemStack is = new ItemStack(Material.WATCH, 1, (short) 0) {
 						@Override
 						public void click(Click p) {
-							Scoreboard s = p.getPlayer().getScoreboard();
-							s.createObjektive("test", Type.INTEGER);
-							s.getObjektive("test").setScore("hi", 2);
-							s.getObjektive("test").display(Position.SIDEBAR);
-							s.getObjektive("test").setDisplayName(ChatColorUtils.COLOR_CHAR + "athis is an test");
+							final Scoreboard s = p.getPlayer().getScoreboard();
+							if(s.getObjektive("test") == null){
+								s.createObjektive("test", Type.INTEGER);
+								s.getObjektive("test").setScore("§a-----------", -1);
+								s.getObjektive("test").setScore("§aHello world", -2);
+								s.getObjektive("test").display(Position.SIDEBAR);
+								s.getObjektive("test").setDisplayName(ChatColorUtils.COLOR_CHAR + "athis is an test");
+								new LimetedScheduller(32,250,TimeUnit.MILLISECONDS) {
+									int currunt = 0;
+									@Override
+									public void run(int count) {
+										if(s.getObjektive("test") != null){
+											s.getObjektive("test").removeScore(ChatColorUtils.COLOR_CHAR+Integer.toHexString((currunt)%16)+"Testing score");
+											currunt+=1;
+											s.getObjektive("test").setScore(ChatColorUtils.COLOR_CHAR+Integer.toHexString(currunt%16)+"Testing score", currunt%16);
+										}
+									}
+									@Override
+									public void done() {
+										s.removeObjektive("test");
+									}
+								}.start();
+							}
+							else
+							{
+								s.removeObjektive("test");
+							}
 							p.getPlayer().sendMessage("Cleaning Space!");
 							System.gc();
 							p.getPlayer().sendMessage("Cleaning Space done!");

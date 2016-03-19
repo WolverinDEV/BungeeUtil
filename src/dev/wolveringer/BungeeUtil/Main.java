@@ -78,10 +78,10 @@ public class Main extends Plugin {
 		AsyncCatcher.catchOp("Async test failed");
 		
 		if (Configuration.getVersionsFeature().size() != 0) {
-			sendMessage("§aBungeeUtil successful updated!");
-			sendMessage("§aFeatures:");
+			sendMessage("" + ChatColorUtils.COLOR_CHAR + "aBungeeUtil successful updated!");
+			sendMessage("" + ChatColorUtils.COLOR_CHAR + "aFeatures:");
 			for (String s : Configuration.getVersionsFeature())
-				sendMessage("   §e" + s);
+				sendMessage("   " + ChatColorUtils.COLOR_CHAR + "e" + s);
 			Configuration.setVersionFeature(null);
 		}
 		
@@ -182,7 +182,7 @@ public class Main extends Plugin {
 							diffSpace+=" ";
 						Main.sendMessage("");
 						Main.sendMessage(ChatColorUtils.COLOR_CHAR + "7#####"+diffSpace.substring(0, diffSpace.length()/2).replaceAll(" ", "#")+" " + ChatColorUtils.COLOR_CHAR + "6Heap utilization statistics [MB] " + ChatColorUtils.COLOR_CHAR + "7#####"+diffSpace.substring(0, diffSpace.length()/2).replaceAll(" ", "#")+(diffSpace.length()%2!=0?"#":""));
-						Main.sendMessage(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aReserved Used Memory:      " + ChatColorUtils.COLOR_CHAR + "e" + var1 + "M §7("+(diff>0?"§a+":diff<0?"§c-":"§6±")+Math.abs(diff)+"§7)   " + ChatColorUtils.COLOR_CHAR + "7#");
+						Main.sendMessage(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aReserved Used Memory:      " + ChatColorUtils.COLOR_CHAR + "e" + var1 + "M " + ChatColorUtils.COLOR_CHAR + "7("+(diff>0?"" + ChatColorUtils.COLOR_CHAR + "a+":diff<0?"" + ChatColorUtils.COLOR_CHAR + "c-":"" + ChatColorUtils.COLOR_CHAR + "6�")+Math.abs(diff)+"" + ChatColorUtils.COLOR_CHAR + "7)   " + ChatColorUtils.COLOR_CHAR + "7#");
 						Main.sendMessage(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aReserved Free Memory:      " + ChatColorUtils.COLOR_CHAR + "e" + var2 + "M    "+diffSpace + ChatColorUtils.COLOR_CHAR + "7#");
 						Main.sendMessage(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aReserved Memory:           " + ChatColorUtils.COLOR_CHAR + "e" + var3 + "M    "+diffSpace + ChatColorUtils.COLOR_CHAR + "7#");
 						Main.sendMessage(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "a-----------------------------" + format("", var5).replaceAll(" ", "-") + "   "+diffSpace + ChatColorUtils.COLOR_CHAR + "7#");
@@ -279,6 +279,8 @@ public class Main extends Plugin {
 		active = false;
 		BungeeCord.getInstance().getConsole().sendMessage(ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "eBungeeUntil" + ChatColorUtils.COLOR_CHAR + "7] " + ChatColorUtils.COLOR_CHAR + "aThank you for using BungeeUntil");
 	}
+	
+	/*
 	public Main() throws IOException {
 		ServerSocket socket = new ServerSocket(25566);
 		while (true) {
@@ -296,6 +298,7 @@ public class Main extends Plugin {
 			}
 		}
 	}
+	*/
 	/*
 	 * 
 	 * public static void main(String[] args) { Runtime.getRuntime().load(new

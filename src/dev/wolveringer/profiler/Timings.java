@@ -154,11 +154,11 @@ public class Timings {
 		for(int i = steps - 1;i >= 0;i--){
 			if(count_step * i <= var)
 				if(((count_step * i) + count_step * 0.5D) <= var)
-					out[i] = "§aX";//""+ChatColorUtils.COLOR_CHAR+"a▅";
+					out[i] = ChatColorUtils.COLOR_CHAR+"aX";//""+ChatColorUtils.COLOR_CHAR+"a▅";
 				else
-					out[i] = "§aX";//ChatColorUtils.COLOR_CHAR+"a█";
+					out[i] = ChatColorUtils.COLOR_CHAR+"aX";//ChatColorUtils.COLOR_CHAR+"a█";
 			else
-				out[i] = "§0X";//ChatColorUtils.COLOR_CHAR+"0█";
+				out[i] = ChatColorUtils.COLOR_CHAR+"0X";//ChatColorUtils.COLOR_CHAR+"0█";
 		}
 		ArrayUtils.reverse(out);
 		return out;
