@@ -18,6 +18,7 @@ import dev.wolveringer.BungeeUtil.RamStatistics.RamStatistic;
 import dev.wolveringer.BungeeUtil.configuration.Configuration;
 import dev.wolveringer.BungeeUtil.injector.InjectFiles;
 import dev.wolveringer.BungeeUtil.packets.Packet;
+import dev.wolveringer.api.bossbar.BossBarListener;
 import dev.wolveringer.api.scoreboard.PacketListenerScoreboard;
 import dev.wolveringer.chat.ChatColor.BukkitColorFormater;
 import dev.wolveringer.chat.ChatColor.ChatColorUtils;
@@ -128,7 +129,10 @@ public class Main extends Plugin {
 		Packet.listPackets();
 		sleep(1000);
 		setInformation("Register Schedullers");
+		
 		PacketListenerScoreboard.init();
+		BossBarListener.init();
+		
 		BungeeCord.getInstance().getScheduler().runAsync(this, new Runnable() {
 			@Override
 			public void run() {

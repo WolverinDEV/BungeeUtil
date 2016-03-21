@@ -101,6 +101,8 @@ public class PacketPlayOutScoreboardTeam extends Packet implements PacketPlayOut
 				s.writeString(prefix);
 				s.writeString(suffix);
 				s.writeByte(friendly_fire);
+				if(tag == null)
+					tag = NameTag.VISIABLE;
 				s.writeString(tag.getIdentifire());
 				if (getBigVersion() == BigClientVersion.v1_9) s.writeString(collisionRule);
 				s.writeByte(color);

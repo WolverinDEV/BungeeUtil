@@ -66,6 +66,8 @@ public abstract class Packet {
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x09,0x37, PacketPlayOutHeldItemSlot.class);//-> 0x37
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x33, 0x46, PacketPlayOutUpdateSign.class);
 		
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, null,0x0C, PacketPlayOutBossBar.class);
+		
 		//TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x0E, PacketPlayOutEntityAbstract.class);//Delete dont needed?
 		//TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x0F, PacketPlayOutEntityAbstract.class);//Delete dont needed?
 		//TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x10, PacketPlayOutEntityAbstract.class);//Delete dont needed?

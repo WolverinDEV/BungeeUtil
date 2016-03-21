@@ -1,5 +1,6 @@
 package dev.wolveringer.BungeeUtil.packets;
 
+import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.packet.PacketDataSerializer;
 
@@ -20,13 +21,27 @@ public class PacketPlayOutGameStateChange extends Packet implements PacketPlayOu
 	
 	@Override
 	public void read(PacketDataSerializer s) {
-		state = s.readUnsignedByte();
-		value = s.readFloat();
+		if(getBigVersion() == BigClientVersion.v1_9){
+			state = s.readVarInt();
+			value = s.readByte();
+		}
+		else
+		{
+			state = s.readUnsignedByte();
+			value = s.readFloat();
+		}
 	}
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeByte(state);
-		s.writeFloat(value);
+		if(getBigVersion() == BigClientVersion.v1_9){
+			s.writeVarInt(state);
+			s.writeByte((int) value);
+		}
+		else
+		{
+			s.writeByte(state);
+			s.writeFloat(value);
+		}
 	}
 	public float getValue() {
 		return value;

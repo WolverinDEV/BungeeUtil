@@ -23,8 +23,10 @@ import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.EncryptionUtil;
 import net.md_5.bungee.UserConnection;
 import net.md_5.bungee.Util;
+import net.md_5.bungee.api.AbstractReconnectHandler;
 import net.md_5.bungee.api.Callback;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.ServerPing.Protocol;
 import net.md_5.bungee.api.config.ListenerInfo;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -177,12 +179,6 @@ public class IIInitialHandler extends IInitialHandler {
 				getChannel().getHandle().eventLoop().execute(new Runnable() {
 					public void run() {
 						if(getChannel().getHandle().isActive()){
-							if(IIInitialHandler.this.getVersion() >= 5){
-								IIInitialHandler.this.unsafe().sendPacket(new LoginSuccess(IIInitialHandler.this.getUniqueId().toString(), IIInitialHandler.this.getName()));
-							}else{
-								IIInitialHandler.this.unsafe().sendPacket(new LoginSuccess(IIInitialHandler.this.getUUID(), IIInitialHandler.this.getName()));
-							}
-							getChannel().setProtocol(net.md_5.bungee.protocol.Protocol.GAME);
 							UserConnection userCon;
 							try{
 								userCon = (UserConnection) class_connection.getConstructor(ProxyServer.class, ChannelWrapper.class, String.class, InitialHandler.class).newInstance(BungeeCord.getInstance(), IIInitialHandler.this.getChannel(), IIInitialHandler.this.getName(), IIInitialHandler.this);
@@ -190,9 +186,16 @@ public class IIInitialHandler extends IInitialHandler {
 								ex.printStackTrace();
 								throw new RuntimeException();
 							}
+							userCon.setCompressionThreshold(BungeeCord.getInstance().config.getCompressionThreshold());
 							userCon.init();
 							conn = userCon;
-
+							if(IIInitialHandler.this.getVersion() >= 5){
+								IIInitialHandler.this.unsafe().sendPacket(new LoginSuccess(IIInitialHandler.this.getUniqueId().toString(), IIInitialHandler.this.getName()));
+							}else{
+								IIInitialHandler.this.unsafe().sendPacket(new LoginSuccess(IIInitialHandler.this.getUUID(), IIInitialHandler.this.getName()));
+							}
+							getChannel().setProtocol(net.md_5.bungee.protocol.Protocol.GAME);
+							
 							ProxyServer.getInstance().getPluginManager().callEvent(new PostLoginEvent(userCon));
 							((HandlerBoss) getChannel().getHandle().pipeline().get(HandlerBoss.class)).setHandler(new UpstreamBridge(ProxyServer.getInstance(), userCon));
 							ServerInfo server;

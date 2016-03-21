@@ -150,6 +150,7 @@ public final class Skin {
 	}
 
 	public void setSignatureRequired(boolean flag) {
+		empty = false;
 		value.put("signatureRequired", flag);
 		updateRaw();
 		
@@ -159,6 +160,14 @@ public final class Skin {
 		return value.has("signatureRequired") && value.getBoolean("signatureRequired");
 	}
 
+	public String getSignature() {
+		return signature;
+	}
+	public void setSignature(String signature) {
+		this.signature = signature;
+		empty = false;
+	}
+	
 	protected void setRawData(String string) {
 		this.raw_value = string;
 		this.value = new JSONObject(Base64Coder.decodeString(raw_value));
@@ -166,6 +175,16 @@ public final class Skin {
 
 	protected String getRawData() {
 		return raw_value;
+	}
+	
+	public Skin clone(){
+		Skin _new = new Skin();
+		_new.empty = empty;
+		_new.name = name;
+		_new.raw_value = raw_value;
+		_new.signature = signature;
+		_new.value = value;
+		return _new;
 	}
 
 	@Override

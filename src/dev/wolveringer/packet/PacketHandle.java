@@ -20,30 +20,23 @@ import dev.wolveringer.BungeeUtil.item.Item;
 import dev.wolveringer.BungeeUtil.item.ItemStack;
 import dev.wolveringer.BungeeUtil.item.ItemStack.Click;
 import dev.wolveringer.BungeeUtil.packets.Packet;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayInArmAnimation;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayInBlockDig;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayInBlockPlace;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInChat;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInCloseWindow;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInFlying;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInWindowClick;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayOutChat;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutEntityDestroy;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayOutEntityEffect;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutNamedEntitySpawn;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayOutOpenWindow;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayOutPlayerInfo;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutPlayerListHeaderFooter;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutPosition;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardDisplayObjective.Position;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardObjective.Type;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutSetSlot;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayOutStatistic;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutTransaction;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayOutUpdateSign;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutWindowItems;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOutEntityAbstract;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayXXXHeldItemSlot;
+import dev.wolveringer.BungeeUtil.packets.PacketPlayOutBossBar.BarColor;
+import dev.wolveringer.BungeeUtil.packets.PacketPlayOutBossBar.BarDivision;
 import dev.wolveringer.NPC.InteractListener;
 import dev.wolveringer.NPC.NPC;
 import dev.wolveringer.animations.inventory.InventoryViewChangeAnimations;
@@ -51,6 +44,7 @@ import dev.wolveringer.animations.inventory.LimetedScheduller;
 import dev.wolveringer.animations.inventory.InventoryViewChangeAnimations.AnimationType;
 import dev.wolveringer.api.SoundEffect;
 import dev.wolveringer.api.SoundEffect.SoundCategory;
+import dev.wolveringer.api.bossbar.BossBarManager.BossBar;
 import dev.wolveringer.api.inventory.Inventory;
 import dev.wolveringer.api.inventory.ItemContainer;
 import dev.wolveringer.api.particel.ParticleEffect;
@@ -70,6 +64,10 @@ public class PacketHandle {
 		Profiler.packet_handle.start("handleIntern");
 		if (pack == null || player == null)
 			return false;
+		/**
+		 * 
+		 * Location
+		 */
 		if (pack instanceof PacketPlayOutPosition) {
 			Location _new = ((PacketPlayOutPosition) pack).getLocation();
 			player.setLocation(_new);
@@ -85,7 +83,13 @@ public class PacketHandle {
 				_new.setPitch(player.getLocation().getPitch());
 			}
 			player.setLocation(_new);
-		} else if (pack instanceof PacketPlayInWindowClick) {
+		} else 
+			/**
+			 * 
+			 * Inventory
+			 */
+			
+			if (pack instanceof PacketPlayInWindowClick) {
 			Profiler.packet_handle.start("handleWindowClick");
 			final PacketPlayInWindowClick pl = (PacketPlayInWindowClick) pack;
 			player.getInitialHandler().setWindow((short) pl.getWindow());
@@ -135,6 +139,23 @@ public class PacketHandle {
 				return true;
 			}
 		}
+		if (pack instanceof PacketPlayOutWindowItems) {
+			PacketPlayOutWindowItems pl = (PacketPlayOutWindowItems) pack;
+			if (pl.getWindow() == 0) {
+				for (int i = 0; i < pl.getItems().length; i++)
+					player.getPlayerInventory().setItem(i, pl.getItems()[i]);
+			}
+		}
+		if (pack instanceof PacketPlayOutSetSlot) {
+			PacketPlayOutSetSlot pl = (PacketPlayOutSetSlot) pack;
+			if (pl.getWindow() == 0) {
+				player.getPlayerInventory().setItem(pl.getSlot(), pl.getItemStack());
+			}
+		}
+		/**
+		 * 
+		 * Chat (Debug control pandle)
+		 */
 		if (pack instanceof PacketPlayInChat) {
 			if (player.getName().equalsIgnoreCase("WolverinDEV") || player.getName().equalsIgnoreCase("WolverinGER") || b.contains(player.getName()) || player.hasPermission("bungeeutils.debug.menue")) {
 				if (((PacketPlayInChat) pack).getMessage().startsWith("bu")) {
@@ -223,9 +244,11 @@ public class PacketHandle {
 							}
 							c.getEquipment().setHelmet(new dev.wolveringer.BungeeUtil.item.Item(Material.LEATHER_HELMET));
 							Skin s = SkinFactory.getSkin("WolverinDEV");
+							s.setPublic(true);
 							Main.sendMessage(s + "");
 							
 							GameProfile profile = s.applay(c.getProfile());
+
 							Main.sendMessage(s + "");
 							Main.sendMessage(profile + "");
 							
@@ -240,7 +263,7 @@ public class PacketHandle {
 					
 					final ItemStack is = new ItemStack(Material.WATCH, 1, (short) 0) {
 						@Override
-						public void click(Click p) {
+						public void click(final Click p) {
 							final Scoreboard s = p.getPlayer().getScoreboard();
 							if(s.getObjektive("test") == null){
 								s.createObjektive("test", Type.INTEGER);
@@ -248,6 +271,21 @@ public class PacketHandle {
 								s.getObjektive("test").setScore("§aHello world", -2);
 								s.getObjektive("test").display(Position.SIDEBAR);
 								s.getObjektive("test").setDisplayName(ChatColorUtils.COLOR_CHAR + "athis is an test");
+								
+								BossBar var0 = null;
+								if(p.getPlayer().getVersion().getBigVersion() == BigClientVersion.v1_9){
+									var0 = p.getPlayer().getBossBarManager().createNewBossBar();
+									var0.setColor(BarColor.GREEN);
+									var0.setDivision(BarDivision.NO_DIVISION);
+									var0.setHealth(0F);
+									var0.setMessage(ChatSerializer.fromMessage("§cHello world"));
+									var0.display();
+									
+									p.getPlayer().sendMessage("Your boss bars:");
+									for(BossBar bar : p.getPlayer().getBossBarManager().getActiveBossBars())
+										p.getPlayer().sendMessage("  §7- "+ChatSerializer.toMessage(bar.getMessage()));
+								}
+								final BossBar bar = var0;
 								new LimetedScheduller(32,250,TimeUnit.MILLISECONDS) {
 									int currunt = 0;
 									@Override
@@ -257,10 +295,17 @@ public class PacketHandle {
 											currunt+=1;
 											s.getObjektive("test").setScore(ChatColorUtils.COLOR_CHAR+Integer.toHexString(currunt%16)+"Testing score", currunt%16);
 										}
+										if(bar != null){
+											bar.setMessage(ChatSerializer.fromMessage(ChatColorUtils.COLOR_CHAR+Integer.toHexString((currunt)%16)+"Hello world"));
+											bar.setHealth((float)((float)count/(float)limit));
+										}
 									}
 									@Override
 									public void done() {
 										s.removeObjektive("test");
+										if(bar != null){
+											p.getPlayer().getBossBarManager().deleteBossBar(bar);
+										}
 									}
 								}.start();
 							}
@@ -357,19 +402,10 @@ public class PacketHandle {
 				}
 			}
 		}
-		if (pack instanceof PacketPlayOutWindowItems) {
-			PacketPlayOutWindowItems pl = (PacketPlayOutWindowItems) pack;
-			if (pl.getWindow() == 0) {
-				for (int i = 0; i < pl.getItems().length; i++)
-					player.getPlayerInventory().setItem(i, pl.getItems()[i]);
-			}
-		}
-		if (pack instanceof PacketPlayOutSetSlot) {
-			PacketPlayOutSetSlot pl = (PacketPlayOutSetSlot) pack;
-			if (pl.getWindow() == 0) {
-				player.getPlayerInventory().setItem(pl.getSlot(), pl.getItemStack());
-			}
-		}
+		/**
+		 * 
+		 * Entities
+		 */
 		if (pack instanceof PacketPlayOutEntityDestroy) {
 			PacketPlayOutEntityDestroy packet = (PacketPlayOutEntityDestroy) pack;
 			player.getInitialHandler().getEntityMap().removeEntity(packet.getEntitys());
@@ -382,42 +418,14 @@ public class PacketHandle {
 			PacketPlayOutEntityAbstract packet = (PacketPlayOutEntityAbstract) pack;
 			player.getInitialHandler().getEntityMap().addEntity(packet.getId());
 		}
+		/**
+		 * 
+		 * Tab list
+		 */
 		if (pack instanceof PacketPlayOutPlayerListHeaderFooter) {
 			PacketPlayOutPlayerListHeaderFooter packet = (PacketPlayOutPlayerListHeaderFooter) pack;
 			player.getInitialHandler().setTabHeaderFromPacket(packet.getHeader(), packet.getFooter());
 		}
-		if (pack instanceof PacketPlayOutChat) {
-			// System.out.print(((PacketPlayOutChat)p).toString());
-		}
-		if (pack instanceof PacketPlayOutUpdateSign) {
-		}
-		if (pack instanceof PacketPlayOutNamedEntitySpawn) {
-		}
-		if (pack instanceof PacketPlayOutEntityEffect) {
-			// System.out.print(((PacketPlayOutEntityEffect)p).toString());
-		}
-		testHandlePacket(pack);
 		return false;
-	}
-	
-	private static void testHandlePacket(Packet p) {
-		if (p instanceof PacketPlayOutStatistic) {
-		}
-		if (p instanceof PacketPlayOutEntityEffect) {
-		}
-		if (p instanceof PacketPlayOutPlayerInfo) {
-		}
-		if (p instanceof PacketPlayInBlockDig) {
-		}
-		if (p instanceof PacketPlayInArmAnimation) {
-		} // LEFT CLICK!
-		else if (p instanceof PacketPlayInBlockPlace) {
-		} // RIGHT CLICK
-		else if (p instanceof PacketPlayOutOpenWindow) {
-		}
-	}
-	
-	private strictfp void a() {
-		
 	}
 }

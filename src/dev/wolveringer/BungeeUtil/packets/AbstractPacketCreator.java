@@ -55,6 +55,8 @@ public abstract class AbstractPacketCreator {
 		
 		for (Class<? extends Packet> packet : getRegisteredPackets()) {
 			int compressed = getPacketId(BigClientVersion.v1_9,packet); //TODO list bouth id's
+			if(compressed == -1)
+				compressed = getPacketId(BigClientVersion.v1_8,packet);
 			packets.get(getProtocoll(compressed)).get(getDirection(compressed)).put(getPacketId(compressed), packet);
 		}
 		

@@ -2,11 +2,12 @@ package dev.wolveringer.BungeeUtil.packets;
 
 import java.util.UUID;
 
+import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.chat.IChatBaseComponent;
 import dev.wolveringer.packet.PacketDataSerializer;
 
-public class PacketOutBossBar extends Packet implements PacketPlayOut{
+public class PacketPlayOutBossBar extends Packet implements PacketPlayOut{
 	public static enum Action {
 		CREATE,
 		DELETE,
@@ -44,12 +45,20 @@ public class PacketOutBossBar extends Packet implements PacketPlayOut{
 	private BarDivision division;
 	private short flags;
 	
+	@SuppressWarnings("incomplete-switch")
 	@Override
 	public void read(PacketDataSerializer s) {
+		if(getBigVersion() != BigClientVersion.v1_9)
+			return;
 		barId = s.readUUID();
-		action = Action.values()[s.readVarInt()];
-		
-		switch (action) {
+		int action = s.readVarInt();
+		if(action >= Action.values().length){
+			System.out.println("Boss bar wrong..... BarId: "+barId);
+			System.out.println("Avariable data: "+s.readableBytes());
+			s.skipBytes(s.readableBytes());
+		}
+		this.action = Action.values()[action];
+		switch (this.action) {
 			case CREATE:
 				title = s.readRawString();
 				health = s.readFloat();
@@ -105,55 +114,67 @@ public class PacketOutBossBar extends Packet implements PacketPlayOut{
 		return barId;
 	}
 
-	public void setBarId(UUID barId) {
+	public PacketPlayOutBossBar setBarId(UUID barId) {
 		this.barId = barId;
+		return this;
 	}
 
 	public Action getAction() {
 		return action;
 	}
 
-	public void setAction(Action action) {
+	public PacketPlayOutBossBar setAction(Action action) {
 		this.action = action;
+		return this;
 	}
 
 	public IChatBaseComponent getTitle() {
 		return title;
 	}
 
-	public void setTitle(IChatBaseComponent title) {
+	public PacketPlayOutBossBar setTitle(IChatBaseComponent title) {
 		this.title = title;
+		return this;
 	}
 
 	public float getHealth() {
 		return health;
 	}
 
-	public void setHealth(float health) {
+	public PacketPlayOutBossBar setHealth(float health) {
 		this.health = health;
+		return this;
 	}
 
 	public BarColor getColor() {
 		return color;
 	}
 
-	public void setColor(BarColor color) {
+	public PacketPlayOutBossBar setColor(BarColor color) {
 		this.color = color;
+		return this;
 	}
 
 	public BarDivision getDivision() {
 		return division;
 	}
 
-	public void setDivision(BarDivision division) {
+	public PacketPlayOutBossBar setDivision(BarDivision division) {
 		this.division = division;
+		return this;
 	}
 
 	public short getFlags() {
 		return flags;
 	}
 
-	public void setFlags(short flags) {
+	public PacketPlayOutBossBar setFlags(short flags) {
 		this.flags = flags;
+		return this;
+	}
+
+	@Override
+	public String toString() {
+		return "PacketPlayOutBossBar [barId=" + barId + ", action=" + action + ", title=" + title + ", health=" + health + ", color=" + color + ", division=" + division + ", flags=" + flags + "]";
 	}
 }

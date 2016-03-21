@@ -42,7 +42,7 @@ public class SkinFactory {
 				profileCache.refresh(uuid);
 				s = profileCache.get(uuid);
 			}
-			return s;
+			return s.clone();
 		}catch (Exception e){
 			BungeeCord.getInstance().getLogger().log(Level.WARNING, "Cant loading Skin for " + uuid + " (Reson: " + e.getMessage() + ")");
 			return Skin.createEmptySkin();

@@ -9,6 +9,8 @@ import io.netty.util.internal.PlatformDependent;
 
 import java.lang.reflect.Field;
 
+import javax.swing.plaf.BorderUIResource;
+
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.BungeeServerInfo;
 import net.md_5.bungee.UserConnection;
@@ -38,6 +40,7 @@ import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayIn;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.api.SoundEffect;
 import dev.wolveringer.api.SoundEffect.SoundCategory;
+import dev.wolveringer.api.bossbar.BossBarManager;
 import dev.wolveringer.api.inventory.Inventory;
 import dev.wolveringer.api.inventory.InventoryType;
 import dev.wolveringer.api.inventory.PlayerInventory;
@@ -58,13 +61,15 @@ public class ProxiedPlayerUserConnection extends AbstraktUserConnection implemen
 	private int slot;
 	private Scoreboard board;
 	private String[] tab = new String[2];
-
+	private BossBarManager bossBarManager;
+	
 	public ProxiedPlayerUserConnection(ProxyServer bungee, ChannelWrapper ch, String name, InitialHandler pendingConnection) {
 		super(bungee, ch, name, pendingConnection);
 		this.i = (IInitialHandler) pendingConnection;
 		p_inv = new PlayerInventory();
 		board = new Scoreboard(this);
 		loc = last_loc = new Location(0, 0, 0);
+		bossBarManager = new BossBarManager(this);
 	}
 
 	public IInitialHandler getInitialHandler() {
@@ -274,5 +279,10 @@ public class ProxiedPlayerUserConnection extends AbstraktUserConnection implemen
 		packet.setSoundCategory(category.ordinal());
 		packet.setSound(effect.getName());
 		sendPacket(packet);
+	}
+
+	@Override
+	public BossBarManager getBossBarManager() {
+		return bossBarManager;
 	}
 }

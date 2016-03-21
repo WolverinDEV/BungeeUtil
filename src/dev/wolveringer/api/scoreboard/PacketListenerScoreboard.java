@@ -14,7 +14,7 @@ import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardScore;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardTeam;
 import dev.wolveringer.api.scoreboard.Objektive.Score;
 
-public class PacketListenerScoreboard implements PacketHandler<Packet> {
+public final class PacketListenerScoreboard implements PacketHandler<Packet> {
 	private static PacketListenerScoreboard listener;
 
 	public static void init() {

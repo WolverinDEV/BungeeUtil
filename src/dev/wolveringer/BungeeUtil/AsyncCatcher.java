@@ -43,14 +43,14 @@ public class AsyncCatcher {
 	}
 	
 	public static void disable(Plugin plugin){
-		if(unchecked_threads.contains(Thread.currentThread().getThreadGroup()))
-			throw new UnsupportedOperationException("Thread alredy unregistered!");
+		if(unchecked_threads.contains(Thread.currentThread().getThreadGroup()));
+			//throw new UnsupportedOperationException("Thread alredy unregistered!");
 		unchecked_threads.add(Thread.currentThread().getThreadGroup());
 		unchecked_plugins.add(plugin);
 	}
 	public static void enable(Plugin plugin){
-		if(!unchecked_threads.contains(Thread.currentThread().getThreadGroup()))
-			throw new UnsupportedOperationException("Thread alredy registered!");
+		if(!unchecked_threads.contains(Thread.currentThread().getThreadGroup()));
+			//throw new UnsupportedOperationException("Thread alredy registered!");
 		unchecked_plugins.remove(plugin);
 		unchecked_threads.remove(Thread.currentThread().getThreadGroup());
 	}

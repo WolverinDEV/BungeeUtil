@@ -46,8 +46,9 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		if (!clazz.getName().endsWith("$-1")) while (clazz.getName().contains("$")) {
 			clazz = (Class<? extends Packet>) clazz.getSuperclass();
 		}
-		if (!classToId[version.ordinal()].containsKey(clazz)) throw new NullPointerException("Packet " + clazz.getName() + " not loadet.");
-		return classToId[version.ordinal()].get(clazz);
+		if (!classToId[version.ordinal()].containsKey(clazz)) //throw new NullPointerException("Packet " + clazz.getName() + " not loadet.");
+			return -1;
+		return   classToId[version.ordinal()].get(clazz);
 	}
 	
 	public List<Class<? extends Packet>> getRegisteredPackets() {

@@ -86,6 +86,6 @@ public class Configuration {
 		if(conf.getBoolean("async-catcher.enabled"))
 			return AsyncCatcherMode.valueOf(conf.getString("async-catcher.mode"));
 		else
-			return null;
+			return AsyncCatcherMode.DISABLED;
 	}
 }
