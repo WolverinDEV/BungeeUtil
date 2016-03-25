@@ -45,11 +45,11 @@ public class Decoder extends MinecraftDecoder {
 		return null;
 	}
 
-	IInitialHandler connection;
-	Protocol prot;
-	int version;
-	ClientVersion clientVersion = ClientVersion.UnderknownVersion;
-	Direction dir;
+	private IInitialHandler connection;
+	private Protocol prot;
+	private int version;
+	private ClientVersion clientVersion = ClientVersion.UnderknownVersion;
+	private Direction dir;
 
 	public Decoder(Protocol protocol, boolean server, int protocolVersion, IInitialHandler i, Direction dir) {
 		super(protocol, server, protocolVersion);

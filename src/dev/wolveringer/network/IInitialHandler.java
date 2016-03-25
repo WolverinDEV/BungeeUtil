@@ -3,7 +3,6 @@ package dev.wolveringer.network;
 import io.netty.buffer.ByteBuf;
 
 import java.lang.reflect.Field;
-import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.ServerConnection;
@@ -12,7 +11,6 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.config.ListenerInfo;
 import net.md_5.bungee.connection.InitialHandler;
-import net.md_5.bungee.netty.PipelineUtils;
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.packet.Kick;
 import net.md_5.bungee.protocol.packet.LoginSuccess;
@@ -29,7 +27,6 @@ import dev.wolveringer.BungeeUtil.packets.PacketPlayOutRemoveEntityEffect;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutUpdateHealth;
 import dev.wolveringer.chat.ChatSerializer;
 import dev.wolveringer.chat.IChatBaseComponent;
-import dev.wolveringer.entity.EntityMap;
 import dev.wolveringer.network.channel.ChannelWrapper;
 
 public abstract class IInitialHandler extends InitialHandler {
@@ -50,7 +47,6 @@ public abstract class IInitialHandler extends InitialHandler {
 	public boolean isConnected;
 	private Encoder b;
 	private Decoder a;
-	private EntityMap e;
 	private short transaktionId;
 	private short window;
 	private IChatBaseComponent[] tab = new IChatBaseComponent[2];
@@ -63,7 +59,6 @@ public abstract class IInitialHandler extends InitialHandler {
 			a.setHandler(this);
 		if(b != null)
 			b.setHandler(this);
-		e = new EntityMap();
 	}
 
 	public Encoder getEncoder() {
@@ -92,9 +87,12 @@ public abstract class IInitialHandler extends InitialHandler {
 	}
 
 	public void disconnect(Exception e) {
+		disconnect(e,10);
+	}
+	
+	public void disconnect(Exception e,int stackDeep) {
 		String message = ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"4Error Message: "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"b" + e.getLocalizedMessage() + "\n";
-		int deep = 10;
-		for(int i = 0;i < (e.getStackTrace().length > deep ? deep : e.getStackTrace().length);i++){
+		for(int i = 0;i < (e.getStackTrace().length > stackDeep ? stackDeep : e.getStackTrace().length);i++){
 			StackTraceElement ex = e.getStackTrace()[i];
 			message += format(ex) + "\n";
 		}
@@ -104,25 +102,19 @@ public abstract class IInitialHandler extends InitialHandler {
 			return;
 		}
 		final IChatBaseComponent comp = ChatSerializer.fromMessage(message);
-		getChannel().getHandle().eventLoop().schedule(new Runnable()
-		{
-			public void run() {
-				unsafe().sendPacket(new Kick(ChatSerializer.toJSONString(comp)));
-				getChannel().close();
-			}
-		}, 500L, TimeUnit.MILLISECONDS);
+		unsafe().sendPacket(new Kick(ChatSerializer.toJSONString(comp)));
+		closeChannel();
 	}
 
 	public void closeChannel() {
 		if(isConnected){
-			if(getPlayer().getInventoryView() == null)
-				return;
-			getPlayer().getInventoryView().getViewer().remove(this);
-			e.clear();
+			if(getPlayer().getInventoryView() != null)
+				getPlayer().getInventoryView().getViewer().remove(this);
 			getPlayer().getPlayerInventory().reset();
 			isConnected = false;
 			b = null;
 			a = null;
+			tab = null;
 		}
 		if(!getChannel().isClosed())
 			getChannel().close();
@@ -158,7 +150,6 @@ public abstract class IInitialHandler extends InitialHandler {
 		sendPacket(new PacketPlayOutEntityEffect(getEntityId(), 15, 1, 100000, true));
 		sendPacket(new PacketPlayOutGameStateChange(3, 0));
 		sendPacket(new PacketPlayOutUpdateHealth(20F, 20, 0F));
-		sendPacket(getEntityMap().getDestroyAll());
 		resetInventory();
 	}
 
@@ -181,11 +172,7 @@ public abstract class IInitialHandler extends InitialHandler {
 			return -1;
 		}
 	}
-
-	@Deprecated
-	public void updateTabList() {
-	}
-
+	
 	public ChannelWrapper getChannel() {
 		try{
 			return (ChannelWrapper) CHANNEL_FIELD.get(this);
@@ -194,11 +181,6 @@ public abstract class IInitialHandler extends InitialHandler {
 			return null;
 		}
 	}
-
-	public EntityMap getEntityMap() {
-		return e;
-	}
-
 	public short getTransaktionId() {
 		return transaktionId;
 	}
@@ -226,13 +208,6 @@ public abstract class IInitialHandler extends InitialHandler {
 
 	public void setTabHeaderFromPacket(IChatBaseComponent header, IChatBaseComponent footer) {
 		this.tab = new IChatBaseComponent[] { header, footer };
-	}
-
-	@Override
-	protected void finalize() throws Throwable {
-		if(e != null)
-			e.clear();
-		super.finalize();
 	}
 
 	@Override

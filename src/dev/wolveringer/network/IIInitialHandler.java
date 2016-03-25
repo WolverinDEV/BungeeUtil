@@ -23,10 +23,8 @@ import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.EncryptionUtil;
 import net.md_5.bungee.UserConnection;
 import net.md_5.bungee.Util;
-import net.md_5.bungee.api.AbstractReconnectHandler;
 import net.md_5.bungee.api.Callback;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.ServerPing.Protocol;
 import net.md_5.bungee.api.config.ListenerInfo;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -63,8 +61,7 @@ public class IIInitialHandler extends IInitialHandler {
 			return pool;
 		try{
 			pool = ClassPool.getDefault();
-			String path = Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-			addJarFile(path);
+			loadClassesFromJar(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()); //Load BungeeUtil in the system
 		}catch (Exception e){
 			e.printStackTrace();
 		}
@@ -76,31 +73,30 @@ public class IIInitialHandler extends IInitialHandler {
 
 	public static void addPlugin(Plugin plugin) {
 		try{
-			String path = plugin.getClass().getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-			addJarFile(path);
+			loadClassesFromJar(plugin.getClass().getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
 		}catch (Exception e){
 			e.printStackTrace();
 		}
 	}
 
-	private static void addJarFile(String path) {
+	@SuppressWarnings("resource")
+	private static void loadClassesFromJar(String path) {
 		if(pool == null)
 			throw new NullPointerException("Class Pool is null!");
 		try{
 			JarFile jarFile = new JarFile(path);
-			Enumeration e = jarFile.entries();
+			Enumeration<JarEntry> e = jarFile.entries();
 
 			URL[] urls = { new URL("jar:file:" + path + "!/") };
 			URLClassLoader cl = URLClassLoader.newInstance(urls, IIInitialHandler.class.getClassLoader());
 			while (e.hasMoreElements()){
-				JarEntry je = (JarEntry) e.nextElement();
-				if(je.isDirectory() || !je.getName().endsWith(".class")){
+				JarEntry je = e.nextElement();
+				if(je.isDirectory() || !je.getName().endsWith(".class")){ //isnt a class file
 					continue;
 				}
 				String className = je.getName().substring(0, je.getName().length() - 6);
 				className = className.replace('/', '.');
-				Class c = cl.loadClass(className);
-				pool.insertClassPath(new ClassClassPath(c));
+				pool.insertClassPath(new ClassClassPath(cl.loadClass(className)));
 			}
 		}catch (Exception e){
 			e.printStackTrace();
@@ -116,7 +112,7 @@ public class IIInitialHandler extends IInitialHandler {
 				clazz.setName("ProxiedPlayerUserConnectionRedefined" + (redifned_count == 0 ? "" : redifned_count));
 				clazz.setSuperclass(cp.get(UserConnection.class.getName()));
 				base_class_connection = class_connection = clazz.toClass(getClassLoader());
-				Main.sendMessage("Init Base class");
+				Main.sendMessage("§aInit Base class");
 				redifned_count++;
 			}catch (Exception e){
 				e.printStackTrace();
@@ -124,16 +120,19 @@ public class IIInitialHandler extends IInitialHandler {
 		}else{
 			if(base_class_connection == null)
 				throw new NullPointerException("Base class isn't init");
+			if(!base.isAssignableFrom(ProxiedPlayerUserConnection.class))
+				throw new RuntimeException("Class ("+base.getCanonicalName()+") isnt an instance of ProxiedPlayerUserConnection");
 			try{
 				ClassPool cp = pool();
 				cp.appendClassPath(new ClassClassPath(base));
 				CtClass clazz = cp.get(base.getName());
-				CtClass super_class = cp.getCtClass(base_class_connection.getName());
-				super_class.getName(); //checking null?
+				CtClass super_class = cp.getCtClass(base_class_connection.getName()); //Get last redefined class
+				if(super_class == null || super_class.getName() == null)
+					throw new NullPointerException("Base class not found.");
 				clazz.setSuperclass(super_class);
 				clazz.setName("ProxiedPlayerUserConnectionRedefined_" + (redifned_count == 0 ? "" : redifned_count));
-				class_connection = clazz.toClass(getClassLoader());
-				Main.sendMessage("Init extra class " + class_connection.getSuperclass());
+				class_connection = clazz.toClass(getClassLoader()); //Create the class
+				Main.sendMessage("§aInit extra class " + class_connection.getSuperclass());
 				redifned_count++;
 			}catch (Exception e){
 				e.printStackTrace();

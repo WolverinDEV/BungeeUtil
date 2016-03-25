@@ -66,7 +66,7 @@ public abstract class Packet {
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x09,0x37, PacketPlayOutHeldItemSlot.class);//-> 0x37
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x33, 0x46, PacketPlayOutUpdateSign.class);
 		
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, null,0x0C, PacketPlayOutBossBar.class);
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, null,0x0C, PacketPlayOutBossBar.class); //Only 1.9 :) Best Bar-Update Ever!
 		
 		//TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x0E, PacketPlayOutEntityAbstract.class);//Delete dont needed?
 		//TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x0F, PacketPlayOutEntityAbstract.class);//Delete dont needed?
@@ -93,11 +93,9 @@ public abstract class Packet {
 		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x0D,0x08, PacketPlayInCloseWindow.class); //0x08
 		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x07,0x13, PacketPlayInBlockDig.class); //0x13
 		
-		//TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x0A, PacketPlayInArmAnimation.class); //Change (2 hands.... i think the two hand system is boring....)
-		//TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x08, PacketPlayInBlockPlace.class); //Changed (2 hands)
+		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x0A,0x1A, PacketPlayInArmAnimation.class);
+		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x08,0x1C, PacketPlayInBlockPlace.class);
 		//TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x12, PacketPlayInUpdateSign.class); //Changed from ChatComponent to String
-		
-		// registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x29, PacketPlayOutNamedSoundEffect.class); //TODO
 	}
 	
 	public static int calculate(BigClientVersion version,Protocol p, Direction d, Integer id) {

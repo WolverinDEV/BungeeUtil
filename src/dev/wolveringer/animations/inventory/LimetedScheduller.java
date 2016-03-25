@@ -11,7 +11,7 @@ public abstract class LimetedScheduller implements Runnable {
 	private int repeat_time;
 	private TimeUnit unit;
 	private int ID;
-
+	
 	public LimetedScheduller(int limit, int repeat_time, TimeUnit unit) {
 		this.limit = limit;
 		this.repeat_time = repeat_time;
@@ -26,12 +26,12 @@ public abstract class LimetedScheduller implements Runnable {
 
 	@Override
 	public void run() {
-		run(count);
-		count++;
 		if(count > limit){
 			BungeeCord.getInstance().getScheduler().cancel(ID);
 			done();
 		}
+		run(count);
+		count++;
 	}
 
 	public abstract void run(int count);
@@ -42,5 +42,10 @@ public abstract class LimetedScheduller implements Runnable {
 
 	public void start() {
 		ID = BungeeCord.getInstance().getScheduler().schedule(Main.getMain(), this, 0, repeat_time, unit).getId();
+	}
+
+	public void stop() {
+		BungeeCord.getInstance().getScheduler().cancel(ID);
+		done();
 	}
 }

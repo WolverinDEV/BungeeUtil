@@ -11,6 +11,7 @@ import dev.wolveringer.BungeeUtil.packets.PacketPlayOutBossBar;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutBossBar.Action;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutBossBar.BarColor;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutBossBar.BarDivision;
+import dev.wolveringer.animations.inventory.LimetedScheduller;
 import dev.wolveringer.chat.ChatSerializer;
 import dev.wolveringer.chat.IChatBaseComponent;
 import lombok.Getter;
@@ -37,7 +38,7 @@ public class BossBarManager {
 		private float health;
 		private IChatBaseComponent message;
 		private boolean visiable;
-		private ScheduledTask curruntTask;
+		private LimetedScheduller curruntTask;
 		
 		private BossBar(BossBarManager manager) {
 			this.manager = manager;
@@ -82,11 +83,23 @@ public class BossBarManager {
 		}
 		
 		public void dynamicChangeHealth(float health,int time,TimeUnit unit){
+			if(curruntTask != null)
+				curruntTask.stop();
 			float diff = this.health-health;
-			float addPerStep = diff/steps;
-			
+			if(diff == 0)
+				return;
+			final float base = this.health;
+			int stepCount = (int) (diff/steps);
+			final float addPerStep = diff/stepCount;
 			int millis = (int) unit.toMillis(time);
-			//int loopsTime = diff/steps/millis;
+			int loopsTime = (int) (millis/stepCount);
+			
+			new LimetedScheduller(millis,Math.abs(loopsTime),TimeUnit.MILLISECONDS) {
+				@Override
+				public void run(int count) {
+					setHealth(base+(addPerStep*count));
+				}
+			}.start();
 		}
 		
 		protected BossBar(BossBarManager manager, UUID uuid, BarColor color, BarDivision division, float value, IChatBaseComponent message, boolean visiable) {
@@ -144,9 +157,5 @@ public class BossBarManager {
 			return;
 		bars.remove(bar);
 		bar.hide();
-	}
-	
-	public static void main(String[] args) {
-		System.out.println("X: "+((double)5/(double)10));
 	}
 }

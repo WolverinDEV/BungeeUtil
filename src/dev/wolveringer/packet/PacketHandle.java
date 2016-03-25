@@ -271,20 +271,24 @@ public class PacketHandle {
 								s.getObjektive("test").setScore("§aHello world", -2);
 								s.getObjektive("test").display(Position.SIDEBAR);
 								s.getObjektive("test").setDisplayName(ChatColorUtils.COLOR_CHAR + "athis is an test");
-								
+							}
+							else
+							{
+								s.removeObjektive("test");
+							}
+							if(p.getPlayer().getVersion().getBigVersion() == BigClientVersion.v1_9){
 								BossBar var0 = null;
-								if(p.getPlayer().getVersion().getBigVersion() == BigClientVersion.v1_9){
-									var0 = p.getPlayer().getBossBarManager().createNewBossBar();
-									var0.setColor(BarColor.GREEN);
-									var0.setDivision(BarDivision.NO_DIVISION);
-									var0.setHealth(0F);
-									var0.setMessage(ChatSerializer.fromMessage("§cHello world"));
-									var0.display();
-									
-									p.getPlayer().sendMessage("Your boss bars:");
-									for(BossBar bar : p.getPlayer().getBossBarManager().getActiveBossBars())
-										p.getPlayer().sendMessage("  §7- "+ChatSerializer.toMessage(bar.getMessage()));
-								}
+						
+								var0 = p.getPlayer().getBossBarManager().createNewBossBar();
+								var0.setColor(BarColor.GREEN);
+								var0.setDivision(BarDivision.NO_DIVISION);
+								var0.setHealth(0F);
+								var0.setMessage(ChatSerializer.fromMessage("§cHello world"));
+								var0.display();
+								
+								p.getPlayer().sendMessage("Your boss bars:");
+								for(BossBar bar : p.getPlayer().getBossBarManager().getActiveBossBars())
+									p.getPlayer().sendMessage("  §7- "+ChatSerializer.toMessage(bar.getMessage()));
 								final BossBar bar = var0;
 								new LimetedScheduller(32,250,TimeUnit.MILLISECONDS) {
 									int currunt = 0;
@@ -297,21 +301,28 @@ public class PacketHandle {
 										}
 										if(bar != null){
 											bar.setMessage(ChatSerializer.fromMessage(ChatColorUtils.COLOR_CHAR+Integer.toHexString((currunt)%16)+"Hello world"));
-											bar.setHealth((float)((float)count/(float)limit));
+											bar.dynamicChangeHealth((float)((float)count/(float)limit), 250, TimeUnit.MILLISECONDS);
 										}
 									}
 									@Override
 									public void done() {
 										s.removeObjektive("test");
 										if(bar != null){
-											p.getPlayer().getBossBarManager().deleteBossBar(bar);
+											bar.setColor(BarColor.RED);
+											BungeeCord.getInstance().getScheduler().runAsync(Main.getMain(), new Runnable() {
+												@Override
+												public void run() {
+													try {
+														Thread.sleep(500);
+													}
+													catch (InterruptedException e) {
+													}
+													p.getPlayer().getBossBarManager().deleteBossBar(bar);
+												}
+											});
 										}
 									}
 								}.start();
-							}
-							else
-							{
-								s.removeObjektive("test");
 							}
 							p.getPlayer().sendMessage("Cleaning Space!");
 							System.gc();
@@ -406,17 +417,8 @@ public class PacketHandle {
 		 * 
 		 * Entities
 		 */
-		if (pack instanceof PacketPlayOutEntityDestroy) {
-			PacketPlayOutEntityDestroy packet = (PacketPlayOutEntityDestroy) pack;
-			player.getInitialHandler().getEntityMap().removeEntity(packet.getEntitys());
-		}
 		if (pack instanceof PacketPlayXXXHeldItemSlot) {
 			player.setSelectedSlot(((PacketPlayXXXHeldItemSlot) pack).getSlot());
-		}
-		
-		if (pack instanceof PacketPlayOutEntityAbstract) {
-			PacketPlayOutEntityAbstract packet = (PacketPlayOutEntityAbstract) pack;
-			player.getInitialHandler().getEntityMap().addEntity(packet.getId());
 		}
 		/**
 		 * 
