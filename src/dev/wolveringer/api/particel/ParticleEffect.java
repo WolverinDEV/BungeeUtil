@@ -376,8 +376,16 @@ public enum ParticleEffect {
 	 * <li>The offset values have no influence on this particle effect
 	 * </ul>
 	 */
-	MOB_APPEARANCE("mobappearance", 41, 8);
+	MOB_APPEARANCE("mobappearance", 41, 8),
 
+	DRAGON_BREATH("dragonbreath", 42, 9),
+	
+	END_ROD("endrod", 43, 9),
+	
+	DAMAGE_INDICATOR("damageindicator", 44, 9),
+	
+	SWEEP_ATTACK("sweepattack", 45, 9);
+	
 	private static final Map<String, ParticleEffect> NAME_MAP = new HashMap<String, ParticleEffect>();
 	private static final Map<Integer, ParticleEffect> ID_MAP = new HashMap<Integer, ParticleEffect>();
 	private final String name;
@@ -1166,7 +1174,7 @@ public enum ParticleEffect {
 			if (packet != null) {
 				return;
 			}
-			packet = new PacketPlayOutWorldParticles(Particle.fromId(this.effect.id), center, new Vector(offsetX, offsetY, offsetZ), this.speed, this.amount,this.longDistance , data==null?new int[0]:effect == ParticleEffect.ITEM_CRACK ? data.getPacketData() : new int[] { data.getPacketData()[0] | (data.getPacketData()[1] << 12)});
+			packet = new PacketPlayOutWorldParticles(this.effect, center, new Vector(offsetX, offsetY, offsetZ), this.speed, this.amount,this.longDistance , data==null?new int[0]:effect == ParticleEffect.ITEM_CRACK ? data.getPacketData() : new int[] { data.getPacketData()[0] | (data.getPacketData()[1] << 12)});
 		}
 
 		/**

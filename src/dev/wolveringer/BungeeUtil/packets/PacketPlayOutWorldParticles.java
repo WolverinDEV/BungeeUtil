@@ -6,7 +6,7 @@ import java.util.Arrays;
 import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
 import dev.wolveringer.BungeeUtil.Vector;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
-import dev.wolveringer.api.particel.Particle;
+import dev.wolveringer.api.particel.ParticleEffect;
 import dev.wolveringer.api.position.Location;
 import dev.wolveringer.packet.PacketDataSerializer;
 
@@ -15,7 +15,7 @@ public class PacketPlayOutWorldParticles extends Packet implements PacketPlayOut
 	private int count;
 	private float data;
 	private Location loc;
-	private Particle name;
+	private ParticleEffect name;
 	private Vector vector;
 
 	//1.8
@@ -26,8 +26,7 @@ public class PacketPlayOutWorldParticles extends Packet implements PacketPlayOut
 		super(0x2A);
 	}
 
-	public PacketPlayOutWorldParticles(Particle s, Location loc, Vector v, float f6, int i, int... pdata) {
-		super(0x2A);
+	public PacketPlayOutWorldParticles(ParticleEffect s, Location loc, Vector v, float f6, int i, int... pdata) {
 		this.name = s;
 		this.loc = loc;
 		this.vector = v;
@@ -36,8 +35,7 @@ public class PacketPlayOutWorldParticles extends Packet implements PacketPlayOut
 		this.p_data = pdata;
 	}
 
-	public PacketPlayOutWorldParticles(Particle s, Location loc, Vector v, float f6, int i, boolean far, int... pdata) {
-		super(0x2A);
+	public PacketPlayOutWorldParticles(ParticleEffect s, Location loc, Vector v, float f6, int i, boolean far, int... pdata) {
 		this.name = s;
 		this.loc = loc;
 		this.vector = v;
@@ -59,7 +57,7 @@ public class PacketPlayOutWorldParticles extends Packet implements PacketPlayOut
 		return loc;
 	}
 
-	public Particle getParticle() {
+	public ParticleEffect getParticle() {
 		return name;
 	}
 
@@ -70,13 +68,13 @@ public class PacketPlayOutWorldParticles extends Packet implements PacketPlayOut
 	@Override
 	public void read(PacketDataSerializer packetdataserializer) {
 		if(getVersion().getBigVersion() == BigClientVersion.v1_7){
-			name = Particle.fromName(packetdataserializer.readString(64));
+			name = ParticleEffect.fromName(packetdataserializer.readString(64));
 			loc = new Location(packetdataserializer.readFloat(), packetdataserializer.readFloat(), packetdataserializer.readFloat());
 			vector = new Vector(packetdataserializer.readFloat(), packetdataserializer.readFloat(), packetdataserializer.readFloat());
 			this.data = packetdataserializer.readFloat();
 			this.count = packetdataserializer.readInt();
 		}else if(getVersion().getBigVersion() == BigClientVersion.v1_8 || getVersion().getBigVersion() == BigClientVersion.v1_9){
-			this.name = Particle.fromId(packetdataserializer.readInt());
+			this.name = ParticleEffect.fromId(packetdataserializer.readInt());
 			this.far = packetdataserializer.readBoolean();
 			loc = new Location(packetdataserializer.readFloat(), packetdataserializer.readFloat(), packetdataserializer.readFloat());
 			vector = new Vector(packetdataserializer.readFloat(), packetdataserializer.readFloat(), packetdataserializer.readFloat());
@@ -107,7 +105,7 @@ public class PacketPlayOutWorldParticles extends Packet implements PacketPlayOut
 		this.loc = loc;
 	}
 
-	public void setParticle(Particle name) {
+	public void setParticle(ParticleEffect name) {
 		this.name = name;
 	}
 
@@ -148,11 +146,11 @@ public class PacketPlayOutWorldParticles extends Packet implements PacketPlayOut
 		}
 	}
 
-	public boolean isJ() {
+	public boolean isFar() {
 		return far;
 	}
 
-	public void setJ(boolean j) {
+	public void setFar(boolean j) {
 		this.far = j;
 	}
 

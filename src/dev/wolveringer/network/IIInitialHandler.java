@@ -120,7 +120,7 @@ public class IIInitialHandler extends IInitialHandler {
 		}else{
 			if(base_class_connection == null)
 				throw new NullPointerException("Base class isn't init");
-			if(!base.isAssignableFrom(ProxiedPlayerUserConnection.class))
+			if(!ProxiedPlayerUserConnection.class.isAssignableFrom(base))
 				throw new RuntimeException("Class ("+base.getCanonicalName()+") isnt an instance of ProxiedPlayerUserConnection");
 			try{
 				ClassPool cp = pool();
