@@ -24,7 +24,6 @@ import dev.wolveringer.BungeeUtil.packets.PacketPlayInChat;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInCloseWindow;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInFlying;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInWindowClick;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayOutEntityDestroy;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutNamedEntitySpawn;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutPlayerListHeaderFooter;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutPosition;
@@ -33,7 +32,6 @@ import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardObjective.Type;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutSetSlot;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutTransaction;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutWindowItems;
-import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOutEntityAbstract;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayXXXHeldItemSlot;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutBossBar.BarColor;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutBossBar.BarDivision;
@@ -62,8 +60,7 @@ public class PacketHandle {
 	@SuppressWarnings("unused")
 	public static boolean handlePacket(final Packet pack, final Player player) {
 		Profiler.packet_handle.start("handleIntern");
-		if (pack == null || player == null)
-			return false;
+		if (pack == null || player == null) return false;
 		/**
 		 * 
 		 * Location
@@ -75,21 +72,22 @@ public class PacketHandle {
 		if (pack instanceof PacketPlayInFlying) {
 			PacketPlayInFlying p = (PacketPlayInFlying) pack;
 			Location _new = ((PacketPlayInFlying) pack).getLocation().clone();
-			if(!p.hasPos()){
+			if (!p.hasPos()) {
 				_new.add(player.getLocation().toVector());
 			}
-			if(!p.hasLook()){
+			if (!p.hasLook()) {
 				_new.setYaw(player.getLocation().getYaw());
 				_new.setPitch(player.getLocation().getPitch());
 			}
 			player.setLocation(_new);
-		} else 
-			/**
-			 * 
-			 * Inventory
-			 */
-			
-			if (pack instanceof PacketPlayInWindowClick) {
+		}
+		else
+		/**
+		 * 
+		 * Inventory
+		 */
+		
+		if (pack instanceof PacketPlayInWindowClick) {
 			Profiler.packet_handle.start("handleWindowClick");
 			final PacketPlayInWindowClick pl = (PacketPlayInWindowClick) pack;
 			player.getInitialHandler().setWindow((short) pl.getWindow());
@@ -114,9 +112,9 @@ public class PacketHandle {
 					public void run() {
 						Profiler.packet_handle.start("itemClickListener");
 						try {
-							if (player.getInventoryView().isClickable())
-								is.click(new Click(player, pl.getSlot(), player.getInventoryView(), pl.getItem(), pl.getMode()));
-						} catch (Exception e) {
+							if (player.getInventoryView().isClickable()) is.click(new Click(player, pl.getSlot(), player.getInventoryView(), pl.getItem(), pl.getMode()));
+						}
+						catch (Exception e) {
 							List<StackTraceElement> le = new ArrayList<>();
 							le.addAll(Arrays.asList(ExceptionUtils.deleteDownward(e.getStackTrace(), ExceptionUtils.getCurrentMethodeIndex(e))));
 							le.add(new StackTraceElement("dev.wolveringer.BungeeUtil.PacketHandler", "handleInventoryClickPacket", null, -1));
@@ -151,6 +149,9 @@ public class PacketHandle {
 			if (pl.getWindow() == 0) {
 				player.getPlayerInventory().setItem(pl.getSlot(), pl.getItemStack());
 			}
+			else if(pl.getWindow() == -1){
+				player.getPlayerInventory().setItem(999, pl.getItemStack());
+			}
 		}
 		/**
 		 * 
@@ -162,12 +163,8 @@ public class PacketHandle {
 					String[] args = new String[0];
 					if (((PacketPlayInChat) pack).getMessage().length() > 2) {
 						String var1[] = ((PacketPlayInChat) pack).getMessage().split(" ");
-						if (var1.length <= 1) {
-							return false;
-						}
-						if (!var1[0].equalsIgnoreCase("bu")) {
-							return false;
-						}
+						if (var1.length <= 1) { return false; }
+						if (!var1[0].equalsIgnoreCase("bu")) { return false; }
 						args = Arrays.copyOfRange(var1, 1, var1.length);
 					}
 					if (args.length == 2) {
@@ -175,12 +172,14 @@ public class PacketHandle {
 							b.add(args[1]);
 							player.sendMessage("Du hast " + args[1] + " hinzugefï¿½gt");
 							return true;
-						} else if (args[0].equalsIgnoreCase("remove")) {
+						}
+						else if (args[0].equalsIgnoreCase("remove")) {
 							b.remove(args[1]);
 							player.sendMessage("Du hast " + args[1] + " removed");
 							return true;
 						}
-					} else if (args.length == 1) {
+					}
+					else if (args.length == 1) {
 						if (args[0].equalsIgnoreCase("list")) {
 							player.sendMessage("Alle Spieler:");
 							for (String s : b)
@@ -213,11 +212,11 @@ public class PacketHandle {
 									double steps = 0.125;
 									double max = 16.5;
 									for (double d = 0; d < max; d += steps) {
-										ParticleEffect.REDSTONE.display(new ParticleEffect.OrdinaryColor((int) (0xFF * (((d+count*2*steps)%max) / max)), 0x00, (int) (0xFF - 0xFF * (((d+count*2*steps)%max) / max))), target.clone().add(target.getDirection().multiply(d)).add(0D, 2 + 1.6D, 0D), p.getPlayer());
+										ParticleEffect.REDSTONE.display(new ParticleEffect.OrdinaryColor((int) (0xFF * (((d + count * 2 * steps) % max) / max)), 0x00, (int) (0xFF - 0xFF * (((d + count * 2 * steps) % max) / max))), target.clone().add(target.getDirection().multiply(d)).add(0D, 2 + 1.6D, 0D), p.getPlayer());
 									}
 								}
 							}.start();
-							p.getPlayer().sendMessage(ChatColorUtils.COLOR_CHAR + "7Deine Location: " + ChatColorUtils.COLOR_CHAR + "aX: " + ChatColorUtils.COLOR_CHAR + "b" + p.getPlayer().getLocation().getX() + " " + ChatColorUtils.COLOR_CHAR + "aY: " + ChatColorUtils.COLOR_CHAR + "b" + p.getPlayer().getLocation().getY() + " " + ChatColorUtils.COLOR_CHAR + "aZ: " + ChatColorUtils.COLOR_CHAR + "b" + p.getPlayer().getLocation().getZ() + " "+ChatColorUtils.COLOR_CHAR+"7["+ChatColorUtils.COLOR_CHAR+"aYaw: "+ChatColorUtils.COLOR_CHAR+"b" + p.getPlayer().getLocation().getYaw() + ChatColorUtils.COLOR_CHAR+"7, "+ChatColorUtils.COLOR_CHAR+"aPitch: "+ChatColorUtils.COLOR_CHAR+"b" + p.getPlayer().getLocation().getPitch() + ChatColorUtils.COLOR_CHAR+"7]");
+							p.getPlayer().sendMessage(ChatColorUtils.COLOR_CHAR + "7Deine Location: " + ChatColorUtils.COLOR_CHAR + "aX: " + ChatColorUtils.COLOR_CHAR + "b" + p.getPlayer().getLocation().getX() + " " + ChatColorUtils.COLOR_CHAR + "aY: " + ChatColorUtils.COLOR_CHAR + "b" + p.getPlayer().getLocation().getY() + " " + ChatColorUtils.COLOR_CHAR + "aZ: " + ChatColorUtils.COLOR_CHAR + "b" + p.getPlayer().getLocation().getZ() + " " + ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "aYaw: " + ChatColorUtils.COLOR_CHAR + "b" + p.getPlayer().getLocation().getYaw() + ChatColorUtils.COLOR_CHAR + "7, " + ChatColorUtils.COLOR_CHAR + "aPitch: " + ChatColorUtils.COLOR_CHAR + "b" + p.getPlayer().getLocation().getPitch() + ChatColorUtils.COLOR_CHAR + "7]");
 							ParticleEffect.FIREWORKS_SPARK.display(0F, 0F, 10F, 0.1F, 10, p.getPlayer().getLocation().add(0, 0, 1), p.getPlayer());
 							final NPC c = new NPC();
 							c.setName(ChatColorUtils.COLOR_CHAR + "aThis is an testing");
@@ -239,8 +238,7 @@ public class PacketHandle {
 							c.getEquipment().setItemInHand(p.getPlayer().getHandItem());
 							if (p.getPlayer().getVersion().getBigVersion() == BigClientVersion.v1_9) {
 								Item i = p.getPlayer().getOffHandItem();
-								if (i != null)
-									c.getEquipment().setItemInOffHand(i);
+								if (i != null) c.getEquipment().setItemInOffHand(i);
 							}
 							c.getEquipment().setHelmet(new dev.wolveringer.BungeeUtil.item.Item(Material.LEATHER_HELMET));
 							Skin s = SkinFactory.getSkin("WolverinDEV");
@@ -248,7 +246,7 @@ public class PacketHandle {
 							Main.sendMessage(s + "");
 							
 							GameProfile profile = s.applay(c.getProfile());
-
+							
 							Main.sendMessage(s + "");
 							Main.sendMessage(profile + "");
 							
@@ -265,20 +263,19 @@ public class PacketHandle {
 						@Override
 						public void click(final Click p) {
 							final Scoreboard s = p.getPlayer().getScoreboard();
-							if(s.getObjektive("test") == null){
+							if (s.getObjektive("test") == null) {
 								s.createObjektive("test", Type.INTEGER);
 								s.getObjektive("test").setScore("§a-----------", -1);
 								s.getObjektive("test").setScore("§aHello world", -2);
 								s.getObjektive("test").display(Position.SIDEBAR);
 								s.getObjektive("test").setDisplayName(ChatColorUtils.COLOR_CHAR + "athis is an test");
 							}
-							else
-							{
+							else {
 								s.removeObjektive("test");
 							}
-							if(p.getPlayer().getVersion().getBigVersion() == BigClientVersion.v1_9){
+							if (p.getPlayer().getVersion().getBigVersion() == BigClientVersion.v1_9) {
 								BossBar var0 = null;
-						
+								
 								var0 = p.getPlayer().getBossBarManager().createNewBossBar();
 								var0.setColor(BarColor.GREEN);
 								var0.setDivision(BarDivision.NO_DIVISION);
@@ -287,27 +284,29 @@ public class PacketHandle {
 								var0.display();
 								
 								p.getPlayer().sendMessage("Your boss bars:");
-								for(BossBar bar : p.getPlayer().getBossBarManager().getActiveBossBars())
-									p.getPlayer().sendMessage("  §7- "+ChatSerializer.toMessage(bar.getMessage()));
+								for (BossBar bar : p.getPlayer().getBossBarManager().getActiveBossBars())
+									p.getPlayer().sendMessage("  §7- " + ChatSerializer.toMessage(bar.getMessage()));
 								final BossBar bar = var0;
-								new LimetedScheduller(32,250,TimeUnit.MILLISECONDS) {
+								new LimetedScheduller(32, 250, TimeUnit.MILLISECONDS) {
 									int currunt = 0;
+									
 									@Override
 									public void run(int count) {
-										if(s.getObjektive("test") != null){
-											s.getObjektive("test").removeScore(ChatColorUtils.COLOR_CHAR+Integer.toHexString((currunt)%16)+"Testing score");
-											currunt+=1;
-											s.getObjektive("test").setScore(ChatColorUtils.COLOR_CHAR+Integer.toHexString(currunt%16)+"Testing score", currunt%16);
+										if (s.getObjektive("test") != null) {
+											s.getObjektive("test").removeScore(ChatColorUtils.COLOR_CHAR + Integer.toHexString((currunt) % 16) + "Testing score");
+											currunt += 1;
+											s.getObjektive("test").setScore(ChatColorUtils.COLOR_CHAR + Integer.toHexString(currunt % 16) + "Testing score", currunt % 16);
 										}
-										if(bar != null){
-											bar.setMessage(ChatSerializer.fromMessage(ChatColorUtils.COLOR_CHAR+Integer.toHexString((currunt)%16)+"Hello world"));
-											bar.dynamicChangeHealth((float)((float)count/(float)limit), 250, TimeUnit.MILLISECONDS);
+										if (bar != null) {
+											bar.setMessage(ChatSerializer.fromMessage(ChatColorUtils.COLOR_CHAR + Integer.toHexString((currunt) % 16) + "Hello world"));
+											bar.dynamicChangeHealth((float) ((float) count / (float) limit), 250, TimeUnit.MILLISECONDS);
 										}
 									}
+									
 									@Override
 									public void done() {
 										s.removeObjektive("test");
-										if(bar != null){
+										if (bar != null) {
 											bar.setColor(BarColor.RED);
 											BungeeCord.getInstance().getScheduler().runAsync(Main.getMain(), new Runnable() {
 												@Override
@@ -356,7 +355,8 @@ public class PacketHandle {
 							while (inv.getViewer().size() > 0) {
 								try {
 									Thread.sleep(500);
-								} catch (InterruptedException e) {
+								}
+								catch (InterruptedException e) {
 								}
 								Runtime runtime = Runtime.getRuntime();
 								List<String> a = new ArrayList<String>();
@@ -389,7 +389,7 @@ public class PacketHandle {
 						@Override
 						public void click(Click p) {
 							p.getPlayer().sendMessage("Sound sended");
-							p.getPlayer().playSound(SoundEffect.getEffect("block.anvil.land"),SoundCategory.MASTER, p.getPlayer().getLocation(), 1F, 0);
+							p.getPlayer().playSound(SoundEffect.getEffect("block.anvil.land"), SoundCategory.MASTER, p.getPlayer().getLocation(), 1F, 0);
 						}
 					};
 					final ArrayList<String> out = new ArrayList<String>();

@@ -27,10 +27,10 @@ public class PacketPlayOutEntityEffect extends Packet implements PacketPlayOut {
 	
 	@Override
 	public void read(PacketDataSerializer s) {
-		entity = getVersion().getBigVersion() == BigClientVersion.v1_8 ? s.readVarInt() : s.readInt();
+		entity = getVersion().getBigVersion() == BigClientVersion.v1_7 ? s.readInt() : s.readVarInt();
 		effect = s.readByte();
 		amplifier = s.readByte();
-		duration = getVersion().getBigVersion() == BigClientVersion.v1_8 ? s.readVarInt() : s.readShort();
+		duration = getVersion().getBigVersion() == BigClientVersion.v1_7 ? s.readShort() : s.readVarInt();
 		hidden = getVersion().getBigVersion() == BigClientVersion.v1_8 ? s.readBoolean() : getBigVersion() == BigClientVersion.v1_9 ? s.readByte() == 1 : false;
 	}
 	

@@ -46,7 +46,7 @@ public final class PlayerInventory {
 	}
 
 	public Item[] getContains() {
-		return items.toArray(new Item[items.size()]);
+		return items.toArray(new Item[Math.min(items.size(), 46)]); //46=Max slots
 	}
 
 	public Item getItem(int slot) {

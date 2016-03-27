@@ -9,8 +9,6 @@ import io.netty.util.internal.PlatformDependent;
 
 import java.lang.reflect.Field;
 
-import javax.swing.plaf.BorderUIResource;
-
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.BungeeServerInfo;
 import net.md_5.bungee.UserConnection;
@@ -54,7 +52,6 @@ import dev.wolveringer.network.inject.XChannelInitializer;
 public class ProxiedPlayerUserConnection extends AbstraktUserConnection implements Player {
 	private IInitialHandler i;
 	private Inventory inv;
-	private Item cursor;
 	private Location loc;
 	private Location last_loc;
 	private PlayerInventory p_inv;
@@ -131,12 +128,12 @@ public class ProxiedPlayerUserConnection extends AbstraktUserConnection implemen
 	}
 
 	public void setCursorItem(Item is) {
-		this.cursor = is;
 		sendPacket(new PacketPlayOutSetSlot(is, -1, -1));
+		getPlayerInventory().setItem(999, is);
 	}
 
 	public Item getCursorItem() {
-		return cursor;
+		return getPlayerInventory().getItem(999);
 	}
 
 	public Item getOffHandItem() {
