@@ -56,6 +56,10 @@ public final class PacketListenerScoreboard implements PacketHandler<Packet> {
 				Objektive obj = board.getObjektive(out.getObjektiveName());
 				if (obj == null)
 					board.server_objs.add(obj = new Objektive(board, out.getObjektiveName()));
+				if(obj == null){
+					System.err.println("ScoreboardObjective "+out.getObjektiveName()+" for the player "+e.getPlayer().getName()+" not found!");
+					return;
+				}
 				Score x = null;
 				for (Score s : obj.scores)
 					if (s.getName().equals(out.getScoreName())) {
@@ -69,6 +73,10 @@ public final class PacketListenerScoreboard implements PacketHandler<Packet> {
 			} else if (out
 					.getAction() == dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardScore.Action.REMOVE) {
 				Objektive obj = board.getObjektive(out.getObjektiveName());
+				if(obj == null){
+					System.err.println("ScoreboardObjective "+out.getObjektiveName()+" for the player "+e.getPlayer().getName()+" not found!");
+					return;
+				}
 				Score x = null;
 				for (Score s : obj.scores)
 					if (s.getName().equals(out.getScoreName())) {

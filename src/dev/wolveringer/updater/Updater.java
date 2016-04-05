@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URL;
@@ -239,7 +240,7 @@ public class Updater {
 	}
 
 	@SuppressWarnings("deprecation")
-	public boolean whiteList() {
+	public boolean isServerWhiteListed() {
 		try{
 			if(data == null)
 				throw new NullPointerException("HTTP Data is null. Invpoke getData() first");
@@ -278,5 +279,18 @@ public class Updater {
 	public void updateData(){
 		if(System.currentTimeMillis()-last>TimeUnit.MINUTES.toMillis(10))
 			loadData();
+	}
+	
+	public static void main(String[] args) {
+		BigDecimal a  = new BigDecimal(Integer.MAX_VALUE);
+		BigDecimal m = new BigDecimal(Integer.MAX_VALUE);
+		int count = 0;
+		while (count<500000) {
+			count++;
+			long start = System.currentTimeMillis();
+			a = a.pow(999999);
+			long end = System.currentTimeMillis();
+			System.out.println("Loop: "+count+" Diff: "+(end-start)+" M: "+a.toBigInteger().bitLength());
+		}
 	}
 }

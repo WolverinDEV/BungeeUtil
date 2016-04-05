@@ -24,8 +24,10 @@ public enum ClientVersion {
 	v1_8_9(47, BigClientVersion.v1_8),
 	v1_8_10(47, BigClientVersion.v1_8),
 	//Skip snapshots
-	v1_9_0(107,BigClientVersion.v1_9);
-
+	v1_9_0(107,BigClientVersion.v1_9),
+	v1_9_1(107,BigClientVersion.v1_9),
+	v1_9_2(108,BigClientVersion.v1_9),
+	v1_9_3(109,BigClientVersion.v1_9);
 	private int v;
 	BigClientVersion bv;
 

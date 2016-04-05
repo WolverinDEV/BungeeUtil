@@ -114,7 +114,12 @@ public class Decoder extends MinecraftDecoder {
 			Packet packet = null;
 			try{
 				Profiler.decoder_timings.start(Messages.getString("network.timings.decoder.create.packet")); //$NON-NLS-1$
-				packet = Packet.getPacket(clientVersion.getBigVersion(),getProtocol(), dir, in, connection.getPlayer());
+				if(clientVersion == null){
+					System.out.println("Client version = null");
+				}
+				if(connection == null)
+					System.out.println("Connection == null");
+				packet = Packet.getPacket(clientVersion.getBigVersion() ,getProtocol(), dir, in, connection.getPlayer());
 				Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.create.packet")); //$NON-NLS-1$
 				if(packet == null){
 					Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.read")); //$NON-NLS-1$

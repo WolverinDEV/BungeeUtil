@@ -173,7 +173,9 @@ public class PacketDataSerializer_v1_8 extends PacketDataSerializer {
 
 	public String c(int i) {
 		int j = readVarInt();
-		if(j > i * 4 && i != -1){
+		if(i == -1) //Overflow fix
+			i = Short.MAX_VALUE;
+		if(j > i * 4){
 			throw new DecoderException("The received encoded string buffer length is longer than maximum allowed (" + j + " > " + i * 4 + ")");
 		}
 		if(j < 0){

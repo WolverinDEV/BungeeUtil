@@ -2,6 +2,7 @@ package dev.wolveringer.api.inventory;
 
 import java.util.Arrays;
 
+import dev.wolveringer.BungeeUtil.Material;
 import dev.wolveringer.BungeeUtil.item.Item;
 import dev.wolveringer.BungeeUtil.item.ItemStack;
 
@@ -88,7 +89,10 @@ public class ItemContainer {
 	}
 
 	public void setItem(int slot, Item is) {
-		items[slot] = is;
+		if(is == null || is.getTypeId() == 0)
+			items[slot] = null;
+		else
+			items[slot] = is;
 	}
 
 	public void clear() {

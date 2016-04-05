@@ -44,6 +44,8 @@ public abstract class Packet {
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x31,0x15, PacketPlayOutWindowData.class);//-> 0x15
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x2F,0x16, PacketPlayOutSetSlot.class); //-> 0x16
 		
+		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x3F, 0x18, PacketPlayOutPluginMessage.class);
+		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x04,0x3C, PacketPlayOutEntityEquipment.class); //Chaned
 		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x2A,0x22, PacketPlayOutWorldParticles.class);
@@ -79,7 +81,10 @@ public abstract class Packet {
 		// registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x21, PacketPlayOutMapChunk.class); //TODO Chunk Serelizer (Premium bungee src)
 		// registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x26, PacketPlayOutMapChunkBulk.class); //TODO Chunk Serelizer (Premium bungee src)
 		
+		
 		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x16,0x03, PacketPlayInClientState.class); //Changed
+		
+		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x17, 0x09, PacketPlayInPluginMessage.class);
 		
 		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x01,0x02, PacketPlayInChat.class); //-> 0x02
 		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x02,0x0A, PacketPlayInUseEntity.class); //-> changed
