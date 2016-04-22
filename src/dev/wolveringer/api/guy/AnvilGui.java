@@ -1,6 +1,7 @@
 package dev.wolveringer.api.guy;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import dev.wolveringer.BungeeUtil.Material;
 import dev.wolveringer.BungeeUtil.PacketHandleEvent;
@@ -18,6 +19,88 @@ import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 import net.md_5.bungee.protocol.DefinedPacket;
 
 public class AnvilGui {
+	
+	private static class AnvilWindowSizeStringCalculator {
+		private static HashMap<Character, Double> charLength = new HashMap<>(); //Length = 1 = X
+		private static final int BOX_SIZE = 18;
+		static {
+			for(int i = 0;i<Character.MAX_VALUE;i++)
+				charLength.put((char) i, 1D);
+			charLength.put('A', 1D); //18
+			charLength.put('B', 1D);
+			charLength.put('C', 1D);
+			charLength.put('D', 1D);
+			charLength.put('E', 1D);
+			charLength.put('F', 1D);
+			charLength.put('G', 1D);
+			charLength.put('H', 1D);
+			charLength.put('I', 18D/26D); //26 in 
+			charLength.put('J', 1D); 
+			charLength.put('K', 1D); 
+			charLength.put('L', 1D);
+			charLength.put('M', 1D); 
+			charLength.put('N', 1D); 
+			charLength.put('O', 1D); 
+			charLength.put('P', 1D); 
+			charLength.put('Q', 1D); 
+			charLength.put('R', 1D); 
+			charLength.put('S', 1D); 
+			charLength.put('T', 1D); 
+			charLength.put('U', 1D); 
+			charLength.put('V', 1D); 
+			charLength.put('W', 1D); 
+			charLength.put('X', 1D); 
+			charLength.put('Y', 1D); 
+			charLength.put('Z', 1D); 
+			
+			charLength.put('a', 1D); //18
+			charLength.put('b', 1D);
+			charLength.put('c', 1D);
+			charLength.put('d', 1D);
+			charLength.put('e', 1D);
+			charLength.put('f', 1D);
+			charLength.put('g', 1D);
+			charLength.put('h', 1D);
+			charLength.put('i', 18D/52D); //Todo
+			charLength.put('j', 18D/28D); 
+			charLength.put('k', 1D); 
+			charLength.put('l', 18D/34D);//Todo
+			charLength.put('m', 1D); 
+			charLength.put('n', 1D); 
+			charLength.put('o', 1D); 
+			charLength.put('p', 1D); 
+			charLength.put('q', 1D); 
+			charLength.put('r', 1D); 
+			charLength.put('s', 1D); 
+			charLength.put('t', 1D); 
+			charLength.put('u', 1D); 
+			charLength.put('v', 1D); 
+			charLength.put('w', 1D); 
+			charLength.put('x', 1D); 
+			charLength.put('y', 1D); 
+			charLength.put('z', 1D); 
+		}
+		
+		private String message;
+		
+		public AnvilWindowSizeStringCalculator(String message) {
+			this.message = message;
+		}
+		
+		public boolean boarderReached(){
+			return reachBoarder(BOX_SIZE);
+		}
+		
+		public boolean reachBoarder(int length){
+			double out = 0;
+			for(char c : message.toCharArray())
+				out+=charLength.get(c);
+			return out+1>length;
+		}
+		
+		
+	}
+	
 	private static final Item DEFAULT_CENTER_ITEM;
 	private static final Item DEFAULT_OUTPUT_ITEM;
 	
@@ -27,7 +110,6 @@ public class AnvilGui {
 		
 		DEFAULT_OUTPUT_ITEM = new Item(Material.NAME_TAG);
 		DEFAULT_OUTPUT_ITEM.getItemMeta().setDisplayName("§aClick to finish");
-		//private static final Item DEFAULT_CENTER_ITEM;
 	}
 	
 	private Player owner;
@@ -43,6 +125,8 @@ public class AnvilGui {
 	
 	private boolean noBackground = false;
 	
+	private String curruntDisplayString = "";
+	
 	private ArrayList<AnvilGuiListener> listener = new ArrayList<>();
 	
 	private PacketHandler<Packet> packet = new PacketHandler<Packet>() {
@@ -55,10 +139,11 @@ public class AnvilGui {
 				if (packet.getChannel().equalsIgnoreCase("MC|ItemName")) {
 					if (e.getPlayer().equals(owner) && inv != null) {
 						String message = curruntItemDisplayName = DefinedPacket.readString(packet.getCopiedbyteBuff());
+						if(colorPrefix.length() > message.length()) //Backspace (color prefix deleted!)
+							message = colorPrefix;
 						message = message.substring(colorPrefix.length(), message.length()); // replace
 	                                                                                         // color
 	                                                                                         // prefix
-						
 						String handleMessage = message;
 						
 						if (message.length() == 0 && noBackground) {
@@ -109,6 +194,8 @@ public class AnvilGui {
 						curruntMessage = handleMessage;
 						for(AnvilGuiListener listener : new ArrayList<>(AnvilGui.this.listener))
 							listener.onMessageChange(AnvilGui.this, handleMessage);
+						
+					//	System.out.println("Boarderreach: "+new AnvilWindowSizeStringCalculator(handleMessage).reachBoarder(18)); 
 					}
 				}
 			}
@@ -258,7 +345,7 @@ public class AnvilGui {
 	
 	public void setColorPrefix(String prefix) {
 		if (colorPrefix.equalsIgnoreCase(prefix)) return;
-		String rawMeta = curruntItemDisplayName.substring(colorPrefix.length());
+		String rawMeta = curruntItemDisplayName.substring(Math.min(colorPrefix.length(), curruntItemDisplayName.length())); //Backspace a color prefix code... fix
 		colorPrefix = prefix;
 		ItemStack item = new ItemStack(backgroundMaterial) {
 			@Override

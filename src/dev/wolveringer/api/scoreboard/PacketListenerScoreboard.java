@@ -45,6 +45,8 @@ public final class PacketListenerScoreboard implements PacketHandler<Packet> {
 				board.server_objs.remove(board.getObjektive(out.getScorebordName()));
 			} else if (out.getAction() == Action.UPDATE) {
 				Objektive obj = board.getObjektive(out.getScorebordName());
+				if(obj == null)
+					return;
 				obj.displayName = out.getDisplayName();
 				obj.type = out.getType();
 			}

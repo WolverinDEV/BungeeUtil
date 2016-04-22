@@ -22,7 +22,7 @@ public class SkinFactory {
 
 	private static LoadingCache<UUID, Skin> profileCache = CacheBuilder.newBuilder().maximumSize(500).expireAfterWrite(4, TimeUnit.HOURS).build(new CacheLoader<UUID, Skin>() {
 		public Skin load(UUID name) throws Exception {
-			Skin skin = null;
+			Skin skin = new SteveSkin();
 			try{
 				skin = loadSkin(name);
 			}catch(Exception e){
@@ -38,7 +38,7 @@ public class SkinFactory {
 			throw new IllegalArgumentException("UUID cant be null");
 		try{
 			Skin s = profileCache.get(uuid);
-			if(s == null){
+			if(s instanceof SteveSkin){
 				profileCache.refresh(uuid);
 				s = profileCache.get(uuid);
 			}
@@ -66,6 +66,10 @@ public class SkinFactory {
 		return Skin.createEmptySkin();
 	}
 	
+	public static Skin createSkin(String rawValue,String signature){
+		return new Skin(rawValue, signature);
+	}
+	
 	@Deprecated
 	public static Skin getSkin(String name) {
 		try{
@@ -91,8 +95,9 @@ public class SkinFactory {
 
 	private static Skin loadSkin(UUID uuid) throws IOException {
 		String s = new SkinRequest().performGetRequest(new URL(PROFILE_URL + uuid.toString().replace("-", "") + "?unsigned=false"));
-		if("".equalsIgnoreCase(s) || s == null)
-			throw new IOException("Player skin not found (" + uuid + ")");
+		if("".equalsIgnoreCase(s) || s == null){
+			throw new NullPointerException("Player skin not found (" + uuid + ")");
+		}
 		return new Skin(new JSONObject(s));
 	}
 	

@@ -1,6 +1,0 @@
-name: BungeeUtil
-version: -1
-main: dev.wolveringer.BungeeUtil.bukkit.BukkitMain
-
-commands:
-  BungeeTimings:

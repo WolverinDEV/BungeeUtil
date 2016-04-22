@@ -1,10 +1,6 @@
 package dev.wolveringer.BungeeUtil;
 
-import io.netty.channel.unix.Socket;
-
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.ServerSocket;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 import jline.TerminalFactory;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.jni.zlib.NativeCompressImpl;
 import dev.wolveringer.BungeeUtil.RamStatistics.RamStatistic;
 import dev.wolveringer.BungeeUtil.configuration.Configuration;
 import dev.wolveringer.BungeeUtil.injector.InjectFiles;
@@ -27,7 +22,6 @@ import dev.wolveringer.network.IIInitialHandler;
 import dev.wolveringer.network.ProxiedPlayerUserConnection;
 import dev.wolveringer.network.channel.init.ChannelInizializer;
 import dev.wolveringer.updater.Updater;
-import dev.wolveringer.util.MathUtil;
 
 public class Main extends Plugin {
 	private static boolean active;

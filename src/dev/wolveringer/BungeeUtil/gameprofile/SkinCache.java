@@ -17,7 +17,7 @@ import com.google.common.cache.LoadingCache;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.OperationCalback;
 
-public class SkinCash {
+public class SkinCache {
 	private static final String PROFILE_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";
 
 	private static LoadingCache<UUID, Skin> profileCache = CacheBuilder.newBuilder().maximumSize(500).expireAfterWrite(4, TimeUnit.HOURS).build(new CacheLoader<UUID, Skin>() {
@@ -84,7 +84,7 @@ public class SkinCash {
 	public static void main(String[] args) {
 		Skin s = Skin.createEmptySkin();
 		s.setRawData("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjdiYmQwYjI5MTFjOTZiNWQ4N2IyZGY3NjY5MWE1MWI4YjEyYzZmZWZkNTIzMTQ2ZDhhYzVlZjFiOGVlIn19fQ==");
-		s.setSkin(SkinCash.getSkin("WolverinEN").getSkinUrl());
+		s.setSkin(SkinCache.getSkin("WolverinEN").getSkinUrl());
 		s.setUUID(UUID.randomUUID());
 		System.out.print(s.getRawData());
 	}

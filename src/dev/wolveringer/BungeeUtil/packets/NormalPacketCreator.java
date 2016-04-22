@@ -114,6 +114,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 			packetsId[loadPacket(BigClientVersion.v1_9,p, d, v1_9_id, clazz)] = (Constructor<? extends Packet>) clazz.getConstructor();
 		}
 		catch (NoSuchMethodException | SecurityException ex) {
+			System.out.println(clazz);
 			ex.printStackTrace();
 		}
 		changed = true;

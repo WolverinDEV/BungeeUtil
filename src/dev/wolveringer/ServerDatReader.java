@@ -22,6 +22,7 @@ import dev.wolveringer.nbt.NBTTagString;
 
 public class ServerDatReader {
 	public static void main(String[] args) throws Exception {
+		System.out.print("X");
 		if(true)
 			return;
 		File f = new File("/home/wolverindev/.minecraft/servers.dat");

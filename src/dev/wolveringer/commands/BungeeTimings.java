@@ -68,10 +68,14 @@ public class BungeeTimings extends Command {
 					cs.sendMessage("Timings are "+ChatColorUtils.COLOR_CHAR+"cdisabled");
 				return;
 			}else if(args[0].equalsIgnoreCase("view")){
+				if(cs instanceof Player){
 				((Player)cs).openInventory(ProfileMenue.getProfilerMenue().getMenue());
+				}
+				else
+					cs.sendMessage("§cYou must be a player to open an inventory.");
 				return;
 			}
 		}
-		cs.sendMessage("/BungeeTimings <view/on/off/reset/paste/status>");
+		cs.sendMessage("/BungeeTimings <"+(cs instanceof Player ? "view/" : "")+"on/off/reset/paste/status>");
 	}
 }
