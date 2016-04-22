@@ -180,7 +180,7 @@ public class Main extends Plugin {
 							diffSpace+=" ";
 						Main.sendMessage("");
 						Main.sendMessage(ChatColorUtils.COLOR_CHAR + "7#####"+diffSpace.substring(0, diffSpace.length()/2).replaceAll(" ", "#")+" " + ChatColorUtils.COLOR_CHAR + "6Heap utilization statistics [MB] " + ChatColorUtils.COLOR_CHAR + "7#####"+diffSpace.substring(0, diffSpace.length()/2).replaceAll(" ", "#")+(diffSpace.length()%2!=0?"#":""));
-						Main.sendMessage(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aReserved Used Memory:      " + ChatColorUtils.COLOR_CHAR + "e" + var1 + "M " + ChatColorUtils.COLOR_CHAR + "7("+(diff>0?"" + ChatColorUtils.COLOR_CHAR + "a+":diff<0?"" + ChatColorUtils.COLOR_CHAR + "c-":"" + ChatColorUtils.COLOR_CHAR + "6±")+Math.abs(diff)+"" + ChatColorUtils.COLOR_CHAR + "7)   " + ChatColorUtils.COLOR_CHAR + "7#");
+						Main.sendMessage(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aReserved Used Memory:      " + ChatColorUtils.COLOR_CHAR + "e" + var1 + "M " + ChatColorUtils.COLOR_CHAR + "7("+(diff>0?"" + ChatColorUtils.COLOR_CHAR + "a+":diff<0?"" + ChatColorUtils.COLOR_CHAR + "c-":"" + ChatColorUtils.COLOR_CHAR + "6ï¿½")+Math.abs(diff)+"" + ChatColorUtils.COLOR_CHAR + "7)   " + ChatColorUtils.COLOR_CHAR + "7#");
 						Main.sendMessage(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aReserved Free Memory:      " + ChatColorUtils.COLOR_CHAR + "e" + var2 + "M    "+diffSpace + ChatColorUtils.COLOR_CHAR + "7#");
 						Main.sendMessage(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aReserved Memory:           " + ChatColorUtils.COLOR_CHAR + "e" + var3 + "M    "+diffSpace + ChatColorUtils.COLOR_CHAR + "7#");
 						Main.sendMessage(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "a-----------------------------" + format("", var5).replaceAll(" ", "-") + "   "+diffSpace + ChatColorUtils.COLOR_CHAR + "7#");
@@ -259,8 +259,6 @@ public class Main extends Plugin {
 				while (message.length() < costumPormtLineMessage.length()) {
 					message += " ";
 				}
-				// 15:00:37
-				
 				BungeeCord.getInstance().getConsoleReader().resetPromptLine("", "", 0);
 				BungeeCord.getInstance().getConsole().sendMessage(message);
 				BungeeCord.getInstance().getConsoleReader().resetPromptLine(costumPormtLineMessage, "", 0);
@@ -277,35 +275,4 @@ public class Main extends Plugin {
 		active = false;
 		BungeeCord.getInstance().getConsole().sendMessage(ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "eBungeeUntil" + ChatColorUtils.COLOR_CHAR + "7] " + ChatColorUtils.COLOR_CHAR + "aThank you for using BungeeUntil");
 	}
-	
-	/*
-	public Main() throws IOException {
-		ServerSocket socket = new ServerSocket(25566);
-		while (true) {
-			java.net.Socket sock = socket.accept();
-			InputStream is = sock.getInputStream();
-			while (true) {
-				if(is.available() > 0){
-					byte[] b = new byte[is.available()];
-					is.read(b);
-					String out = "";
-					for(byte b0 : b)
-						out+=" 0x"+Integer.toHexString(b0)+",";
-					System.out.println("Readed: "+out);
-				}
-			}
-		}
-	}
-	*/
-	/*
-	 * 
-	 * public static void main(String[] args) { Runtime.getRuntime().load(new
-	 * File(
-	 * "/home/wolverindev/workspaces/BungeeUtil/Native BungeeUtil/Debug/NativeLib.so"
-	 * ).getAbsolutePath()); NativePacketCreator p = new NativePacketCreator();
-	 * p.registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x01,
-	 * PacketPlayOutChat.class); p.registerPacket(Protocol.GAME,
-	 * Direction.TO_CLIENT, 0x02, PacketPlayOutEntityAbstract.class);
-	 * Main.sendMessage(p.getRegisteredPackets()); }
-	 */
 }
