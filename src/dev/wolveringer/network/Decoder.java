@@ -126,8 +126,8 @@ public class Decoder extends MinecraftDecoder {
 				}else{
 					Profiler.decoder_timings.start(Messages.getString("network.timings.decoder.handle"));
 					Profiler.decoder_timings.start(Messages.getString("network.timings.decoder.handle.intern")); //$NON-NLS-1$
-					PacketHandleEvent<?> e = new PacketHandleEvent(packet, connection.getPlayer());
-					if(Propeties.HANDLE_INTERN_PACKET || !PacketHandle.handlePacket(packet,connection.getPlayer())){
+					PacketHandleEvent<? extends Packet> e = new PacketHandleEvent(packet, connection.getPlayer());
+					if(Propeties.HANDLE_INTERN_PACKET || !PacketHandle.handlePacket(e)){
 						Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.handle.intern")); //$NON-NLS-1$
 						Profiler.decoder_timings.start(Messages.getString("network.timings.decoder.handle.extern")); //$NON-NLS-1$
 						PacketLib.handle(e);

@@ -3,20 +3,12 @@ package dev.wolveringer.packet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.BungeeCord;
-import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
-import dev.wolveringer.BungeeUtil.CostumPrintStream;
 import dev.wolveringer.BungeeUtil.Main;
-import dev.wolveringer.BungeeUtil.Material;
+import dev.wolveringer.BungeeUtil.PacketHandleEvent;
 import dev.wolveringer.BungeeUtil.Player;
 import dev.wolveringer.BungeeUtil.exception.ExceptionUtils;
-import dev.wolveringer.BungeeUtil.gameprofile.GameProfile;
-import dev.wolveringer.BungeeUtil.gameprofile.Skin;
-import dev.wolveringer.BungeeUtil.gameprofile.SkinFactory;
-import dev.wolveringer.BungeeUtil.item.Item;
 import dev.wolveringer.BungeeUtil.item.ItemStack;
 import dev.wolveringer.BungeeUtil.item.ItemStack.Click;
 import dev.wolveringer.BungeeUtil.packets.Packet;
@@ -27,38 +19,20 @@ import dev.wolveringer.BungeeUtil.packets.PacketPlayInWindowClick;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutNamedEntitySpawn;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutPlayerListHeaderFooter;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutPosition;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardDisplayObjective.Position;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardObjective.Type;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutSetSlot;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutTransaction;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayOutWindowItems;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayXXXHeldItemSlot;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayOutBossBar.BarColor;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayOutBossBar.BarDivision;
-import dev.wolveringer.NPC.InteractListener;
-import dev.wolveringer.NPC.NPC;
-import dev.wolveringer.animations.inventory.InventoryViewChangeAnimations;
-import dev.wolveringer.animations.inventory.LimetedScheduller;
-import dev.wolveringer.animations.inventory.InventoryViewChangeAnimations.AnimationType;
-import dev.wolveringer.api.SoundEffect;
-import dev.wolveringer.api.SoundEffect.SoundCategory;
-import dev.wolveringer.api.bossbar.BossBarManager.BossBar;
 import dev.wolveringer.api.inventory.Inventory;
-import dev.wolveringer.api.inventory.ItemContainer;
-import dev.wolveringer.api.particel.ParticleEffect;
 import dev.wolveringer.api.position.Location;
-import dev.wolveringer.api.scoreboard.Scoreboard;
-import dev.wolveringer.chat.ChatSerializer;
-import dev.wolveringer.chat.ChatColor.ChatColorUtils;
-import dev.wolveringer.profiler.ProfileMenue;
 import dev.wolveringer.profiler.Profiler;
 
 public class PacketHandle {
 	static PacketPlayOutNamedEntitySpawn a;
 	static ArrayList<String> b = new ArrayList<String>();
 	
-	@SuppressWarnings("unused")
-	public static boolean handlePacket(final Packet pack, final Player player) {
+	public static boolean handlePacket(PacketHandleEvent e) {
+		final Packet pack = e.getPacket();
+		final Player player = e.getPlayer();
 		Profiler.packet_handle.start("handleIntern");
 		if (pack == null || player == null) return false;
 		/**
@@ -93,21 +67,27 @@ public class PacketHandle {
 			player.getInitialHandler().setWindow((short) pl.getWindow());
 			player.getInitialHandler().setTransaktionId(pl.getActionNumber());
 			if (player.isInventoryOpened()) {
-				if (player.getInventoryView().getSlots() <= pl.getSlot() || pl.getSlot() < 0) {
-					player.sendPacket(new PacketPlayOutTransaction(Inventory.ID, pl.getActionNumber(), false));
+				player.sendPacket(new PacketPlayOutTransaction(Inventory.ID, pl.getActionNumber(), false));
+				player.sendPacket(new PacketPlayOutSetSlot(null, -1, 0));
+				
+				if (pl.getSlot()>player.getInventoryView().getSlots() || pl.getSlot() < 0) {
 					Profiler.packet_handle.stop("handleWindowClick");
-					return true;
+					e.setCancelled(true);
+					if(pl.getSlot()>player.getInventoryView().getSlots()){
+						int slot = pl.getSlot()-e.getPlayer().getInventoryView().getSlots()+9;
+						player.sendPacket(new PacketPlayOutSetSlot(e.getPlayer().getPlayerInventory().getItem(slot), Inventory.ID, pl.getSlot()));
+					}
+					return false;
 				}
 				final ItemStack is = player.getInventoryView().getItem(pl.getSlot());
 				if (is == null) {
-					player.sendPacket(new PacketPlayOutTransaction(Inventory.ID, pl.getActionNumber(), false));
 					Profiler.packet_handle.stop("handleWindowClick");
-					return true;
+					e.setCancelled(true);
+					return false;
 				}
-				player.sendPacket(new PacketPlayOutTransaction(Inventory.ID, pl.getActionNumber(), false));
 				player.sendPacket(new PacketPlayOutSetSlot(player.getInventoryView().getContains()[pl.getSlot()], Inventory.ID, pl.getSlot()));
-				player.sendPacket(new PacketPlayOutSetSlot(null, -1, 0));
 				player.updateInventory();
+				
 				BungeeCord.getInstance().getScheduler().runAsync(Main.getMain(), new Runnable() {
 					public void run() {
 						Profiler.packet_handle.start("itemClickListener");
@@ -126,7 +106,8 @@ public class PacketHandle {
 					}
 				});
 				Profiler.packet_handle.stop("handleWindowClick");
-				return true;
+				e.setCancelled(true);
+				return false;
 			}
 		}
 		if (pack instanceof PacketPlayInCloseWindow) {
@@ -134,14 +115,8 @@ public class PacketHandle {
 			if (pl.getWindow() == Inventory.ID && player.isInventoryOpened()) {
 				player.closeInventory();
 				player.updateInventory();
+				e.setCancelled(true);
 				return false;
-			}
-		}
-		if (pack instanceof PacketPlayOutWindowItems) {
-			PacketPlayOutWindowItems pl = (PacketPlayOutWindowItems) pack;
-			if (pl.getWindow() == 0) {
-				for (int i = 0; i < pl.getItems().length; i++)
-					player.getPlayerInventory().setItem(i, pl.getItems()[i]);
 			}
 		}
 		if (pack instanceof PacketPlayOutSetSlot) {
@@ -170,7 +145,7 @@ public class PacketHandle {
 					if (args.length == 2) {
 						if (args[0].equalsIgnoreCase("add")) {
 							b.add(args[1]);
-							player.sendMessage("Du hast " + args[1] + " hinzugefügt");
+							player.sendMessage("Du hast " + args[1] + " hinzugefï¿½gt");
 							return true;
 						}
 						else if (args[0].equalsIgnoreCase("remove")) {

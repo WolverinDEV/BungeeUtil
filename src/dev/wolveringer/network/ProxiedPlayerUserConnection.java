@@ -120,10 +120,18 @@ public class ProxiedPlayerUserConnection extends AbstraktUserConnection implemen
 	}
 
 	public void updateInventory() {
+		int window = 0;
+		int dslot = 0;
+		if(isInventoryOpened()){
+			window = Inventory.ID;
+			dslot = getInventoryView().getSlots();
+		}
 		Item[] items = p_inv.getContains();
 		for(int i = 0;i < items.length;i++){
+			if(isInventoryOpened() && i-9 < 0)
+				continue;
 			Item item = items[i];
-			sendPacket(new PacketPlayOutSetSlot(item, 0, i));
+			sendPacket(new PacketPlayOutSetSlot(item, window, dslot+i-(isInventoryOpened()?9:0))); //-9 Player crafting and armor
 		}
 	}
 

@@ -11,7 +11,7 @@ import dev.wolveringer.chat.ChatModifier;
 
 public class ChatColorUtils {
 	private final static Map<Character, ChatColor> BY_CHAR = Maps.newHashMap();
-	public static final char COLOR_CHAR = 'ง';//\u00A7
+	public static final char COLOR_CHAR = 'ยง';//\u00A7
 	private static final Pattern STRIP_FORMAT_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[A-FK-OR]");
 	private static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9]");
 	static{

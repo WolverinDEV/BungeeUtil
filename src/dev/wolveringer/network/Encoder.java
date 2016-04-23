@@ -59,7 +59,7 @@ public class Encoder extends MinecraftEncoder {
 		in.release();
 		PacketHandleEvent e = new PacketHandleEvent(packet, i.getPlayer());
 		Profiler.encoder_timings.start(Messages.getString("network.timings.encoder.handle.intern"));
-		boolean intern = PacketHandle.handlePacket(packet,i.getPlayer());
+		boolean intern = PacketHandle.handlePacket(e);
 		Profiler.encoder_timings.stop(Messages.getString("network.timings.encoder.handle.intern"));
 		if(!intern || Propeties.HANDLE_INTERN_PACKET){
 			Profiler.encoder_timings.start(Messages.getString("network.timings.encoder.handle.extern"));

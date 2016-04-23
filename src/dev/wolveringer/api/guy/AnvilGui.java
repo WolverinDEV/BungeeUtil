@@ -106,10 +106,10 @@ public class AnvilGui {
 	
 	static {
 		DEFAULT_CENTER_ITEM = new Item(Material.BARRIER);
-		DEFAULT_CENTER_ITEM.getItemMeta().setDisplayName("§r");
+		DEFAULT_CENTER_ITEM.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR+"r");
 		
 		DEFAULT_OUTPUT_ITEM = new Item(Material.NAME_TAG);
-		DEFAULT_OUTPUT_ITEM.getItemMeta().setDisplayName("§aClick to finish");
+		DEFAULT_OUTPUT_ITEM.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR+"aClick to finish");
 	}
 	
 	private Player owner;
@@ -117,7 +117,7 @@ public class AnvilGui {
 	private String curruntMessage = "";
 	private String backgroundString = "Message here: ";
 	private Material backgroundMaterial = Material.STONE;
-	private String colorPrefix = "§a";
+	private String colorPrefix = "Â§a";
 	private Item centerItem = DEFAULT_CENTER_ITEM;
 	private Item outputItem = DEFAULT_OUTPUT_ITEM;
 	
@@ -138,14 +138,16 @@ public class AnvilGui {
 				PacketPlayInPluginMessage packet = (PacketPlayInPluginMessage) e.getPacket();
 				if (packet.getChannel().equalsIgnoreCase("MC|ItemName")) {
 					if (e.getPlayer().equals(owner) && inv != null) {
-						String message = curruntItemDisplayName = DefinedPacket.readString(packet.getCopiedbyteBuff());
+						String message = DefinedPacket.readString(packet.getCopiedbyteBuff());
+						if(curruntItemDisplayName.equalsIgnoreCase(message) && false)
+							return;
+						curruntItemDisplayName = message;
 						if(colorPrefix.length() > message.length()) //Backspace (color prefix deleted!)
 							message = colorPrefix;
 						message = message.substring(colorPrefix.length(), message.length()); // replace
 	                                                                                         // color
 	                                                                                         // prefix
 						String handleMessage = message;
-						
 						if (message.length() == 0 && noBackground) {
 							ItemStack item = new ItemStack(backgroundMaterial) {
 								@Override
@@ -159,6 +161,7 @@ public class AnvilGui {
 							handleMessage = "";
 							return;
 						}
+						
 						if (buildOutString(message, backgroundString).length() <= 1 && noBackground == false) {// Checking
 	                                                                                                           // for
 	                                                                                                           // background
@@ -186,6 +189,19 @@ public class AnvilGui {
 								item.getItemMeta().setDisplayName(curruntItemDisplayName = colorPrefix + newMessage);
 								inv.setItem(0, item);
 							}
+						}
+						else
+						{
+							/*
+							ItemStack item = new ItemStack(backgroundMaterial) {
+								@Override
+								public void click(Click click) {
+									click.setCancelled(true);
+								}
+							};
+							item.getItemMeta().setDisplayName(curruntItemDisplayName);
+							inv.setItem(0, item);
+							*/
 						}
 						
 						handleMessage = handleMessage.replaceFirst(backgroundString, ""); // For safty
