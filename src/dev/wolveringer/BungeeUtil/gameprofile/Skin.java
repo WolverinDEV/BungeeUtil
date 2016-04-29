@@ -17,7 +17,7 @@ public class Skin {
 		return s;
 	}
 
-	private String name;
+	private String name = "textures";
 	private String raw_value;
 	private String signature;
 	private boolean empty = false;

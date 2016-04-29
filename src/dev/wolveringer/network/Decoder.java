@@ -109,6 +109,11 @@ public class Decoder extends MinecraftDecoder {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+		if(connection == null){
+			super.decode(ctx, in, out);
+			System.out.println("Skipping decode()");
+			return;
+		}
 		Profiler.decoder_timings.start(Messages.getString("network.timings.decoder.read")); //$NON-NLS-1$
 		try{
 			Packet packet = null;

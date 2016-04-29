@@ -52,7 +52,7 @@ public abstract class IInitialHandler extends InitialHandler {
 	private IChatBaseComponent[] tab = new IChatBaseComponent[2];
 
 	public IInitialHandler(ProxyServer instance, ListenerInfo listenerInfo, Decoder a, Encoder b) {
-		super(instance, listenerInfo);
+		super((BungeeCord) instance, listenerInfo);
 		this.a = a;
 		this.b = b;
 		if(a != null)

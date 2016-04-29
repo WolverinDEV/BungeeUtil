@@ -63,7 +63,8 @@ public class ProxiedPlayerUserConnection extends AbstraktUserConnection implemen
 	public ProxiedPlayerUserConnection(ProxyServer bungee, ChannelWrapper ch, String name, InitialHandler pendingConnection) {
 		super(bungee, ch, name, pendingConnection);
 		this.i = (IInitialHandler) pendingConnection;
-		p_inv = new PlayerInventory();
+		p_inv = new PlayerInventory(this);
+		p_inv.getViewer().add(this);
 		board = new Scoreboard(this);
 		loc = last_loc = new Location(0, 0, 0);
 		bossBarManager = new BossBarManager(this);

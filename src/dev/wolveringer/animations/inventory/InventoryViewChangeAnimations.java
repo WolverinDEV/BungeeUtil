@@ -114,6 +114,10 @@ public class InventoryViewChangeAnimations {
 				base.disableUpdate();
 				int count = limit-c;
 				boolean resized = false;
+				if(count < 0){
+					base.enableUpdate();
+					return;
+				}
 				if(base.getSlots() / 9 < new_row_count){
 					base.resize(base.getSlots() + 9);
 					this.count-=1;

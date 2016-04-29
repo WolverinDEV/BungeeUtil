@@ -2,7 +2,6 @@ package dev.wolveringer.network.channel.init;
 
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelException;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
@@ -26,6 +25,7 @@ import net.md_5.bungee.protocol.Varint21LengthFieldPrepender;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.network.Decoder;
 import dev.wolveringer.network.Encoder;
+import dev.wolveringer.network.IIInitialHandler;
 import dev.wolveringer.network.channel.ChannelHandler;
 
 public class BungeeUtilChannelInit <T extends InitialHandler> extends ChannelInizializer {

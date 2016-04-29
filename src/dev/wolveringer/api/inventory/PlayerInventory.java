@@ -2,6 +2,7 @@ package dev.wolveringer.api.inventory;
 
 import java.util.ArrayList;
 
+import dev.wolveringer.BungeeUtil.Material;
 import dev.wolveringer.BungeeUtil.Player;
 import dev.wolveringer.BungeeUtil.item.Item;
 import dev.wolveringer.BungeeUtil.item.ItemStack;
@@ -29,20 +30,20 @@ public final class PlayerInventory {
 	private String name;
 	private ArrayList<Player> viewer = new ArrayList<Player>();
 	private int ID;
-
-	public PlayerInventory(int ID, String name) {
+	private Player player;
+	public PlayerInventory(Player player,int ID, String name) {
 		this.name = name;
 		this.ID = ID;
+		this.player = player;
 		getItem(45);
 	}
 
-	public PlayerInventory() {
-		this(0,"");
+	public PlayerInventory(Player player) {
+		this(player,0,"");
 	}
 
 	private void brotcast(Packet a) {
-		for(Player p : viewer)
-			p.sendPacket((PacketPlayOut)a);
+		player.sendPacket((PacketPlayOut)a);
 	}
 
 	public Item[] getContains() {
@@ -67,7 +68,13 @@ public final class PlayerInventory {
 
 	public void setItem(int slot, Item is) {
 		items.set(slot, is);
-		brotcast(new PacketPlayOutSetSlot(is, ID, slot));
+		if(player.isInventoryOpened()){
+			if(slot > 8){
+				brotcast(new PacketPlayOutSetSlot(is, Inventory.ID, slot-9+player.getInventoryView().getSlots()));
+			}
+		}
+		else
+			brotcast(new PacketPlayOutSetSlot(is, ID, slot));
 	}
 
 	public ArrayList<Player> getViewer() {
@@ -75,7 +82,6 @@ public final class PlayerInventory {
 	}
 
 	public void reset() {
-		viewer.clear();
 		items.clear();
 	}
 	

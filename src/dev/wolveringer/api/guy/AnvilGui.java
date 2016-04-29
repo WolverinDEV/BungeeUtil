@@ -26,59 +26,10 @@ public class AnvilGui {
 		static {
 			for(int i = 0;i<Character.MAX_VALUE;i++)
 				charLength.put((char) i, 1D);
-			charLength.put('A', 1D); //18
-			charLength.put('B', 1D);
-			charLength.put('C', 1D);
-			charLength.put('D', 1D);
-			charLength.put('E', 1D);
-			charLength.put('F', 1D);
-			charLength.put('G', 1D);
-			charLength.put('H', 1D);
 			charLength.put('I', 18D/26D); //26 in 
-			charLength.put('J', 1D); 
-			charLength.put('K', 1D); 
-			charLength.put('L', 1D);
-			charLength.put('M', 1D); 
-			charLength.put('N', 1D); 
-			charLength.put('O', 1D); 
-			charLength.put('P', 1D); 
-			charLength.put('Q', 1D); 
-			charLength.put('R', 1D); 
-			charLength.put('S', 1D); 
-			charLength.put('T', 1D); 
-			charLength.put('U', 1D); 
-			charLength.put('V', 1D); 
-			charLength.put('W', 1D); 
-			charLength.put('X', 1D); 
-			charLength.put('Y', 1D); 
-			charLength.put('Z', 1D); 
-			
-			charLength.put('a', 1D); //18
-			charLength.put('b', 1D);
-			charLength.put('c', 1D);
-			charLength.put('d', 1D);
-			charLength.put('e', 1D);
-			charLength.put('f', 1D);
-			charLength.put('g', 1D);
-			charLength.put('h', 1D);
 			charLength.put('i', 18D/52D); //Todo
 			charLength.put('j', 18D/28D); 
-			charLength.put('k', 1D); 
 			charLength.put('l', 18D/34D);//Todo
-			charLength.put('m', 1D); 
-			charLength.put('n', 1D); 
-			charLength.put('o', 1D); 
-			charLength.put('p', 1D); 
-			charLength.put('q', 1D); 
-			charLength.put('r', 1D); 
-			charLength.put('s', 1D); 
-			charLength.put('t', 1D); 
-			charLength.put('u', 1D); 
-			charLength.put('v', 1D); 
-			charLength.put('w', 1D); 
-			charLength.put('x', 1D); 
-			charLength.put('y', 1D); 
-			charLength.put('z', 1D); 
 		}
 		
 		private String message;
@@ -375,10 +326,22 @@ public class AnvilGui {
 	
 	protected void handleSuccessClick(){
 		for(AnvilGuiListener listener : new ArrayList<>(AnvilGui.this.listener))
+			if(listener != null)
 			listener.onConfirmInput(AnvilGui.this, this.curruntMessage);
+		if(owner.getInventoryView() != null)
+			if(owner.getInventoryView().equals(this.inv))
+				owner.closeInventory();
+		PacketLib.removeHandler(packet);
+	}
+	
+	public void close(){
+		for(AnvilGuiListener listener : new ArrayList<>(AnvilGui.this.listener))
+			if(listener != null)
+				listener.onClose(AnvilGui.this);
 		
-		if(owner.getInventoryView().equals(this.inv))
-			owner.closeInventory();
+		if(owner.getInventoryView() != null)
+			if(owner.getInventoryView().equals(this.inv))
+				owner.closeInventory();
 		PacketLib.removeHandler(packet);
 	}
 	

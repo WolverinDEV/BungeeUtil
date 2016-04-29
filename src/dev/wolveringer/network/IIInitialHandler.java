@@ -112,7 +112,7 @@ public class IIInitialHandler extends IInitialHandler {
 				clazz.setName("ProxiedPlayerUserConnectionRedefined" + (redifned_count == 0 ? "" : redifned_count));
 				clazz.setSuperclass(cp.get(UserConnection.class.getName()));
 				base_class_connection = class_connection = clazz.toClass(getClassLoader());
-				Main.sendMessage("§aInit Base class");
+				Main.sendMessage("Â§aInit Base class");
 				redifned_count++;
 			}catch (Exception e){
 				e.printStackTrace();
@@ -132,7 +132,7 @@ public class IIInitialHandler extends IInitialHandler {
 				clazz.setSuperclass(super_class);
 				clazz.setName("ProxiedPlayerUserConnectionRedefined_" + (redifned_count == 0 ? "" : redifned_count));
 				class_connection = clazz.toClass(getClassLoader()); //Create the class
-				Main.sendMessage("§aInit extra class " + class_connection.getSuperclass());
+				Main.sendMessage("Â§aInit extra class " + class_connection.getSuperclass());
 				redifned_count++;
 			}catch (Exception e){
 				e.printStackTrace();

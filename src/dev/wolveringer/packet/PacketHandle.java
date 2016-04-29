@@ -70,10 +70,10 @@ public class PacketHandle {
 				player.sendPacket(new PacketPlayOutTransaction(Inventory.ID, pl.getActionNumber(), false));
 				player.sendPacket(new PacketPlayOutSetSlot(null, -1, 0));
 				
-				if (pl.getSlot()>player.getInventoryView().getSlots() || pl.getSlot() < 0) {
+				if (pl.getSlot()>=player.getInventoryView().getSlots() || pl.getSlot() < 0) {
 					Profiler.packet_handle.stop("handleWindowClick");
 					e.setCancelled(true);
-					if(pl.getSlot()>player.getInventoryView().getSlots()){
+					if(pl.getSlot()>=player.getInventoryView().getSlots()){
 						int slot = pl.getSlot()-e.getPlayer().getInventoryView().getSlots()+9;
 						player.sendPacket(new PacketPlayOutSetSlot(e.getPlayer().getPlayerInventory().getItem(slot), Inventory.ID, pl.getSlot()));
 					}
