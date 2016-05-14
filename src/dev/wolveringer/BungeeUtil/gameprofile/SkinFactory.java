@@ -8,6 +8,7 @@ import java.util.logging.Level;
 
 import net.md_5.bungee.BungeeCord;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.common.cache.CacheBuilder;
@@ -67,7 +68,15 @@ public class SkinFactory {
 	}
 	
 	public static Skin createSkin(String rawValue,String signature){
-		return new Skin(rawValue, signature);
+		JSONObject o = new JSONObject();
+		JSONArray props = new JSONArray();
+		JSONObject prop = new JSONObject();
+		prop.put("name", "textures");
+		prop.put("value", rawValue);
+		prop.put("signature", signature);
+		props.put(prop);
+		o.put("properties", props);
+		return new Skin(o);
 	}
 	
 	@Deprecated

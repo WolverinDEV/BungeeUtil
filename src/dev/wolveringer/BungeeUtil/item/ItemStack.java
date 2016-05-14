@@ -36,12 +36,15 @@ public abstract class ItemStack extends Item {
 		private int mode;
 		private boolean cancel = true;
 		private Item item;
-		public Click(Player p, int slot, Inventory inv,Item ci, int mode) {
+		private boolean sync;
+		
+		public Click(Player p, int slot, Inventory inv,Item ci, int mode,boolean sync) {
 			this.player = p;
 			this.slot = slot;
 			this.inventory = inv;
 			this.mode = mode;
 			this.item = ci;
+			this.sync = sync;
 		}
 
 		public Player getPlayer() {
@@ -72,6 +75,10 @@ public abstract class ItemStack extends Item {
 		@Deprecated
 		public boolean isCancelled() {
 			return cancel;
+		}
+		
+		public boolean isSyncHandle() {
+			return sync;
 		}
 	}
 }

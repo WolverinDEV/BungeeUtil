@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
@@ -54,7 +55,7 @@ public class Updater {
 				if(Main.getMain().getDescription().getVersion().equalsIgnoreCase(plugins.getJSONObject(Main.getMain().getDescription().getName()).getString("version")))
 					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aNo plugin update found! Your version is alredy the newest! ("+plugins.getJSONObject(Main.getMain().getDescription().getName()).getString("version")+")");
 				else
-					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aYou plugin version is newer than the currunt public version. I think i´m a dev build... All bugs will be ignored");
+					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aYou plugin version is newer than the currunt public version. I think iï¿½m a dev build... All bugs will be ignored");
 			}
 			}else
 				Main.sendMessage(ChatColorUtils.COLOR_CHAR+"cPlugin not found!");
@@ -124,7 +125,7 @@ public class Updater {
 	private void downloadPlugin(String url, File f, String name) {
 		Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aStarte Download von dem Plugin "+ChatColorUtils.COLOR_CHAR+"6" + name);
 		try{
-			Main.setInformation("§aDownloading update §7[§e000%§7]");
+			Main.setInformation("ï¿½aDownloading update ï¿½7[ï¿½e000%ï¿½7]");
 			BufferedInputStream in = null;
 			FileOutputStream fout = null;
 			try{
@@ -149,11 +150,11 @@ public class Updater {
 					String p = "000"+MathUtil.calculatePercent(readed, fileLength);
 					p = p.substring(0, p.indexOf("."));
 					p = p.substring(p.length()-3, p.length());
-					Main.setInformation("§aDownloading update §7[§e"+p+"%§7]");
+					Main.setInformation("ï¿½aDownloading update ï¿½7[ï¿½e"+p+"%ï¿½7]");
 				}
 				fout.close();
 				in.close();
-				Main.setInformation("§aDownload done!");
+				Main.setInformation("ï¿½aDownload done!");
 				if(f.exists())
 					f.delete();
 				try{
@@ -162,27 +163,27 @@ public class Updater {
 					e.printStackTrace();
 				}
 				Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aDownloaden von dem Plugin "+ChatColorUtils.COLOR_CHAR+"6" + name + " "+ChatColorUtils.COLOR_CHAR+"aabgeshlossen");
-				Main.setInformation("§aCheck update for errors!");
+				Main.setInformation("ï¿½aCheck update for errors!");
 				Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aTeste update auf fehler...");
 				try{
 					JarInputStream is = new JarInputStream(new FileInputStream(df));
 					while(null != is.getNextJarEntry()) {}
 					is.close();
 				}catch(Exception e){
-					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"cError beim überprüfen des Updates (Message: "+e.getLocalizedMessage()+")");
-					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"cLösche das update");
+					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"cError beim ï¿½berprï¿½fen des Updates (Message: "+e.getLocalizedMessage()+")");
+					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"cLï¿½sche das update");
 					try{
 						df.delete();
 					}catch(Exception ex){}
-					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"cUpdate rückgängig gemacht.");
+					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"cUpdate rï¿½ckgï¿½ngig gemacht.");
 					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aRestarte den BungeeCord");
 					return;
 				}
 				Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aTeste erfolgreich abgeschlossen.");
 				Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aUpdate plugin");
-				Main.setInformation("§aInstalling update");
+				Main.setInformation("ï¿½aInstalling update");
 				if(!f.delete()){
-					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"6Konnte das alte plugin nicht löschen. Überschreibe das alte Plugin.");
+					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"6Konnte das alte plugin nicht lï¿½schen. ï¿½berschreibe das alte Plugin.");
 				}
 				f.createNewFile();
 				FileInputStream fis = new FileInputStream(df);
@@ -193,9 +194,9 @@ public class Updater {
 				fis.close();
 				fos.close();
 				if(!df.delete())
-					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"6Konnte junk Files nicht löschen..");
+					Main.sendMessage(ChatColorUtils.COLOR_CHAR+"6Konnte junk Files nicht lï¿½schen..");
 				Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aRestarte den BungeeCord");
-				Main.setInformation("§aUpdate installed!");
+				Main.setInformation("ï¿½aUpdate installed!");
 			}catch (Exception e){
 				e.printStackTrace();
 				Main.sendMessage(ChatColorUtils.COLOR_CHAR+"cError beim Downloaden vom Plugin "+ChatColorUtils.COLOR_CHAR+"4" + name);

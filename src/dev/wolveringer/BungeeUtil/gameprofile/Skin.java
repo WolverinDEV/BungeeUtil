@@ -3,6 +3,7 @@ package dev.wolveringer.BungeeUtil.gameprofile;
 import java.util.UUID;
 
 import org.json.JSONArray;
+import org.json.JSONML;
 import org.json.JSONObject;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
@@ -48,6 +49,7 @@ public class Skin {
 			e.printStackTrace();
 			empty = true;
 		}
+		
 	}
 
 	protected Skin(String rawValue, String signature) {

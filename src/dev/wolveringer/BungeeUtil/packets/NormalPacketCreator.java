@@ -79,8 +79,6 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		Constructor<? extends Packet> cons = null;
 		try {
 			if ((cons = packetsId[compressed]) == null) {
-				// return new
-				// UnderknownPacket().setID(id).setProtocol(protocol).setPlayer(p).load(b);
 				return null;
 			}
 			Packet packet = cons.newInstance();
@@ -89,9 +87,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 			else return packet.setcompressedId(compressed).load(b, p.getVersion());
 		}
 		catch (Exception e) {
-			System.out.print("Class load error (" + (cons == null ? "Class not found" : cons.getDeclaringClass().getName()) + ")");
-			e.printStackTrace();
-			return null;
+			throw new RuntimeException("Packet error -> " + (cons == null ? "Class not found" : cons.getDeclaringClass().getName()) + " -> "+e.getMessage(),e);
 		}
 	}
 	

@@ -130,7 +130,8 @@ public class Main extends Plugin {
 		BungeeCord.getInstance().getScheduler().runAsync(this, new Runnable() {
 			@Override
 			public void run() {
-				while (true) {
+				sendMessage("§eSystem.gc() -> Enabled: "+Configuration.isGCEnabled());
+				while (Configuration.isGCEnabled()) {
 					try {
 						Thread.sleep(5 * 1000);
 					} catch (InterruptedException e) {

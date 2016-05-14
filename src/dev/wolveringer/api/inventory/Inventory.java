@@ -12,6 +12,7 @@ import dev.wolveringer.BungeeUtil.item.itemmeta.MetaListener;
 import dev.wolveringer.BungeeUtil.packets.Packet;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutOpenWindow;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutSetSlot;
+import dev.wolveringer.BungeeUtil.packets.PacketPlayOutWindowItems;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 
 /**
@@ -129,9 +130,7 @@ public class Inventory {
 				e.UTF_8 = true;
 				p.sendPacket(e);
 			}
-			Item[] items = container.getContains();
-			for(int i = 0;i < items.length;i++)
-				brotcast(new PacketPlayOutSetSlot(items[i], ID, i));
+			updateInventory();
 		}else{
 			resend_inventory = true;
 		}
@@ -177,14 +176,13 @@ public class Inventory {
 
 	public void resize(int size) {
 		if(type != InventoryType.Chest)
-			throw new IllegalStateException("Inventorytype isn´t a Chest!");
+			throw new IllegalStateException("Inventorytype isnï¿½t a Chest!");
 		container.resize(size);
 		if(autoUpdate){
 			Item[] items = container.getContains();
 			for(Player p : viewer)
 				p.sendPacket(new PacketPlayOutOpenWindow(ID, type.getType(p.getVersion()), name, items.length, false));
-			for(int i = 0;i < items.length;i++)
-				brotcast(new PacketPlayOutSetSlot(items[i], ID, i));
+			updateInventory();
 		}else{
 			resend_inventory = true;
 		}
@@ -212,13 +210,9 @@ public class Inventory {
 				e.UTF_8 = true;
 				p.sendPacket(e);
 			}
-			Item[] items = container.getContains();
-			for(int i = 0;i < items.length;i++)
-				brotcast(new PacketPlayOutSetSlot(items[i], ID, i));
+			brotcast(new PacketPlayOutWindowItems(ID, this.container.getContains()));
 		}else{
-			Item[] items = container.getContains();
-			for(int i = 0;i < items.length;i++)
-				brotcast(new PacketPlayOutSetSlot(items[i], ID, i));
+			brotcast(new PacketPlayOutWindowItems(ID, this.container.getContains()));
 		}
 	}
 

@@ -119,11 +119,15 @@ public class Decoder extends MinecraftDecoder {
 			Packet packet = null;
 			try{
 				Profiler.decoder_timings.start(Messages.getString("network.timings.decoder.create.packet")); //$NON-NLS-1$
-				if(clientVersion == null){
-					System.out.println("Client version = null");
-				}
-				if(connection == null)
+				if(connection == null){
 					System.out.println("Connection == null");
+					return;
+				}
+				if(clientVersion == null){
+					System.out.println("Client version = null | Version id -> "+version);
+					connection.disconnect("§cYour client versions isnt supported!");
+					return;
+				}
 				packet = Packet.getPacket(clientVersion.getBigVersion() ,getProtocol(), dir, in, connection.getPlayer());
 				Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.create.packet")); //$NON-NLS-1$
 				if(packet == null){
@@ -154,7 +158,8 @@ public class Decoder extends MinecraftDecoder {
 				System.out.print("Error: 102");
 				return;
 			}catch (Exception e){
-				e.printStackTrace();
+				if(connection.isConnected)
+					e.printStackTrace();
 				connection.disconnect(e);
 				return;
 			}
@@ -183,7 +188,8 @@ public class Decoder extends MinecraftDecoder {
 				}
 			}
 		}catch(Exception e){
-			e.printStackTrace();
+			if(connection.isConnected)
+				e.printStackTrace();
 		}
 		Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.read")); //$NON-NLS-1$
 	}

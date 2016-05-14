@@ -88,4 +88,7 @@ public class Configuration {
 		else
 			return AsyncCatcherMode.DISABLED;
 	}
+	public static boolean isGCEnabled(){
+		return conf.getBoolean("system.gc.enabled");
+	}
 }

@@ -60,7 +60,6 @@ public class PacketHandle {
 		 * 
 		 * Inventory
 		 */
-		
 		if (pack instanceof PacketPlayInWindowClick) {
 			Profiler.packet_handle.start("handleWindowClick");
 			final PacketPlayInWindowClick pl = (PacketPlayInWindowClick) pack;
@@ -87,24 +86,24 @@ public class PacketHandle {
 				}
 				player.sendPacket(new PacketPlayOutSetSlot(player.getInventoryView().getContains()[pl.getSlot()], Inventory.ID, pl.getSlot()));
 				player.updateInventory();
-				
-				BungeeCord.getInstance().getScheduler().runAsync(Main.getMain(), new Runnable() {
-					public void run() {
-						Profiler.packet_handle.start("itemClickListener");
-						try {
-							if (player.getInventoryView().isClickable()) is.click(new Click(player, pl.getSlot(), player.getInventoryView(), pl.getItem(), pl.getMode()));
+				if (player.getInventoryView().isClickable()){
+					BungeeCord.getInstance().getScheduler().runAsync(Main.getMain(), new Runnable() {
+						public void run() {
+							Profiler.packet_handle.start("itemClickListener");
+							try {
+								 is.click(new Click(player, pl.getSlot(), player.getInventoryView(), pl.getItem(), pl.getMode(),false));
+							} catch (Exception e) {
+								List<StackTraceElement> le = new ArrayList<>();
+								le.addAll(Arrays.asList(ExceptionUtils.deleteDownward(e.getStackTrace(), ExceptionUtils.getCurrentMethodeIndex(e))));
+								le.add(new StackTraceElement("dev.wolveringer.BungeeUtil.PacketHandler", "handleInventoryClickPacket", null, -1));
+								e.setStackTrace(le.toArray(new StackTraceElement[0]));
+								e.printStackTrace();
+								player.disconnect(e);
+							}
+							Profiler.packet_handle.stop("itemClickListener");
 						}
-						catch (Exception e) {
-							List<StackTraceElement> le = new ArrayList<>();
-							le.addAll(Arrays.asList(ExceptionUtils.deleteDownward(e.getStackTrace(), ExceptionUtils.getCurrentMethodeIndex(e))));
-							le.add(new StackTraceElement("dev.wolveringer.BungeeUtil.PacketHandler", "handleInventoryClickPacket", null, -1));
-							e.setStackTrace(le.toArray(new StackTraceElement[0]));
-							e.printStackTrace();
-							player.disconnect(e);
-						}
-						Profiler.packet_handle.stop("itemClickListener");
-					}
-				});
+					});
+				}
 				Profiler.packet_handle.stop("handleWindowClick");
 				e.setCancelled(true);
 				return false;

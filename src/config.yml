@@ -24,6 +24,9 @@
 timings: true
 updater: true
 byteBuffType: direct
+system.gc:
+  enabled: false
+  periode: 60000
 terminal:
   colored: true
 debug:

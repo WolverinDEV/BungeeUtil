@@ -42,10 +42,12 @@ import net.md_5.bungee.netty.HandlerBoss;
 import net.md_5.bungee.netty.cipher.CipherDecoder;
 import net.md_5.bungee.netty.cipher.CipherEncoder;
 import net.md_5.bungee.protocol.DefinedPacket;
+import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.packet.EncryptionRequest;
 import net.md_5.bungee.protocol.packet.EncryptionResponse;
 import net.md_5.bungee.protocol.packet.LoginRequest;
 import net.md_5.bungee.protocol.packet.LoginSuccess;
+import dev.wolveringer.BungeeUtil.ClientVersion;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.Player;
 
@@ -227,7 +229,8 @@ public class IIInitialHandler extends IInitialHandler {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void handle(LoginRequest loginRequest) throws Exception {
 		set("loginRequest", loginRequest);
-		if(!net.md_5.bungee.protocol.Protocol.supportedVersions.contains(getHandshake().getProtocolVersion())){
+		ClientVersion version = ClientVersion.fromProtocoll(getHandshake().getProtocolVersion());
+		if(version == null || !version.isSupported()){
 			disconnect(ProxyServer.getInstance().getTranslation("outdated_server", new Object[0]));
 			return;
 		}
@@ -252,7 +255,8 @@ public class IIInitialHandler extends IInitialHandler {
 			disconnect(ProxyServer.getInstance().getTranslation("already_connected", new Object[0]));
 			return;
 		}
-
+		
+		setProtocol(Protocol.LOGIN);
 		Callback<PreLoginEvent> callback = new Callback() {
 			@Override
 			public void done(Object paramV, Throwable paramThrowable) {
