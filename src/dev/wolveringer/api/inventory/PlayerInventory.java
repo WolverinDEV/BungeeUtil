@@ -2,6 +2,7 @@ package dev.wolveringer.api.inventory;
 
 import java.util.ArrayList;
 
+import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
 import dev.wolveringer.BungeeUtil.Material;
 import dev.wolveringer.BungeeUtil.Player;
 import dev.wolveringer.BungeeUtil.item.Item;
@@ -47,7 +48,7 @@ public final class PlayerInventory {
 	}
 
 	public Item[] getContains() {
-		return items.toArray(new Item[Math.min(items.size(), 46)]); //46=Max slots
+		return items.toArray(new Item[Math.min(items.size(), player.getVersion().getBigVersion() == BigClientVersion.v1_9 ? 46 : 45)]); //46/45=Max slots
 	}
 
 	public Item getItem(int slot) {
