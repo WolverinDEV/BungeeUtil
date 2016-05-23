@@ -304,6 +304,7 @@ public final class NPC {
 	@Override
 	protected void finalize() throws Throwable {
 		PacketLib.removeHandler(handler);
+		base_names.remove(base_name);
 		super.finalize();
 	}
 }
