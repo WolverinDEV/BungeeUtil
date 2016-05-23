@@ -141,7 +141,7 @@ public abstract class IInitialHandler extends InitialHandler {
 	
 	public void sendPacketToServer(Packet p) {
 		AsyncCatcher.catchOp("Packet cant be sending async!");
-		ByteBuf b = p.getByteBuf(p.getVersion());
+		ByteBuf b = p.getByteBuf(ClientVersion.fromProtocoll(this.getVersion()));
 		((ServerConnection) getPlayer().getServer()).getCh().write(b);
 	}
 	

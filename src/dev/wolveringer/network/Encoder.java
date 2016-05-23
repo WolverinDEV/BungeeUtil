@@ -49,7 +49,7 @@ public class Encoder extends MinecraftEncoder {
 		super.encode(ctx, msg, in = Unpooled.buffer());
 
 		Profiler.encoder_timings.start(Messages.getString("network.timings.encoder.create.packet"));
-		Packet packet = Packet.getPacket(clientVersion.getBigVersion(),prot, Direction.TO_CLIENT, in, i.getPlayer());
+		Packet packet = Packet.getPacket(clientVersion.getProtocollVersion(),prot, Direction.TO_CLIENT, in, i.getPlayer());
 		Profiler.encoder_timings.stop(Messages.getString("network.timings.encoder.create.packet"));
 		if(packet == null){
 			ByteBuffCreator.copy(in, out);

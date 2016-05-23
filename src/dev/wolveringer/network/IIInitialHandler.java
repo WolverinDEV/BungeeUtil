@@ -31,6 +31,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.PreLoginEvent;
+import net.md_5.bungee.api.plugin.Event;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.connection.InitialHandler;
 import net.md_5.bungee.connection.LoginResult;
@@ -230,8 +231,9 @@ public class IIInitialHandler extends IInitialHandler {
 	public void handle(LoginRequest loginRequest) throws Exception {
 		set("loginRequest", loginRequest);
 		ClientVersion version = ClientVersion.fromProtocoll(getHandshake().getProtocolVersion());
-		if(version == null || !version.isSupported()){
-			disconnect(ProxyServer.getInstance().getTranslation("outdated_server", new Object[0]));
+		if(version == null || !version.getProtocollVersion().isSupported()){
+			//disconnect(ProxyServer.getInstance().getTranslation("outdated_server", new Object[0]));
+			disconnect("§cBungeeUtil cant handle your client version.");
 			return;
 		}
 

@@ -128,7 +128,7 @@ public class Decoder extends MinecraftDecoder {
 					connection.disconnect("§cYour client versions isnt supported!");
 					return;
 				}
-				packet = Packet.getPacket(clientVersion.getBigVersion() ,getProtocol(), dir, in, connection.getPlayer());
+				packet = Packet.getPacket(clientVersion.getProtocollVersion() ,getProtocol(), dir, in, connection.getPlayer());
 				Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.create.packet")); //$NON-NLS-1$
 				if(packet == null){
 					Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.read")); //$NON-NLS-1$

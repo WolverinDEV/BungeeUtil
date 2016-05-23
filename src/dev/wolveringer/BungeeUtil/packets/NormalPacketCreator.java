@@ -7,26 +7,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javassist.CannotCompileException;
-import javassist.ClassClassPath;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtConstructor;
-import javassist.NotFoundException;
-import javassist.bytecode.Bytecode;
-import javassist.bytecode.ConstPool;
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 import dev.wolveringer.BungeeUtil.ClientVersion;
 import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
+import dev.wolveringer.BungeeUtil.ClientVersion.ProtocollVersion;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.Player;
-import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayIn;
-import dev.wolveringer.network.IIInitialHandler;
+import dev.wolveringer.BungeeUtil.packets.Packet.ProtocollId;
 
 public class NormalPacketCreator extends AbstractPacketCreator {
 	@SuppressWarnings("unchecked")
-	private Constructor<? extends Packet>[] packetsId = new Constructor[((BigClientVersion.values().length & 0x0F) << 16) | ((Protocol.values().length & 0x0F) << 12) | ((Direction.values().length & 0x0F) << 8) | 0xFF]; // Calculate max packet compressed id. (0xFF = Max ID)
+	private Constructor<? extends Packet>[] packetsId = new Constructor[((ProtocollVersion.values().length & 0x0F) << 16) | ((Protocol.values().length & 0x0F) << 12) | ((Direction.values().length & 0x0F) << 8) | 0xFF]; // Calculate max packet compressed id. (0xFF = Max ID)
 	@SuppressWarnings("unchecked")
 	private HashMap<Class<? extends Packet>, Integer>[] classToId = new HashMap[BigClientVersion.values().length];
 	
@@ -39,9 +31,9 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public int getPacketId(BigClientVersion version,Class<? extends Packet> clazz) {
-		if(version == BigClientVersion.UnderknownVersion){
-			throw new NullPointerException("Underknown version!");
+	public int getPacketId(ProtocollVersion version,Class<? extends Packet> clazz) {
+		if(version == ProtocollVersion.Unsupported){
+			throw new NullPointerException("Unsupported version!");
 		}
 		if (!clazz.getName().endsWith("$-1")) while (clazz.getName().contains("$")) {
 			clazz = (Class<? extends Packet>) clazz.getSuperclass();
@@ -64,26 +56,21 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		return registerPackets;
 	}
 	
-	/**
-	 * 20000 ns faster
-	 * 
-	 * @param protocol
-	 * @param d
-	 * @param id
-	 * @param b
-	 * @param p
-	 * @return
-	 */
-	public Packet getPacket0(BigClientVersion version,Protocol protocol, Direction d, Integer id, ByteBuf b, Player p) {
+	public Packet getPacket0(ProtocollVersion version,Protocol protocol, Direction d, Integer id, ByteBuf b, Player p) {
 		int compressed = calculate(version,protocol, d, id);
 		Constructor<? extends Packet> cons = null;
 		try {
 			if ((cons = packetsId[compressed]) == null) {
-				return null;
+				if(version.getBasedVersion().getProtocollVersion() == version) //Fallback (based version) (1.8-1.9)
+					return null;
+				else
+					return getPacket0(version.getBasedVersion().getProtocollVersion(), protocol, d, id, b, p);
 			}
 			Packet packet = cons.newInstance();
-			if (packet == null) return null;
-			if (p == null || p.getVersion() == null) return packet.setcompressedId(compressed).load(b, ClientVersion.UnderknownVersion);
+			if (p == null || p.getVersion() == null){
+				Main.debug("Version of '"+(p == null ? "<Null client>" : p.getName())+"' is undefined");
+				return packet.setcompressedId(compressed).load(b, ClientVersion.UnderknownVersion);
+			}
 			else return packet.setcompressedId(compressed).load(b, p.getVersion());
 		}
 		catch (Exception e) {
@@ -91,7 +78,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		}
 	}
 	
-	public int loadPacket(BigClientVersion version,Protocol p, Direction d, Integer id, Class<? extends Packet> clazz) {
+	public int loadPacket(ProtocollVersion version,Protocol p, Direction d, Integer id, Class<? extends Packet> clazz) {
 		//clazz = getPacketWithDefaultConstructor(clazz);
 		int compressedId = calculate(version,p, d, id);
 		classToId[version.ordinal()].put(clazz, compressedId);
@@ -99,15 +86,20 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 	}
 	
 	
-	public void registerPacket(Protocol p, Direction d, Integer v1_8_id, Integer v1_9_id, Class<? extends Packet> clazz) {
+	public void registerPacket(Protocol p, Direction d, Class<? extends Packet> clazz, ProtocollId... ids) {
 		//clazz = getPacketWithDefaultConstructor(clazz);
 		try {
+			for(ProtocollId id : ids)
+				if(id != null && id.isValid())
+				packetsId[loadPacket(id.getVersion(),p, d, id.getId(), clazz)] = (Constructor<? extends Packet>) clazz.getConstructor();
+			/*
 			if(v1_8_id != null){
-			packetsId[loadPacket(BigClientVersion.v1_7,p, d, v1_8_id, clazz)] = (Constructor<? extends Packet>) clazz.getConstructor();
-			packetsId[loadPacket(BigClientVersion.v1_8,p, d, v1_8_id, clazz)] = (Constructor<? extends Packet>) clazz.getConstructor();
+			packetsId[loadPacket(ProtocollVersion.v1_7,p, d, v1_8_id, clazz)] = (Constructor<? extends Packet>) clazz.getConstructor();
+			packetsId[loadPacket(ProtocollVersion.v1_8,p, d, v1_8_id, clazz)] = (Constructor<? extends Packet>) clazz.getConstructor();
 			}
 			if(v1_9_id != null)
-			packetsId[loadPacket(BigClientVersion.v1_9,p, d, v1_9_id, clazz)] = (Constructor<? extends Packet>) clazz.getConstructor();
+			packetsId[loadPacket(ProtocollVersion.v1_9,p, d, v1_9_id, clazz)] = (Constructor<? extends Packet>) clazz.getConstructor();
+			*/
 		}
 		catch (NoSuchMethodException | SecurityException ex) {
 			System.out.println(clazz);
@@ -163,7 +155,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 	}
 	*/
 	
-	public void unregisterPacket(BigClientVersion version,Protocol p, Direction d, Integer id) {
+	public void unregisterPacket(ProtocollVersion version,Protocol p, Direction d, Integer id) {
 		packetsId[calculate(version,p, d, id)] = null;
 		changed = true;
 		

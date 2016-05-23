@@ -1,13 +1,16 @@
 package dev.wolveringer.BungeeUtil.packets;
 
 import io.netty.buffer.ByteBuf;
+import lombok.Getter;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 import dev.wolveringer.BungeeUtil.ClientVersion;
 import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
+import dev.wolveringer.BungeeUtil.ClientVersion.ProtocollVersion;
 import dev.wolveringer.BungeeUtil.CostumPrintStream;
 import dev.wolveringer.BungeeUtil.Player;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
@@ -15,7 +18,25 @@ import dev.wolveringer.packet.ByteBuffCreator;
 import dev.wolveringer.packet.PacketDataSerializer;
 
 public abstract class Packet {
-	public static Long clazz = 0L;
+	@Getter
+	public static class ProtocollId {
+		private ProtocollVersion version;
+		private int id;
+		
+		public ProtocollId(ProtocollVersion version, int id) {
+			this.version = version;
+			this.id = id;
+		}
+		public ProtocollId(BigClientVersion version, int id) {
+			this.version = version.getProtocollVersion();
+			this.id = id;
+		}
+		public boolean isValid(){
+			return id > 0 && version != null && version != ProtocollVersion.Unsupported;
+		}
+	}
+	
+	public static final AtomicLong classInstances = new AtomicLong();
 	
 	private static AbstractPacketCreator creator;
 	
@@ -33,7 +54,7 @@ public abstract class Packet {
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x47,0x48, PacketPlayOutPlayerListHeaderFooter.class);//->0x48
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x08,0x2E, PacketPlayOutPosition.class); //Changed -> 0x2E
 		
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x18,0x4A, PacketPlayOutEntityTeleport.class); //Changed -> 0x2E
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x18,0x4A, PacketPlayOutEntityTeleport.class); //Changed -> 0x2E | 1.9.4 other id!
 		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x19,0x34, PacketPlayOutEntityHeadRotation.class);
 		
@@ -70,11 +91,6 @@ public abstract class Packet {
 		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, null,0x0C, PacketPlayOutBossBar.class); //Only 1.9 :) Best Bar-Update Ever!
 		
-		//TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x0E, PacketPlayOutEntityAbstract.class);//Delete dont needed?
-		//TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x0F, PacketPlayOutEntityAbstract.class);//Delete dont needed?
-		//TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x10, PacketPlayOutEntityAbstract.class);//Delete dont needed?
-		//TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x11, PacketPlayOutEntityAbstract.class);//Delete dont needed?
-		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x29,0x19, PacketPlayOutNamedSoundEffect.class); //Changed
 		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x0C,0x05, PacketPlayOutNamedEntitySpawn.class);
@@ -103,7 +119,7 @@ public abstract class Packet {
 		//TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x12, PacketPlayInUpdateSign.class); //Changed from ChatComponent to String
 	}
 	
-	public static int calculate(BigClientVersion version,Protocol p, Direction d, Integer id) {
+	public static int calculate(ProtocollVersion version,Protocol p, Direction d, Integer id) {
 		return getCreator().calculate(version,p, d, id);
 	}
 	
@@ -119,7 +135,7 @@ public abstract class Packet {
 		return getCreator().getDirection(base);
 	}
 	
-	public static Packet getPacket(BigClientVersion version,Protocol s, Direction d, ByteBuf b, Player p) {
+	public static Packet getPacket(ProtocollVersion version,Protocol s, Direction d, ByteBuf b, Player p) {
 		return getCreator().getPacket(version,s, d, b, p);
 	}
 	
@@ -131,19 +147,26 @@ public abstract class Packet {
 		getCreator().listPackets();
 	}
 	
-	public static Packet getPacket0(BigClientVersion version,Protocol protocol, Direction d, Integer id, ByteBuf b, Player p) {
-		return getCreator().getPacket0(version,protocol, d, id, b, p);
-	}
-	
-	public static int loadPacket(BigClientVersion version,Protocol p, Direction d, Integer id, Class<? extends Packet> clazz) {
+	public static int loadPacket(ProtocollVersion version,Protocol p, Direction d, Integer id, Class<? extends Packet> clazz) {
 		return getCreator().loadPacket(version,p, d, id, clazz);
 	}
 	
+	@Deprecated
 	public static void registerPacket(Protocol p, Direction d, Integer v1_8_id,Integer v1_9_id, Class<? extends Packet> clazz) {
-		getCreator().registerPacket(p, d, v1_8_id, v1_9_id, clazz);
+		if(v1_8_id == null && v1_9_id == null)
+			throw new RuntimeException("All packet ids are null!");
+		if(v1_8_id == null)
+			v1_8_id = -1;
+		if(v1_9_id == null)
+			v1_9_id = -1;
+		registerPacket(p, d, clazz, new ProtocollId(BigClientVersion.v1_8, v1_8_id), new ProtocollId(BigClientVersion.v1_9, v1_9_id));
+	}
+
+	public static void registerPacket(Protocol p, Direction d, Class<? extends Packet> clazz,ProtocollId... ids) {
+		getCreator().registerPacket(p, d, clazz, ids);
 	}
 	
-	public static void unregisterPacket(BigClientVersion version,Protocol p, Direction d, Integer id) {
+	public static void unregisterPacket(ProtocollVersion version,Protocol p, Direction d, Integer id) {
 		getCreator().unregisterPacket(version,p, d, id);
 	}
 	
@@ -151,7 +174,7 @@ public abstract class Packet {
 		return getCreator().countPackets();
 	}
 	
-	public static int getPacketId(BigClientVersion version,Class<? extends Packet> clazz) {
+	public static int getPacketId(ProtocollVersion version,Class<? extends Packet> clazz) {
 		return getCreator().getPacketId(version,clazz);
 	}
 	
@@ -165,7 +188,9 @@ public abstract class Packet {
 	 */
 	
 	private int compressedId = -1;
-	private ClientVersion version = ClientVersion.UnderknownVersion;
+	private transient ClientVersion version = ClientVersion.UnderknownVersion;
+	private ClientVersion readedVersion = ClientVersion.UnderknownVersion;
+	private ClientVersion writtenVersion = ClientVersion.UnderknownVersion;
 	
 	protected Packet setcompressedId(int id) {
 		this.compressedId = id;
@@ -173,25 +198,25 @@ public abstract class Packet {
 	}
 	
 	public Packet() {
-		clazz++;
+		classInstances.addAndGet(1);
 	}
 	
 	public Packet(int id) {
-		clazz++;
+		this();
 	}
 	
 	public Packet(byte id) {
-		clazz++;
+		this();
 	}
 	
 	public Protocol getProtocol() {
-		if (compressedId == -1) compressedId = getPacketId(version.getBigVersion(),this.getClass());
+		if (compressedId == -1) compressedId = getPacketId(version.getProtocollVersion(),this.getClass());
 		return getProtocoll(compressedId);
 	}
 	
 	public ByteBuf getByteBuf(ClientVersion version) {
 		this.version = version;
-		compressedId = getPacketId(version.getBigVersion(),this.getClass());
+		compressedId = getPacketId(version.getProtocollVersion(),this.getClass());
 		return writeToByteBuff(null, version);
 	}
 	
@@ -206,14 +231,14 @@ public abstract class Packet {
 		else{
 			s = PacketDataSerializer.create(getPacketId(compressedId), version, buf);
 		}
-		this.version = version;
+		this.version = (writtenVersion = version);
 		this.write(s);
 		this.version = ClientVersion.UnderknownVersion;
 		return s;
 	}
 	
 	protected Packet load(ByteBuf b, ClientVersion version) {
-		this.version = version;
+		this.version = (readedVersion = version);
 		read(PacketDataSerializer.create(b, version));
 		this.version = ClientVersion.UnderknownVersion;
 		if (b.readableBytes() != 0) throw new RuntimeException("Did not read all bytes from packet (" + this.getClass().getName() + ")");
@@ -223,23 +248,32 @@ public abstract class Packet {
 	public abstract void read(PacketDataSerializer s);
 	
 	public void sendPacket(Player p) {
-		if (p instanceof PacketPlayOut) p.sendPacket((PacketPlayOut) this);
+		if (this instanceof PacketPlayOut) p.sendPacket((PacketPlayOut) this);
 		else throw new IllegalStateException("PacketPlayIn cant send to player");
 	}
 	
 	public abstract void write(PacketDataSerializer s);
 	
-	public BigClientVersion getBigVersion() {
+	@Deprecated
+	protected BigClientVersion getBigVersion() {
 		return version.getBigVersion();
 	}
 	
-	public ClientVersion getVersion() {
+	public ClientVersion getReadedVersion() {
+		return readedVersion;
+	}
+	public ClientVersion getWrittenVersion() {
+		return writtenVersion;
+	}
+	
+	@Deprecated
+	protected ClientVersion getVersion(){
 		return version;
 	}
 	
 	@Override
 	protected void finalize() throws Throwable {
 		compressedId = -1;
-		clazz--;
+		classInstances.addAndGet(-1);
 	}
 }
