@@ -91,4 +91,7 @@ public class Configuration {
 	public static boolean isGCEnabled(){
 		return conf.getBoolean("system.gc.enabled");
 	}
+	public static boolean isDebugEnabled(){
+		return conf.getBoolean("debug");
+	}
 }

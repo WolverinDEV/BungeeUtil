@@ -12,7 +12,7 @@ public class AsyncCatcher {
 	public static enum AsyncCatcherMode {
 		DISABLED,
 		EXCEPTION,
-		ERROR;
+		WARNING;
 		
 		private AsyncCatcherMode() {}
 	}
@@ -32,7 +32,7 @@ public class AsyncCatcher {
 					return;
 			if(mode == AsyncCatcherMode.EXCEPTION)
 				throw new IllegalStateException("Asynchronous " + reason + "!"); 
-			else if(mode == AsyncCatcherMode.ERROR){
+			else if(mode == AsyncCatcherMode.WARNING){
 				StackTraceElement e = ExceptionUtils.getCurruntMethodeStackTraceElement();
 				if(e == null)
 					System.out.println("Async catcher catched from underknown src. Message: "+reason);

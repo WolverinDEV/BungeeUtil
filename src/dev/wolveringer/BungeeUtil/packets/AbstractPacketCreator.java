@@ -10,13 +10,15 @@ import java.util.TreeMap;
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
+import dev.wolveringer.BungeeUtil.ClientVersion.ProtocollVersion;
+import dev.wolveringer.BungeeUtil.packets.Packet.ProtocollId;
 import dev.wolveringer.BungeeUtil.CostumPrintStream;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.Player;
 import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 
 public abstract class AbstractPacketCreator {
-	public int calculate(BigClientVersion version,Protocol p, Direction d, Integer id) {
+	public int calculate(ProtocollVersion version,Protocol p, Direction d, Integer id) {
 		int x = ((version.ordinal() & 0x0F) << 16) | ((p.ordinal() & 0x0F) << 12) | ((d.ordinal() & 0x0F) << 8) | (id & 0xFF);
 		return x;
 	}
@@ -37,7 +39,7 @@ public abstract class AbstractPacketCreator {
 		return Direction.values()[((int) (base >> 8)) & 0x0F];
 	}
 
-	public Packet getPacket(BigClientVersion version,Protocol s, Direction d, ByteBuf x, Player p) {
+	public Packet getPacket(ProtocollVersion version,Protocol s, Direction d, ByteBuf x, Player p) {
 		x.markReaderIndex().markWriterIndex();
 		int id;
 		Packet y = getPacket0(version,s, d, (int)(id = x.readUnsignedByte()), x, p); // faster
@@ -54,9 +56,9 @@ public abstract class AbstractPacketCreator {
 		}
 		
 		for (Class<? extends Packet> packet : getRegisteredPackets()) {
-			int compressed = getPacketId(BigClientVersion.v1_9,packet); //TODO list bouth id's
+			int compressed = getPacketId(ProtocollVersion.v1_9,packet); //TODO list bouth id's
 			if(compressed == -1)
-				compressed = getPacketId(BigClientVersion.v1_8,packet);
+				compressed = getPacketId(ProtocollVersion.v1_8,packet);
 			packets.get(getProtocoll(compressed)).get(getDirection(compressed)).put(getPacketId(compressed), packet);
 		}
 		
@@ -123,17 +125,17 @@ public abstract class AbstractPacketCreator {
 	 * @param p
 	 * @return
 	 */
-	public abstract Packet getPacket0(BigClientVersion version,Protocol protocol, Direction d, Integer id, ByteBuf b, Player p);
+	public abstract Packet getPacket0(ProtocollVersion version,Protocol protocol, Direction d, Integer id, ByteBuf b, Player p);
 
-	public abstract int loadPacket(BigClientVersion version,Protocol p, Direction d, Integer id, Class<? extends Packet> clazz);
+	public abstract int loadPacket(ProtocollVersion version,Protocol p, Direction d, Integer id, Class<? extends Packet> clazz);
 
-	public abstract void registerPacket(Protocol p, Direction d, Integer v1_8_id,Integer v1_9_id, Class<? extends Packet> clazz);
+	public abstract void registerPacket(Protocol p, Direction d, Class<? extends Packet> clazz,ProtocollId... ids);
 
-	public abstract void unregisterPacket(BigClientVersion version,Protocol p, Direction d, Integer id);
+	public abstract void unregisterPacket(ProtocollVersion version,Protocol p, Direction d, Integer id);
 
 	public abstract int countPackets();
 
-	public abstract int getPacketId(BigClientVersion version,Class<? extends Packet> clazz);
+	public abstract int getPacketId(ProtocollVersion version,Class<? extends Packet> clazz);
 
 	public abstract List<Class<? extends Packet>> getRegisteredPackets();
 }

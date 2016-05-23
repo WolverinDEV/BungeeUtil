@@ -4,8 +4,11 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import dev.wolveringer.BungeeUtil.packets.Packet;
+import dev.wolveringer.BungeeUtil.packets.PacketPlayInFlying;
+import dev.wolveringer.BungeeUtil.packets.PacketPlayInPosition;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class PacketLib {
@@ -33,14 +36,18 @@ public class PacketLib {
 				try{
 					ArrayList<Class<? extends Packet>> list = new ArrayList<Class<? extends Packet>>();
 					Class c = (Class) paramObject;
-					if(c == Packet.class){
-						list.add(c);
-					}else
-						for(Class<? extends Packet> clazz : Packet.getRegisteredPackets())
-							if(clazz.isAssignableFrom(c))
-								if(clazz != Packet.class)
-									list.add(clazz);
-					super.put((Class<? extends Packet>) paramObject, r = list);
+					Main.debug("Sarching for subinstances of "+c);
+					if(c != Packet.class)
+						for(Class<? extends Packet> clazz : Packet.getRegisteredPackets()){
+							if(c.isAssignableFrom(clazz)){
+								list.add(clazz);
+							}
+						}
+					list.add(c);
+					r = (list = new ArrayList<>(new HashSet<>(list)));
+					for(Class x : list)
+						Main.debug("Found class instance of "+c+" -> "+x);
+					super.put((Class<? extends Packet>) paramObject, r);
 				}catch (Exception e){ }
 			return r;
 		}
@@ -73,10 +80,27 @@ public class PacketLib {
 					try{
 						if(c.equals(Packet.class))
 							continue;
-						return Class.forName(c.toString().split(" ")[1]);
+						try{
+							return Class.forName(c.toString().split(" ")[1]);
+						}catch(ExceptionInInitializerError e){
+							System.out.println("Cant find class "+c.toString().split(" ")[1]);
+							throw e;
+						}
 					}catch (ClassNotFoundException e){
 						e.printStackTrace();
 					}
 		return Packet.class;
+	}
+	
+	public static void main(String[] args) {
+		PacketHandler handler = new PacketHandler<PacketPlayInFlying>() {
+			@Override
+			public void handle(PacketHandleEvent<PacketPlayInFlying> e) {
+				System.out.println("Handle "+e);
+			}
+		};
+		System.out.println("Type: "+getPacketType(handler));
+		addHandler(handler);
+		handle(new PacketHandleEvent(new PacketPlayInPosition(), null));
 	}
 }
