@@ -31,11 +31,11 @@ public class Timings {
 		rebuild();
 	}
 
-	public void start() {
+	public synchronized void start() {
 		start = System.nanoTime();
 	}
 
-	public void stop() {
+	public synchronized void stop() {
 		if(start == -1L)
 			return;
 		addTiming(System.nanoTime() - start);
@@ -70,7 +70,7 @@ public class Timings {
 		return times.get(times.size() - 1);
 	}
 
-	private void recalculate() {
+	private synchronized void recalculate() {
 		if(times.size() >= 100){
 			Long l = durchschnitt(times);
 			period_times.add(l);

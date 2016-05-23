@@ -9,7 +9,6 @@ import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.PacketHandleEvent;
 import dev.wolveringer.BungeeUtil.Player;
 import dev.wolveringer.BungeeUtil.exception.ExceptionUtils;
-import dev.wolveringer.BungeeUtil.item.Item;
 import dev.wolveringer.BungeeUtil.item.ItemStack;
 import dev.wolveringer.BungeeUtil.item.ItemStack.Click;
 import dev.wolveringer.BungeeUtil.item.itemmeta.CraftItemMeta;
@@ -32,11 +31,11 @@ public class PacketHandle {
 	static PacketPlayOutNamedEntitySpawn a;
 	static ArrayList<String> b = new ArrayList<String>();
 	
-	public static boolean handlePacket(PacketHandleEvent e) {
+	public static boolean handlePacket(PacketHandleEvent<?> e) {
 		final Packet pack = e.getPacket();
 		final Player player = e.getPlayer();
-		Profiler.packet_handle.start("handleIntern");
 		if (pack == null || player == null) return false;
+		Profiler.packet_handle.start("handleIntern");
 		/**
 		 * 
 		 * Location
@@ -57,7 +56,6 @@ public class PacketHandle {
 			}
 			player.setLocation(_new);
 		}
-		else
 		/**
 		 * 
 		 * Inventory
