@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>dev.wolveringer</groupId>
   <artifactId>BungeeUtil</artifactId>
-  <version>1.6.5.7</version>
+  <version>1.6.5.7.2</version>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -24,18 +24,35 @@
       </plugin>
     </plugins>
   </build>
-  	<repositories>
-		<repository>
-			<id>bungee-repo</id>
-			<url>https://oss.sonatype.org/content/groups/public/</url>
-		</repository>
-	</repositories>
-	<dependencies>
-		<dependency>
-			<artifactId>bungeecord-api</artifactId>
-			<groupId>net.md-5</groupId>
-			<version>1.9-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
+    <repositories>
+        <repository>
+            <id>bungee-repo</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
+        </repository>
+    </repositories>
+    <dependencies>
+        <dependency>
+            <artifactId>bungeecord-api</artifactId>
+            <groupId>net.md-5</groupId>
+            <version>1.9-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <artifactId>bungeecord-proxy</artifactId>
+            <groupId>net.md-5</groupId>
+            <version>1.9-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.19.0-GA</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.8</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>

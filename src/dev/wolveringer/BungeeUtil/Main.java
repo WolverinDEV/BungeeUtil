@@ -273,4 +273,10 @@ public class Main extends Plugin {
 	public static void debug(String string) {
 		if (getMain() == null || Configuration.isDebugEnabled()) System.out.println(string); //Debug if this not a plugin
 	}
+	public static void debug(Exception e,String otherMessage) {
+		if (getMain() == null || Configuration.isDebugEnabled()) e.printStackTrace(); //Debug if this not a plugin
+	}
+	public static void debug(Exception e) {
+		debug(e, "Exception message -> "+e.getMessage());
+	}
 }

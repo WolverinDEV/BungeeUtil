@@ -1,18 +1,27 @@
 package dev.wolveringer.BungeeUtil.item.itemmeta;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.item.Item;
+import dev.wolveringer.BungeeUtil.item.ItemStack;
+import dev.wolveringer.BungeeUtil.item.SyncHandle;
+import dev.wolveringer.BungeeUtil.item.ItemStack.Click;
 import dev.wolveringer.api.inventory.Inventory;
 import dev.wolveringer.nbt.NBTTagCompound;
 import dev.wolveringer.nbt.NBTTagList;
 import dev.wolveringer.nbt.NBTTagString;
+import dev.wolveringer.util.UtilReflection;
 
 public class CraftItemMeta implements ItemMeta {
 	protected Item item;
 	protected ArrayList<MetaListener> listener = new ArrayList<MetaListener>();
-
+	private int sync = -1;
+	
 	public CraftItemMeta(Item i) {
 		this.item = i;
 	}
@@ -97,7 +106,7 @@ public class CraftItemMeta implements ItemMeta {
 			if (e.getClassName().contains(Inventory.class.getCanonicalName() + "$2")
 					&& e.getMethodName().equalsIgnoreCase("onUpdate")) // recall
 																		// in
-																		// update
+																		// updateâ€“
 				return;
 		if (listener.size() != 0){
 			try{
@@ -105,7 +114,7 @@ public class CraftItemMeta implements ItemMeta {
 				if (l != null)
 					l.onUpdate(item);
 			}catch(NegativeArraySizeException e){
-				System.out.println("NegativeArraySizeException from ArrayList?! I´m craz! sie()->"+listener.size());
+				System.out.println("NegativeArraySizeException from ArrayList?! I'm crazy! size()->"+listener.size());
 			}
 		}
 	}
@@ -118,6 +127,23 @@ public class CraftItemMeta implements ItemMeta {
 		this.listener.remove(listener);
 	}
 
+	public boolean isClickSync(){
+		if(sync == -1){
+			if(!(item instanceof ItemStack))
+				sync = 0;
+			ItemStack is = (ItemStack) item;
+			try{
+				System.out.println(is.getClass());
+				System.out.println("X: "+Arrays.asList(is.getClass().getAnnotations()));
+				Method m = UtilReflection.getMethod(is.getClass(), "click", Click.class);
+				sync = m.isAnnotationPresent(SyncHandle.class) ? 1 : 0;
+			}catch(Exception e){
+				Main.debug(e, "Exception while try to detect sync handeling....");
+			}
+		}
+		return sync == 1;
+	}
+	
 	@Override
 	public String toString() {
 		return "CraftItemMeta@" + System.identityHashCode(this) + "[listener=" + listener + "]";

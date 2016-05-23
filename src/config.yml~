@@ -38,3 +38,4 @@ loading:
 async-catcher:
   enabled: true
   mode: EXCEPTION
+debug: false

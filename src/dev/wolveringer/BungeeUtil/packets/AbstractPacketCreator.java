@@ -40,6 +40,8 @@ public abstract class AbstractPacketCreator {
 	}
 
 	public Packet getPacket(ProtocollVersion version,Protocol s, Direction d, ByteBuf x, Player p) {
+		if(x.readableBytes() < 1)
+			return null;
 		x.markReaderIndex().markWriterIndex();
 		int id;
 		Packet y = getPacket0(version,s, d, (int)(id = x.readUnsignedByte()), x, p); // faster
