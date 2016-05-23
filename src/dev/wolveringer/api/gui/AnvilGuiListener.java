@@ -1,4 +1,4 @@
-package dev.wolveringer.api.guy;
+package dev.wolveringer.api.gui;
 
 public interface AnvilGuiListener {
 	/**
