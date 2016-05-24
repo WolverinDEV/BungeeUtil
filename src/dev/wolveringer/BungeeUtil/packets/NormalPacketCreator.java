@@ -63,10 +63,12 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		Constructor<? extends Packet> cons = null;
 		try {
 			if ((cons = packetsId[compressed]) == null) {
-				if(version.getBasedVersion().getProtocollVersion() == version) //Fallback (based version) (1.8-1.9)
+				if(version.getBasedVersion().getProtocollVersion() == version){ //Fallback (based version) (1.8-1.9)
 					return null;
-				else
+				}
+				else{
 					return getPacket0(version.getBasedVersion().getProtocollVersion(), protocol, d, id, b, p);
+				}
 			}
 			Packet packet = cons.newInstance();
 			if (p == null || p.getVersion() == null){

@@ -3,7 +3,6 @@ package dev.wolveringer.network;
 import io.netty.buffer.ByteBuf;
 
 import java.lang.reflect.Field;
-import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.ServerConnection;
@@ -28,7 +27,6 @@ import dev.wolveringer.BungeeUtil.packets.PacketPlayOutPlayerListHeaderFooter;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutPosition;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutRemoveEntityEffect;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutUpdateHealth;
-import dev.wolveringer.chat.ChatMessage;
 import dev.wolveringer.chat.ChatSerializer;
 import dev.wolveringer.chat.IChatBaseComponent;
 import dev.wolveringer.network.channel.ChannelWrapper;
@@ -49,6 +47,14 @@ public abstract class IInitialHandler extends InitialHandler {
 		CHANNEL_FIELD = f;
 	}
 	
+	public IInitialHandler(ProxyServer instance, ListenerInfo listenerInfo, Decoder a, Encoder b) {
+		super(BungeeCord.getInstance(), listenerInfo);
+		this.a = a;
+		this.b = b;
+		if (a != null) a.setHandler(this);
+		if (b != null) b.setHandler(this);
+	}
+	
 	public boolean isConnected = false;
 	private boolean isDisconnecting = false;
 	private Encoder b;
@@ -57,13 +63,6 @@ public abstract class IInitialHandler extends InitialHandler {
 	private short window;
 	private IChatBaseComponent[] tab = new IChatBaseComponent[2];
 	
-	public IInitialHandler(ProxyServer instance, ListenerInfo listenerInfo, Decoder a, Encoder b) {
-		super((BungeeCord) instance, listenerInfo);
-		this.a = a;
-		this.b = b;
-		if (a != null) a.setHandler(this);
-		if (b != null) b.setHandler(this);
-	}
 	
 	public Encoder getEncoder() {
 		return b;

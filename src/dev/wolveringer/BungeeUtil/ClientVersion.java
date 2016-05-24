@@ -51,32 +51,47 @@ public enum ClientVersion {
 	}
 	
 	public static enum BigClientVersion {
-		UnderknownVersion(ProtocollVersion.Unsupported),
-		v1_7(ProtocollVersion.v1_7),
-		v1_8(ProtocollVersion.v1_8),
-		v1_9(ProtocollVersion.v1_9);
+		UnderknownVersion(0),
+		v1_7(1),
+		v1_8(2),
+		v1_9(3);
 		
-		@Getter
 		private ProtocollVersion protocollVersion;
+		private int protocollVersionInt;
 		
-		private BigClientVersion(ProtocollVersion basedVersion) {
-			this.protocollVersion = basedVersion;
+		private BigClientVersion(int basedVersion) {
+			this.protocollVersionInt = basedVersion;
+		}
+		public ProtocollVersion getProtocollVersion() {
+			if(protocollVersion == null)
+				protocollVersion = ProtocollVersion.values()[protocollVersionInt];
+			return protocollVersion;
 		}
 	}
 	
-	@AllArgsConstructor
 	@Getter
 	public static enum ProtocollVersion {
-		Unsupported(BigClientVersion.UnderknownVersion, false),
-		v1_7(BigClientVersion.v1_7, false),
-		v1_8(BigClientVersion.v1_8, true),
-		v1_9(BigClientVersion.v1_9, true),
-		v1_9_2(BigClientVersion.v1_9, true),
-		v1_9_3(BigClientVersion.v1_9, true),
-		v1_9_4(BigClientVersion.v1_9, true);
+		Unsupported(0, false),
+		v1_7(1, false),
+		v1_8(2, true),
+		v1_9(3, true),
+		v1_9_2(3, true),
+		v1_9_3(3, true),
+		v1_9_4(3, true);
 		
+		private int basedVersionInt;
 		private BigClientVersion basedVersion;
 		private boolean supported;
+		private ProtocollVersion(int basedVersion, boolean supported) {
+			this.basedVersionInt = basedVersion;
+			this.supported = supported;
+		}
+		
+		public BigClientVersion getBasedVersion(){
+			if(basedVersion == null)
+				basedVersion = BigClientVersion.values()[basedVersionInt];
+			return basedVersion;
+		}
 	}
 	
 	public static ClientVersion fromProtocoll(int protocolVersion) {
