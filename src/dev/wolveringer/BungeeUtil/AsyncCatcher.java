@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import dev.wolveringer.BungeeUtil.configuration.Configuration;
 import dev.wolveringer.BungeeUtil.exception.ExceptionUtils;
-import jline.WindowsTerminal.ConsoleMode;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class AsyncCatcher {
@@ -35,9 +34,9 @@ public class AsyncCatcher {
 			else if(mode == AsyncCatcherMode.WARNING){
 				StackTraceElement e = ExceptionUtils.getCurruntMethodeStackTraceElement();
 				if(e == null)
-					System.out.println("Async catcher catched from underknown src. Message: "+reason);
+					Main.sendMessage("Async catcher catched from underknown src. Message: "+reason);
 				else
-					System.out.println("Async catcher catched from "+e.getClassName()+"#"+e.getMethodName()+"("+e.getLineNumber()+"). Message: "+reason);
+					Main.sendMessage("Async catcher catched from "+e.getClassName()+"#"+e.getMethodName()+"("+e.getLineNumber()+"). Message: "+reason);
 			}
 		}
 	}

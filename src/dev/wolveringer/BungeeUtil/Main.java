@@ -86,7 +86,13 @@ public class Main extends Plugin {
 		try {
 			updater = new Updater("http://www.mcgalaxy.de/updater/updates.json");
 			if (Configuration.isUpdaterActive()) updater.loadData();
-			if (Configuration.isUpdaterActive()) if (updater.check()) return;
+			if (Configuration.isUpdaterActive()) if (updater.check()){
+				setInformation("§cRestarting bungeecord");
+				sleep(1000);
+				setInformation(null);
+				System.exit(-1);
+				return;
+			}
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -101,12 +107,14 @@ public class Main extends Plugin {
 			case 0:
 				sendMessage(ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "eBungeeUntil" + ChatColorUtils.COLOR_CHAR + "7] " + ChatColorUtils.COLOR_CHAR + "cA fatal error has blocked in the injection of BungeeUtil.");
 				sendMessage(ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "eBungeeUntil" + ChatColorUtils.COLOR_CHAR + "7] " + ChatColorUtils.COLOR_CHAR + "cDisable BungeeUtil");
+				setInformation(null);
 				return;
 			case 1:
 				long diff = System.currentTimeMillis() - start;
 				DecimalFormat format = new DecimalFormat("#,000");
 				sendMessage(ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "eBungeeUntil" + ChatColorUtils.COLOR_CHAR + "7] " + ChatColorUtils.COLOR_CHAR + "aBungeeUtil injection successful (" + format.format(diff).replaceAll(",", ".") + "s). Restarting BungeeCord.");
 				BungeeCord.getInstance().stop();
+				setInformation(null);
 				return;
 		};
 		IIInitialHandler.init(ProxiedPlayerUserConnection.class);
@@ -222,10 +230,6 @@ public class Main extends Plugin {
 		}
 	}
 	
-	/*
-	 * 100 = 20 ? = 1
-	 */
-	
 	public static void setInformation(String info) {
 		if ("".equalsIgnoreCase(info) || info == null) costumPromtLine = false;
 		else costumPromtLine = true;
@@ -245,9 +249,9 @@ public class Main extends Plugin {
 	
 	@SuppressWarnings("deprecation")
 	public static void sendMessage(String message) {
-		if (!message.startsWith(ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "eBungeeUntil" + ChatColorUtils.COLOR_CHAR + "7] ")) message = ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "eBungeeUntil" + ChatColorUtils.COLOR_CHAR + "7] " + message;
+		if (!message.startsWith(ChatColorUtils.PREFIX+" ")) message = ChatColorUtils.PREFIX+" " + message;
 		message = "\r" + date_format.format(new Date()) + " " + message;
-		if (costumPromtLine) {
+		if (costumPromtLine && main != null) {
 			try {
 				while (message.length() < costumPormtLineMessage.length()) {
 					message += " ";
@@ -260,8 +264,14 @@ public class Main extends Plugin {
 				e.printStackTrace();
 			}
 		}
-		else BungeeCord.getInstance().getConsole().sendMessage(message);
+		else{
+			if(main != null)
+				BungeeCord.getInstance().getConsole().sendMessage(message);
+			else
+				System.out.println(message);
+		}
 	}
+	
 	
 	@SuppressWarnings("deprecation")
 	@Override

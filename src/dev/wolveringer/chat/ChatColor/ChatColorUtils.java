@@ -12,6 +12,7 @@ import dev.wolveringer.chat.ChatModifier;
 public class ChatColorUtils {
 	private final static Map<Character, ChatColor> BY_CHAR = Maps.newHashMap();
 	public static final char COLOR_CHAR = '§';//\u00A7
+	public static final String PREFIX = ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "eBungeeUntil" + ChatColorUtils.COLOR_CHAR + "7]";
 	private static final Pattern STRIP_FORMAT_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[A-FK-OR]");
 	private static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9]");
 	static{

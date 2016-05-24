@@ -25,7 +25,6 @@ public class ProfileMenue {
 	private Inventory inv_disabled = new Inventory(9, ""+ChatColorUtils.COLOR_CHAR+"cTimings Disabled");
 
 	public ProfileMenue() {
-		rebuild();
 		BungeeCord.getInstance().getScheduler().schedule(Main.getMain(), new Runnable() {
 			@Override
 			public void run() {

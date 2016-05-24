@@ -1,5 +1,6 @@
 package dev.wolveringer.network;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
@@ -86,6 +87,8 @@ public class IIInitialHandler extends IInitialHandler {
 	private static void loadClassesFromJar(String path) {
 		if(pool == null)
 			throw new NullPointerException("Class Pool is null!");
+		if(new File(path).isDirectory())
+			return;
 		try{
 			JarFile jarFile = new JarFile(path);
 			Enumeration<JarEntry> e = jarFile.entries();
@@ -142,7 +145,7 @@ public class IIInitialHandler extends IInitialHandler {
 			}
 		}
 	}
-
+	
 	public IIInitialHandler(ProxyServer instance, ListenerInfo listenerInfo, Decoder a, Encoder b) {
 		super(instance, listenerInfo, a, b);
 	}

@@ -35,19 +35,19 @@ public class PacketPlayInWindowClick extends Packet implements PacketPlayIn {
 			return getMode(mode) == 5;
 		}
 
-		public static final class Normal {
-			public static final int LEFT_CLICK = getInt(0, 0);
-			public static final int RIGHT_CLICK = getInt(0, 1);
-			public static final int MIDDLE_CLICK = getInt(3, 2);
-			public static final int DOUBLE_CLICK = getInt(6, 0);
-		}
+		//public static final class Normal {
+			public static final int NORMAL_LEFT_CLICK = getInt(0, 0);
+			public static final int NORMAL_RIGHT_CLICK = getInt(0, 1);
+			public static final int NORMAL_MIDDLE_CLICK = getInt(3, 2);
+			public static final int NORMAL_DOUBLE_CLICK = getInt(6, 0);
+		//}
 
-		public static final class Shift {
-			public static final int LEFT_CLICK = getInt(1, 0);
-			public static final int RIGHT_CLICK = getInt(1, 1);
-		}
+		//public static final class Shift {
+			public static final int SHIFT_LEFT_CLICK = getInt(1, 0);
+			public static final int SHIFT_RIGHT_CLICK = getInt(1, 1);
+		//}
 
-		public static final class Key {
+		//public static final class Key {
 			public static final int KEY_1 = getInt(2, 0);
 			public static final int KEY_2 = getInt(2, 1);
 			public static final int KEY_3 = getInt(2, 2);
@@ -57,21 +57,21 @@ public class PacketPlayInWindowClick extends Packet implements PacketPlayIn {
 			public static final int KEY_7 = getInt(2, 6);
 			public static final int KEY_8 = getInt(2, 7);
 			public static final int KEY_9 = getInt(2, 8);
-		}
+		//}
 
-		public static final class Drop {
-			public static final int ITEM = getInt(4, 0);
-			public static final int ITEM_STACK = getInt(4, 1);
-		}
+		//public static final class Drop {
+			public static final int DROP_ITEM = getInt(4, 0);
+			public static final int DROP_ITEM_STACK = getInt(4, 1);
+		//}
 
-		public static final class Drag {
-			public static final int START_LEFT = getInt(5, 0);
-			public static final int ADD_LEFT = getInt(5, 1);
-			public static final int END_LEFT = getInt(5, 2);
-			public static final int START_RIGHT = getInt(5, 4);
-			public static final int ADD_RIGHT = getInt(5, 5);
-			public static final int END_RIGHT = getInt(5, 6);
-		}
+		//public static final class Drag {
+			public static final int DRAG_START_LEFT = getInt(5, 0);
+			public static final int DRAG_ADD_LEFT = getInt(5, 1);
+			public static final int DRAG_END_LEFT = getInt(5, 2);
+			public static final int DRAG_START_RIGHT = getInt(5, 4);
+			public static final int DRAG_ADD_RIGHT = getInt(5, 5);
+			public static final int DRAG_END_RIGHT = getInt(5, 6);
+		//}
 	}
 
 	private short actionNumber;

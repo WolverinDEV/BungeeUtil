@@ -19,6 +19,7 @@ import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.UserConnection;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.configuration.Configuration;
+import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 
 public class InjectFiles {
 	public static int inject() {
@@ -28,8 +29,8 @@ public class InjectFiles {
 			if(!Modifier.isFinal(modifier) && Modifier.isPublic(modifier)){
 				return -1;
 			}
-			Main.sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7["+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"eBungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"aStarting BungeeUtil injection.");
-			Main.sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7["+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"eBungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"aSet modifiers for class UserConnection.class to \"public\"");
+			Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aStarting BungeeUtil injection.");
+			Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aSet modifiers for class UserConnection.class to \"public\"");
 
 			String[] names = { "net.md_5.bungee.UserConnection.class" };
 			ClassPool cp = ClassPool.getDefault();
@@ -51,9 +52,9 @@ public class InjectFiles {
 	private static void updateZipFile(File zipFile, String[] names, InputStream[] ins) throws IOException {
 		File tempFile = File.createTempFile(zipFile.getName(), null);
 		if(!tempFile.delete())
-			System.out.print("Warn: Cant delte temp file.");
+			Main.sendMessage("Warn: Cant delte temp file.");
 		if(tempFile.exists())
-			System.out.print("Warn: Temp target file alredy exist!");
+			Main.sendMessage("Warn: Temp target file alredy exist!");
 		if(!zipFile.exists())
 			throw new RuntimeException("Could not rename the file " + zipFile.getAbsolutePath() + " to " + tempFile.getAbsolutePath()+" (Src. not found!)");
 		int renameOk = zipFile.renameTo(tempFile)?1:0;
@@ -62,16 +63,16 @@ public class InjectFiles {
 			com.google.common.io.Files.copy(zipFile, tempFile);
 			renameOk = 2;
 			if(zipFile.delete()){
-				System.out.print("Warn: Src file cant delete.");
+				Main.sendMessage("Warn: Src file cant delete.");
 				renameOk = -1;
 			}
 		}
 		if(renameOk == 0)
 			throw new RuntimeException("Could not rename the file " + zipFile.getAbsolutePath() + " to " + tempFile.getAbsolutePath()+" (Directory read only? (Temp:[R:"+(tempFile.canRead()?1:0)+";W:"+(tempFile.canWrite()?1:0)+",D:"+(tempFile.canExecute()?1:0)+"],Src:[R:"+(zipFile.canRead()?1:0)+";W:"+(zipFile.canWrite()?1:0)+",D:"+(zipFile.canExecute()?1:0)+"]))");
 		if(renameOk != 1)
-			System.out.print("Warn: Cant create temp file. Use .copy file");
+			Main.sendMessage("Warn: Cant create temp file. Use .copy file");
 		byte[] buf = new byte[Configuration.getLoadingBufferSize()];
-		Main.sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7["+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"eBungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"aBuffer size: "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"e"+buf.length);
+		Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aBuffer size: "+ChatColorUtils.COLOR_CHAR+"e"+buf.length);
 		ZipInputStream zin = new ZipInputStream(new FileInputStream(tempFile));
 		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile));
 

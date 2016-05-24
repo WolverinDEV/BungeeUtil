@@ -1,6 +1,5 @@
-package dev.wolveringer.BungeeUtil;
+package dev.wolveringer.BungeeUtil.gameprofile;
 
-import dev.wolveringer.BungeeUtil.gameprofile.GameProfile;
 import dev.wolveringer.chat.ChatSerializer;
 import dev.wolveringer.chat.IChatBaseComponent;
 

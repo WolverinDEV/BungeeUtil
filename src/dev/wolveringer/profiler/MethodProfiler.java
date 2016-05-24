@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import dev.wolveringer.api.inventory.Inventory;
 import dev.wolveringer.api.inventory.ScrolingInventory;
+import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 
 public class MethodProfiler {
 	private String name;
@@ -21,7 +22,7 @@ public class MethodProfiler {
 	public MethodProfiler(Profiler profile,String key) {
 		this.name = key;
 		this.profile = profile;
-		String name = ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"aTimings "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7("+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"5"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"l"+profile.getName()+" "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"c"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"l>> "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"b"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"l"+getName()+""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7)";
+		String name = ChatColorUtils.COLOR_CHAR+"aTimings "+ChatColorUtils.COLOR_CHAR+"7("+ChatColorUtils.COLOR_CHAR+"5"+ChatColorUtils.COLOR_CHAR+"l"+profile.getName()+" "+ChatColorUtils.COLOR_CHAR+"c"+ChatColorUtils.COLOR_CHAR+"l>> "+ChatColorUtils.COLOR_CHAR+"b"+ChatColorUtils.COLOR_CHAR+"l"+getName()+""+ChatColorUtils.COLOR_CHAR+"7)";
 		inv = new ScrolingInventory(4, name);
 		updateInventory();
 	}

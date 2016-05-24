@@ -30,6 +30,7 @@
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
     </repositories>
+    <!-- JSON as an dependency? Not anymore directly included -->
     <dependencies>
         <dependency>
             <artifactId>bungeecord-api</artifactId>

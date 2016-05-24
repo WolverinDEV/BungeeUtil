@@ -29,8 +29,8 @@ import dev.wolveringer.animations.inventory.InventoryViewChangeAnimations.Animat
 import dev.wolveringer.api.SoundEffect;
 import dev.wolveringer.api.SoundEffect.SoundCategory;
 import dev.wolveringer.api.bossbar.BossBarManager.BossBar;
-import dev.wolveringer.api.guy.AnvilGui;
-import dev.wolveringer.api.guy.AnvilGuiListener;
+import dev.wolveringer.api.gui.AnvilGui;
+import dev.wolveringer.api.gui.AnvilGuiListener;
 import dev.wolveringer.api.inventory.Inventory;
 import dev.wolveringer.api.inventory.ItemContainer;
 import dev.wolveringer.api.particel.ParticleEffect;
@@ -123,8 +123,8 @@ public class DebugMenue {
 				final Scoreboard s = p.getPlayer().getScoreboard();
 				if (s.getObjektive("test") == null) {
 					s.createObjektive("test", Type.INTEGER);
-					s.getObjektive("test").setScore("§a-----------", -1);
-					s.getObjektive("test").setScore("§aHello world", -2);
+					s.getObjektive("test").setScore("ï¿½a-----------", -1);
+					s.getObjektive("test").setScore("ï¿½aHello world", -2);
 					s.getObjektive("test").display(Position.SIDEBAR);
 					s.getObjektive("test").setDisplayName(ChatColorUtils.COLOR_CHAR + "athis is an test");
 				}
@@ -138,12 +138,12 @@ public class DebugMenue {
 					var0.setColor(BarColor.GREEN);
 					var0.setDivision(BarDivision.NO_DIVISION);
 					var0.setHealth(0F);
-					var0.setMessage(ChatSerializer.fromMessage("§cHello world"));
+					var0.setMessage(ChatSerializer.fromMessage("ï¿½cHello world"));
 					var0.display();
 					
 					p.getPlayer().sendMessage("Your boss bars:");
 					for (BossBar bar : p.getPlayer().getBossBarManager().getActiveBossBars())
-						p.getPlayer().sendMessage("  §7- " + ChatSerializer.toMessage(bar.getMessage()));
+						p.getPlayer().sendMessage("  ï¿½7- " + ChatSerializer.toMessage(bar.getMessage()));
 					final BossBar bar = var0;
 					new LimetedScheduller(32, 250, TimeUnit.MILLISECONDS) {
 						int currunt = 0;
@@ -276,21 +276,21 @@ public class DebugMenue {
 					public void onMessageChange(AnvilGui guy, String newMessage) {
 				    	//Changing text color
 				    	if ("HelloWorld #Yolo".startsWith(newMessage)){
-				    		guy.setColorPrefix("§6");
+				    		guy.setColorPrefix("ï¿½6");
 				    		guy.setCenterItem(new Item(Material.getMaterial(351),1,(byte)10));
 						}
 						else if(newMessage.startsWith("HelloWorld #Yolo")){
-							guy.setColorPrefix("§a");
+							guy.setColorPrefix("ï¿½a");
 							guy.setCurruntInput("You did it!");
 						}
 						else{
-							guy.setColorPrefix("§c");
+							guy.setColorPrefix("ï¿½c");
 							guy.setCenterItem(new Item(Material.getMaterial(351),1,(byte)1));
 						}
 				    	
 				    	//Update output item ;)
 						Item item = new Item(Material.ENCHANTED_BOOK);
-				    	item.getItemMeta().setDisplayName("§aYour message: §e" + (newMessage.length() == 0 ? "§cNo message" : newMessage));
+				    	item.getItemMeta().setDisplayName("ï¿½aYour message: ï¿½e" + (newMessage.length() == 0 ? "ï¿½cNo message" : newMessage));
 				    	guy.setOutputItem(item);
 					}
 					
@@ -307,7 +307,7 @@ public class DebugMenue {
 				guy.open();
 			}
 		};
-		i.getItemMeta().setDisplayName("§aTesting anvil guy");
+		i.getItemMeta().setDisplayName("ï¿½aTesting anvil guy");
 		inv.setItem(10, i);
 		
 		Profiler.packet_handle.stop("buildDebugInventory");

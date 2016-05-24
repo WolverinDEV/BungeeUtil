@@ -130,7 +130,7 @@ public class PacketHandle {
 					if (args.length == 2) {
 						if (args[0].equalsIgnoreCase("add")) {
 							b.add(args[1]);
-							player.sendMessage("Du hast " + args[1] + " hinzugef�gt");
+							player.sendMessage("Du hast " + args[1] + " hinzugefügt");
 							return true;
 						}
 						else if (args[0].equalsIgnoreCase("remove")) {

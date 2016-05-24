@@ -5,8 +5,8 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
-import dev.wolveringer.BungeeUtil.PlayerInfoData;
 import dev.wolveringer.BungeeUtil.gameprofile.GameProfile;
+import dev.wolveringer.BungeeUtil.gameprofile.PlayerInfoData;
 import dev.wolveringer.BungeeUtil.gameprofile.Property;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.chat.ChatSerializer;

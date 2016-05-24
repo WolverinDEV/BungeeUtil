@@ -23,8 +23,6 @@ import dev.wolveringer.nbt.NBTTagString;
 public class ServerDatReader {
 	public static void main(String[] args) throws Exception {
 		System.out.print("X");
-		if(true)
-			return;
 		File f = new File("/home/wolverindev/.minecraft/servers.dat");
 		FileInputStream in = new FileInputStream(f);
 		NBTTagCompound base = NBTCompressedStreamTools.read(new DataInputStream(new BufferedInputStream(in)));
@@ -34,9 +32,9 @@ public class ServerDatReader {
 			c.set("name", new NBTTagString("§a§l§n"+reset(c.getString("name"))));
 			Main.sendMessage(comp.toString());
 		}
-		FileOutputStream out = new FileOutputStream(f);
-		write(base, out);
-		out.close();
+		//FileOutputStream out = new FileOutputStream(f);
+		//write(base, out);
+		//out.close();
 	}
 	
 	public static String reset(String  in){
