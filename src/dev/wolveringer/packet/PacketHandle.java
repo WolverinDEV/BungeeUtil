@@ -2,7 +2,9 @@ package dev.wolveringer.packet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.BungeeCord;
 import dev.wolveringer.BungeeUtil.Main;
@@ -25,12 +27,13 @@ import dev.wolveringer.BungeeUtil.packets.PacketPlayOutTransaction;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayXXXHeldItemSlot;
 import dev.wolveringer.api.inventory.Inventory;
 import dev.wolveringer.api.position.Location;
+import dev.wolveringer.maps.CachedHashMap;
 import dev.wolveringer.profiler.Profiler;
 
 public class PacketHandle {
 	static PacketPlayOutNamedEntitySpawn a;
 	static ArrayList<String> b = new ArrayList<String>();
-	
+	private static CachedHashMap<Player, Long> lastInventortyUpdate = new CachedHashMap<>(100, TimeUnit.MILLISECONDS);
 	public static boolean handlePacket(PacketHandleEvent<?> e) {
 		final Packet pack = e.getPacket();
 		final Player player = e.getPlayer();
@@ -85,7 +88,10 @@ public class PacketHandle {
 					return false;
 				}
 				player.sendPacket(new PacketPlayOutSetSlot(player.getInventoryView().getContains()[pl.getSlot()], Inventory.ID, pl.getSlot()));
-				player.updateInventory();
+				//if(Math.abs(lastInventortyUpdate.getOrDefault(e.getPlayer(), System.currentTimeMillis())-System.currentTimeMillis())<=1){
+						player.updateInventory();
+				//		lastInventortyUpdate.put(e.getPlayer(), System.currentTimeMillis());
+				//}
 				if (player.getInventoryView().isClickable()){
 					boolean sync = ((CraftItemMeta)is.getItemMeta()).isClickSync();
 					handleItemClick(player,is,new Click(player, pl.getSlot(), player.getInventoryView(), pl.getItem(), pl.getMode(), sync),sync);
@@ -174,7 +180,7 @@ public class PacketHandle {
 		if(!sync){
 			BungeeCord.getInstance().getScheduler().runAsync(Main.getMain(), new Runnable() {
 				public void run() {
-					handleItemClick(player, is, c, false);
+					handleItemClick(player, is, c, true);
 				}
 			});
 			return;
