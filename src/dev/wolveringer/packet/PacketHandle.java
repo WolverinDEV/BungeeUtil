@@ -93,7 +93,7 @@ public class PacketHandle {
 				//}
 				if (player.getInventoryView().isClickable()){
 					boolean sync = ((CraftItemMeta)is.getItemMeta()).isClickSync();
-					handleItemClick(player,is,new Click(player, pl.getSlot(), player.getInventoryView(), pl.getItem(), pl.getMode(), sync),sync);
+					handleItemClick(player,is,new Click(player, pl.getSlot(), player.getInventoryView(), pl.getItem(), pl.getMode(), sync),sync,false);
 				}
 				Profiler.packet_handle.stop("handleWindowClick");
 				e.setCancelled(true);
@@ -175,11 +175,11 @@ public class PacketHandle {
 		return false;
 	}
 	
-	private static void handleItemClick(final Player player,final ItemStack is,final Click c,boolean sync){
-		if(!sync){
+	private static void handleItemClick(final Player player,final ItemStack is,final Click c,final boolean sync,final boolean looped){
+		if(!sync && !looped){
 			BungeeCord.getInstance().getScheduler().runAsync(Main.getMain(), new Runnable() {
 				public void run() {
-					handleItemClick(player, is, c, true);
+					handleItemClick(player, is, c, sync, true);
 				}
 			});
 			return;
@@ -190,7 +190,7 @@ public class PacketHandle {
 		} catch (Exception e) {
 			List<StackTraceElement> le = new ArrayList<>();
 			le.addAll(Arrays.asList(ExceptionUtils.deleteDownward(e.getStackTrace(), ExceptionUtils.getCurrentMethodeIndex(e))));
-			le.add(new StackTraceElement("dev.wolveringer.BungeeUtil.PacketHandler", "handleInventoryClickPacket", null, -1));
+			le.add(new StackTraceElement("dev.wolveringer.BungeeUtil.PacketHandler."+player.getVersion().name(), "handleInventoryClickPacket"+(sync?"Sync":"Ansync"), null, -1));
 			e.setStackTrace(le.toArray(new StackTraceElement[0]));
 			e.printStackTrace();
 			player.disconnect(e);

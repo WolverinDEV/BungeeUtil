@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardDisplayObjective;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardDisplayObjective.Position;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardObjective;
@@ -58,7 +59,7 @@ public final class Objektive {
 				x = s;
 			}
 		if(x == null){
-			System.out.println("Removing not existing score ("+scoreName+ChatColorUtils.COLOR_CHAR+"r)");
+			Main.debug("Removing not existing score ("+scoreName+ChatColorUtils.COLOR_CHAR+"r)");
 			return;
 		}
 		scores.remove(x);

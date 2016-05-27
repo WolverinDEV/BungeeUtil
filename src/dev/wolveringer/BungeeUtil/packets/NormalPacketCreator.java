@@ -78,7 +78,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 			else return packet.setcompressedId(compressed).load(b, p.getVersion());
 		}
 		catch (Exception e) {
-			throw new RuntimeException("Packet error -> ver: " + (p == null ? "unknown" : p.getVersion()) + (cons == null ? "Class not found" : cons.getDeclaringClass().getName()) + " -> "+e.getMessage(),e);
+			throw new RuntimeException("Packet error -> ver: " + (p == null ? "unknown" : p.getVersion()) + " " + (cons == null ? "Class not found" : cons.getDeclaringClass().getName()) + " -> "+e.getMessage(),e);
 		}
 	}
 	

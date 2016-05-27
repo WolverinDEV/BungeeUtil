@@ -3,6 +3,7 @@ package dev.wolveringer.api.scoreboard;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.PacketHandleEvent;
 import dev.wolveringer.BungeeUtil.PacketHandler;
 import dev.wolveringer.BungeeUtil.PacketLib;
@@ -59,7 +60,7 @@ public final class PacketListenerScoreboard implements PacketHandler<Packet> {
 				if (obj == null)
 					board.server_objs.add(obj = new Objektive(board, out.getObjektiveName()));
 				if(obj == null){
-					System.err.println("ScoreboardObjective "+out.getObjektiveName()+" for the player "+e.getPlayer().getName()+" not found!");
+					Main.debug("ScoreboardObjective "+out.getObjektiveName()+" for the player "+e.getPlayer().getName()+" not found!");
 					return;
 				}
 				Score x = null;
@@ -76,7 +77,7 @@ public final class PacketListenerScoreboard implements PacketHandler<Packet> {
 					.getAction() == dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardScore.Action.REMOVE) {
 				Objektive obj = board.getObjektive(out.getObjektiveName());
 				if(obj == null){
-					System.err.println("ScoreboardObjective "+out.getObjektiveName()+" for the player "+e.getPlayer().getName()+" not found!");
+					Main.debug("ScoreboardObjective "+out.getObjektiveName()+" for the player "+e.getPlayer().getName()+" not found");
 					return;
 				}
 				Score x = null;
