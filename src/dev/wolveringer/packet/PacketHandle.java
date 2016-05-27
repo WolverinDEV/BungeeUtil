@@ -9,6 +9,7 @@ import net.md_5.bungee.BungeeCord;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.PacketHandleEvent;
 import dev.wolveringer.BungeeUtil.Player;
+import dev.wolveringer.BungeeUtil.configuration.Configuration;
 import dev.wolveringer.BungeeUtil.exception.ExceptionUtils;
 import dev.wolveringer.BungeeUtil.item.ItemStack;
 import dev.wolveringer.BungeeUtil.item.ItemStack.Click;
@@ -92,7 +93,7 @@ public class PacketHandle {
 				//		lastInventortyUpdate.put(e.getPlayer(), System.currentTimeMillis());
 				//}
 				if (player.getInventoryView().isClickable()){
-					boolean sync = ((CraftItemMeta)is.getItemMeta()).isClickSync();
+					boolean sync = ((CraftItemMeta)is.getItemMeta()).isClickSync() || Configuration.isSyncInventoryClickActive();
 					handleItemClick(player,is,new Click(player, pl.getSlot(), player.getInventoryView(), pl.getItem(), pl.getMode(), sync),sync,false);
 				}
 				Profiler.packet_handle.stop("handleWindowClick");

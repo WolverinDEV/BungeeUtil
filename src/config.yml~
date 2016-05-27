@@ -19,6 +19,9 @@
 #        The catcher has 2 modes:      # 
 # - EXCEPTION (will throw a exception) # 
 # - WARNING (will print a warn message)# 
+#                                      #
+#             Debug messages           #
+#   Enable/Disable all debug messages  #  
 #                                      # 
 ######################################## 
 timings: true
@@ -39,3 +42,5 @@ async-catcher:
   enabled: true
   mode: EXCEPTION
 debug: false
+inventory:
+  synchandle: true

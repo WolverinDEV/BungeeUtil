@@ -94,4 +94,7 @@ public class Configuration {
 	public static boolean isDebugEnabled(){
 		return conf.getBoolean("debug");
 	}
+	public static boolean isSyncInventoryClickActive(){
+		return conf.getBoolean("inventory.synchandle");
+	}
 }
