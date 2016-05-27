@@ -50,6 +50,7 @@ import dev.wolveringer.network.inject.XChannelFutureListener;
 import dev.wolveringer.network.inject.XChannelInitializer;
 
 public class ProxiedPlayerUserConnection extends AbstraktUserConnection implements Player {
+	private static final int CURSOR_ITEM_SLOT = 50;
 	private IInitialHandler i;
 	private Inventory inv;
 	private Location loc;
@@ -123,26 +124,29 @@ public class ProxiedPlayerUserConnection extends AbstraktUserConnection implemen
 	public void updateInventory() {
 		int window = 0;
 		int dslot = 0;
-		if(isInventoryOpened()){
-			//window = Inventory.ID;
-			//dslot = getInventoryView().getSlots();
-		}
 		Item[] items = p_inv.getContains();
-		for(int i = 0;i < items.length;i++){
-			//if(isInventoryOpened() && i-9 < 0)
-			//	continue;
-			Item item = items[i];
-			sendPacket(new PacketPlayOutSetSlot(item, window, dslot+i-(isInventoryOpened()?/*9*/0:0))); //-9 Player crafting and armor
+		/*
+		if(isInventoryOpened()){
+			window = Inventory.ID;
+			dslot = getInventoryView().getSlots();
 		}
+		for(int i = 0;i < items.length;i++){
+			if(isInventoryOpened() && i-9 < 0)
+				continue;
+			Item item = items[i];
+			sendPacket(new PacketPlayOutSetSlot(item, window, dslot+i-(isInventoryOpened()?/*9*//*0:0))); //-9 Player crafting and armor
+		}
+		*/
+		sendPacket(new PacketPlayOutWindowItems(0, items));
 	}
 
 	public void setCursorItem(Item is) {
 		sendPacket(new PacketPlayOutSetSlot(is, -1, -1));
-		getPlayerInventory().setItem(999, is);
+		getPlayerInventory().setItem(CURSOR_ITEM_SLOT, is);
 	}
 
 	public Item getCursorItem() {
-		return getPlayerInventory().getItem(999);
+		return getPlayerInventory().getItem(CURSOR_ITEM_SLOT);
 	}
 
 	public Item getOffHandItem() {
