@@ -3,6 +3,7 @@ package dev.wolveringer.BungeeUtil.packets;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,12 +16,23 @@ import dev.wolveringer.BungeeUtil.Player;
 import dev.wolveringer.BungeeUtil.packets.Packet.ProtocollId;
 import dev.wolveringer.packet.PacketDataSerializer;
 import io.netty.buffer.ByteBuf;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 
 public class NormalPacketCreator extends AbstractPacketCreator {
-	@SuppressWarnings("unchecked")
-	private Constructor<? extends Packet>[] packetsId = new Constructor[((ProtocollVersion.values().length & 0x0F) << 16) | ((Protocol.values().length & 0x0F) << 12) | ((Direction.values().length & 0x0F) << 8) | 0xFF]; // Calculate max packet compressed id. (0xFF = Max ID)
+	@AllArgsConstructor
+	@Getter
+	private static class PacketHolder {
+		private Constructor<? extends Packet> constuctor;
+
+		public Packet newInstance() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+			return constuctor.newInstance();
+		}
+	}
+	
+	private PacketHolder[] packetsId = new PacketHolder[((ProtocollVersion.values().length & 0x0F) << 16) | ((Protocol.values().length & 0x0F) << 12) | ((Direction.values().length & 0x0F) << 8) | 0xFF]; // Calculate max packet compressed id. (0xFF = Max ID)
 	@SuppressWarnings("unchecked")
 	private HashMap<Class<? extends Packet>, Integer>[] classToId = new HashMap[ProtocollVersion.values().length];
 	
@@ -41,7 +53,10 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 			clazz = (Class<? extends Packet>) clazz.getSuperclass();
 		}
 		if (!classToId[version.ordinal()].containsKey(clazz)) //throw new NullPointerException("Packet " + clazz.getName() + " not loadet.");
-			return -1;
+			if(version.getBasedVersion().getProtocollVersion() != version)
+				return getPacketId(version.getBasedVersion().getProtocollVersion(),clazz);
+			else
+				return -1;
 		return   classToId[version.ordinal()].get(clazz);
 	}
 	
@@ -49,7 +64,9 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		if (packetListChanged) {
 			registerPackets.clear();
 			for (int i = 0; i < packetsId.length; i++) {
-				Constructor<? extends Packet> constructor = packetsId[i];
+				if(packetsId[i] == null)
+					continue;
+				Constructor<? extends Packet> constructor = packetsId[i].getConstuctor();
 				if (constructor == null) continue;
 				registerPackets.add(constructor.getDeclaringClass());
 			}
@@ -60,16 +77,18 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 	
 	public Packet getPacket0(ProtocollVersion version,Protocol protocol, Direction d, Integer id, ByteBuf b, Player p) {
 		int compressed = calculate(version,protocol, d, id);
-		Constructor<? extends Packet> cons = null;
-		try {
-			if ((cons = packetsId[compressed]) == null) {
-				if(version.getBasedVersion().getProtocollVersion() == version){ //Fallback (based version) (1.8-1.9)
-					return null;
-				}
-				else{
-					return getPacket0(version.getBasedVersion().getProtocollVersion(), protocol, d, id, b, p);
-				}
+		PacketHolder cons = null;
+		if ((cons = packetsId[compressed]) == null) {
+			if(version.getBasedVersion().getProtocollVersion() == version){ //Fallback (based version) (1.8-1.9)
+				return null;
 			}
+			else{
+				return getPacket0(version.getBasedVersion().getProtocollVersion(), protocol, d, id, b, p);
+			}
+		}
+		if(cons.getConstuctor() == null)
+			return null;
+		try {
 			Packet packet = cons.newInstance();
 			if (p == null || p.getVersion() == null){
 				Main.debug("Version of '"+(p == null ? "<Null client>" : p.getName())+"' is undefined");
@@ -78,8 +97,12 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 			else return packet.setcompressedId(compressed).load(b, p.getVersion());
 		}
 		catch (Exception e) {
-			throw new RuntimeException("Packet error -> ver: " + (p == null ? "unknown" : p.getVersion()) + " " + (cons == null ? "Class not found" : cons.getDeclaringClass().getName()) + " -> "+e.getMessage(),e);
+			throw new RuntimeException("Packet error (Version: " + (p == null ? "unknown" : p.getVersion()) + ",Readed version: "+version+", Class: " + (cons == null || cons.getConstuctor() == null ? "null" : cons.getConstuctor().getDeclaringClass().getName()) + ", Id: 0x"+Integer.toHexString(id).toUpperCase()+") -> "+e.getMessage(),e);
 		}
+	}
+	
+	public Packet getPacket1(ProtocollVersion version,ProtocollVersion orginalVersion,Protocol protocol, Direction d, Integer id, ByteBuf b, Player p) {
+		return null;
 	}
 	
 	public int loadPacket(ProtocollVersion version,Protocol p, Direction d, Integer id, Class<? extends Packet> clazz) {
@@ -94,8 +117,16 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		//clazz = getPacketWithDefaultConstructor(clazz);
 		try {
 			for(ProtocollId id : ids)
-				if(id != null && id.isValid())
-					packetsId[loadPacket(id.getVersion(),p, d, id.getId(), clazz)] = (Constructor<? extends Packet>) clazz.getConstructor();
+				if(id != null && id.isValid()){
+					packetsId[loadPacket(id.getVersion(),p, d, id.getId(), clazz)] = new PacketHolder(clazz == null ? null : (Constructor<? extends Packet>) clazz.getConstructor());
+					/*
+					if(id.getVersion().getBasedVersion().getProtocollVersion() != id.getVersion()){
+						int cid = loadPacket(id.getVersion().getBasedVersion().getProtocollVersion(),p, d, id.getId(), clazz);
+						if(packetsId[cid] == null)
+							packetsId[cid] = new PacketHolder(null);
+					}
+					*/
+				}
 		}
 		catch (NoSuchMethodException | SecurityException ex) {
 			System.out.println(clazz);

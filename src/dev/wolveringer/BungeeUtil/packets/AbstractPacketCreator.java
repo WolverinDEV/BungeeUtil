@@ -19,12 +19,12 @@ import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 
 public abstract class AbstractPacketCreator {
 	public int calculate(ProtocollVersion version,Protocol p, Direction d, Integer id) {
-		int x = ((version.ordinal() & 0x0F) << 16) | ((p.ordinal() & 0x0F) << 12) | ((d.ordinal() & 0x0F) << 8) | (id & 0xFF);
+		int x = ((version.ordinal() & 0xFF) << 16) | ((p.ordinal() & 0x0F) << 12) | ((d.ordinal() & 0x0F) << 8) | (id & 0xFF);
 		return x;
 	}
 
-	public BigClientVersion getPacketVersion(int base){
-		return BigClientVersion.values()[((int) (base >> 16)) & 0x0F];
+	public ProtocollVersion getPacketVersion(int base){
+		return ProtocollVersion.values()[((int) (base >> 16)) & 0xFF];
 	}
 	
 	public int getPacketId(int base) {

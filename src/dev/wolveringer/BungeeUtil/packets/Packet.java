@@ -36,6 +36,11 @@ public abstract class Packet {
 		public boolean isValid() {
 			return id > 0 && version != null && version != ProtocollVersion.Unsupported;
 		}
+
+		@Override
+		public String toString() {
+			return "ProtocollId [version=" + version + ", id=" + Integer.toHexString(id) + "]";
+		}
 	}
 	
 	public static final AtomicLong classInstances = new AtomicLong();
@@ -54,9 +59,12 @@ public abstract class Packet {
 		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x02, 0x0F, PacketPlayOutChat.class); // ->0x0F
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutPlayerListHeaderFooter.class, new ProtocollId(BigClientVersion.v1_8, 0x47), new ProtocollId(BigClientVersion.v1_9, 0x48), new ProtocollId(ProtocollVersion.v1_9_4, 0x47));// ->0x48
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, null, new ProtocollId(ProtocollVersion.v1_9_4, 0x48));
+		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x08, 0x2E, PacketPlayOutPosition.class); // Changed -> 0x2E
 		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutEntityTeleport.class, new ProtocollId(BigClientVersion.v1_8, 0x18), new ProtocollId(BigClientVersion.v1_9, 0x4A), new ProtocollId(ProtocollVersion.v1_9_4, 0x49)); // Changed -> 0x2E | 1.9.4 other id!
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, null, new ProtocollId(ProtocollVersion.v1_9_4, 0x4A));
 		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x19, 0x34, PacketPlayOutEntityHeadRotation.class);
 		
@@ -83,26 +91,29 @@ public abstract class Packet {
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x37, 0x07, PacketPlayOutStatistic.class); // -> 0x07
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x13, 0x30, PacketPlayOutEntityDestroy.class);// -> 0x30
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutEntityEffect.class, new ProtocollId(BigClientVersion.v1_8, 0x1D), new ProtocollId(BigClientVersion.v1_9, 0x4C), new ProtocollId(ProtocollVersion.v1_9_4, 0x4B));// Changed ->
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, null, new ProtocollId(ProtocollVersion.v1_9_4, 0x4C));
+		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x1E, 0x31, PacketPlayOutRemoveEntityEffect.class);
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x2B, 0x31, PacketPlayOutGameStateChange.class);// -> 0x31
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x2B, 0x1E, PacketPlayOutGameStateChange.class);// -> 0x31
 		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x38, 0x2D, PacketPlayOutPlayerInfo.class);// -> 0x2D
 		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x09, 0x37, PacketPlayOutHeldItemSlot.class);// -> 0x37
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x33, 0x46, PacketPlayOutUpdateSign.class);
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutUpdateSign.class,new ProtocollId(BigClientVersion.v1_8, 0x33)); //1.9 -> TitleEntityNBTData ;)
 		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, null, 0x0C, PacketPlayOutBossBar.class); // Only 1.9 :) Best Bar-Update Ever!
 		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutNamedSoundEffect.class, new ProtocollId(BigClientVersion.v1_8, 0x29), new ProtocollId(BigClientVersion.v1_9, 0x19), new ProtocollId(ProtocollVersion.v1_9_4, 0x46)); // Changed
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, null, new ProtocollId(ProtocollVersion.v1_9_4, 0x19));
 		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x0C, 0x05, PacketPlayOutNamedEntitySpawn.class);
-		// registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x21, PacketPlayOutMapChunk.class); //TODO Chunk Serelizer (Premium bungee src)
-		// registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x26, PacketPlayOutMapChunkBulk.class); //TODO Chunk Serelizer (Premium bungee src)
+		//registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x21, PacketPlayOutMapChunk.class); //TODO Chunk Serelizer (Premium bungee src)
+		//registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x26, PacketPlayOutMapChunkBulk.class); //TODO Chunk Serelizer (Premium bungee src)
 		
 		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x16, 0x03, PacketPlayInClientState.class); // Changed
 		
 		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x17, 0x09, PacketPlayInPluginMessage.class);
-		
+
 		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x01, 0x02, PacketPlayInChat.class); // -> 0x02
 		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x02, 0x0A, PacketPlayInUseEntity.class); // -> changed
 		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x09, 0x17, PacketPlayInHeldItemSlot.class);// -> 0x17

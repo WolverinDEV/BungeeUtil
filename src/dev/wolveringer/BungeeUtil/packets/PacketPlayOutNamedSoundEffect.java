@@ -1,6 +1,7 @@
 package dev.wolveringer.BungeeUtil.packets;
 
 import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
+import dev.wolveringer.BungeeUtil.ClientVersion.ProtocollVersion;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.api.SoundEffect;
 import dev.wolveringer.api.SoundEffect.SoundCategory;
@@ -20,11 +21,21 @@ public class PacketPlayOutNamedSoundEffect extends Packet implements PacketPlayO
 	@Override
 	public void read(PacketDataSerializer s) {
 		if(getBigVersion() == BigClientVersion.v1_9){
-			sound = s.readString(-1);
-			soundCategory = s.readVarInt();
-			loc = new Location(s.readInt(), s.readInt(), s.readInt()).dividide(8D);
-			volume = s.readFloat();
-			pitch = s.readUnsignedByte();
+			if(getVersion().getProtocollVersion() == ProtocollVersion.v1_9_4){
+				sound = s.readVarInt()+"";
+				soundCategory = s.readVarInt();
+				loc = new Location(s.readInt(), s.readInt(), s.readInt()).dividide(8D);
+				volume = s.readFloat();
+				pitch = s.readUnsignedByte();
+			}
+			else
+			{
+				sound = s.readString(-1);
+				soundCategory = s.readVarInt();
+				loc = new Location(s.readInt(), s.readInt(), s.readInt()).dividide(8D);
+				volume = s.readFloat();
+				pitch = s.readUnsignedByte();
+			}
 		}
 		else if(getBigVersion() == BigClientVersion.v1_8){
 			sound = s.readString(-1);
@@ -37,10 +48,33 @@ public class PacketPlayOutNamedSoundEffect extends Packet implements PacketPlayO
 	
 	@Override
 	public void write(PacketDataSerializer s) {
-		if(getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_8){
+		if(getBigVersion() == BigClientVersion.v1_9){
+			if(getVersion().getProtocollVersion() == ProtocollVersion.v1_9_4){
+				s.writeVarInt(Integer.parseInt(sound));
+				s.writeVarInt(soundCategory);
+				loc.multiply(8D);
+				s.writeInt(loc.getBlockX());
+				s.writeInt(loc.getBlockY());
+				s.writeInt(loc.getBlockZ());
+				loc.dividide(8D);
+				s.writeFloat(volume);
+				s.writeByte(pitch);
+			}
+			else
+			{
+				s.writeString(sound);
+				s.writeVarInt(soundCategory);
+				loc.multiply(8D);
+				s.writeInt(loc.getBlockX());
+				s.writeInt(loc.getBlockY());
+				s.writeInt(loc.getBlockZ());
+				loc.dividide(8D);
+				s.writeFloat(volume);
+				s.writeByte(pitch);
+			}
+		}
+		else if(getBigVersion() == BigClientVersion.v1_8){
 			s.writeString(sound);
-			if(getBigVersion() == BigClientVersion.v1_9)
-			s.writeVarInt(soundCategory);
 			loc.multiply(8D);
 			s.writeInt(loc.getBlockX());
 			s.writeInt(loc.getBlockY());

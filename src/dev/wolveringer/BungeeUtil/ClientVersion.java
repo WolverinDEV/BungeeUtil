@@ -1,5 +1,7 @@
 package dev.wolveringer.BungeeUtil;
 
+import java.util.ArrayList;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -58,7 +60,7 @@ public enum ClientVersion {
 		
 		private ProtocollVersion protocollVersion;
 		private int protocollVersionInt;
-		
+		private ProtocollVersion[] protocollVersions;
 		private BigClientVersion(int basedVersion) {
 			this.protocollVersionInt = basedVersion;
 		}
@@ -66,6 +68,17 @@ public enum ClientVersion {
 			if(protocollVersion == null)
 				protocollVersion = ProtocollVersion.values()[protocollVersionInt];
 			return protocollVersion;
+		}
+		
+		public ProtocollVersion[] getProtocollVersions(){
+			if(protocollVersions != null)
+				return protocollVersions;
+			ArrayList<ProtocollVersion> versions = new ArrayList<>();
+			for(ProtocollVersion v : ProtocollVersion.values())
+				if(v.getBasedVersion() == this)
+					versions.add(v);
+			this.protocollVersions = versions.toArray(new ProtocollVersion[0]);
+			return protocollVersions;
 		}
 	}
 	

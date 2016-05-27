@@ -1,6 +1,7 @@
 package dev.wolveringer.api.inventory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import dev.wolveringer.BungeeUtil.Material;
@@ -21,7 +22,7 @@ public class ScrolingInventory extends Inventory {
 		update();
 	}
 
-	private ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+	private List<ItemStack> items =Collections.synchronizedList(new ArrayList<ItemStack>());
 	private ItemStack[] toolitem = new ItemStack[7];
 	private int side = 0;
 	private int rows = -1;

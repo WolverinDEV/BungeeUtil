@@ -3,18 +3,15 @@ package dev.wolveringer.BungeeUtil.packets;
 import dev.wolveringer.BungeeUtil.item.Item;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.packet.PacketDataSerializer;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class PacketPlayOutSetSlot extends Packet implements PacketPlayOut{
 	private Item ItemStack;
 	private int slot;
 	private int window;
 
-	public PacketPlayOutSetSlot() {
-		super(0x2F);
-	}
-
 	public PacketPlayOutSetSlot(Item itemstack, int window, int slot) {
-		super(0x2F);
 		this.ItemStack = itemstack == null ? null : itemstack;
 		this.window = window;
 		this.slot = slot;
