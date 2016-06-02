@@ -133,10 +133,9 @@ public class CraftItemMeta implements ItemMeta {
 				sync = 0;
 			ItemStack is = (ItemStack) item;
 			try{
-				System.out.println(is.getClass());
-				System.out.println("X: "+Arrays.asList(is.getClass().getAnnotations()));
 				Method m = UtilReflection.getMethod(is.getClass(), "click", Click.class);
 				sync = m.isAnnotationPresent(SyncHandle.class) ? 1 : 0;
+				Main.debug((sync == 1 ? "Sync-":"Ansync-")+"Click handeling for "+m.getDeclaringClass().getName()+"#"+m.getName());
 			}catch(Exception e){
 				Main.debug(e, "Exception while try to detect sync handeling....");
 			}
