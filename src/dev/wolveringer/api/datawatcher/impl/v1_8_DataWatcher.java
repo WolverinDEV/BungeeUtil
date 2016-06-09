@@ -60,6 +60,7 @@ public class v1_8_DataWatcher extends DataWatcher{
 	
 	public v1_8_DataWatcher(PacketDataSerializer paramPacketDataSerializer) {
 		this();
+		if(paramPacketDataSerializer != null)
 		this.objekts = read(paramPacketDataSerializer);
 	}
 	

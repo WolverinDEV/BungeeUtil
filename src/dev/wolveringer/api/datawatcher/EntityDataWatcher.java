@@ -50,6 +50,8 @@ public interface EntityDataWatcher{
 	
 	public void setSlient(boolean flag);
 	
+	public boolean hasGravity();
+	public void setApplayGravity(boolean flag);
 	
 	
 	public DataWatcher getWatcher();

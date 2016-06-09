@@ -36,7 +36,7 @@ public class PacketPlayOutChat extends BetaPacket implements PacketPlayOut {
 	@Override
 	public void read(PacketDataSerializer s) {
 		data = s.readStringBytes();
-		if(getVersion().getBigVersion() == BigClientVersion.v1_8 || getBigVersion() == BigClientVersion.v1_9)
+		if(getVersion().getBigVersion() == BigClientVersion.v1_8 || getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10)
 			modus = s.readByte();
 	}
 
@@ -47,7 +47,7 @@ public class PacketPlayOutChat extends BetaPacket implements PacketPlayOut {
 	@Override
 	public void write(PacketDataSerializer s) {
 		s.writeStringBytes(data);
-		if(getVersion().getBigVersion() == BigClientVersion.v1_8 || getBigVersion() == BigClientVersion.v1_9)
+		if(getVersion().getBigVersion() == BigClientVersion.v1_8 || getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10)
 			s.writeByte(modus);
 	}
 

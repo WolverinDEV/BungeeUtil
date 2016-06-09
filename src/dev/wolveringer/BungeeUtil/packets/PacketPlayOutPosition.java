@@ -42,11 +42,8 @@ public class PacketPlayOutPosition extends Packet implements PacketPlayOut{
 	@Override
 	public void read(PacketDataSerializer s) {
 		loc = new Location(s.readDouble(), s.readDouble(), s.readDouble(), s.readFloat(), s.readFloat());
-		if(getVersion().getBigVersion() == BigClientVersion.v1_7)
-			ground = s.readBoolean();
-		else if(getVersion().getBigVersion() == BigClientVersion.v1_8 || getBigVersion() == BigClientVersion.v1_9)// 
-			flag = (byte) s.readUnsignedByte();
-		if(getVersion().getBigVersion() == BigClientVersion.v1_9)
+		flag = (byte) s.readUnsignedByte();
+		if(getVersion().getBigVersion() == BigClientVersion.v1_9  || getBigVersion() == BigClientVersion.v1_10)
 			teleportId = s.readVarInt();
 	}
 
@@ -61,11 +58,8 @@ public class PacketPlayOutPosition extends Packet implements PacketPlayOut{
 		s.writeDouble(loc.getZ());
 		s.writeFloat(loc.getYaw());
 		s.writeFloat(loc.getPitch());
-		if(getVersion().getBigVersion() == BigClientVersion.v1_7)
-			s.writeBoolean(ground);
-		else if(getVersion().getBigVersion() == BigClientVersion.v1_8 || getBigVersion() == BigClientVersion.v1_9)
-			s.writeByte(flag);
-		if(getVersion().getBigVersion() == BigClientVersion.v1_9)
+		s.writeByte(flag);
+		if(getVersion().getBigVersion() == BigClientVersion.v1_9  || getBigVersion() == BigClientVersion.v1_10)
 			s.writeVarInt(teleportId);
 	}
 

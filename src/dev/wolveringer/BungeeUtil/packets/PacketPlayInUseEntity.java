@@ -25,8 +25,8 @@ public class PacketPlayInUseEntity extends Packet implements PacketPlayIn {
 	public void read(PacketDataSerializer s) {
 		target = getBigVersion() == BigClientVersion.v1_7 ? s.readInt() : s.readVarInt();
 		action = Action.values()[getBigVersion() == BigClientVersion.v1_7 ? s.readByte() : s.readVarInt()];
-		if ((getBigVersion() == BigClientVersion.v1_8 || getBigVersion() == BigClientVersion.v1_9) && action == Action.INTERACT_AT) location = new Vector3f(s.readFloat(), s.readFloat(), s.readFloat());
-		if (getBigVersion() == BigClientVersion.v1_9 && action != Action.ATTACK) hand = s.readVarInt();
+		if ((getBigVersion() == BigClientVersion.v1_8 || getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10) && action == Action.INTERACT_AT) location = new Vector3f(s.readFloat(), s.readFloat(), s.readFloat());
+		if ((getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10) && action != Action.ATTACK) hand = s.readVarInt();
 	}
 	
 	@Override
@@ -35,7 +35,7 @@ public class PacketPlayInUseEntity extends Packet implements PacketPlayIn {
 			s.writeInt(target);
 			s.writeByte(action.ordinal());
 		}
-		else if (getBigVersion() == BigClientVersion.v1_8 || getBigVersion() == BigClientVersion.v1_9) {
+		else if (getBigVersion() == BigClientVersion.v1_8 || getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10) {
 			s.writeVarInt(target);
 			s.writeVarInt(action.ordinal());
 			if (action == Action.INTERACT_AT) {
@@ -43,7 +43,7 @@ public class PacketPlayInUseEntity extends Packet implements PacketPlayIn {
 				s.writeFloat(location.getY());
 				s.writeFloat(location.getZ());
 			}
-			if (getBigVersion() == BigClientVersion.v1_9 && action != Action.ATTACK) s.writeVarInt(hand);
+			if ((getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10) && action != Action.ATTACK) s.writeVarInt(hand);
 		}
 	}
 	

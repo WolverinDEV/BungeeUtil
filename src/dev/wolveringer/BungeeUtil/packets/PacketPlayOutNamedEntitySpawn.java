@@ -69,29 +69,14 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutEntityAbstract i
 
 	public void read(PacketDataSerializer paramPacketDataSerializer) {
 		setId(paramPacketDataSerializer.readVarInt());
-		if(getVersion().getBigVersion() != BigClientVersion.v1_7)
-			this.uuid = paramPacketDataSerializer.readUUID();
-		else{
-			String uuid = paramPacketDataSerializer.readString(-1);
-			this.uuid = uuid == null ? null : UUID.fromString(getVersion().getVersion() >= 5 ? uuid : uuid.replaceFirst("([0-9a-fA-F]{8})([0-9a-fA-F]{4})([0-9a-fA-F]{4})([0-9a-fA-F]{4})([0-9a-fA-F]+)", "$1-$2-$3-$4-$5"));
-		}
-		if(getVersion().getBigVersion() == BigClientVersion.v1_7 && getVersion().getVersion() >= 5){
-			p = new GameProfile(uuid, paramPacketDataSerializer.readString(-1));
-			int i = ((PacketDataSerializer_v1_7) paramPacketDataSerializer).readInteger();
-			for(int j = 0;j < i;++j){
-				String s = paramPacketDataSerializer.readString(32767);
-				String s1 = paramPacketDataSerializer.readString(32767);
-				String s2 = paramPacketDataSerializer.readString(32767);
-				p.getProperties().put(s, new Property(s, s1, s2));
-			}
-		}
-		if(getBigVersion() == BigClientVersion.v1_9)
+		this.uuid = paramPacketDataSerializer.readUUID();
+		if(getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10)
 			loc = new Location(paramPacketDataSerializer.readDouble(), paramPacketDataSerializer.readDouble(), paramPacketDataSerializer.readDouble());
 		else
 			loc = new Location(paramPacketDataSerializer.readInt()/32, paramPacketDataSerializer.readInt()/32, paramPacketDataSerializer.readInt()/32);
 		this.yaw = paramPacketDataSerializer.readByte();
 		this.pitch = paramPacketDataSerializer.readByte();
-		if(getBigVersion() != BigClientVersion.v1_9)
+		if(getBigVersion() == BigClientVersion.v1_8)
 			this.item_id = paramPacketDataSerializer.readShort();
 		this.data = DataWatcher.createDataWatcher(getBigVersion(),paramPacketDataSerializer);
 	}
@@ -99,22 +84,8 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutEntityAbstract i
 	@SuppressWarnings("rawtypes")
 	public void write(PacketDataSerializer paramPacketDataSerializer) {
 		paramPacketDataSerializer.writeVarInt(getId());
-		if(getVersion().getBigVersion() != BigClientVersion.v1_7)
 			paramPacketDataSerializer.writeUUID(this.uuid);
-		else
-			paramPacketDataSerializer.writeString(getVersion().getVersion() >= 5 ? uuid.toString() : uuid == null ? "" : uuid.toString().replaceAll("-", ""));
-		if(getVersion().getBigVersion() == BigClientVersion.v1_7 && getVersion().getVersion() >= 5){
-			paramPacketDataSerializer.writeString(p.getName());
-			paramPacketDataSerializer.writeVarInt(p.getProperties().size());
-			Iterator iterator = p.getProperties().values().iterator();
-			while (iterator.hasNext()){
-				Property property = (Property) iterator.next();
-				paramPacketDataSerializer.writeString(property.getName());
-				paramPacketDataSerializer.writeString(property.getValue());
-				paramPacketDataSerializer.writeString(property.getSignature());
-			}
-		}
-		if(getBigVersion() == BigClientVersion.v1_9){
+		if(getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10){
 			paramPacketDataSerializer.writeDouble(loc.getX());
 			paramPacketDataSerializer.writeDouble(loc.getY());
 			paramPacketDataSerializer.writeDouble(loc.getZ());
@@ -127,7 +98,7 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutEntityAbstract i
 		}
 		paramPacketDataSerializer.writeByte(this.yaw);
 		paramPacketDataSerializer.writeByte(this.pitch);
-		if(getBigVersion() != BigClientVersion.v1_9)
+		if(getBigVersion() == BigClientVersion.v1_8)
 			paramPacketDataSerializer.writeShort(this.item_id);
 		this.data.write(paramPacketDataSerializer);
 	}

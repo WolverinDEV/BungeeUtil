@@ -36,7 +36,7 @@ public abstract class Packet {
 		public boolean isValid() {
 			return id > 0 && version != null && version != ProtocollVersion.Unsupported;
 		}
-
+		
 		@Override
 		public String toString() {
 			return "ProtocollId [version=" + version + ", id=" + Integer.toHexString(id) + "]";
@@ -55,80 +55,80 @@ public abstract class Packet {
 	}
 	
 	static {
-		registerPacket(Protocol.LOGIN, Direction.TO_CLIENT, 0x00, 0x00, PacketLoginDisconnect.class);
+		registerPacket(Protocol.LOGIN, Direction.TO_CLIENT, PacketLoginDisconnect.class, new ProtocollId(BigClientVersion.v1_8, 0x00), new ProtocollId(BigClientVersion.v1_9, 0x00), new ProtocollId(BigClientVersion.v1_10, 0x00));
 		
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x02, 0x0F, PacketPlayOutChat.class); // ->0x0F
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutPlayerListHeaderFooter.class, new ProtocollId(BigClientVersion.v1_8, 0x47), new ProtocollId(BigClientVersion.v1_9, 0x48), new ProtocollId(ProtocollVersion.v1_9_4, 0x47));// ->0x48
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutChat.class, new ProtocollId(BigClientVersion.v1_8, 0x02), new ProtocollId(BigClientVersion.v1_9, 0x0F)); // ->0x0F
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutPlayerListHeaderFooter.class, new ProtocollId(BigClientVersion.v1_8, 0x47), new ProtocollId(BigClientVersion.v1_9, 0x48), new ProtocollId(ProtocollVersion.v1_9_4, 0x47), new ProtocollId(BigClientVersion.v1_10, 0x47));// ->0x48
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, null, new ProtocollId(ProtocollVersion.v1_9_4, 0x48));
 		
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x08, 0x2E, PacketPlayOutPosition.class); // Changed -> 0x2E
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutPosition.class, new ProtocollId(BigClientVersion.v1_8, 0x08), new ProtocollId(BigClientVersion.v1_9, 0x2E), new ProtocollId(BigClientVersion.v1_10, 0x2E)); // Changed -> 0x2E
 		
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutEntityTeleport.class, new ProtocollId(BigClientVersion.v1_8, 0x18), new ProtocollId(BigClientVersion.v1_9, 0x4A), new ProtocollId(ProtocollVersion.v1_9_4, 0x49)); // Changed -> 0x2E | 1.9.4 other id!
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutEntityTeleport.class, new ProtocollId(BigClientVersion.v1_8, 0x18), new ProtocollId(BigClientVersion.v1_9, 0x4A), new ProtocollId(ProtocollVersion.v1_9_4, 0x49), new ProtocollId(BigClientVersion.v1_10, 0x49)); // Changed -> 0x2E | 1.9.4 other id!
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, null, new ProtocollId(ProtocollVersion.v1_9_4, 0x4A));
 		
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x19, 0x34, PacketPlayOutEntityHeadRotation.class);
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutEntityHeadRotation.class, new ProtocollId(BigClientVersion.v1_8, 0x19), new ProtocollId(BigClientVersion.v1_9, 0x34), new ProtocollId(BigClientVersion.v1_10, 0x34));
 		
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x32, 0x11, PacketPlayOutTransaction.class); // -> 0x11
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x2E, 0x12, PacketPlayOutCloseWindow.class); // -> 0x12
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x2D, 0x13, PacketPlayOutOpenWindow.class); // -> 0x13
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x30, 0x14, PacketPlayOutWindowItems.class);// -> 0x14
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x31, 0x15, PacketPlayOutWindowData.class);// -> 0x15
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x2F, 0x16, PacketPlayOutSetSlot.class); // -> 0x16
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutTransaction.class, new ProtocollId(BigClientVersion.v1_8, 0x32), new ProtocollId(BigClientVersion.v1_9, 0x11), new ProtocollId(BigClientVersion.v1_10, 0x11)); // -> 0x11
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutCloseWindow.class, new ProtocollId(BigClientVersion.v1_8, 0x2E), new ProtocollId(BigClientVersion.v1_9, 0x12), new ProtocollId(BigClientVersion.v1_10, 0x12));// -> 0x12
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutOpenWindow.class, new ProtocollId(BigClientVersion.v1_8, 0x2D), new ProtocollId(BigClientVersion.v1_9, 0x13), new ProtocollId(BigClientVersion.v1_10, 0x13)); // -> 0x13
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutWindowItems.class, new ProtocollId(BigClientVersion.v1_8, 0x30), new ProtocollId(BigClientVersion.v1_9, 0x14), new ProtocollId(BigClientVersion.v1_10, 0x14));// -> 0x14
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutWindowData.class, new ProtocollId(BigClientVersion.v1_8, 0x31), new ProtocollId(BigClientVersion.v1_9, 0x15), new ProtocollId(BigClientVersion.v1_10, 0x15));// -> 0x15
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutSetSlot.class, new ProtocollId(BigClientVersion.v1_8, 0x2F), new ProtocollId(BigClientVersion.v1_9, 0x16), new ProtocollId(BigClientVersion.v1_10, 0x16)); // -> 0x16
 		
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x3F, 0x18, PacketPlayOutPluginMessage.class);
+		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayOutPluginMessage.class, new ProtocollId(BigClientVersion.v1_8, 0x3F), new ProtocollId(BigClientVersion.v1_9, 0x18), new ProtocollId(BigClientVersion.v1_10, 0x18));
 		
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x04, 0x3C, PacketPlayOutEntityEquipment.class); // Chaned
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutEntityEquipment.class, new ProtocollId(BigClientVersion.v1_8, 0x04), new ProtocollId(BigClientVersion.v1_9, 0x3C), new ProtocollId(BigClientVersion.v1_10, 0x3C)); // Chaned
 		
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x2A, 0x22, PacketPlayOutWorldParticles.class);
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutWorldParticles.class, new ProtocollId(BigClientVersion.v1_8, 0x2A), new ProtocollId(BigClientVersion.v1_9, 0x22), new ProtocollId(BigClientVersion.v1_10, 0x22));
 		
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x40, 0x1A, PacketPlayOutDisconnect.class); // 0x1A
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutDisconnect.class, new ProtocollId(BigClientVersion.v1_8, 0x40), new ProtocollId(BigClientVersion.v1_9, 0x1A), new ProtocollId(BigClientVersion.v1_10, 0x1A)); // 0x1A
 		
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x3E, 0x41, PacketPlayOutScoreboardTeam.class); // -> 0x41
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x3D, 0x38, PacketPlayOutScoreboardDisplayObjective.class);// -> 0x38
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x3B, 0x3F, PacketPlayOutScoreboardObjective.class); // -> 0x3F
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x3C, 0x42, PacketPlayOutScoreboardScore.class); // -> 0x42
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutScoreboardTeam.class, new ProtocollId(BigClientVersion.v1_8, 0x3E), new ProtocollId(BigClientVersion.v1_9, 0x41), new ProtocollId(BigClientVersion.v1_10, 0x41)); // -> 0x41
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutScoreboardDisplayObjective.class, new ProtocollId(BigClientVersion.v1_8, 0x3D), new ProtocollId(BigClientVersion.v1_9, 0x38), new ProtocollId(BigClientVersion.v1_10, 0x38));// -> 0x38
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutScoreboardObjective.class, new ProtocollId(BigClientVersion.v1_8, 0x3B), new ProtocollId(BigClientVersion.v1_9, 0x3F), new ProtocollId(BigClientVersion.v1_10, 0x3F)); // -> 0x3F
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutScoreboardScore.class, new ProtocollId(BigClientVersion.v1_8, 0x3C), new ProtocollId(BigClientVersion.v1_9, 0x42), new ProtocollId(BigClientVersion.v1_10, 0x42)); // -> 0x42
 		
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x37, 0x07, PacketPlayOutStatistic.class); // -> 0x07
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x13, 0x30, PacketPlayOutEntityDestroy.class);// -> 0x30
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutEntityEffect.class, new ProtocollId(BigClientVersion.v1_8, 0x1D), new ProtocollId(BigClientVersion.v1_9, 0x4C), new ProtocollId(ProtocollVersion.v1_9_4, 0x4B));// Changed ->
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutStatistic.class, new ProtocollId(BigClientVersion.v1_8, 0x37), new ProtocollId(BigClientVersion.v1_9, 0x07), new ProtocollId(BigClientVersion.v1_10, 0x07)); // -> 0x07
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutEntityDestroy.class, new ProtocollId(BigClientVersion.v1_8, 0x13), new ProtocollId(BigClientVersion.v1_9, 0x30), new ProtocollId(BigClientVersion.v1_10, 0x30));// -> 0x30
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutEntityEffect.class, new ProtocollId(BigClientVersion.v1_8, 0x1D), new ProtocollId(BigClientVersion.v1_9, 0x4C), new ProtocollId(ProtocollVersion.v1_9_4, 0x4B), new ProtocollId(BigClientVersion.v1_10, 0x4B));// Changed ->
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, null, new ProtocollId(ProtocollVersion.v1_9_4, 0x4C));
 		
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x1E, 0x31, PacketPlayOutRemoveEntityEffect.class);
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x2B, 0x1E, PacketPlayOutGameStateChange.class);// -> 0x31
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutRemoveEntityEffect.class, new ProtocollId(BigClientVersion.v1_8, 0x1E), new ProtocollId(BigClientVersion.v1_9, 0x31), new ProtocollId(BigClientVersion.v1_10, 0x31));
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutGameStateChange.class, new ProtocollId(BigClientVersion.v1_8, 0x2B), new ProtocollId(BigClientVersion.v1_9, 0x1E), new ProtocollId(BigClientVersion.v1_10, 0x1E));// -> 0x31
 		
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x38, 0x2D, PacketPlayOutPlayerInfo.class);// -> 0x2D
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutPlayerInfo.class, new ProtocollId(BigClientVersion.v1_8, 0x38), new ProtocollId(BigClientVersion.v1_9, 0x2D), new ProtocollId(BigClientVersion.v1_10, 0x2D));// -> 0x2D
 		
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x09, 0x37, PacketPlayOutHeldItemSlot.class);// -> 0x37
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutUpdateSign.class,new ProtocollId(BigClientVersion.v1_8, 0x33)); //1.9 -> TitleEntityNBTData ;)
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutHeldItemSlot.class, new ProtocollId(BigClientVersion.v1_8, 0x09), new ProtocollId(BigClientVersion.v1_9, 0x37), new ProtocollId(BigClientVersion.v1_10, 0x37));// -> 0x37
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutUpdateSign.class, new ProtocollId(BigClientVersion.v1_8, 0x33)); // 1.9 -> TitleEntityNBTData ;)
 		
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, null, 0x0C, PacketPlayOutBossBar.class); // Only 1.9 :) Best Bar-Update Ever!
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutBossBar.class, new ProtocollId(BigClientVersion.v1_9, 0x0C), new ProtocollId(BigClientVersion.v1_10, 0x0C)); // Only 1.9 :) Best Bar-Update Ever!
 		
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutNamedSoundEffect.class, new ProtocollId(BigClientVersion.v1_8, 0x29), new ProtocollId(BigClientVersion.v1_9, 0x19), new ProtocollId(ProtocollVersion.v1_9_4, 0x46)); // Changed
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutNamedSoundEffect.class, new ProtocollId(BigClientVersion.v1_8, 0x29), new ProtocollId(BigClientVersion.v1_9, 0x19), new ProtocollId(ProtocollVersion.v1_9_4, 0x46), new ProtocollId(BigClientVersion.v1_10, 0x46)); // Changed
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, null, new ProtocollId(ProtocollVersion.v1_9_4, 0x19));
 		
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x0C, 0x05, PacketPlayOutNamedEntitySpawn.class);
-		//registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x21, PacketPlayOutMapChunk.class); //TODO Chunk Serelizer (Premium bungee src)
-		//registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x26, PacketPlayOutMapChunkBulk.class); //TODO Chunk Serelizer (Premium bungee src)
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutNamedEntitySpawn.class, new ProtocollId(BigClientVersion.v1_8, 0x0C), new ProtocollId(BigClientVersion.v1_9, 0x05), new ProtocollId(BigClientVersion.v1_10, 0x05));
+		// registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x21, PacketPlayOutMapChunk.class, new ProtocollId(BigClientVersion.v1_8, 0x00), new ProtocollId(BigClientVersion.v1_9, 0x00), new ProtocollId(BigClientVersion.v1_10, 0x00); //TODO Chunk Serelizer (Premium bungee src)
+		// registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x26, PacketPlayOutMapChunkBulk.class, new ProtocollId(BigClientVersion.v1_8, 0x00), new ProtocollId(BigClientVersion.v1_9, 0x00), new ProtocollId(BigClientVersion.v1_10, 0x00); //TODO Chunk Serelizer (Premium bungee src)
 		
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x16, 0x03, PacketPlayInClientState.class); // Changed
+		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInClientState.class, new ProtocollId(BigClientVersion.v1_8, 0x16), new ProtocollId(BigClientVersion.v1_9, 0x03), new ProtocollId(BigClientVersion.v1_10, 0x03)); // Changed
 		
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x17, 0x09, PacketPlayInPluginMessage.class);
-
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x01, 0x02, PacketPlayInChat.class); // -> 0x02
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x02, 0x0A, PacketPlayInUseEntity.class); // -> changed
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x09, 0x17, PacketPlayInHeldItemSlot.class);// -> 0x17
+		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInPluginMessage.class, new ProtocollId(BigClientVersion.v1_8, 0x17), new ProtocollId(BigClientVersion.v1_9, 0x09), new ProtocollId(BigClientVersion.v1_10, 0x09));
 		
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x04, 0x0C, PacketPlayInPosition.class);// -> 0x0C
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x06, 0x0D, PacketPlayInPositionLook.class);// -> 0x0D
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x05, 0x0E, PacketPlayInLook.class);// -> 0x0E
+		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInChat.class, new ProtocollId(BigClientVersion.v1_8, 0x01), new ProtocollId(BigClientVersion.v1_9, 0x02), new ProtocollId(BigClientVersion.v1_10, 0x02)); // -> 0x02
+		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInUseEntity.class, new ProtocollId(BigClientVersion.v1_8, 0x02), new ProtocollId(BigClientVersion.v1_9, 0x0A), new ProtocollId(BigClientVersion.v1_10, 0x0A)); // -> changed
+		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInHeldItemSlot.class, new ProtocollId(BigClientVersion.v1_8, 0x09), new ProtocollId(BigClientVersion.v1_9, 0x17), new ProtocollId(BigClientVersion.v1_10, 0x17));// -> 0x17
 		
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x0E, 0x07, PacketPlayInWindowClick.class); // 0x07
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x0D, 0x08, PacketPlayInCloseWindow.class); // 0x08
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x07, 0x13, PacketPlayInBlockDig.class); // 0x13
+		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInPosition.class, new ProtocollId(BigClientVersion.v1_8, 0x04), new ProtocollId(BigClientVersion.v1_9, 0x0C), new ProtocollId(BigClientVersion.v1_10, 0x0C));// -> 0x0C
+		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInPositionLook.class, new ProtocollId(BigClientVersion.v1_8, 0x06), new ProtocollId(BigClientVersion.v1_9, 0x0D), new ProtocollId(BigClientVersion.v1_10, 0x0D));// -> 0x0D
+		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInLook.class, new ProtocollId(BigClientVersion.v1_8, 0x05), new ProtocollId(BigClientVersion.v1_9, 0x0E), new ProtocollId(BigClientVersion.v1_10, 0x0E));// -> 0x0E
 		
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x0A, 0x1A, PacketPlayInArmAnimation.class);
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x08, 0x1C, PacketPlayInBlockPlace.class);
-		// TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x12, PacketPlayInUpdateSign.class); //Changed from ChatComponent to String
+		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInWindowClick.class, new ProtocollId(BigClientVersion.v1_8, 0x0E), new ProtocollId(BigClientVersion.v1_9, 0x07), new ProtocollId(BigClientVersion.v1_10, 0x07)); // 0x07
+		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInCloseWindow.class, new ProtocollId(BigClientVersion.v1_8, 0x0D), new ProtocollId(BigClientVersion.v1_9, 0x08), new ProtocollId(BigClientVersion.v1_10, 0x08)); // 0x08
+		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInBlockDig.class, new ProtocollId(BigClientVersion.v1_8, 0x07), new ProtocollId(BigClientVersion.v1_9, 0x13), new ProtocollId(BigClientVersion.v1_10, 0x13)); // 0x13
+		
+		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInArmAnimation.class, new ProtocollId(BigClientVersion.v1_8, 0x0A), new ProtocollId(BigClientVersion.v1_9, 0x1A), new ProtocollId(BigClientVersion.v1_10, 0x1A));
+		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInBlockPlace.class, new ProtocollId(BigClientVersion.v1_8, 0x08), new ProtocollId(BigClientVersion.v1_9, 0x1C), new ProtocollId(BigClientVersion.v1_10, 0x1C));
+		// TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x12, PacketPlayInUpdateSign.class, new ProtocollId(BigClientVersion.v1_8, 0x00), new ProtocollId(BigClientVersion.v1_9, 0x00), new ProtocollId(BigClientVersion.v1_10, 0x00); //Changed from ChatComponent to String
 	}
 	
 	public static int calculate(ProtocollVersion version, Protocol p, Direction d, Integer id) {

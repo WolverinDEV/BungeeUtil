@@ -15,19 +15,17 @@ public class PacketPlayInBlockPlace extends Packet implements PacketPlayIn {
 	private Item item;
 	private Vector3f cursorPosition;
 
-	public PacketPlayInBlockPlace() {
-		super(0x08);
-	}
+	public PacketPlayInBlockPlace() {}
 
 	@Override
 	public void read(PacketDataSerializer s) {
 		loc = s.readBlockPosition();
-		face = getBigVersion() == BigClientVersion.v1_9 ? s.readVarInt() : s.readUnsignedByte();
-		if(getBigVersion() == BigClientVersion.v1_9)
+		face = (getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10) ? s.readVarInt() : s.readUnsignedByte();
+		if(getBigVersion() == BigClientVersion.v1_9  || getBigVersion() == BigClientVersion.v1_10)
 			hand = s.readVarInt();
 		if(face == 255)
 			loc.setY(255);
-		if(getBigVersion() != BigClientVersion.v1_9)
+		if(getBigVersion() == BigClientVersion.v1_8)
 			item = s.readItem();
 		cursorPosition = new Vector3f((float) s.readUnsignedByte() / 16.0F, (float) s.readUnsignedByte() / 16.0F, (float) s.readUnsignedByte() / 16.0F);
 	}
@@ -35,14 +33,14 @@ public class PacketPlayInBlockPlace extends Packet implements PacketPlayIn {
 	@Override
 	public void write(PacketDataSerializer s) {
 		s.writeBlockPosition(loc);
-		if(getBigVersion() == BigClientVersion.v1_9)
+		if(getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10)
 			s.writeVarInt(face);
 		else
 			s.writeByte(face);
-		if(getBigVersion() == BigClientVersion.v1_9)
+		if(getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10)
 			s.writeVarInt(hand);
-		if(getBigVersion() != BigClientVersion.v1_9)
-		s.writeItem(item);
+		if(getBigVersion() == BigClientVersion.v1_8)
+			s.writeItem(item);
 		s.writeByte((int) (cursorPosition.getX() * 16.0F));
 		s.writeByte((int) (cursorPosition.getY() * 16.0F));
 		s.writeByte((int) (cursorPosition.getZ() * 16.0F));

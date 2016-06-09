@@ -3,11 +3,11 @@ package dev.wolveringer.api.datawatcher.impl;
 import dev.wolveringer.api.datawatcher.DataWatcher;
 import dev.wolveringer.api.datawatcher.EntityDataWatcher;
 
-public class v1_9_EntityDataWatcher implements EntityDataWatcher{
+public class v1_10_EntityDataWatcher implements EntityDataWatcher{
 	
 	protected DataWatcher watcher;
 	
-	protected v1_9_EntityDataWatcher(DataWatcher dataWatcher) {
+	protected v1_10_EntityDataWatcher(DataWatcher dataWatcher) {
 		this.watcher = dataWatcher;
 	}
 	
@@ -151,8 +151,10 @@ public class v1_9_EntityDataWatcher implements EntityDataWatcher{
 	
 	@Override
 	public boolean hasGravity() {
-		return true;
+		return watcher.getByte(5) == 1;
 	}
 	@Override
-	public void setApplayGravity(boolean flag) {}
+	public void setApplayGravity(boolean flag) {
+		watcher.setValue(5, flag ? 1 : 0);
+	}
 }

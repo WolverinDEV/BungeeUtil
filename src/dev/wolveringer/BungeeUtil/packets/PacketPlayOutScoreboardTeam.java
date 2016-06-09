@@ -92,80 +92,44 @@ public class PacketPlayOutScoreboardTeam extends Packet implements PacketPlayOut
 	
 	@Override
 	public void write(PacketDataSerializer s) {
-		if (getVersion().getBigVersion() == BigClientVersion.v1_8 || getBigVersion() == BigClientVersion.v1_9) {
-			// TODO 1.8 -> done??
-			s.writeString(team);
-			s.writeByte(action.getAction());
-			if (action.getAction() == 0 || action.getAction() == 2) {
-				s.writeString(displayName);
-				s.writeString(prefix);
-				s.writeString(suffix);
-				s.writeByte(friendly_fire);
-				if(tag == null)
-					tag = NameTag.VISIABLE;
-				s.writeString(tag.getIdentifire());
-				if (getBigVersion() == BigClientVersion.v1_9) s.writeString(collisionRule);
-				s.writeByte(color);
-			}
-			if (action.getAction() == 0 || action.getAction() == 3 || action.getAction() == 4) {
-				s.writeVarInt(player.length);
-				for (String x : player)
-					s.writeString(x);
-			}
+		s.writeString(team);
+		s.writeByte(action.getAction());
+		if (action.getAction() == 0 || action.getAction() == 2) {
+			s.writeString(displayName);
+			s.writeString(prefix);
+			s.writeString(suffix);
+			s.writeByte(friendly_fire);
+			if (tag == null) tag = NameTag.VISIABLE;
+			s.writeString(tag.getIdentifire());
+			if (getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10) s.writeString(collisionRule);
+			s.writeByte(color);
 		}
-		else {
-			s.writeString(team);
-			s.writeByte(action.getAction());
-			if (action.getAction() == 0 || action.getAction() == 2) {
-				s.writeString(displayName);
-				s.writeString(prefix);
-				s.writeString(suffix);
-				s.writeByte(friendly_fire);
-			}
-			if (action.getAction() == 0 || action.getAction() == 3 || action.getAction() == 4) {
-				s.writeShort(player.length);
-				for (String x : player)
-					s.writeString(x);
-			}
+		if (action.getAction() == 0 || action.getAction() == 3 || action.getAction() == 4) {
+			s.writeVarInt(player.length);
+			for (String x : player)
+				s.writeString(x);
 		}
 	}
 	
 	public void read(PacketDataSerializer s) {
-		if (getVersion().getBigVersion() == BigClientVersion.v1_8 || getBigVersion() == BigClientVersion.v1_9) {
-			team = s.readString(16);
-			action = Action.fromInt(s.readByte());
-			if (action.getAction() == 0 || action.getAction() == 2) {
-				displayName = s.readString(32);
-				prefix = s.readString(16);
-				suffix = s.readString(16);
-				friendly_fire = s.readByte();
-				tag = NameTag.fromString(s.readString(32));
-				if (getBigVersion() == BigClientVersion.v1_9) collisionRule = s.readString(-1);
-				color = s.readByte();
-			}
-			if (action.getAction() == 0 || action.getAction() == 3 || action.getAction() == 4) {
-				int i = PacketDataSerializer.readVarInt(s);
-				player = new String[i];
-				for (int x = 0; x < i; x++)
-					player[x] = s.readString(40);
-			}
+		team = s.readString(16);
+		action = Action.fromInt(s.readByte());
+		if (action.getAction() == 0 || action.getAction() == 2) {
+			displayName = s.readString(32);
+			prefix = s.readString(16);
+			suffix = s.readString(16);
+			friendly_fire = s.readByte();
+			tag = NameTag.fromString(s.readString(32));
+			if (getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10) collisionRule = s.readString(-1);
+			color = s.readByte();
 		}
-		else {
-			team = s.readString(16);
-			action = Action.fromInt(s.readByte());
-			if (action.getAction() == 0 || action.getAction() == 2) {
-				displayName = s.readString(32);
-				prefix = s.readString(16);
-				suffix = s.readString(16);
-				friendly_fire = s.readByte();
-			}
-			if (action.getAction() == 0 || action.getAction() == 3 || action.getAction() == 4) {
-				short i = s.readShort();
-				player = new String[i];
-				for (int x = 0; x < i; x++)
-					player[x] = s.readString(40);
-			}
+		if (action.getAction() == 0 || action.getAction() == 3 || action.getAction() == 4) {
+			int i = PacketDataSerializer.readVarInt(s);
+			player = new String[i];
+			for (int x = 0; x < i; x++)
+				player[x] = s.readString(40);
 		}
+		
 	}
 	
 	@Override

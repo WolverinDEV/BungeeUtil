@@ -11,7 +11,7 @@ import dev.wolveringer.packet.PacketDataSerializer;
 //1.8 -> 0x29
 public class PacketPlayOutNamedSoundEffect extends Packet implements PacketPlayOut{
 	private float volume;
-	private short pitch;
+	private float pitch;
 	private Location loc;
 	private String sound;
 	private int soundCategory;
@@ -43,12 +43,30 @@ public class PacketPlayOutNamedSoundEffect extends Packet implements PacketPlayO
 			loc = new Location(s.readInt(), s.readInt(), s.readInt()).dividide(8D);
 			volume = s.readFloat();
 			pitch = s.readUnsignedByte();
+		}else if(getBigVersion() == BigClientVersion.v1_10){
+			sound = s.readVarInt()+"";
+			soundCategory = s.readVarInt();
+			loc = new Location(s.readInt(), s.readInt(), s.readInt()).dividide(8D);
+			volume = s.readFloat();
+			pitch = s.readFloat();
 		}
 	}
 	
 	@Override
 	public void write(PacketDataSerializer s) {
-		if(getBigVersion() == BigClientVersion.v1_9){
+		if(getBigVersion() == BigClientVersion.v1_10){
+			s.writeVarInt(Integer.parseInt(sound));
+			s.writeVarInt(soundCategory);
+			loc.multiply(8D);
+			s.writeInt(loc.getBlockX());
+			s.writeInt(loc.getBlockY());
+			s.writeInt(loc.getBlockZ());
+			loc.dividide(8D);
+			s.writeFloat(volume);
+			s.writeFloat(
+					 pitch);
+		}
+		else if(getBigVersion() == BigClientVersion.v1_9){
 			if(getVersion().getProtocollVersion() == ProtocollVersion.v1_9_4){
 				s.writeVarInt(Integer.parseInt(sound));
 				s.writeVarInt(soundCategory);
@@ -58,7 +76,7 @@ public class PacketPlayOutNamedSoundEffect extends Packet implements PacketPlayO
 				s.writeInt(loc.getBlockZ());
 				loc.dividide(8D);
 				s.writeFloat(volume);
-				s.writeByte(pitch);
+				s.writeByte((int) pitch);
 			}
 			else
 			{
@@ -70,7 +88,7 @@ public class PacketPlayOutNamedSoundEffect extends Packet implements PacketPlayO
 				s.writeInt(loc.getBlockZ());
 				loc.dividide(8D);
 				s.writeFloat(volume);
-				s.writeByte(pitch);
+				s.writeByte((int) pitch);
 			}
 		}
 		else if(getBigVersion() == BigClientVersion.v1_8){
@@ -81,7 +99,7 @@ public class PacketPlayOutNamedSoundEffect extends Packet implements PacketPlayO
 			s.writeInt(loc.getBlockZ());
 			loc.dividide(8D);
 			s.writeFloat(volume);
-			s.writeByte(pitch);
+			s.writeByte((int) pitch);
 		}
 	}
 	
@@ -93,7 +111,7 @@ public class PacketPlayOutNamedSoundEffect extends Packet implements PacketPlayO
 		this.volume = volume;
 	}
 
-	public short getPitch() {
+	public float getPitch() {
 		return pitch;
 	}
 

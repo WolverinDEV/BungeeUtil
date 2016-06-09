@@ -31,17 +31,17 @@ public class PacketPlayOutEntityEffect extends Packet implements PacketPlayOut {
 		effect = s.readByte();
 		amplifier = s.readByte();
 		duration = getVersion().getBigVersion() == BigClientVersion.v1_7 ? s.readShort() : s.readVarInt();
-		hidden = getVersion().getBigVersion() == BigClientVersion.v1_8 ? s.readBoolean() : getBigVersion() == BigClientVersion.v1_9 ? s.readByte() == 1 : false;
+		hidden = getVersion().getBigVersion() == BigClientVersion.v1_8 ? s.readBoolean() : (getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10) ? s.readByte() == 1 : false;
 	}
 	
 	public void write(PacketDataSerializer s) {
-		if (getVersion().getBigVersion() == BigClientVersion.v1_8 || getVersion().getBigVersion() == BigClientVersion.v1_9) {
+		if (getVersion().getBigVersion() == BigClientVersion.v1_8 || getVersion().getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10) {
 			s.writeVarInt(entity);
 			s.writeByte(effect);
 			s.writeByte(amplifier);
 			s.writeVarInt(duration);
 			if (getBigVersion() == BigClientVersion.v1_8) s.writeBoolean(hidden);
-			else if (getBigVersion() == BigClientVersion.v1_9) s.writeByte(hidden == true ? 1 : 0);
+			else if (getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10) s.writeByte(hidden == true ? 1 : 0);
 		}
 		else if (getVersion().getBigVersion() == BigClientVersion.v1_7) {
 			s.writeInt(entity);

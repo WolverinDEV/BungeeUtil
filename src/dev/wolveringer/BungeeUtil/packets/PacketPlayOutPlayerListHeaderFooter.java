@@ -11,16 +11,13 @@ public class PacketPlayOutPlayerListHeaderFooter extends Packet implements Packe
 	private ByteString footer;
 
 	public PacketPlayOutPlayerListHeaderFooter() {
-		super(0x47);
 	}
 	
 	public PacketPlayOutPlayerListHeaderFooter(String header,String footer) {
-		super(0x47);
 		setHeader(ChatSerializer.fromMessage(header));
 		setFooter(ChatSerializer.fromMessage(footer));
 	}
 	public PacketPlayOutPlayerListHeaderFooter(IChatBaseComponent header,IChatBaseComponent footer) {
-		super(0x47);
 		setHeader(header);
 		setFooter(footer);
 	}

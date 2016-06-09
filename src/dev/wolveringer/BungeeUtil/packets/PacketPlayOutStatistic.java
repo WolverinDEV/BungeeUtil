@@ -31,7 +31,7 @@ public class PacketPlayOutStatistic extends Packet implements PacketPlayOut{
 			if(this.x == -2)
 				s.writeVarInt(stats.get(x));
 			else
-				s.writeVarInt(-1);
+				s.writeVarInt(this.x);
 		}
 	}
 

@@ -1,6 +1,7 @@
 package dev.wolveringer.api.datawatcher;
 
 import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
+import dev.wolveringer.api.datawatcher.impl.v1_10_DataWatcher;
 import dev.wolveringer.api.datawatcher.impl.v1_8_DataWatcher;
 import dev.wolveringer.api.datawatcher.impl.v1_9_DataWatcher;
 import dev.wolveringer.packet.PacketDataSerializer;
@@ -8,17 +9,20 @@ import dev.wolveringer.packet.PacketDataSerializer;
 public abstract class DataWatcher {
 	
 	public static DataWatcher createDataWatcher(BigClientVersion version){
-		if(version == BigClientVersion.v1_9)
-			return new v1_9_DataWatcher();
-		else
-			return new v1_8_DataWatcher();
+		return createDataWatcher(version, null);
 	}
 	
 	public static DataWatcher createDataWatcher(BigClientVersion version,PacketDataSerializer watcher){
-		if(version == BigClientVersion.v1_9)
-			return new v1_9_DataWatcher(watcher);
-		else
-			return new v1_8_DataWatcher(watcher);
+		switch (version) {
+			case v1_8:
+				return new v1_8_DataWatcher(watcher);
+			case v1_9:
+				return new v1_9_DataWatcher(watcher);
+			case v1_10:
+				return new v1_10_DataWatcher(watcher);
+			default:
+				throw new RuntimeException("Cant find datawatcher for "+version);
+		}
 	}
 	
 	public abstract void write(PacketDataSerializer packetdataserializer);

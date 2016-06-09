@@ -30,7 +30,7 @@ public class PacketPlayOutEntityTeleport extends Packet implements PacketPlayOut
 			id = s.readInt();
 		else
 			id = s.readVarInt();
-		if(getBigVersion() == BigClientVersion.v1_9)
+		if(getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10)
 			loc = new Location(s.readDouble(), s.readDouble(), s.readDouble(),((float)s.readByte())/ 256.0F * 360.0F,((float)s.readByte())/ 256.0F * 360.0F);
 		else
 			loc = new Location(s.readInt(), s.readInt(), s.readInt(), ((float)s.readByte())/ 256.0F * 360.0F,((float)s.readByte())/ 256.0F * 360.0F).dividide(32D);
@@ -46,7 +46,7 @@ public class PacketPlayOutEntityTeleport extends Packet implements PacketPlayOut
 		}else{
 			s.writeVarInt(id);
 		}
-		if(getBigVersion() == BigClientVersion.v1_9){
+		if(getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10){
 			s.writeDouble(loc.getX());
 			s.writeDouble(loc.getY());
 			s.writeDouble(loc.getZ());

@@ -34,7 +34,9 @@ public enum ClientVersion {
 	v1_9_1(107, BigClientVersion.v1_9, ProtocollVersion.v1_9),
 	v1_9_2(108, BigClientVersion.v1_9, ProtocollVersion.v1_9_2),
 	v1_9_3(109, BigClientVersion.v1_9, ProtocollVersion.v1_9_3),
-	v1_9_4(110, BigClientVersion.v1_9, ProtocollVersion.v1_9_4);
+	v1_9_4(110, BigClientVersion.v1_9, ProtocollVersion.v1_9_4),
+	v1_9_5(110, BigClientVersion.v1_9, ProtocollVersion.v1_9_4),
+	v1_10_0(210, BigClientVersion.v1_10, ProtocollVersion.v1_10);
 	
 	@Getter
 	private int version;
@@ -56,11 +58,13 @@ public enum ClientVersion {
 		UnderknownVersion(0),
 		v1_7(1),
 		v1_8(2),
-		v1_9(3);
+		v1_9(3),
+		v1_10(7);
 		
 		private ProtocollVersion protocollVersion;
 		private int protocollVersionInt;
 		private ProtocollVersion[] protocollVersions;
+		
 		private BigClientVersion(int basedVersion) {
 			this.protocollVersionInt = basedVersion;
 		}
@@ -90,7 +94,8 @@ public enum ClientVersion {
 		v1_9(3, true),
 		v1_9_2(3, true),
 		v1_9_3(3, true),
-		v1_9_4(3, true);
+		v1_9_4(3, true),
+		v1_10(4, true);
 		
 		private int basedVersionInt;
 		private BigClientVersion basedVersion;

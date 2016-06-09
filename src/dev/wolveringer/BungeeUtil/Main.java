@@ -85,8 +85,8 @@ public class Main extends Plugin {
 		
 		try {
 			updater = new Updater("http://www.mcgalaxy.de/updater/updates.json");
-			if (Configuration.isUpdaterActive()) updater.loadData();
-			if (Configuration.isUpdaterActive()) if (updater.check()){
+			updater.loadData();
+			if (updater.check()){
 				setInformation("§cRestarting bungeecord");
 				sleep(1000);
 				setInformation(null);

@@ -18,7 +18,7 @@ public class PacketPlayInArmAnimation extends Packet implements PacketPlayIn {
 		if(getBigVersion() == BigClientVersion.v1_7){
 			this.id = s.readInt();
 			this.type = s.readByte();
-		}else if(getBigVersion() == BigClientVersion.v1_9)
+		}else if(getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10)
 			this.type = s.readVarInt();
 		else
 			this.type = 0;
@@ -30,7 +30,7 @@ public class PacketPlayInArmAnimation extends Packet implements PacketPlayIn {
 			s.writeInt(id);
 			s.writeByte(type);
 		}
-		else if(getBigVersion() == BigClientVersion.v1_9)
+		else if(getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10)
 			s.writeVarInt(type);
 	}
 	

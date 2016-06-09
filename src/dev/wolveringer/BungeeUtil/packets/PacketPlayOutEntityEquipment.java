@@ -37,14 +37,14 @@ public class PacketPlayOutEntityEquipment extends Packet implements PacketPlayOu
 	@Override
 	public void read(PacketDataSerializer s) {
 		eid = s.readVarInt();
-		slot = Slot.values()[getBigVersion() == BigClientVersion.v1_9 ? s.readVarInt() : s.readShort()];
+		slot = Slot.values()[(getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10) ? s.readVarInt() : s.readShort()];
 		item= s.readItem();
 	}
 
 	@Override
 	public void write(PacketDataSerializer s) {
 		s.writeVarInt(eid);
-		if(getBigVersion() == BigClientVersion.v1_9)
+		if(getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10)
 			s.writeVarInt(slot.ordinal());
 		else
 			s.writeShort(slot.ordinal());

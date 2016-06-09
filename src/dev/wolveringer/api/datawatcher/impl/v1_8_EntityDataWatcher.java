@@ -142,4 +142,11 @@ public class v1_8_EntityDataWatcher implements EntityDataWatcher{
 	public void setSlient(boolean flag) {
 		throw new RuntimeException("Methode not implimented in 1.8");
 	}
+	
+	@Override
+	public boolean hasGravity() {
+		return true;
+	}
+	@Override
+	public void setApplayGravity(boolean flag) {}
 }

@@ -8,11 +8,9 @@ public class PacketPlayOutEntityDestroy extends Packet implements PacketPlayOut{
 	private int[] entitys;
 
 	public PacketPlayOutEntityDestroy() {
-		super(0x13);
 	}
 
 	public PacketPlayOutEntityDestroy(int... paramVarArgs) {
-		super(0x13);
 		this.entitys = paramVarArgs;
 	}
 

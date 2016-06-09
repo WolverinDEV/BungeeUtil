@@ -24,17 +24,14 @@ public class PacketPlayOutUpdateHealth extends Packet implements PacketPlayOut{
 	@Override
 	public void read(PacketDataSerializer s) {
 		health = s.readFloat();
-		food = getVersion().getBigVersion() == BigClientVersion.v1_7?s.readShort():s.readVarInt();
+		food = s.readVarInt();
 		food_indicase = s.readFloat();
 	}
 
 	@Override
 	public void write(PacketDataSerializer s) {
 		s.writeFloat(health);
-		if(getVersion().getBigVersion() == BigClientVersion.v1_7)
-			s.writeShort(food);
-		else
-			s.writeVarInt(food);
+		s.writeVarInt(food);
 		s.writeFloat(food_indicase);
 	}
 

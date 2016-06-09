@@ -97,7 +97,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 			else return packet.setcompressedId(compressed).load(b, p.getVersion());
 		}
 		catch (Exception e) {
-			throw new RuntimeException("Packet error (Version: " + (p == null ? "unknown" : p.getVersion()) + ",Readed version: "+version+", Class: " + (cons == null || cons.getConstuctor() == null ? "null" : cons.getConstuctor().getDeclaringClass().getName()) + ", Id: 0x"+Integer.toHexString(id).toUpperCase()+") -> "+e.getMessage(),e);
+			throw new RuntimeException("Packet error (Version: " + (p == null ? "unknown" : p.getVersion()) + ", Readed version: "+version+", Class: " + (cons == null || cons.getConstuctor() == null ? "null" : cons.getConstuctor().getDeclaringClass().getName()) + ", Id: 0x"+Integer.toHexString(id).toUpperCase()+") -> "+e.getMessage(),e);
 		}
 	}
 	

@@ -24,24 +24,25 @@ import dev.wolveringer.chat.IChatBaseComponent;
 import dev.wolveringer.packet.PacketDataSerializer;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public class v1_9_DataWatcher extends DataWatcher{
-	private static final TObjectIntMap v1_9_classToId = new TObjectIntHashMap(10, 0.5F, -1);
+public class v1_10_DataWatcher extends DataWatcher{
+	private static final TObjectIntMap v1_10_classToId = new TObjectIntHashMap(10, 0.5F, -1);
 	
 	static {
-		v1_9_classToId.put(Byte.class, 0);
-		v1_9_classToId.put(Integer.class, 1);
-		v1_9_classToId.put(Float.class, 2);
-		v1_9_classToId.put(String.class, 3);
-		v1_9_classToId.put(IChatBaseComponent.class, 4);
-		v1_9_classToId.put(Item.class, 5);
-		v1_9_classToId.put(Boolean.class, 6);
-		v1_9_classToId.put(Vector3f.class, 7);
-		v1_9_classToId.put(BlockPosition.class, 8);
-		v1_9_classToId.put(OptionalBlockPosition.class, 9);
-		v1_9_classToId.put(Direction.class, 10);
-		v1_9_classToId.put(OptionalUUID.class, 11);
-		v1_9_classToId.put(BlockData.class, 12);
-		v1_9_classToId.put(Short.class, 13);
+		v1_10_classToId.put(Byte.class, 0);
+		v1_10_classToId.put(Integer.class, 1);
+		v1_10_classToId.put(Float.class, 2);
+		v1_10_classToId.put(String.class, 3);
+		v1_10_classToId.put(IChatBaseComponent.class, 4);
+		v1_10_classToId.put(Item.class, 5);
+		v1_10_classToId.put(Boolean.class, 6);
+		v1_10_classToId.put(Vector3f.class, 7);
+		v1_10_classToId.put(BlockPosition.class, 8);
+		v1_10_classToId.put(OptionalBlockPosition.class, 9);
+		v1_10_classToId.put(Direction.class, 10);
+		v1_10_classToId.put(OptionalUUID.class, 11);
+		v1_10_classToId.put(BlockData.class, 12);
+		
+		v1_10_classToId.put(Short.class, 13); //old
 	}
 	
 	@SuppressWarnings("serial")
@@ -69,13 +70,13 @@ public class v1_9_DataWatcher extends DataWatcher{
 		};
 	};
 	
-	public v1_9_DataWatcher(PacketDataSerializer paramPacketDataSerializer) {
+	public v1_10_DataWatcher(PacketDataSerializer paramPacketDataSerializer) {
 		this();
 		if(paramPacketDataSerializer != null)
 		this.objekts = read(paramPacketDataSerializer);
 	}
 	
-	public v1_9_DataWatcher() {
+	public v1_10_DataWatcher() {
 	}
 	
 	public void write(PacketDataSerializer packetdataserializer) {
@@ -90,8 +91,8 @@ public class v1_9_DataWatcher extends DataWatcher{
 	
 	private void write(PacketDataSerializer s, DataWatcherObjekt o) {
 			s.writeByte(o.getPostition());
-			int typeId = v1_9_classToId.get(o.getType());
-			if (typeId == 13) s.writeByte(v1_9_classToId.get(Integer.class));
+			int typeId = v1_10_classToId.get(o.getType());
+			if (typeId == 13) s.writeByte(v1_10_classToId.get(Integer.class));
 			else s.writeByte(typeId);
 			
 			switch (typeId) {
@@ -211,18 +212,18 @@ public class v1_9_DataWatcher extends DataWatcher{
 	}
 	
 	private static Class<?> getTypeId(int type) {
-			for (Object o : v1_9_classToId.keys())
-				if (v1_9_classToId.get(o) == type) return (Class<?>) o;
+			for (Object o : v1_10_classToId.keys())
+				if (v1_10_classToId.get(o) == type) return (Class<?>) o;
 		return null;
 	}
 	
 	@Override
 	public String toString() {
-		return "DataWatcher [v1_9] [objekts=" + objekts + "]";
+		return "DataWatcher [v1_10] [objekts=" + objekts + "]";
 	}
 	
 	public DataWatcher copy() {
-		v1_9_DataWatcher watcher = new v1_9_DataWatcher();
+		v1_10_DataWatcher watcher = new v1_10_DataWatcher();
 		watcher.objekts = new ArrayList<DataWatcherObjekt>(this.objekts);
 		return watcher;
 	}
@@ -233,11 +234,11 @@ public class v1_9_DataWatcher extends DataWatcher{
 	
 	public <T extends EntityDataWatcher> T getSpecialDataWatcher(Class<T> clazz) {
 		if(clazz.isAssignableFrom(EntityDataWatcher.class))
-			clazz = (Class<T>) v1_9_EntityDataWatcher.class;
+			clazz = (Class<T>) v1_10_EntityDataWatcher.class;
 		else if(clazz.isAssignableFrom(LivingEntityDataWatcher.class))
-			clazz = (Class<T>) v1_9_LivingEntityDataWatcher.class;
+			clazz = (Class<T>) v1_10_LivingEntityDataWatcher.class;
 		else if(clazz.isAssignableFrom(HumanDataWatcher.class))
-			clazz = (Class<T>) v1_9_HumanEntityDataWatcher.class;
+			clazz = (Class<T>) v1_10_HumanEntityDataWatcher.class;
 		if (watchers.get(clazz) == null) {
 			try {
 				watchers.put(clazz, clazz.getConstructor(DataWatcher.class).newInstance(this));

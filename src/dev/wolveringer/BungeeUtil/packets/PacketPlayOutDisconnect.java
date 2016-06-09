@@ -10,11 +10,9 @@ public class PacketPlayOutDisconnect extends Packet implements PacketPlayOut{
 	private String c;
 	
 	public PacketPlayOutDisconnect() {
-		super(0x40);
 	}
 	
 	public PacketPlayOutDisconnect(IChatBaseComponent c) {
-		super(0x40);
 		this.c = ChatSerializer.toJSONString(c);
 	}
 	
