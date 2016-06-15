@@ -48,8 +48,8 @@ public class PacketPlayOutBossBar extends Packet implements PacketPlayOut{
 	@SuppressWarnings("incomplete-switch")
 	@Override
 	public void read(PacketDataSerializer s) {
-		if(getBigVersion() != BigClientVersion.v1_9)
-			return;
+		if(getBigVersion() == BigClientVersion.v1_8)
+			throw new RuntimeException("BossBar packet is 1.9-1.10 only!");
 		barId = s.readUUID();
 		int action = s.readVarInt();
 		if(action >= Action.values().length){

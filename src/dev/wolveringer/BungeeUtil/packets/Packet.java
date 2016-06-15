@@ -112,7 +112,8 @@ public abstract class Packet {
 		
 		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInClientState.class, new ProtocollId(BigClientVersion.v1_8, 0x16), new ProtocollId(BigClientVersion.v1_9, 0x03), new ProtocollId(BigClientVersion.v1_10, 0x03)); // Changed
 		
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInPluginMessage.class, new ProtocollId(BigClientVersion.v1_8, 0x17), new ProtocollId(BigClientVersion.v1_9, 0x09), new ProtocollId(BigClientVersion.v1_10, 0x09));
+		//
+		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInPluginMessage.class,new ProtocollId(BigClientVersion.v1_8, 0x17),  new ProtocollId(BigClientVersion.v1_9, 0x09), new ProtocollId(BigClientVersion.v1_10, 0x09));
 		
 		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInChat.class, new ProtocollId(BigClientVersion.v1_8, 0x01), new ProtocollId(BigClientVersion.v1_9, 0x02), new ProtocollId(BigClientVersion.v1_10, 0x02)); // -> 0x02
 		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInUseEntity.class, new ProtocollId(BigClientVersion.v1_8, 0x02), new ProtocollId(BigClientVersion.v1_9, 0x0A), new ProtocollId(BigClientVersion.v1_10, 0x0A)); // -> changed

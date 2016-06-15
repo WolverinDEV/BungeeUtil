@@ -2,12 +2,12 @@ package dev.wolveringer.api.datawatcher.impl;
 
 import dev.wolveringer.api.datawatcher.DataWatcher;
 import dev.wolveringer.api.datawatcher.LivingEntityDataWatcher;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class v1_10_LivingEntityDataWatcher extends v1_9_EntityDataWatcher implements LivingEntityDataWatcher{
+public class v1_10_LivingEntityDataWatcher extends v1_10_EntityDataWatcher implements LivingEntityDataWatcher{
 	
 	public v1_10_LivingEntityDataWatcher(DataWatcher dataWatcher) {
 		super(dataWatcher);
-
 	}
 	
 	public void setHealth(float h) {
@@ -41,16 +41,18 @@ public class v1_10_LivingEntityDataWatcher extends v1_9_EntityDataWatcher implem
 	}
 
 	public void setAI(boolean flag) {
-		throw new RuntimeException("Methode not implimented in 1.9");
+		throw new RuntimeException("Methode not implimented in 1.10");
 	}
 
 	public boolean hasAI() {
-		throw new RuntimeException("Methode not implimented in 1.8");
+		throw new RuntimeException("Methode not implimented in 1.10");
 	}
 
 	@Override
 	public v1_10_LivingEntityDataWatcher injektDefault() {
 		super.injektDefault();
+		if(this.watcher.get(6) == null)
+			this.watcher.setValue(6, Byte.valueOf((byte)0));
 		if(this.watcher.get(7) == null)
 			this.watcher.setValue(7, Float.valueOf(20.0F));
 		if(this.watcher.get(8) == null)

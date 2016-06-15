@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
 import dev.wolveringer.BungeeUtil.CostumPrintStream;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.Material;
 import dev.wolveringer.BungeeUtil.Player;
-import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
 import dev.wolveringer.BungeeUtil.gameprofile.GameProfile;
+import dev.wolveringer.BungeeUtil.gameprofile.Property;
+import dev.wolveringer.BungeeUtil.gameprofile.PropertyMap;
 import dev.wolveringer.BungeeUtil.gameprofile.Skin;
 import dev.wolveringer.BungeeUtil.gameprofile.SkinFactory;
 import dev.wolveringer.BungeeUtil.item.Item;
@@ -24,11 +26,12 @@ import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardObjective.Type;
 import dev.wolveringer.NPC.InteractListener;
 import dev.wolveringer.NPC.NPC;
 import dev.wolveringer.animations.inventory.InventoryViewChangeAnimations;
-import dev.wolveringer.animations.inventory.LimetedScheduller;
 import dev.wolveringer.animations.inventory.InventoryViewChangeAnimations.AnimationType;
+import dev.wolveringer.animations.inventory.LimetedScheduller;
 import dev.wolveringer.api.SoundEffect;
 import dev.wolveringer.api.SoundEffect.SoundCategory;
 import dev.wolveringer.api.bossbar.BossBarManager.BossBar;
+import dev.wolveringer.api.datawatcher.HumanDataWatcher;
 import dev.wolveringer.api.gui.AnvilGui;
 import dev.wolveringer.api.gui.AnvilGuiListener;
 import dev.wolveringer.api.inventory.Inventory;
@@ -36,11 +39,13 @@ import dev.wolveringer.api.inventory.ItemContainer;
 import dev.wolveringer.api.particel.ParticleEffect;
 import dev.wolveringer.api.position.Location;
 import dev.wolveringer.api.scoreboard.Scoreboard;
+import dev.wolveringer.chat.ChatComponentText;
 import dev.wolveringer.chat.ChatSerializer;
 import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 import dev.wolveringer.profiler.ProfileMenue;
 import dev.wolveringer.profiler.Profiler;
 import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class DebugMenue {
 	public static void open(Player player){
@@ -112,6 +117,38 @@ public class DebugMenue {
 				c.setVisiable(p.getPlayer(), true);
 				ParticleEffect.HEART.display(0F, 0F, 1F, 0F, 1, c.getLocation(), p.getPlayer());
 				p.getPlayer().sendMessage("NCP is visiable");
+				
+				NPC npc = new NPC();
+				npc.setPing(1);
+		        npc.setPlayerListName(new ChatComponentText("§a-----NPC----"));
+		        npc.setTabListed(true);
+		        Item item = new Item(Material.WATCH);
+		        item.getItemMeta().setGlow(true);
+		        npc.getEquipment().setItemInHand(item);
+		        PropertyMap pm = new PropertyMap();
+		        pm.put("§c神奇的NPC", new Property("textures",
+		                "eyJ0aW1lc3RhbXAiOjE0NTg0NTMxNjM3MDksInByb2ZpbGVJZCI6ImNhZWZmYmFhMzdhZDRhYjI5Mjg5NGQxZDEzOTk4YTg5IiwicHJvZmlsZU5hbWUiOiJ3YXlfX3plciIsInNpZ25hdHVyZVJlcXVpcmVkIjp0cnVlLCJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmQzYzdmN2E3ZjIyZTU5NDIxYzRkZDI3NjY2ZDVlZTlmYzc4MTEwODE3MTU3MmQxYzRlMzZkMzhmMjZjOWQzIn19fQ==",
+		                "ofNqZSqPhaWL4b8mHRUpv+vUVw3bqXH1mhvoZzyaxXOTE4TqXfapJRTmct4KV5r25ezW9in9zryaadGX4yueERYZzUkVj5MJqduI44z/rqc1oy4NSTqRAHzaka6PWD/DZyG8kySKhDXBhwEKKeGTHUAeohbLtyfvs3FRLxMf6GkyEzibM32hj65eln9itaqKH6uU9l7bzjPfNx3RlLOg2LbmdBIajXffSDQBgklSOg/v/7OiD5fXYREWzYPNex5Iiw8id0NFTTpQE4Dvrv31ijXcnWsS4Mp62+zPYponsloPynZ9AqQaXVeuLJQhSwJktkavThqz9dfaS9+IGn1Ko7AUhFyLxWjqbet6M7sKd29sqlWbdxB8LMh6I+RMNb9Tx4yKa0EeedFHXfYMaURs2TdPMO2QtiM3nG+IieaXaZwh64wyf/u3iuu3sNd4/s1JmOM9nVYvVaIQVsT80HW/NQwz/N+ufJOh4L7unTt/Jlwm4DkldaTKzUiuVLB4ypYON2/Pa1dXBgRZbU7dCwjXuAL/Cox1UKqYcq3uEuCKhBWYFdEe2p7NDNTuFhjX38MP+h94SlFjbfaSpzDegjr92qO8r41JqpcyewQYI2fkwk8Ju9AJDMTpeoA6ofHEzAMhajXkViKvUPoPbl4HUDvtRBZu5k8dggWKQ83v1UXsDxQ="));
+		        npc.getProfile().setProperties(pm);
+		        HumanDataWatcher dw = npc.getDatawatcher();
+		        dw.setParicelColor(1224755642);
+		        dw.setSkinFlags((byte) 127);
+		        npc.setName("§c神奇的NPC");
+		        npc.addListener(new InteractListener() {
+
+		            @Override
+		            public void rightClick(Player p) {
+		                    p.sendMessage(new TextComponent("§c§l[NPC] §cHI! §c§l" + p.getDisplayName() + "  §c§l请先登录,再尝试打开"));
+		            }
+
+		            @Override
+		            public void leftClick(Player p) {
+		                p.sendMessage(new TextComponent("§c§l[NPC] §cHI! §c§l" + p.getDisplayName() + "  §a欢迎来到MFT服务器"));
+		            }
+		        });
+
+		        npc.setLocation(p.getPlayer().getLocation().add(0, 5, 0));
+		        npc.setVisiable(p.getPlayer(), true);
 			}
 		};
 		i.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR + "aTesting");

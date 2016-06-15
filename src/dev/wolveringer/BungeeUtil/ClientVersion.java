@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public enum ClientVersion {
 	UnderknownVersion(-1, BigClientVersion.UnderknownVersion, ProtocollVersion.Unsupported),
@@ -73,7 +75,7 @@ public enum ClientVersion {
 				protocollVersion = ProtocollVersion.values()[protocollVersionInt];
 			return protocollVersion;
 		}
-		
+
 		public ProtocollVersion[] getProtocollVersions(){
 			if(protocollVersions != null)
 				return protocollVersions;

@@ -18,15 +18,14 @@ public class PacketPlayOutPluginMessage extends Packet implements PacketPlayIn{
 	public void read(PacketDataSerializer s) {
 		channel = s.readString(-1);
 		data = s.copy(s.readerIndex(), s.readableBytes());
-		s.skipBytes(data.readableBytes());
+		s.skipBytes(s.readableBytes());
 	}
 
 	@Override
 	public void write(PacketDataSerializer s) {
 		s.writeString(channel);
-		byte[] buffer = new byte[data.readableBytes()];
-		data.readBytes(buffer);
-		s.writeBytes(buffer);
+		data.resetReaderIndex();
+		data.readBytes(s,data.readableBytes());
 		data.release();
 	}
 	

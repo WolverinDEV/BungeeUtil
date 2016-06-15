@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.mysql.jdbc.Util;
+
+import dev.wolveringer.util.UtilReflection;
+
 public class ExceptionUtils {
 	private static final String class_name;
 
@@ -97,5 +101,21 @@ public class ExceptionUtils {
 	}
 	public static StackTraceElement[] deleteUpward(StackTraceElement[] ex,int index){
 		return Arrays.copyOfRange(ex, index, ex.length);
+	}
+	public static Throwable setExceptionMessage(Throwable t,String message){
+		try{
+			UtilReflection.getField(Throwable.class, "detailMessage").set(t, message);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return t;
+	}
+	public static RuntimeException createRuntimeException(Throwable t){
+		if(t instanceof RuntimeException)
+			return (RuntimeException) t;
+		RuntimeException ex = new RuntimeException(t.getMessage());
+		ex.setStackTrace(t.getStackTrace());
+		UtilReflection.setField(RuntimeException.class, "cause", t.getCause() == null ? ex : t.getCause());
+		return ex;
 	}
 }

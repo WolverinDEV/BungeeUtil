@@ -9,6 +9,7 @@ import java.lang.reflect.Modifier;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.netty.PipelineUtils;
 import dev.wolveringer.BungeeUtil.Main;
+import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 import dev.wolveringer.network.IIInitialHandler;
 
 public abstract class ChannelInizializer extends ChannelInitializer<Channel> {
@@ -39,8 +40,8 @@ public abstract class ChannelInizializer extends ChannelInitializer<Channel> {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"e"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cError while loading ProtocolLIB "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"4Code: 002");
-			BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"e"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cDisable ProtocolLIB");
+			BungeeCord.getInstance().getConsole().sendMessage(ChatColorUtils.COLOR_CHAR+"e"+ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+ChatColorUtils.COLOR_CHAR+"7] "+ChatColorUtils.COLOR_CHAR+"cError while loading ProtocolLIB "+ChatColorUtils.COLOR_CHAR+"4Code: 002");
+			BungeeCord.getInstance().getConsole().sendMessage(ChatColorUtils.COLOR_CHAR+"e"+ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+ChatColorUtils.COLOR_CHAR+"7] "+ChatColorUtils.COLOR_CHAR+"cDisable ProtocolLIB");
 		}
 	}
 	

@@ -187,6 +187,7 @@ public class NPCData implements HumanDataWatcher {
 	
 	public HumanDataWatcher injektDefault() {
 		v1_9.injektDefault();
+		v1_10.injektDefault();
 		return v1_8.injektDefault();
 	}
 	

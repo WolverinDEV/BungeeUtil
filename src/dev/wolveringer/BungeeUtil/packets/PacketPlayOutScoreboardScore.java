@@ -46,7 +46,7 @@ public class PacketPlayOutScoreboardScore extends Packet implements PacketPlayOu
 	public void read(PacketDataSerializer s) {
 		name = s.readString(-1);
 		action = Action.fromInt(s.readByte());
-		if(action.i == 0) string_name = s.readString(-1);
+		string_name = s.readString(-1);
 		if(action.i == 0) value = PacketDataSerializer.readVarInt(s);
 	}
 
@@ -54,7 +54,7 @@ public class PacketPlayOutScoreboardScore extends Packet implements PacketPlayOu
 	public void write(PacketDataSerializer s) {
 		s.writeString(name);
 		s.writeByte(action.i);
-		if(action.i == 0) s.writeString(string_name);
+		s.writeString(string_name);
 		if(action.i == 0) PacketDataSerializer.writeVarInt(value, s);
 		
 	}

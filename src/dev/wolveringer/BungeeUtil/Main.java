@@ -1,14 +1,31 @@
 package dev.wolveringer.BungeeUtil;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
+import com.mysql.jdbc.authentication.MysqlClearPasswordPlugin;
+
 import jline.TerminalFactory;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.protocol.AbstractPacketHandler;
+import net.md_5.bungee.protocol.DefinedPacket;
+import net.md_5.bungee.protocol.PacketWrapper;
+import net.md_5.bungee.protocol.Protocol;
+import net.md_5.bungee.protocol.Protocol.DirectionData;
+import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 import dev.wolveringer.BungeeUtil.RamStatistics.RamStatistic;
 import dev.wolveringer.BungeeUtil.configuration.Configuration;
 import dev.wolveringer.BungeeUtil.injector.InjectFiles;
@@ -22,6 +39,8 @@ import dev.wolveringer.network.IIInitialHandler;
 import dev.wolveringer.network.ProxiedPlayerUserConnection;
 import dev.wolveringer.network.channel.init.ChannelInizializer;
 import dev.wolveringer.updater.Updater;
+import dev.wolveringer.util.UtilReflection;
+import io.netty.buffer.ByteBuf;
 
 public class Main extends Plugin {
 	private static boolean active;
@@ -54,8 +73,7 @@ public class Main extends Plugin {
 		PacketLib.class.getName();
 		try {
 			ChannelInizializer.init();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			sendMessage(ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "eBungeeUntil" + ChatColorUtils.COLOR_CHAR + "7] " + ChatColorUtils.COLOR_CHAR + "cError while loading ProtocolLIB " + ChatColorUtils.COLOR_CHAR + "4Code: 002");
 			sendMessage(ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "eBungeeUntil" + ChatColorUtils.COLOR_CHAR + "7] " + ChatColorUtils.COLOR_CHAR + "cDisable ProtocolLIB");
@@ -67,6 +85,7 @@ public class Main extends Plugin {
 		main = this;
 		active = true;
 		System.out.println("Terminal size: " + TerminalFactory.get().getWidth());
+		
 		setInformation(ChatColorUtils.COLOR_CHAR + "aGeneral Loading");
 		Configuration.init();
 		AsyncCatcher.init();
@@ -86,7 +105,7 @@ public class Main extends Plugin {
 		try {
 			updater = new Updater("http://www.mcgalaxy.de/updater/updates.json");
 			updater.loadData();
-			if (updater.check()){
+			if (updater.check()) {
 				setInformation("§cRestarting bungeecord");
 				sleep(1000);
 				setInformation(null);
@@ -249,7 +268,7 @@ public class Main extends Plugin {
 	
 	@SuppressWarnings("deprecation")
 	public static void sendMessage(String message) {
-		if (!message.startsWith(ChatColorUtils.PREFIX+" ")) message = ChatColorUtils.PREFIX+" " + message;
+		if (!message.startsWith(ChatColorUtils.PREFIX + " ")) message = ChatColorUtils.PREFIX + " " + message;
 		message = "\r" + date_format.format(new Date()) + " " + message;
 		if (costumPromtLine && main != null) {
 			try {
@@ -264,14 +283,11 @@ public class Main extends Plugin {
 				e.printStackTrace();
 			}
 		}
-		else{
-			if(main != null)
-				BungeeCord.getInstance().getConsole().sendMessage(message);
-			else
-				System.out.println(message);
+		else {
+			if (main != null) BungeeCord.getInstance().getConsole().sendMessage(message);
+			else System.out.println(message);
 		}
 	}
-	
 	
 	@SuppressWarnings("deprecation")
 	@Override
@@ -281,12 +297,14 @@ public class Main extends Plugin {
 	}
 	
 	public static void debug(String string) {
-		if (getMain() == null || Configuration.isDebugEnabled()) System.out.println(string); //Debug if this not a plugin
+		if (getMain() == null || Configuration.isDebugEnabled()) System.out.println(string); // Debug if this not a plugin
 	}
-	public static void debug(Exception e,String otherMessage) {
-		if (getMain() == null || Configuration.isDebugEnabled()) e.printStackTrace(); //Debug if this not a plugin
+	
+	public static void debug(Exception e, String otherMessage) {
+		if (getMain() == null || Configuration.isDebugEnabled()) e.printStackTrace(); // Debug if this not a plugin
 	}
+	
 	public static void debug(Exception e) {
-		debug(e, "Exception message -> "+e.getMessage());
+		debug(e, "Exception message -> " + e.getMessage());
 	}
 }

@@ -11,6 +11,7 @@ import java.util.List;
 
 import dev.wolveringer.BungeeUtil.ClientVersion;
 import dev.wolveringer.BungeeUtil.ClientVersion.ProtocollVersion;
+import dev.wolveringer.BungeeUtil.exception.ExceptionUtils;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.Player;
 import dev.wolveringer.BungeeUtil.packets.Packet.ProtocollId;
@@ -97,7 +98,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 			else return packet.setcompressedId(compressed).load(b, p.getVersion());
 		}
 		catch (Exception e) {
-			throw new RuntimeException("Packet error (Version: " + (p == null ? "unknown" : p.getVersion()) + ", Readed version: "+version+", Class: " + (cons == null || cons.getConstuctor() == null ? "null" : cons.getConstuctor().getDeclaringClass().getName()) + ", Id: 0x"+Integer.toHexString(id).toUpperCase()+") -> "+e.getMessage(),e);
+			throw ExceptionUtils.createRuntimeException(ExceptionUtils.setExceptionMessage(e, "Packet error (Version: " + (p == null ? "unknown" : p.getVersion()) + ", Readed version: "+version+", Class: " + (cons == null || cons.getConstuctor() == null ? "null" : cons.getConstuctor().getDeclaringClass().getName()) + ", Id: 0x"+Integer.toHexString(id).toUpperCase()+") -> "+e.getMessage()));
 		}
 	}
 	

@@ -3,7 +3,7 @@ package dev.wolveringer.api.datawatcher.impl;
 import dev.wolveringer.api.datawatcher.DataWatcher;
 import dev.wolveringer.api.datawatcher.HumanDataWatcher;
 
-public class v1_10_HumanEntityDataWatcher extends v1_9_LivingEntityDataWatcher implements HumanDataWatcher {
+public class v1_10_HumanEntityDataWatcher extends v1_10_LivingEntityDataWatcher implements HumanDataWatcher {
 	
 	public v1_10_HumanEntityDataWatcher(DataWatcher watcher) {
 		super(watcher);

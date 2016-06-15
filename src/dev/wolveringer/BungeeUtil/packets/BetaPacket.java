@@ -9,6 +9,8 @@ import dev.wolveringer.BungeeUtil.DebugProperties;
 
 public abstract class BetaPacket extends Packet{
 	
+	public BetaPacket() {}
+	
 	public BetaPacket(byte id) {
 		super(id);
 		
