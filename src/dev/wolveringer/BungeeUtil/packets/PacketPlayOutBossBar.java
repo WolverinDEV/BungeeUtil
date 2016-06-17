@@ -84,6 +84,8 @@ public class PacketPlayOutBossBar extends Packet implements PacketPlayOut{
 
 	@Override
 	public void write(PacketDataSerializer s) {
+		if(getBigVersion() == BigClientVersion.v1_8)
+			throw new RuntimeException("BossBar packet is 1.9-1.10 only!");
 		s.writeUUID(barId);
 		s.writeVarInt(action.ordinal());
 		switch (action) {
