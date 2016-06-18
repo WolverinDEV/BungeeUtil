@@ -97,4 +97,10 @@ public class Configuration {
 	public static boolean isSyncInventoryClickActive(){
 		return conf.getBoolean("inventory.synchandle");
 	}
+	public static boolean isScoreboardhandleEnabled(){
+		return conf.getBoolean("utils.scoreboard");
+	}
+	public static boolean isBossBarhandleEnabled(){
+		return conf.getBoolean("utils.bossbar");
+	}
 }

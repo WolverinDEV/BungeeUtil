@@ -7,6 +7,7 @@ import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.PacketHandleEvent;
 import dev.wolveringer.BungeeUtil.PacketHandler;
 import dev.wolveringer.BungeeUtil.PacketLib;
+import dev.wolveringer.BungeeUtil.configuration.Configuration;
 import dev.wolveringer.BungeeUtil.packets.Packet;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardDisplayObjective;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardObjective;
@@ -19,7 +20,8 @@ public final class PacketListenerScoreboard implements PacketHandler<Packet> {
 	private static PacketListenerScoreboard listener;
 	
 	public static void init() {
-		PacketLib.addHandler(listener = new PacketListenerScoreboard());
+		if(Configuration.isScoreboardhandleEnabled())
+			PacketLib.addHandler(listener = new PacketListenerScoreboard());
 	}
 	
 	public static PacketListenerScoreboard getListener() {

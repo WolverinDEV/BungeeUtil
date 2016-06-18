@@ -26,6 +26,7 @@ import com.google.common.base.Preconditions;
 
 import dev.wolveringer.BungeeUtil.ClientVersion;
 import dev.wolveringer.BungeeUtil.Player;
+import dev.wolveringer.BungeeUtil.configuration.Configuration;
 import dev.wolveringer.BungeeUtil.item.Item;
 import dev.wolveringer.BungeeUtil.packets.Packet;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInChat;
@@ -186,7 +187,9 @@ public class ProxiedPlayerUserConnection extends AbstraktUserConnection implemen
 	}
 
 	public Scoreboard getScoreboard() {
-		return board;
+		if(Configuration.isScoreboardhandleEnabled())
+			return board;
+		throw new RuntimeException("The Scoreboard manager isnt enabled in the configuration!");
 	}
 
 	@Override
@@ -293,6 +296,8 @@ public class ProxiedPlayerUserConnection extends AbstraktUserConnection implemen
 
 	@Override
 	public BossBarManager getBossBarManager() {
-		return bossBarManager;
+		if(Configuration.isBossBarhandleEnabled())
+			return bossBarManager;
+		throw new RuntimeException("The BossBar manager isnt enabled in the configuration!");
 	}
 }

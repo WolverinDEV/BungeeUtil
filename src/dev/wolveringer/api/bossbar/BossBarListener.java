@@ -4,6 +4,7 @@ import dev.wolveringer.BungeeUtil.PacketHandleEvent;
 import dev.wolveringer.BungeeUtil.PacketHandler;
 import dev.wolveringer.BungeeUtil.PacketLib;
 import dev.wolveringer.BungeeUtil.Player;
+import dev.wolveringer.BungeeUtil.configuration.Configuration;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutBossBar;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutBossBar.Action;
 import dev.wolveringer.api.bossbar.BossBarManager.BossBar;
@@ -11,7 +12,7 @@ import dev.wolveringer.api.bossbar.BossBarManager.BossBar;
 public class BossBarListener implements PacketHandler<PacketPlayOutBossBar>{
 	private static BossBarListener listener;
 	public static void init(){
-		if(listener == null)
+		if(listener == null && Configuration.isBossBarhandleEnabled())
 			PacketLib.addHandler(listener = new BossBarListener()); 
 	}
 	

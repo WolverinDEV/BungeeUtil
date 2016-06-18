@@ -23,6 +23,10 @@
 #             Debug messages           #
 #   Enable/Disable all debug messages  #  
 #                                      # 
+#               Utils:                 # 
+#  Enable/Disable some unused feature  #  
+#             to save ram              #  
+#                                      # 
 ######################################## 
 timings: true
 updater: true
@@ -44,3 +48,6 @@ async-catcher:
 debug: false
 inventory:
   synchandle: true
+utils:
+  scoreboard: true
+  bossbar: true
