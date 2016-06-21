@@ -34,7 +34,7 @@ public abstract class Packet {
 		}
 		
 		public boolean isValid() {
-			return id > 0 && version != null && version != ProtocollVersion.Unsupported;
+			return id >= 0 && version != null && version != ProtocollVersion.Unsupported;
 		}
 		
 		@Override

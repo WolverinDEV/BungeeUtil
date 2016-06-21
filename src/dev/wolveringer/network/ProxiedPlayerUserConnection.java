@@ -271,7 +271,7 @@ public class ProxiedPlayerUserConnection extends AbstraktUserConnection implemen
 
 	@Override
 	public boolean isConnected() {
-		return getUserconnection().isConnected();
+		return !((ChannelWrapper)get("ch")).isClosed();
 	}
 
 	@Override

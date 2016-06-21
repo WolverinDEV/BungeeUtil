@@ -95,7 +95,7 @@ public abstract class AbstractPacketCreator {
 			}
 		}
 	}
-
+	
 	private String right(String s, int i) {
 		while (s.length() < i) {
 			s += " ";
