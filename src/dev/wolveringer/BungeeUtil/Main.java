@@ -1,31 +1,14 @@
 package dev.wolveringer.BungeeUtil;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
-import com.mysql.jdbc.authentication.MysqlClearPasswordPlugin;
-
 import jline.TerminalFactory;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.protocol.AbstractPacketHandler;
-import net.md_5.bungee.protocol.DefinedPacket;
-import net.md_5.bungee.protocol.PacketWrapper;
-import net.md_5.bungee.protocol.Protocol;
-import net.md_5.bungee.protocol.Protocol.DirectionData;
-import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 import dev.wolveringer.BungeeUtil.RamStatistics.RamStatistic;
 import dev.wolveringer.BungeeUtil.configuration.Configuration;
 import dev.wolveringer.BungeeUtil.injector.InjectFiles;
@@ -39,8 +22,6 @@ import dev.wolveringer.network.IIInitialHandler;
 import dev.wolveringer.network.ProxiedPlayerUserConnection;
 import dev.wolveringer.network.channel.init.ChannelInizializer;
 import dev.wolveringer.updater.Updater;
-import dev.wolveringer.util.UtilReflection;
-import io.netty.buffer.ByteBuf;
 
 public class Main extends Plugin {
 	private static boolean active;
@@ -68,7 +49,6 @@ public class Main extends Plugin {
 	public void onLoad() {
 		main = this;
 		ramStatistiks = new RamStatistics();
-		// "+ChatColorUtils.COLOR_CHAR+"
 		PacketHandler.class.getName();
 		PacketLib.class.getName();
 		try {
@@ -88,13 +68,19 @@ public class Main extends Plugin {
 		
 		setInformation(ChatColorUtils.COLOR_CHAR + "aGeneral Loading");
 		Configuration.init();
+		
+		if(Configuration.getHandleExceptionAction() == null){
+			sendMessage("§cCant find the NetworkExceptionAction for "+Configuration.getConfig().getString("network.exception")+". §6Using default ("+HandleErrorAction.DISCONNECT+")");
+			Configuration.getConfig().set("network.exception", HandleErrorAction.DISCONNECT.name().toUpperCase());
+		}
+		
 		AsyncCatcher.init();
 		AsyncCatcher.disable(this);
 		AsyncCatcher.catchOp("Async test failed");
 		
 		if (Configuration.getVersionsFeature().size() != 0) {
-			sendMessage("" + ChatColorUtils.COLOR_CHAR + "aBungeeUtil successful updated!");
-			sendMessage("" + ChatColorUtils.COLOR_CHAR + "aFeatures:");
+			sendMessage(ChatColorUtils.COLOR_CHAR + "aBungeeUtil successful updated!");
+			sendMessage(ChatColorUtils.COLOR_CHAR + "aFeatures:");
 			for (String s : Configuration.getVersionsFeature())
 				sendMessage("   " + ChatColorUtils.COLOR_CHAR + "e" + s);
 			Configuration.setVersionFeature(null);
@@ -202,7 +188,7 @@ public class Main extends Plugin {
 							diffSpace += " ";
 						Main.sendMessage("");
 						Main.sendMessage(ChatColorUtils.COLOR_CHAR + "7#####" + diffSpace.substring(0, diffSpace.length() / 2).replaceAll(" ", "#") + " " + ChatColorUtils.COLOR_CHAR + "6Heap utilization statistics [MB] " + ChatColorUtils.COLOR_CHAR + "7#####" + diffSpace.substring(0, diffSpace.length() / 2).replaceAll(" ", "#") + (diffSpace.length() % 2 != 0 ? "#" : ""));
-						Main.sendMessage(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aReserved Used Memory:      " + ChatColorUtils.COLOR_CHAR + "e" + var1 + "M " + ChatColorUtils.COLOR_CHAR + "7(" + (diff > 0 ? "" + ChatColorUtils.COLOR_CHAR + "a+" : diff < 0 ? "" + ChatColorUtils.COLOR_CHAR + "c-" : "" + ChatColorUtils.COLOR_CHAR + "6�") + Math.abs(diff) + "" + ChatColorUtils.COLOR_CHAR + "7)   " + ChatColorUtils.COLOR_CHAR + "7#");
+						Main.sendMessage(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aReserved Used Memory:      " + ChatColorUtils.COLOR_CHAR + "e" + var1 + "M " + ChatColorUtils.COLOR_CHAR + "7(" + (diff > 0 ? ChatColorUtils.COLOR_CHAR + "a+" : diff < 0 ? ChatColorUtils.COLOR_CHAR + "c-" : ChatColorUtils.COLOR_CHAR + "6�") + Math.abs(diff) + ChatColorUtils.COLOR_CHAR + "7)   " + ChatColorUtils.COLOR_CHAR + "7#");
 						Main.sendMessage(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aReserved Free Memory:      " + ChatColorUtils.COLOR_CHAR + "e" + var2 + "M    " + diffSpace + ChatColorUtils.COLOR_CHAR + "7#");
 						Main.sendMessage(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aReserved Memory:           " + ChatColorUtils.COLOR_CHAR + "e" + var3 + "M    " + diffSpace + ChatColorUtils.COLOR_CHAR + "7#");
 						Main.sendMessage(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "a-----------------------------" + format("", var5).replaceAll(" ", "-") + "   " + diffSpace + ChatColorUtils.COLOR_CHAR + "7#");

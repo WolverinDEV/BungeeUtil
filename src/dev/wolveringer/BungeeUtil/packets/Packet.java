@@ -57,7 +57,7 @@ public abstract class Packet {
 	static {
 		registerPacket(Protocol.LOGIN, Direction.TO_CLIENT, PacketLoginDisconnect.class, new ProtocollId(BigClientVersion.v1_8, 0x00), new ProtocollId(BigClientVersion.v1_9, 0x00), new ProtocollId(BigClientVersion.v1_10, 0x00));
 		
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutChat.class, new ProtocollId(BigClientVersion.v1_8, 0x02), new ProtocollId(BigClientVersion.v1_9, 0x0F)); // ->0x0F
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutChat.class, new ProtocollId(BigClientVersion.v1_8, 0x02), new ProtocollId(BigClientVersion.v1_9, 0x0F), new ProtocollId(BigClientVersion.v1_10, 0x0F)); // ->0x0F
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutPlayerListHeaderFooter.class, new ProtocollId(BigClientVersion.v1_8, 0x47), new ProtocollId(BigClientVersion.v1_9, 0x48), new ProtocollId(ProtocollVersion.v1_9_4, 0x47), new ProtocollId(BigClientVersion.v1_10, 0x47));// ->0x48
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, null, new ProtocollId(ProtocollVersion.v1_9_4, 0x48));
 		
@@ -231,6 +231,8 @@ public abstract class Packet {
 	}
 	
 	public ByteBuf writeToByteBuff(ByteBuf buf, ClientVersion version) {
+		if(getPacketId(compressedId) < 0)
+			throw new RuntimeException("Unexpected packet id ("+getPacketId(compressedId) +")");
 		PacketDataSerializer s;
 		if (buf == null) {
 			buf = ByteBuffCreator.createByteBuff();

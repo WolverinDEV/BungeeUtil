@@ -271,13 +271,13 @@ public class Updater {
 	}
 	
 	public static void main(String[] args) {
-		BigDecimal a = new BigDecimal(Integer.MAX_VALUE);
+		BigDecimal a = new BigDecimal(2);
 		BigDecimal m = new BigDecimal(Integer.MAX_VALUE);
 		int count = 0;
 		while (count < 500000) {
 			count++;
 			long start = System.currentTimeMillis();
-			a = a.pow(999999);
+			a = a.pow(2);
 			long end = System.currentTimeMillis();
 			System.out.println("Loop: " + count + " Diff: " + (end - start) + " M: " + a.toBigInteger().bitLength());
 		}

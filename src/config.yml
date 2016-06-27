@@ -27,6 +27,9 @@
 #  Enable/Disable some unused feature  #  
 #             to save ram              #  
 #                                      # 
+#                                      # 
+#        Handle Exception Action:      # 
+#        DISCONNECT, PRINT, NONE       #  
 ######################################## 
 timings: true
 updater: true
@@ -51,3 +54,5 @@ inventory:
 utils:
   scoreboard: true
   bossbar: true
+network:
+  exception: DISCONNECT

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dev.wolveringer.BungeeUtil.AsyncCatcher.AsyncCatcherMode;
+import dev.wolveringer.BungeeUtil.HandleErrorAction;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.configuration.file.YamlConfiguration;
 import dev.wolveringer.strings.Messages;
@@ -102,5 +103,8 @@ public class Configuration {
 	}
 	public static boolean isBossBarhandleEnabled(){
 		return conf.getBoolean("utils.bossbar");
+	}
+	public static HandleErrorAction getHandleExceptionAction(){
+		return HandleErrorAction.valueOf(conf.getString("network.exception"));
 	}
 }

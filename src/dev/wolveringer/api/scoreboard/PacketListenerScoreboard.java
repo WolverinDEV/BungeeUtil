@@ -96,6 +96,8 @@ public final class PacketListenerScoreboard implements PacketHandler<Packet> {
 			PacketPlayOutScoreboardTeam out = (PacketPlayOutScoreboardTeam) e.getPacket();
 			if (out.getAction() == dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardTeam.Action.CREATE) {
 				Team t = new Team(board, out.getTeam());
+				if(t == null)
+					return;
 				t.color = out.getColor();
 				t.displayName = out.getDisplayName();
 				t.friendly_fire = out.isFriendlyFire();
@@ -107,14 +109,20 @@ public final class PacketListenerScoreboard implements PacketHandler<Packet> {
 			}
 			else if (out.getAction() == dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardTeam.Action.PLAYER_ADD) {
 				Team t = board.getTeam(out.getTeam());
+				if(t == null)
+					return;
 				t.member.addAll(new ArrayList<>(Arrays.asList(out.getPlayers())));
 			}
 			else if (out.getAction() == dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardTeam.Action.PLAYER_REMOVE) {
 				Team t = board.getTeam(out.getTeam());
+				if(t == null)
+					return;
 				t.member.removeAll(new ArrayList<>(Arrays.asList(out.getPlayers())));
 			}
 			else if (out.getAction() == dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardTeam.Action.REMOVE) {
 				Team t = board.getTeam(out.getTeam());
+				if(t == null)
+					return;
 				board.server_teams.remove(t);
 			}
 			else if (out.getAction() == dev.wolveringer.BungeeUtil.packets.PacketPlayOutScoreboardTeam.Action.UPDATE) {
