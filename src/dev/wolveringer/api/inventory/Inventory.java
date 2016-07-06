@@ -47,7 +47,7 @@ public class Inventory {
 				if(autoUpdate){
 					int slot = getSlot(is);
 					if(slot != -1)
-						brotcast(new PacketPlayOutSetSlot(is, ID, slot));
+						broadcast(new PacketPlayOutSetSlot(is, ID, slot));
 				}
 			}
 		};
@@ -100,8 +100,17 @@ public class Inventory {
 				}
 			}
 	}
-
+	
+	/**
+	 * Contains spelling mistake
+	 * @deprecated Use {@link #broadcast(Packet a)} instead.  
+	 */
+	@Deprecated
 	private void brotcast(Packet a) {
+		broadcast(a);
+	}
+	
+	private void broadcast(Packet a) {
 		for(Player p : viewer)
 			p.sendPacket((PacketPlayOut) a);
 	}
@@ -156,7 +165,7 @@ public class Inventory {
 		if(is != null)
 			((CraftItemMeta) is.getItemMeta()).addMetaListener(this.imcil);
 		if(autoUpdate)
-			brotcast(new PacketPlayOutSetSlot(is, ID, slot));
+			broadcast(new PacketPlayOutSetSlot(is, ID, slot));
 	}
 
 	public void setItem(int i, Item item) {
@@ -210,9 +219,9 @@ public class Inventory {
 				e.UTF_8 = true;
 				p.sendPacket(e);
 			}
-			brotcast(new PacketPlayOutWindowItems(ID, this.container.getContains()));
+			broadcast(new PacketPlayOutWindowItems(ID, this.container.getContains()));
 		}else{
-			brotcast(new PacketPlayOutWindowItems(ID, this.container.getContains()));
+			broadcast(new PacketPlayOutWindowItems(ID, this.container.getContains()));
 		}
 	}
 

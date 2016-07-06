@@ -98,7 +98,7 @@ public final class NPC {
 	
 	public void setPing(int ping) {
 		this.ping = ping;
-		if (tab) brotcastPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_PING, new PlayerInfoData(profile, ping, 0, tabname)));
+		if (tab) broadcastPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_PING, new PlayerInfoData(profile, ping, 0, tabname)));
 	}
 	
 	public int getPing() {
@@ -137,8 +137,8 @@ public final class NPC {
 	public void setLocation(Location location) {
 		this.location = location;
 		rebuild();
-		brotcastPacket(new PacketPlayOutEntityTeleport(ID, location));
-		brotcastPacket(new PacketPlayOutEntityHeadRotation(ID, location.getYaw()));
+		broadcastPacket(new PacketPlayOutEntityTeleport(ID, location));
+		broadcastPacket(new PacketPlayOutEntityHeadRotation(ID, location.getYaw()));
 	}
 	
 	public HumanDataWatcher getDatawatcher() {
@@ -170,8 +170,8 @@ public final class NPC {
 	}
 	
 	public void setTabListed(boolean listed) {
-		if (tab != listed) if (tab) brotcastPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.ADD_PLAYER, new PlayerInfoData(profile, ping, 0, (IChatBaseComponent) tabname)));
-		else brotcastPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.REMOVE_PLAYER, new PlayerInfoData(profile, ping, 0, tabname)));
+		if (tab != listed) if (tab) broadcastPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.ADD_PLAYER, new PlayerInfoData(profile, ping, 0, (IChatBaseComponent) tabname)));
+		else broadcastPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.REMOVE_PLAYER, new PlayerInfoData(profile, ping, 0, tabname)));
 		this.tab = listed;
 	}
 	
@@ -181,7 +181,7 @@ public final class NPC {
 	
 	public void setPlayerListName(IChatBaseComponent name) {
 		this.tabname = name;
-		brotcastPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, new PlayerInfoData(profile, ping, 0, tabname)));
+		broadcastPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, new PlayerInfoData(profile, ping, 0, tabname)));
 	}
 	
 	public IChatBaseComponent getPlayerListName() {
@@ -209,8 +209,17 @@ public final class NPC {
 		viewer.add(p);
 		sendSpawn(p);
 	}
-	
+
+	/**
+	 * Contains spelling mistake
+	 * @deprecated Use {@link #broadcastPacket(Packet a)} instead.  
+	 */
+	@Deprecated
 	private void brotcastPacket(Packet p) {
+		broadcastPacket(p);
+	}
+	
+	private void broadcastPacket(Packet p) {
 		for (Player pl : viewer)
 			pl.sendPacket((PacketPlayOut) p);
 	}
