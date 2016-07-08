@@ -43,7 +43,16 @@ public final class PlayerInventory {
 		this(player,0,"");
 	}
 
+	/**
+	 * Contains spelling mistake
+	 * @deprecated Use {@link #broadcast(Packet a)} instead.  
+	 */
+	@Deprecated
 	private void brotcast(Packet a) {
+		broadcast(a);
+	}
+
+	private void broadcast(Packet a) {
 		player.sendPacket((PacketPlayOut)a);
 	}
 
@@ -71,11 +80,11 @@ public final class PlayerInventory {
 		items.set(slot, is);
 		if(player.isInventoryOpened()){
 			if(slot > 8){
-				brotcast(new PacketPlayOutSetSlot(is, Inventory.ID, slot-9+player.getInventoryView().getSlots()));
+				broadcast(new PacketPlayOutSetSlot(is, Inventory.ID, slot-9+player.getInventoryView().getSlots()));
 			}
 		}
 		else
-			brotcast(new PacketPlayOutSetSlot(is, ID, slot));
+			broadcast(new PacketPlayOutSetSlot(is, ID, slot));
 	}
 
 	public ArrayList<Player> getViewer() {
