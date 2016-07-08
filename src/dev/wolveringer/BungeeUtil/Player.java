@@ -5,7 +5,7 @@ import dev.wolveringer.BungeeUtil.item.Item;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayIn;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.api.SoundEffect;
-import dev.wolveringer.api.SoundEffect.SoundCategory;
+import dev.wolveringer.api.SoundCategory;
 import dev.wolveringer.api.bossbar.BossBarManager;
 import dev.wolveringer.api.inventory.Inventory;
 import dev.wolveringer.api.inventory.PlayerInventory;
