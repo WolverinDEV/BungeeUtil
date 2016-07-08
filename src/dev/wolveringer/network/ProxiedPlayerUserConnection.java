@@ -38,7 +38,7 @@ import dev.wolveringer.BungeeUtil.packets.PacketPlayOutWindowItems;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayIn;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.api.SoundEffect;
-import dev.wolveringer.api.SoundEffect.SoundCategory;
+import dev.wolveringer.api.SoundCategory;
 import dev.wolveringer.api.bossbar.BossBarManager;
 import dev.wolveringer.api.inventory.Inventory;
 import dev.wolveringer.api.inventory.InventoryType;
@@ -290,7 +290,7 @@ public class ProxiedPlayerUserConnection extends AbstraktUserConnection implemen
 		packet.setLoc(location);
 		packet.setVolume(volume);
 		packet.setSoundCategory(category.ordinal());
-		packet.setSound(effect.getName());
+		packet.setSound(effect.getId(getVersion().getBigVersion()));
 		sendPacket(packet);
 	}
 
