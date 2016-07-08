@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
@@ -15,7 +14,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 import java.util.jar.JarInputStream;
 
@@ -272,12 +270,11 @@ public class Updater {
 	
 	public static void main(String[] args) {
 		BigDecimal a = new BigDecimal(2);
-		BigDecimal m = new BigDecimal(Integer.MAX_VALUE);
 		int count = 0;
 		while (count < 500000) {
 			count++;
 			long start = System.currentTimeMillis();
-			a = a.pow(2);
+			a = a.multiply(a);
 			long end = System.currentTimeMillis();
 			System.out.println("Loop: " + count + " Diff: " + (end - start) + " M: " + a.toBigInteger().bitLength());
 		}
