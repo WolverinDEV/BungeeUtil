@@ -20,42 +20,24 @@ public class PacketPlayOutNamedSoundEffect extends Packet implements PacketPlayO
 
 	@Override
 	public void read(PacketDataSerializer s) {
-		if(getBigVersion() == BigClientVersion.v1_9){
-			if(getVersion().getProtocollVersion() == ProtocollVersion.v1_9_4){
-				sound = s.readVarInt()+"";
-				soundCategory = s.readVarInt();
-				loc = new Location(s.readInt(), s.readInt(), s.readInt()).dividide(8D);
-				volume = s.readFloat();
-				pitch = s.readUnsignedByte();
-			}
-			else
-			{
-				sound = s.readString(-1);
-				soundCategory = s.readVarInt();
-				loc = new Location(s.readInt(), s.readInt(), s.readInt()).dividide(8D);
-				volume = s.readFloat();
-				pitch = s.readUnsignedByte();
-			}
-		}
-		else if(getBigVersion() == BigClientVersion.v1_8){
+		if(getBigVersion().equals(BigClientVersion.v1_10) || getBigVersion().equals(BigClientVersion.v1_9)) {
 			sound = s.readString(-1);
-			soundCategory = 0;
-			loc = new Location(s.readInt(), s.readInt(), s.readInt()).dividide(8D);
-			volume = s.readFloat();
-			pitch = s.readUnsignedByte();
-		}else if(getBigVersion() == BigClientVersion.v1_10){
-			sound = s.readVarInt()+"";
 			soundCategory = s.readVarInt();
 			loc = new Location(s.readInt(), s.readInt(), s.readInt()).dividide(8D);
 			volume = s.readFloat();
-			pitch = s.readFloat();
+			pitch = s.readUnsignedByte();
+		} else if(getBigVersion().equals(BigClientVersion.v1_8)) {
+			sound = s.readString(-1);
+			loc = new Location(s.readInt(), s.readInt(), s.readInt()).dividide(8D);
+			volume = s.readFloat();
+			pitch = s.readUnsignedByte();
 		}
 	}
 	
 	@Override
 	public void write(PacketDataSerializer s) {
-		if(getBigVersion() == BigClientVersion.v1_10){
-			s.writeVarInt(Integer.parseInt(sound));
+		if(getBigVersion().equals(BigClientVersion.v1_10) || getBigVersion().equals(BigClientVersion.v1_9)){
+			s.writeString(sound);
 			s.writeVarInt(soundCategory);
 			loc.multiply(8D);
 			s.writeInt(loc.getBlockX());
@@ -63,35 +45,8 @@ public class PacketPlayOutNamedSoundEffect extends Packet implements PacketPlayO
 			s.writeInt(loc.getBlockZ());
 			loc.dividide(8D);
 			s.writeFloat(volume);
-			s.writeFloat(
-					 pitch);
-		}
-		else if(getBigVersion() == BigClientVersion.v1_9){
-			if(getVersion().getProtocollVersion() == ProtocollVersion.v1_9_4){
-				s.writeVarInt(Integer.parseInt(sound));
-				s.writeVarInt(soundCategory);
-				loc.multiply(8D);
-				s.writeInt(loc.getBlockX());
-				s.writeInt(loc.getBlockY());
-				s.writeInt(loc.getBlockZ());
-				loc.dividide(8D);
-				s.writeFloat(volume);
-				s.writeByte((int) pitch);
-			}
-			else
-			{
-				s.writeString(sound);
-				s.writeVarInt(soundCategory);
-				loc.multiply(8D);
-				s.writeInt(loc.getBlockX());
-				s.writeInt(loc.getBlockY());
-				s.writeInt(loc.getBlockZ());
-				loc.dividide(8D);
-				s.writeFloat(volume);
-				s.writeByte((int) pitch);
-			}
-		}
-		else if(getBigVersion() == BigClientVersion.v1_8){
+			s.writeFloat(pitch);
+		} else if(getBigVersion() == BigClientVersion.v1_8){
 			s.writeString(sound);
 			loc.multiply(8D);
 			s.writeInt(loc.getBlockX());
