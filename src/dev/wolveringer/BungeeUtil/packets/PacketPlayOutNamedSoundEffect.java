@@ -4,7 +4,6 @@ import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
 import dev.wolveringer.BungeeUtil.ClientVersion.ProtocollVersion;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.api.SoundEffect;
-import dev.wolveringer.api.SoundEffect.SoundCategory;
 import dev.wolveringer.api.position.Location;
 import dev.wolveringer.packet.PacketDataSerializer;
 

@@ -29,7 +29,6 @@ import dev.wolveringer.animations.inventory.InventoryViewChangeAnimations;
 import dev.wolveringer.animations.inventory.InventoryViewChangeAnimations.AnimationType;
 import dev.wolveringer.animations.inventory.LimetedScheduller;
 import dev.wolveringer.api.SoundEffect;
-import dev.wolveringer.api.SoundEffect.SoundCategory;
 import dev.wolveringer.api.bossbar.BossBarManager.BossBar;
 import dev.wolveringer.api.datawatcher.HumanDataWatcher;
 import dev.wolveringer.api.gui.AnvilGui;
@@ -284,7 +283,7 @@ public class DebugMenue {
 			@Override
 			public void click(Click p) {
 				p.getPlayer().sendMessage("Sound sended");
-				p.getPlayer().playSound(SoundEffect.getEffect("block.anvil.land"), SoundCategory.MASTER, p.getPlayer().getLocation(), 1F, 0);
+				//p.getPlayer().playSound(SoundEffect.getEffect("block.anvil.land"), SoundCategory.MASTER, p.getPlayer().getLocation(), 1F, 0);
 			}
 		};
 		final ArrayList<String> out = new ArrayList<String>();
