@@ -30,7 +30,6 @@ public class PacketPlayOutTitle extends Packet{
 	@Override
 	public void read(PacketDataSerializer s) {
 		action = Action.values()[s.readVarInt()];
-		title = s.readString(-1);
 		switch (action) {
 		case SET_TITLE:
 		case SET_SUBTITLE:
