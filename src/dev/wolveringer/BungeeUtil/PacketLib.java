@@ -3,24 +3,80 @@ package dev.wolveringer.BungeeUtil;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
 import dev.wolveringer.BungeeUtil.packets.Packet;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInFlying;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInPosition;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class PacketLib {
-	private static HashMap<Class<? extends Packet>, ArrayList<PacketHandler>> handlers = new HashMap<Class<? extends Packet>, ArrayList<PacketHandler>>() {
+	@AllArgsConstructor
+	@Getter
+	private static class PacketHandlerHolder implements Comparable<PacketHandlerHolder> {
+		private PacketHandler handler;
+		private int importance;
+		
+		@Override
+		public int compareTo(PacketHandlerHolder o) {
+			return Integer.compare(o.importance, importance);
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((handler == null) ? 0 : handler.hashCode());
+			result = prime * result + importance;
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if(obj instanceof PacketHandler)
+				return obj.equals(handler);
+			if (getClass() != obj.getClass())
+				return false;
+			PacketHandlerHolder other = (PacketHandlerHolder) obj;
+			if (handler == null) {
+				if (other.handler != null)
+					return false;
+			} else if (!handler.equals(other.handler))
+				return false;
+			if (importance != other.importance)
+				return false;
+			return true;
+		}
+	}
+	private static HashMap<Class<? extends Packet>, ArrayList<PacketHandlerHolder>> handlers = new HashMap<Class<? extends Packet>, ArrayList<PacketHandlerHolder>>() {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public ArrayList<PacketHandler> get(Object paramObject) {
+		public ArrayList<PacketHandlerHolder> get(Object paramObject) {
 			Object r = super.get(paramObject);
 			if(r == null)
 				try{
-					super.put((Class<? extends Packet>) paramObject, new ArrayList<PacketHandler>());
+					super.put((Class<? extends Packet>) paramObject, new ArrayList<PacketHandlerHolder>(){
+						private static final long serialVersionUID = 1L;
+						public void insertSorted(PacketHandlerHolder value) {
+					        super.add(value);
+					        Comparable<PacketHandlerHolder> cmp = (Comparable<PacketHandlerHolder>) value;
+					        for (int i = size()-1; i > 0 && cmp.compareTo(get(i-1)) < 0; i--)
+					            Collections.swap(this, i, i-1);
+					    }
+						public boolean add(PacketHandlerHolder value) {
+							insertSorted(value);
+							return true;
+						}
+					});
 				}catch (Exception e){
 				}
 			return super.get(paramObject);
@@ -54,22 +110,28 @@ public class PacketLib {
 	};
 
 	public static void addHandler(PacketHandler h) {
+		addHandler(h, 0);
+	}
+
+	public static void addHandler(PacketHandler h,int importance) {
 		for(Class c : superclazzes.get(getPacketType(h))){
-			handlers.get(c).add(h);
+			handlers.get(c).add(new PacketHandlerHolder(h, importance));
 		}
 	}
 
+	
 	public static void removeHandler(PacketHandler h) {
-		for(Class c : superclazzes.get(getPacketType(h)))
+		for(Class c : superclazzes.get(getPacketType(h))){
 			handlers.get(c).remove(h);
+		}
 	}
 	
 	public static PacketHandleEvent handle(PacketHandleEvent e) {
 		Class<? extends Packet> c = e.getPacket().getClass();
-		for(PacketHandler h : new ArrayList<>(handlers.get(c)))
-			h.handle(e);
-		for(PacketHandler h : new ArrayList<>(handlers.get(Packet.class)))
-			h.handle(e);
+		for(PacketHandlerHolder h : new ArrayList<>(handlers.get(c)))
+			h.handler.handle(e);
+		for(PacketHandlerHolder h : new ArrayList<>(handlers.get(Packet.class)))
+			h.handler.handle(e);
 		return e;
 	}
 
