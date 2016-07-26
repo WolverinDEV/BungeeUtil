@@ -49,7 +49,7 @@ public class PacketPlayOutTitle extends Packet{
 
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeInt(action.ordinal());
+		s.writeVarInt(action.ordinal());
 		switch (action) {
 		case SET_SUBTITLE:
 		case SET_TITLE:
