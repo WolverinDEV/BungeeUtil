@@ -107,11 +107,11 @@ public abstract class Packet {
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, null, new ProtocollId(ProtocollVersion.v1_9_4, 0x19));
 		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutNamedEntitySpawn.class, new ProtocollId(BigClientVersion.v1_8, 0x0C), new ProtocollId(BigClientVersion.v1_9, 0x05), new ProtocollId(BigClientVersion.v1_10, 0x05));
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutTitle.class, new ProtocollId(BigClientVersion.v1_8, 0x45), new ProtocollId(BigClientVersion.v1_9, 0x45), new ProtocollId(BigClientVersion.v1_10, 0x45));
 		// registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x21, PacketPlayOutMapChunk.class, new ProtocollId(BigClientVersion.v1_8, 0x00), new ProtocollId(BigClientVersion.v1_9, 0x00), new ProtocollId(BigClientVersion.v1_10, 0x00); //TODO Chunk Serelizer (Premium bungee src)
 		// registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x26, PacketPlayOutMapChunkBulk.class, new ProtocollId(BigClientVersion.v1_8, 0x00), new ProtocollId(BigClientVersion.v1_9, 0x00), new ProtocollId(BigClientVersion.v1_10, 0x00); //TODO Chunk Serelizer (Premium bungee src)
 		
 		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInClientState.class, new ProtocollId(BigClientVersion.v1_8, 0x16), new ProtocollId(BigClientVersion.v1_9, 0x03), new ProtocollId(BigClientVersion.v1_10, 0x03)); // Changed
-		
 		//
 		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInPluginMessage.class,new ProtocollId(BigClientVersion.v1_8, 0x17),  new ProtocollId(BigClientVersion.v1_9, 0x09), new ProtocollId(BigClientVersion.v1_10, 0x09));
 		

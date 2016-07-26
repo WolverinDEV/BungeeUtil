@@ -14,14 +14,13 @@ import com.google.common.collect.Lists;
 public class ChatMessage extends ChatBaseComponent {
 
 	public static final Pattern pattern = Pattern.compile("%(?:(\\d+)\\$)?([A-Za-z%]|$)");
-	List<IChatBaseComponent> b = Lists.newArrayList();
-	private final String d;
-	private final Object[] e;
-	private final Object f = new Object();
+	List<IChatBaseComponent> siblings = Lists.newArrayList();
+	private final String translationKey;
+	private final Object[] values;
 
 	public ChatMessage(String s, Object... aobject) {
-		this.d = s;
-		this.e = aobject;
+		this.translationKey = s;
+		this.values = aobject;
 		Object[] aobject1 = aobject;
 		int i = aobject.length;
 
@@ -34,10 +33,10 @@ public class ChatMessage extends ChatBaseComponent {
 	}
 
 	private IChatBaseComponent getText(int i){
-		if(i >= this.e.length){
+		if(i >= this.values.length){
 			throw new ChatMessageException(this, i);
 		}else{
-			Object object = this.e[i];
+			Object object = this.values[i];
 			Object object1;
 
 			if(object instanceof IChatBaseComponent){
@@ -51,57 +50,10 @@ public class ChatMessage extends ChatBaseComponent {
 		}
 	}
 
-	protected void b(String s) {
-		Matcher matcher = pattern.matcher(s);
-		int i = 0;
-		int j = 0;
-
-		try{
-			int k;
-			for(;matcher.find(j);j = k){
-				int l = matcher.start();
-				k = matcher.end();
-				if(l > j){
-					ChatComponentText chatcomponenttext = new ChatComponentText(String.format(s.substring(j, l), new Object[0]));
-					chatcomponenttext.getChatModifier().setChatModifier(this.getChatModifier());
-					this.b.add(chatcomponenttext);
-				}
-
-				String s1 = matcher.group(2);
-				String s2 = s.substring(l, k);
-
-				if("%".equals(s1) && "%%".equals(s2)){
-					ChatComponentText chatcomponenttext1 = new ChatComponentText("%");
-
-					chatcomponenttext1.getChatModifier().setChatModifier(this.getChatModifier());
-					this.b.add(chatcomponenttext1);
-				}else{
-					if(!"s".equals(s1)){
-						throw new ChatMessageException(this, "Unsupported format: \'" + s2 + "\'");
-					}
-
-					String s3 = matcher.group(1);
-					int i1 = s3 != null ? Integer.parseInt(s3) - 1 : i++;
-
-					this.b.add(this.getText(i1));
-				}
-			}
-
-			if(j < s.length()){
-				ChatComponentText chatcomponenttext2 = new ChatComponentText(String.format(s.substring(j), new Object[0]));
-
-				chatcomponenttext2.getChatModifier().setChatModifier(this.getChatModifier());
-				this.b.add(chatcomponenttext2);
-			}
-		}catch (IllegalFormatException illegalformatexception){
-			throw new ChatMessageException(this, illegalformatexception);
-		}
-	}
-
 	@Override
 	public String getText() {
 		StringBuilder stringbuilder = new StringBuilder();
-		Iterator<IChatBaseComponent> iterator = this.b.iterator();
+		Iterator<IChatBaseComponent> iterator = this.siblings.iterator();
 
 		while (iterator.hasNext())
 			stringbuilder.append(iterator.next().getText());
@@ -118,23 +70,23 @@ public class ChatMessage extends ChatBaseComponent {
 		}else{
 			ChatMessage chatmessage = (ChatMessage) object;
 
-			return Arrays.equals(this.e, chatmessage.e) && this.d.equals(chatmessage.d) && super.equals(object);
+			return Arrays.equals(this.values, chatmessage.values) && this.translationKey.equals(chatmessage.translationKey) && super.equals(object);
 		}
 	}
 
 	@Override
 	public ChatMessage addSibling() {
-		Object[] aobject = new Object[this.e.length];
+		Object[] aobject = new Object[this.values.length];
 
-		for(int i = 0;i < this.e.length;++i){
-			if(this.e[i] instanceof IChatBaseComponent){
-				aobject[i] = ((IChatBaseComponent) this.e[i]).addSibling();
+		for(int i = 0;i < this.values.length;++i){
+			if(this.values[i] instanceof IChatBaseComponent){
+				aobject[i] = ((IChatBaseComponent) this.values[i]).addSibling();
 			}else{
-				aobject[i] = this.e[i];
+				aobject[i] = this.values[i];
 			}
 		}
 
-		ChatMessage chatmessage = new ChatMessage(this.d, aobject);
+		ChatMessage chatmessage = new ChatMessage(this.translationKey, aobject);
 
 		chatmessage.setChatModifier(this.getChatModifier().clone());
 		Iterator<IChatBaseComponent> iterator = this.getSiblings().iterator();
@@ -149,33 +101,33 @@ public class ChatMessage extends ChatBaseComponent {
 	public int hashCode() {
 		int i = super.hashCode();
 
-		i = 31 * i + this.d.hashCode();
-		i = 31 * i + Arrays.hashCode(this.e);
+		i = 31 * i + this.translationKey.hashCode();
+		i = 31 * i + Arrays.hashCode(this.values);
 		return i;
 	}
 
 	public String getLanguage() {
-		return this.d;
+		return this.translationKey;
 	}
 
 	@Override
 	public Iterator<IChatBaseComponent> iterator() {
-		return Iterators.concat(this.b.iterator(), this.texte.iterator());
+		return Iterators.concat(this.siblings.iterator(), this.texte.iterator());
 	}
 
 	public Object[] getData() {
-		return this.e;
+		return this.values;
 	}
 
 	@Override
 	public IChatBaseComponent setChatModifier(ChatModifier chatmodifier) {
 		super.setChatModifier(chatmodifier);
-		for(int j = 0;j < this.e.length;++j){
-			if(this.e[j] instanceof IChatBaseComponent)
-				((IChatBaseComponent) this.e[j]).getChatModifier().setChatModifier(this.getChatModifier());
+		for(int j = 0;j < this.values.length;++j){
+			if(this.values[j] instanceof IChatBaseComponent)
+				((IChatBaseComponent) this.values[j]).getChatModifier().setChatModifier(this.getChatModifier());
 		}
 		if(false){
-			Iterator<IChatBaseComponent> iterator = this.b.iterator();
+			Iterator<IChatBaseComponent> iterator = this.siblings.iterator();
 			while (iterator.hasNext()){
 				iterator.next().getChatModifier().setChatModifier(chatmodifier);
 			}
@@ -186,7 +138,7 @@ public class ChatMessage extends ChatBaseComponent {
 
 	@Override
 	public String toString() {
-		return "TranslatableComponent{key=\'" + this.d + '\'' + ", args=" + Arrays.toString(this.e) + ", siblings=" + this.texte + ", style=" + this.getChatModifier() + '}';
+		return "TranslatableComponent{key=\'" + this.translationKey + '\'' + ", args=" + Arrays.toString(this.values) + ", siblings=" + this.texte + ", style=" + this.getChatModifier() + '}';
 	}
 
 	@Override
