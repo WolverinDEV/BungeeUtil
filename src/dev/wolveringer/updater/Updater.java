@@ -126,6 +126,7 @@ public class Updater {
 	private int downloadUpdate(String url, File targetFile) {
 		BigInteger errorMask = new BigInteger("0");
 		errorMask.setBit(8);
+		Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aUpdating from "+getCurrentVersion()+" to "+getNewestVersion());
 		Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aStarting to download the update ("+url+")");
 		programm:
 		try {
