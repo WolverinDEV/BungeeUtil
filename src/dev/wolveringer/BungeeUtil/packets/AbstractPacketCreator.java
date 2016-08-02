@@ -75,7 +75,7 @@ public abstract class AbstractPacketCreator {
 		
 		HashMap<ProtocollVersion, Integer> rowMapping = new HashMap<>();
 		List<TerminalColumn> columns = new ArrayList<>();
-		columns.add(new TerminalColumn("§eName", Align.LEFT));
+		columns.add(new TerminalColumn("§eName", Align.RIGHT));
 		columns.add(new TerminalColumn("§eDirection", Align.CENTER));
 		for(ProtocollVersion version : packets.keySet()){
 			rowMapping.put(version, columns.size());
