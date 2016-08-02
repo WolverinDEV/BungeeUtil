@@ -90,7 +90,7 @@ public class Main extends Plugin {
 		setInformation("Check for updates");
 		
 		try {
-			updater = new Updater("https://github.com/WolverinDEV/BungeeUtil/blob/jars/versions.json");
+			updater = new Updater("https://raw.githubusercontent.com/WolverinDEV/BungeeUtil/jars/versions.json");
 			updater.loadData();
 			if (Configuration.isUpdaterActive() && updater.checkUpdate()) {
 				setInformation("§cRestarting bungeecord");
@@ -123,6 +123,7 @@ public class Main extends Plugin {
 				TerminalRow row = new TerminalRow(2);
 				row.getColumns()[1].addAll(e.getValue());
 				row.setText(0, e.getKey());
+				table.addRow(row);
 			}
 			for(String message : table.buildLines())
 				sendMessage(message);

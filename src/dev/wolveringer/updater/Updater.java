@@ -299,6 +299,7 @@ public class Updater {
 		while (objects.hasNext()) {
 			JSONObject object = (JSONObject) objects.next();
 			String version; 
+			System.out.print((Long.parseLong((version = object.getString("Verion")).replaceAll("\\.", "")) > Long.parseLong(lastVersion.replaceAll("\\.", "")))+"-"+(Long.parseLong((version = object.getString("Verion")).replaceAll("\\.", "")) +":"+ Long.parseLong(getCurrentVersion().replaceAll("\\.", ""))));
 			if(Long.parseLong((version = object.getString("Verion")).replaceAll("\\.", "")) > Long.parseLong(lastVersion.replaceAll("\\.", "")) && Long.parseLong((version = object.getString("Verion")).replaceAll("\\.", "")) <= Long.parseLong(getCurrentVersion().replaceAll("\\.", ""))){
 				ArrayList<String> changes = new ArrayList<>();
 				Iterator<Object> message = object.getJSONArray("Changed").iterator();
