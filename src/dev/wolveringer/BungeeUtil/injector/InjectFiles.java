@@ -29,6 +29,7 @@ public class InjectFiles {
 			if(!Modifier.isFinal(modifier) && Modifier.isPublic(modifier)){
 				return -1;
 			}
+			Main.setInformation("§aInjection BungeeUtils. Please wait.");
 			Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aStarting BungeeUtil injection.");
 			Main.sendMessage(ChatColorUtils.COLOR_CHAR+"aSet modifiers for class UserConnection.class to \"public\"");
 

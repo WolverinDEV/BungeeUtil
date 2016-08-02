@@ -93,7 +93,7 @@ public class Configuration {
 		return conf.getBoolean("system.gc.enabled");
 	}
 	public static boolean isDebugEnabled(){
-		return conf.getBoolean("debug");
+		return conf.getBoolean("debug.messages");
 	}
 	public static boolean isSyncInventoryClickActive(){
 		return conf.getBoolean("inventory.synchandle");

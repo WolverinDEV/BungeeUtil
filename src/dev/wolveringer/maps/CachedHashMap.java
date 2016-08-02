@@ -52,9 +52,10 @@ public class CachedHashMap<K,V> extends HashMap<K, V> {
 		keys.remove(key);
 		return super.remove(key);
 	}
-	public void remove(Object key, Object value) {
+	
+	public boolean remove(Object key, Object value) {
 		keys.remove(key);
-		remove(key, value);
+		return remove(key, value);
 	}
 	
 	private void putKey(K key){

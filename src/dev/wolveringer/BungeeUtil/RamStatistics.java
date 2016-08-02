@@ -3,7 +3,12 @@ package dev.wolveringer.BungeeUtil;
 import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 
+import dev.wolveringer.string.ColoredChar;
+import dev.wolveringer.terminal.graph.TerminalGraph;
+import dev.wolveringer.terminal.graph.TerminalGraph.Graph;
+import dev.wolveringer.terminal.graph.TerminalGraph.Point;
 import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -92,5 +97,43 @@ public class RamStatistics {
 	
 	public RamStatistic getLastState(){
 		return last.getLast();
+	}
+	
+	public TerminalGraph createGrath(int seconds,int divisor){
+		TerminalGraph base = new TerminalGraph();
+		
+		Graph graphUsedMemory = new Graph();
+		graphUsedMemory.setReturnZeroByNoData(true);
+		graphUsedMemory.setCharacter(new ColoredChar('#'));
+		graphUsedMemory.getCharacter().setColor(ChatColor.GREEN);
+		
+		Graph graphAllocatedMemory = new Graph();
+		graphAllocatedMemory.setReturnZeroByNoData(true);
+		graphAllocatedMemory.setCharacter(new ColoredChar('+'));
+		graphAllocatedMemory.getCharacter().setColor(ChatColor.GOLD);
+		
+		int max = 0;
+		
+		for(RamStatistic stats : this.last){
+			if(stats.getTimestamp() > System.currentTimeMillis()-seconds*1000){
+				graphUsedMemory.addPoint(new Point((int)((System.currentTimeMillis()-stats.getTimestamp())/1000), (int) stats.getUsedMemory()/divisor));
+				if(stats.getUsedMemory()/divisor > max)
+					max = (int) stats.getUsedMemory()/divisor;
+				
+				graphAllocatedMemory.addPoint(new Point((int)((System.currentTimeMillis()-stats.getTimestamp())/1000), (int) stats.getReservedMemory()/divisor));
+				if(stats.getReservedMemory()/divisor > max)
+					max = (int) stats.getReservedMemory()/divisor;
+			}
+		}
+		
+		base.addGraph(graphAllocatedMemory);
+		base.addGraph(graphUsedMemory);
+		
+		base.setStartX(seconds);
+		base.setEndX(0);
+		base.setStepX(10);
+		base.setStartY(0);
+		base.setEndY((int) (max+(max*0.1)));
+		return base;
 	}
 }

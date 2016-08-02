@@ -205,6 +205,7 @@ public class Main extends Plugin {
 					return in;
 				}
 			});
+			BungeeCord.getInstance().getPluginManager().registerCommand(this, new dev.wolveringer.commands.RamStatistics());
 		}
 		setInformation("Plugin loadet");
 		sleep(1000);
