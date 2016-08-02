@@ -3,7 +3,13 @@ package dev.wolveringer.BungeeUtil;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import jline.TerminalFactory;
@@ -21,6 +27,9 @@ import dev.wolveringer.commands.BungeeTimings;
 import dev.wolveringer.network.IIInitialHandler;
 import dev.wolveringer.network.ProxiedPlayerUserConnection;
 import dev.wolveringer.network.channel.init.ChannelInizializer;
+import dev.wolveringer.terminal.table.TerminalTable;
+import dev.wolveringer.terminal.table.TerminalTable.Align;
+import dev.wolveringer.terminal.table.TerminalTable.TerminalRow;
 import dev.wolveringer.updater.Updater;
 
 public class Main extends Plugin {
@@ -78,20 +87,12 @@ public class Main extends Plugin {
 		AsyncCatcher.disable(this);
 		AsyncCatcher.catchOp("Async test failed");
 		
-		if (Configuration.getVersionsFeature().size() != 0) {
-			sendMessage(ChatColorUtils.COLOR_CHAR + "aBungeeUtil successful updated!");
-			sendMessage(ChatColorUtils.COLOR_CHAR + "aFeatures:");
-			for (String s : Configuration.getVersionsFeature())
-				sendMessage("   " + ChatColorUtils.COLOR_CHAR + "e" + s);
-			Configuration.setVersionFeature(null);
-		}
-		
 		setInformation("Check for updates");
 		
 		try {
-			updater = new Updater("http://www.mcgalaxy.de/updater/updates.json");
+			updater = new Updater("https://github.com/WolverinDEV/BungeeUtil/blob/jars/versions.json");
 			updater.loadData();
-			if (updater.check()) {
+			if (Configuration.isUpdaterActive() && updater.checkUpdate()) {
 				setInformation("§cRestarting bungeecord");
 				sleep(1000);
 				setInformation(null);
@@ -102,6 +103,31 @@ public class Main extends Plugin {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		if (Configuration.getLastVersion() != null && updater != null) {
+			sendMessage(ChatColorUtils.COLOR_CHAR + "aBungeeUtil successful updated!");
+			sendMessage(ChatColorUtils.COLOR_CHAR + "aUpdates:");
+			TerminalTable table = new TerminalTable(new TerminalTable.TerminalColumn[]{
+					new TerminalTable.TerminalColumn("Version", Align.LEFT),
+					new TerminalTable.TerminalColumn("Changes", Align.LEFT)
+			});
+			HashMap<String, List<String>> _changes = updater.createChanges(Configuration.getLastVersion());
+			List<Entry<String, List<String>>> changes = new ArrayList<>(_changes.entrySet());
+			Collections.sort(changes, new Comparator<Entry<String, List<String>>>() {
+				@Override
+				public int compare(Entry<String, List<String>> o1, Entry<String, List<String>> o2) {
+					return Long.compare(Long.parseLong(o2.getKey().replaceAll("\\.", "")), Long.parseLong(o1.getKey().replaceAll("\\.", "")));
+				}
+			});
+			for(Entry<String, List<String>> e : changes){
+				TerminalRow row = new TerminalRow(2);
+				row.getColumns()[1].addAll(e.getValue());
+				row.setText(0, e.getKey());
+			}
+			for(String message : table.buildLines())
+				sendMessage(message);
+		}
+		
 		sleep(1000);
 		
 		setInformation("Loading PluginData");

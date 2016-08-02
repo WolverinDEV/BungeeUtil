@@ -67,17 +67,15 @@ public class Configuration {
 	public static boolean isUpdaterActive(){
 		return conf.getBoolean(Messages.getString("configuration.updater"));
 	}
-	public static List<String> getVersionsFeature(){
-		if(conf.isList("versionsFeatures"))
-			return conf.getStringList("versionsFeatures");
-		return new ArrayList<String>();
+	public static String getLastVersion(){
+		return conf.getString("lastVersion"); 
 	}
-	public static void setVersionFeature(List<String> out){
-		if(out == null || out.size() == 0){
-			conf.set("versionsFeatures", null);
+	public static void setLastVersion(String oldVerstion){
+		if(oldVerstion == null){
+			conf.set("lastVersion", null);
 		}
 		else
-			conf.set("versionsFeatures", out);
+			conf.set("lastVersion", oldVerstion);
 		try {
 			conf.save(new File(Main.getMain().getDataFolder(),Messages.getString("configuration.name")));
 		} catch (IOException e) {

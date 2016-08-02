@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>dev.wolveringer</groupId>
   <artifactId>BungeeUtil</artifactId>
-  <version>1.6.7.6</version>
+  <version>1.6.7.7</version>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -28,6 +28,7 @@
         <version>2.3.1</version>
         <configuration>
           <outputDirectory>/home/wolverindev/bungee/plugins/</outputDirectory>
+          <jarName>BungeeUtils</jarName>
         </configuration>
       </plugin>
       <plugin>
@@ -50,6 +51,18 @@
                 </filter>
               </filters>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.0.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>

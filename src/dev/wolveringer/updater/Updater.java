@@ -8,14 +8,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.jar.JarInputStream;
+
+import javax.print.DocFlavor.STRING;
 
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ProxyServer;
@@ -28,7 +35,33 @@ import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.configuration.Configuration;
 import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 import dev.wolveringer.util.MathUtil;
+import lombok.NonNull;
 
+/*
+ * 
+{
+	CurrentVersion: "1.6.7.7",
+	Download: "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.7.jar",
+	VersionsHistory: [
+		{
+			Version: "1.6.7.6",
+			Download: "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.6.jar",
+		}
+	],
+	Changelog: [
+		{
+			Verion: "1.6.7.7",
+			Changed: [
+				"Improved ram statistics. (Terminal)",
+				"Fixed PacketPlayOutPluginMessage bug",
+				"Removed java insturmental",
+				"Reimplemented sound API (Currently not working!)"
+			]
+		}
+	]
+}
+ * 
+ */
 public class Updater {
 	
 	private String url;
@@ -39,75 +72,62 @@ public class Updater {
 		this.url = url;
 	}
 	
-	public boolean check() {
+	public boolean checkUpdate() {
 		updateData();
 		Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aChecking for Plugin updates");
 		if (data == null) throw new NullPointerException("HTTP Data is null. Invpoke getData() first");
-		JSONObject plugins = data.getJSONObject("plugins");
-		if (plugins.has(Main.getMain().getDescription().getName())) {
-			if (check(Main.getMain().getDescription().getName(), plugins.getJSONObject(Main.getMain().getDescription().getName()))) {
-				BungeeCord.getInstance().stop();
-				return true;
-			}
-			else {
-				if (Main.getMain().getDescription().getVersion().equalsIgnoreCase(plugins.getJSONObject(Main.getMain().getDescription().getName()).getString("version"))) Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aNo plugin update found! Your version is alredy the newest! (" + plugins.getJSONObject(Main.getMain().getDescription().getName()).getString("version") + ")");
-				else Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aYou plugin version is newer than the currunt public version. I think i'm a dev build... All bugs will be ignored");
-			}
+		if (!isNewstVersion()) {
+			installUpdate();
+			BungeeCord.getInstance().stop();
+			return true;
 		}
-		else Main.sendMessage(ChatColorUtils.COLOR_CHAR + "cPlugin not found!");
+		else {
+			if (!isDevBuild()) Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aNo plugin update found! Your version is alredy the newest! (" + getCurrentVersion() + ")");
+			else Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aYou plugin version is newer than the currunt public version. I think i'm a dev build... All bugs will be ignored");
+		}
 		return false;
+	}
+	
+	public void installUpdate(){
+		File ownFile = new File(Main.getMain().getDataFolder().getAbsoluteFile().getAbsolutePath() + ".jar");
+		downloadUpdate(data.getString("Download"), ownFile);
+		Configuration.setLastVersion(getCurrentVersion());
+	}
+	
+	public String getCurrentVersion(){
+		return Main.getMain().getDescription().getVersion();
 	}
 	
 	public String getNewestVersion() {
 		updateData();
-		if (data.has(Main.getMain().getDescription().getName())) { return data.getJSONObject(Main.getMain().getDescription().getName()).getString("version"); }
-		return "underknown";
+		return data.getString("CurrentVersion");
 	}
 	
 	public boolean isNewstVersion() {
-		updateData();
-		return !checkVersion(Main.getMain().getDescription().getVersion(), getNewestVersion());
+		return Long.parseLong(getNewestVersion().replaceAll("\\.", "")) <= Long.parseLong(getCurrentVersion().replaceAll("\\.", ""));
 	}
 	
-	private boolean check(String name, JSONObject plugin) {
-		String url = plugin.getString("url");
-		String version = plugin.getString("version");
-		File f = new File(Main.getMain().getDataFolder().getAbsoluteFile().getAbsolutePath() + ".jar");
-		return checkVersion(plugin, ProxyServer.getInstance().getPluginManager().getPlugin(name), version, url, f, name);
+	public boolean isDevBuild(){
+		return Long.parseLong(getCurrentVersion().replaceAll("\\.", "")) > Long.parseLong(getNewestVersion().replaceAll("\\.", ""));
 	}
 	
-	private void editChangeLog(JSONObject obj, String name, String version) {
-		JSONArray changes = obj.getJSONArray("changeLog");
-		for (int i = 0; i < changes.length(); i++) {
-			JSONObject ver = changes.getJSONObject(i);
-			if (ver.getString("version").equalsIgnoreCase(version)) {
-				Configuration.setVersionFeature(Arrays.asList(ver.getString("changes").split("<br>")));
-			}
-		}
-	}
-	
-	private boolean checkVersion(JSONObject root, Plugin plugin, String version, String url2, File f, String name) {
-		if (checkVersion(plugin.getDescription().getVersion(), version)) {
-			if (Configuration.isUpdaterActive()) {
-				Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aUpdating the plugin" + ChatColorUtils.COLOR_CHAR + "6" + name + " " + ChatColorUtils.COLOR_CHAR + "afrom version " + ChatColorUtils.COLOR_CHAR + "e" + plugin.getDescription().getVersion() + " " + ChatColorUtils.COLOR_CHAR + "ato version " + ChatColorUtils.COLOR_CHAR + "1" + version + ChatColorUtils.COLOR_CHAR + "a ab.");
-				editChangeLog(root, name, version);
-				downloadPlugin(url2, f, name);
-			}
-			else {
-				Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aBungeeUtils found an update. New version: " + ChatColorUtils.COLOR_CHAR + "6" + version + ChatColorUtils.COLOR_CHAR + "a.");
-				return false;
-			}
-			return true;
-		}
-		return false;
-	}
-	
-	private boolean checkVersion(String version1, String version2) {
-		return Long.parseLong(version1.replaceAll("\\.", "")) > Long.parseLong(version2.replaceAll("\\.", ""));
-	}
-	
-	private void downloadPlugin(String url, File f, String name) {
-		Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aStarting downloading " + ChatColorUtils.COLOR_CHAR + "6" + name);
+	/**
+	 * 
+	 * @param url
+	 * @param targetFile
+	 * @return errormask
+	 * errors:
+	 * 0: Create new file exception
+	 * 1: Invalid jar
+	 * 2: cant delete invalid jar
+	 * 3: Download IO error
+	 * 3: Finaly error
+	 */
+	private int downloadUpdate(String url, File targetFile) {
+		BigInteger errorMask = new BigInteger("0");
+		errorMask.setBit(8);
+		Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aStarting to download the update");
+		programm:
 		try {
 			Main.setInformation(ChatColorUtils.COLOR_CHAR + "aDownloading update " + ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "e000%" + ChatColorUtils.COLOR_CHAR + "7]");
 			BufferedInputStream in = null;
@@ -117,11 +137,11 @@ public class Updater {
 				int fileLength = com.getContentLength();
 				in = new BufferedInputStream(com.getInputStream());
 				File df;
-				if (f.exists()) {
-					fout = new FileOutputStream(df = new File(f.toString() + ".download"));
+				if (targetFile.exists()) {
+					fout = new FileOutputStream(df = new File(targetFile.toString() + ".download"));
 					df.deleteOnExit();
 				}
-				else fout = new FileOutputStream(df = f);
+				else fout = new FileOutputStream(df = targetFile);
 				final byte data[] = new byte[1024];
 				int count;
 				int readed = 0;
@@ -138,14 +158,15 @@ public class Updater {
 				fout.close();
 				in.close();
 				Main.setInformation(ChatColorUtils.COLOR_CHAR + "aDownload done!");
-				if (f.exists()) f.delete();
+				if (targetFile.exists()) targetFile.delete();
 				try {
-					f.createNewFile();
+					targetFile.createNewFile();
 				}
 				catch (IOException e) {
+					errorMask.setBit(0);
 					e.printStackTrace();
 				}
-				Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aDownload of " + ChatColorUtils.COLOR_CHAR + "6" + name + " " + ChatColorUtils.COLOR_CHAR + "adone!");
+				Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aUpdate downloaded!");
 				Main.setInformation(ChatColorUtils.COLOR_CHAR + "aCheck update for errors!");
 				Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aCheck update for errors!");
 				try {
@@ -155,24 +176,26 @@ public class Updater {
 					is.close();
 				}
 				catch (Exception e) {
+					errorMask.setBit(1);
 					Main.sendMessage(ChatColorUtils.COLOR_CHAR + "cThe update contains an error. (Message: " + e.getLocalizedMessage() + ")");
 					Main.sendMessage(ChatColorUtils.COLOR_CHAR + "cDeleting the update!");
 					try {
 						df.delete();
 					}
 					catch (Exception ex) {
+						errorMask.setBit(2);
 					}
-					return;
+					break programm;
 				}
 				Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aUpdate valid.");
 				Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aInstalling update!");
 				Main.setInformation(ChatColorUtils.COLOR_CHAR + "aInstalling update");
-				if (!f.delete()) {
+				if (!targetFile.delete()) {
 					Main.sendMessage(ChatColorUtils.COLOR_CHAR + "6Cant delete the old plugin jar.");
 				}
-				f.createNewFile();
+				targetFile.createNewFile();
 				FileInputStream fis = new FileInputStream(df);
-				FileOutputStream fos = new FileOutputStream(f);
+				FileOutputStream fos = new FileOutputStream(targetFile);
 				while ((count = fis.read(data, 0, 1024)) != -1) {
 					fos.write(data, 0, count);
 				}
@@ -183,8 +206,9 @@ public class Updater {
 				Main.setInformation(ChatColorUtils.COLOR_CHAR + "aUpdate installed!");
 			}
 			catch (Exception e) {
+				errorMask.setBit(3);
 				e.printStackTrace();
-				Main.sendMessage(ChatColorUtils.COLOR_CHAR + "cAn error happend while downloading " + ChatColorUtils.COLOR_CHAR + "4" + name);
+				Main.sendMessage(ChatColorUtils.COLOR_CHAR + "cAn error happend while downloading the update");
 			}
 			finally {
 				if (in != null) {
@@ -196,9 +220,11 @@ public class Updater {
 			}
 		}
 		catch (Exception e) {
+			errorMask.setBit(4);
 			e.printStackTrace();
-			Main.sendMessage(ChatColorUtils.COLOR_CHAR + "cAn error happend while downloading " + ChatColorUtils.COLOR_CHAR + "4" + name);
+			Main.sendMessage(ChatColorUtils.COLOR_CHAR + "cAn error happend while downloading the update");
 		}
+		return errorMask.intValue();
 	}
 	
 	public JSONObject getData() {
@@ -208,7 +234,7 @@ public class Updater {
 	
 	public Updater loadData() {
 		last = System.currentTimeMillis();
-		Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aGetting Update data!");
+		Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aLoading update data!");
 		try {
 			URL i = new URL(url);
 			HttpURLConnection c = (HttpURLConnection) i.openConnection();
@@ -228,6 +254,7 @@ public class Updater {
 		return this;
 	}
 	
+	/*
 	@SuppressWarnings("deprecation")
 	public boolean isServerWhiteListed() {
 		try {
@@ -263,20 +290,28 @@ public class Updater {
 		}
 		return true;
 	}
+	*/
+	
+	public HashMap<String, List<String>> createChanges(@NonNull String lastVersion){
+		HashMap<String, List<String>> out = new HashMap<>();
+		JSONArray changelogArray = data.getJSONArray("Changelog");
+		Iterator<Object> objects = changelogArray.iterator();
+		while (objects.hasNext()) {
+			JSONObject object = (JSONObject) objects.next();
+			String version; 
+			if(Long.parseLong((version = object.getString("Verion")).replaceAll("\\.", "")) > Long.parseLong(lastVersion.replaceAll("\\.", "")) && Long.parseLong((version = object.getString("Verion")).replaceAll("\\.", "")) <= Long.parseLong(getCurrentVersion().replaceAll("\\.", ""))){
+				ArrayList<String> changes = new ArrayList<>();
+				Iterator<Object> message = object.getJSONArray("Changed").iterator();
+				while (message.hasNext()) {
+					changes.add((String) message.next());
+				}
+				out.put(version, changes);
+			}
+		}
+		return out;
+	}
 	
 	public void updateData() {
 		if (System.currentTimeMillis() - last > TimeUnit.MINUTES.toMillis(10)) loadData();
-	}
-	
-	public static void main(String[] args) {
-		BigDecimal a = new BigDecimal(2);
-		int count = 0;
-		while (count < 500000) {
-			count++;
-			long start = System.currentTimeMillis();
-			a = a.multiply(a);
-			long end = System.currentTimeMillis();
-			System.out.println("Loop: " + count + " Diff: " + (end - start) + " M: " + a.toBigInteger().bitLength());
-		}
 	}
 }
