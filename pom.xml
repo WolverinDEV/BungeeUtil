@@ -57,21 +57,20 @@
 				</executions>
 			</plugin>
 			<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-source-plugin</artifactId>
-						<version>3.0.1</version>
-						<executions>
-							<execution>
-								<id>attach-sources</id>
-								<goals>
-									<goal>jar-no-fork</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
-
 	<properties>
 		<bungeecord.version>1.10-SNAPSHOT</bungeecord.version>
 	</properties>
@@ -104,6 +103,7 @@
 			<artifactId>jsoup</artifactId>
 			<version>1.9.2</version>
 		</dependency>
+		<!-- https://gitlab.com/WolverinDEV/TerminalUtils -->
 		<dependency>
 			<groupId>dev.wolveringer</groupId>
 			<artifactId>TerminalUtils</artifactId>
