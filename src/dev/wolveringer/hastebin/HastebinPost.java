@@ -6,11 +6,10 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
 import com.google.common.base.Charsets;
-
-import dev.wolveringer.util.apache.IOUtils;
 
 public class HastebinPost {
 	private StringBuilder text = new StringBuilder();

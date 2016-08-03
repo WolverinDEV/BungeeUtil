@@ -2,7 +2,7 @@ package dev.wolveringer.configuration;
 
 import java.util.Map;
 
-import dev.wolveringer.util.apache.Validate;
+import org.apache.commons.lang3.Validate;
 
 /**
  * This is a {@link Configuration} implementation that does not save or load

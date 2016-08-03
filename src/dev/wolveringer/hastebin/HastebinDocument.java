@@ -7,12 +7,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.common.base.Charsets;
-
-import dev.wolveringer.util.apache.IOUtils;
 
 public class HastebinDocument {
 	private static final String BASE_URL = "http://hastebin.com/raw/";

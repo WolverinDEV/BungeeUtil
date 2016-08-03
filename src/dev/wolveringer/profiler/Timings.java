@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import dev.wolveringer.BungeeUtil.Material;
 import dev.wolveringer.BungeeUtil.item.ItemStack;
 import dev.wolveringer.BungeeUtil.item.MultiClickItemStack;
 import dev.wolveringer.chat.ChatColor.ChatColorUtils;
-import dev.wolveringer.util.apache.ArrayUtils;
 
 public class Timings {
 	private LinkedList<Long> times = new LinkedList<Long>();

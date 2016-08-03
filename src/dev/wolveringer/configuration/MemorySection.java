@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import dev.wolveringer.util.apache.Validate;
+import org.apache.commons.lang3.Validate;
 
 /**
  * A type of {@link ConfigurationSection} that is stored in memory.

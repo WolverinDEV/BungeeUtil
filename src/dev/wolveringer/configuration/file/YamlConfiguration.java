@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.util.Map;
 
+import org.apache.commons.lang3.Validate;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.error.YAMLException;
@@ -15,7 +16,6 @@ import org.yaml.snakeyaml.representer.Representer;
 import dev.wolveringer.configuration.Configuration;
 import dev.wolveringer.configuration.ConfigurationSection;
 import dev.wolveringer.configuration.InvalidConfigurationException;
-import dev.wolveringer.util.apache.Validate;
 
 /**
  * An implementation of {@link Configuration} which saves all files in Yaml.

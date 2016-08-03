@@ -9,8 +9,9 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.Validate;
+
 import dev.wolveringer.configuration.Configuration;
-import dev.wolveringer.util.apache.Validate;
 
 /**
  * Utility class for storing and retrieving classes for {@link Configuration}.

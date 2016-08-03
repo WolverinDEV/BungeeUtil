@@ -5,9 +5,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import com.google.common.base.Charsets;
+import org.apache.commons.io.IOUtils;
 
-import dev.wolveringer.util.apache.IOUtils;
+import com.google.common.base.Charsets;
 
 public class SkinRequest {
 	public String performGetRequest(URL url) throws IOException {
