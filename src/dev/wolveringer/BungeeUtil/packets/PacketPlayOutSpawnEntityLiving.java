@@ -1,9 +1,9 @@
 package dev.wolveringer.BungeeUtil.packets;
 
-import dev.wolveringer.BungeeUtil.Vector;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.api.datawatcher.DataWatcher;
 import dev.wolveringer.api.position.Location;
+import dev.wolveringer.api.position.Vector;
 import dev.wolveringer.packet.PacketDataSerializer;
 
 public class PacketPlayOutSpawnEntityLiving extends BetaPacket implements PacketPlayOut{

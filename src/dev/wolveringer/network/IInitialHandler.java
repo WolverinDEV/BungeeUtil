@@ -51,8 +51,8 @@ public abstract class IInitialHandler extends InitialHandler {
 		super(BungeeCord.getInstance(), listenerInfo);
 		this.a = a;
 		this.b = b;
-		if (a != null) a.setHandler(this);
-		if (b != null) b.setHandler(this);
+		if (a != null) a.setInitHandler(this);
+		if (b != null) b.setInitHandler(this);
 	}
 	
 	public boolean isConnected = false;
@@ -93,8 +93,8 @@ public abstract class IInitialHandler extends InitialHandler {
 	public void disconnect(final BaseComponent... reason) {
 		if (isDisconnecting) return;
 		isDisconnecting = true;
-		if (getHandshake().getRequestedProtocol() == 2 && (getEncoder().prot == Protocol.LOGIN || getEncoder().prot == Protocol.GAME || (getEncoder().prot == Protocol.HANDSHAKE && getHandshake() != null))) {
-			if(getEncoder().prot == Protocol.HANDSHAKE)
+		if (getHandshake().getRequestedProtocol() == 2 && (getEncoder().getProtocoll() == Protocol.LOGIN || getEncoder().getProtocoll() == Protocol.GAME || (getEncoder().getProtocoll() == Protocol.HANDSHAKE && getHandshake() != null))) {
+			if(getEncoder().getProtocoll() == Protocol.HANDSHAKE)
 				setProtocol(Protocol.LOGIN);
 			unsafe().sendPacket(new Kick(ComponentSerializer.toString(reason)));
 		}
@@ -109,7 +109,7 @@ public abstract class IInitialHandler extends InitialHandler {
 		if (isDisconnecting) return;
 		isDisconnecting = true;
 		if (getChannel().isClosed()) { return; }
-		if (getHandshake().getRequestedProtocol() == 2 && (getEncoder().prot == Protocol.LOGIN || getEncoder().prot == Protocol.GAME)) {
+		if (getHandshake().getRequestedProtocol() == 2 && (getEncoder().getProtocoll() == Protocol.LOGIN || getEncoder().getProtocoll() == Protocol.GAME)) {
 			String message = "" + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "4Error Message: " + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "b" + e.getLocalizedMessage() + "\n";
 			for (int i = 0; i < (e.getStackTrace().length > stackDeep ? stackDeep : e.getStackTrace().length); i++) {
 				StackTraceElement ex = e.getStackTrace()[i];

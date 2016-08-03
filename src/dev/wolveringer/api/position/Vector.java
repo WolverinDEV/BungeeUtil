@@ -1,10 +1,10 @@
-package dev.wolveringer.BungeeUtil;
+package dev.wolveringer.api.position;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
-import dev.wolveringer.api.position.Location;
+import dev.wolveringer.BungeeUtil.NumberConversions;
 
 /**
  * Represents a mutable vector. Because the components of Vectors are mutable,

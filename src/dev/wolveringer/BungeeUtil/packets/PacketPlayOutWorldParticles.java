@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
-import dev.wolveringer.BungeeUtil.Vector;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.api.particel.ParticleEffect;
 import dev.wolveringer.api.position.Location;
+import dev.wolveringer.api.position.Vector;
 import dev.wolveringer.packet.PacketDataSerializer;
 
 public class PacketPlayOutWorldParticles extends Packet implements PacketPlayOut {

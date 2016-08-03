@@ -2,6 +2,8 @@ package dev.wolveringer.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -15,7 +17,6 @@ import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 import dev.wolveringer.BungeeUtil.ClientVersion;
 import dev.wolveringer.BungeeUtil.PacketHandleEvent;
 import dev.wolveringer.BungeeUtil.PacketLib;
-import dev.wolveringer.BungeeUtil.Propeties;
 import dev.wolveringer.BungeeUtil.packets.Packet;
 import dev.wolveringer.packet.ByteBuffCreator;
 import dev.wolveringer.packet.PacketHandle;
@@ -45,7 +46,9 @@ public class Decoder extends MinecraftDecoder {
 		return null;
 	}
 
-	private IInitialHandler connection;
+	@Getter
+	@Setter
+	private IInitialHandler initHandler;
 	private Protocol prot;
 	private int version;
 	private ClientVersion clientVersion = ClientVersion.UnderknownVersion;
@@ -54,12 +57,12 @@ public class Decoder extends MinecraftDecoder {
 	public Decoder(Protocol protocol, boolean server, int protocolVersion, IInitialHandler i, Direction dir) {
 		super(protocol, server, protocolVersion);
 		this.dir = dir;
-		this.connection = i;
+		this.initHandler = i;
 		this.setProtocolVersion(protocolVersion);
 	}
 
 	public IInitialHandler getHandler() {
-		return connection;
+		return initHandler;
 	}
 
 	public Protocol getProtocol() {
@@ -89,10 +92,6 @@ public class Decoder extends MinecraftDecoder {
 		return false;
 	}
 
-	public void setHandler(IInitialHandler i) {
-		this.connection = i;
-	}
-
 	@Override
 	public void setProtocol(Protocol protocol) {
 		super.setProtocol(protocol);
@@ -109,7 +108,7 @@ public class Decoder extends MinecraftDecoder {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-		if(connection == null){
+		if(initHandler == null){
 			super.decode(ctx, in, out);
 			System.out.println("Skipping decode()");
 			return;
@@ -119,24 +118,24 @@ public class Decoder extends MinecraftDecoder {
 			Packet packet = null;
 			try{
 				Profiler.decoder_timings.start(Messages.getString("network.timings.decoder.create.packet")); //$NON-NLS-1$
-				if(connection == null){
+				if(initHandler == null){
 					System.out.println("Connection == null");
 					return;
 				}
 				if(clientVersion == null){
 					System.out.println("Client version = null | Version id -> "+version);
-					connection.disconnect("§cYour client versions isnt supported!");
+					initHandler.disconnect("§cYour client versions isnt supported!");
 					return;
 				}
-				packet = Packet.getPacket(clientVersion.getProtocollVersion() ,getProtocol(), dir, in, connection.getPlayer());
+				packet = Packet.getPacket(clientVersion.getProtocollVersion() ,getProtocol(), dir, in, initHandler.getPlayer());
 				Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.create.packet")); //$NON-NLS-1$
 				if(packet == null){
 					Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.read")); //$NON-NLS-1$
 				}else{
 					Profiler.decoder_timings.start(Messages.getString("network.timings.decoder.handle"));
 					Profiler.decoder_timings.start(Messages.getString("network.timings.decoder.handle.intern")); //$NON-NLS-1$
-					PacketHandleEvent<? extends Packet> e = new PacketHandleEvent(packet, connection.getPlayer());
-					if(Propeties.HANDLE_INTERN_PACKET || !PacketHandle.handlePacket(e)){
+					PacketHandleEvent<? extends Packet> e = new PacketHandleEvent(packet, initHandler.getPlayer());
+					if(!PacketHandle.handlePacket(e)){
 						Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.handle.intern")); //$NON-NLS-1$
 						Profiler.decoder_timings.start(Messages.getString("network.timings.decoder.handle.extern")); //$NON-NLS-1$
 						PacketLib.handle(e);
@@ -158,14 +157,14 @@ public class Decoder extends MinecraftDecoder {
 				System.out.print("Error: 102");
 				return;
 			}catch (Exception e){
-				if(connection.isConnected)
+				if(initHandler.isConnected)
 					e.printStackTrace();
-				connection.disconnect(e);
+				initHandler.disconnect(e);
 				return;
 			}
 	
 			Protocol.DirectionData prot = isServer() ? this.getProtocol().TO_SERVER : this.getProtocol().TO_CLIENT;
-			ByteBuf copy = packet == null ? in.copy() : packet.writeToByteBuff(ByteBuffCreator.createByteBuff(),ClientVersion.fromProtocoll(connection.getVersion()));
+			ByteBuf copy = packet == null ? in.copy() : packet.writeToByteBuff(ByteBuffCreator.createByteBuff(),ClientVersion.fromProtocoll(initHandler.getVersion()));
 			try{
 				int packetId = DefinedPacket.readVarInt(in);
 				DefinedPacket bungeePacket = null;
@@ -188,7 +187,7 @@ public class Decoder extends MinecraftDecoder {
 				}
 			}
 		}catch(Exception e){
-			if(connection.isConnected)
+			if(initHandler.isConnected)
 				e.printStackTrace();
 		}
 		Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.read")); //$NON-NLS-1$

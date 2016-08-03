@@ -1,7 +1,6 @@
 package dev.wolveringer.api.position;
 
 import dev.wolveringer.BungeeUtil.NumberConversions;
-import dev.wolveringer.BungeeUtil.Vector;
 
 /**
  * Represents a 3-dimensional position in a world

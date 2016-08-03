@@ -9,10 +9,10 @@ import java.util.Map.Entry;
 
 import dev.wolveringer.BungeeUtil.Material;
 import dev.wolveringer.BungeeUtil.Player;
-import dev.wolveringer.BungeeUtil.Vector;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutWorldParticles;
 import dev.wolveringer.api.particel.ParticleEffect.ParticleData;
 import dev.wolveringer.api.position.Location;
+import dev.wolveringer.api.position.Vector;
 /**
  * <b>ParticleEffect Library</b>
  * <p>
