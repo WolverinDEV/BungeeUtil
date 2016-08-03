@@ -28,8 +28,31 @@
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.3.1</version>
 				<configuration>
-					<outputDirectory>/home/wolverindev/bungee/plugins/</outputDirectory>
-					<jarName>BungeeUtils</jarName>
+					<!--<outputDirectory>/home/wolverindev/bungee/plugins/</outputDirectory> 
+						<jarName>BungeeUtils</jarName> -->
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>maven-replacer-plugin</artifactId>
+				<version>1.4.0</version>
+				<executions>
+					<execution>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<file>${bungeeyml.location}</file>
+					<outputFile>${bungeeyml.location}</outputFile>
+					<replacements>
+						<replacement>
+							<token>version: (.*)</token>
+							<value>version: ${project.version}</value>
+						</replacement>
+					</replacements>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -72,6 +95,7 @@
 		</plugins>
 	</build>
 	<properties>
+		<bungeeyml.location>src/bungee.yml</bungeeyml.location>
 		<bungeecord.version>1.10-SNAPSHOT</bungeecord.version>
 	</properties>
 	<dependencies>
