@@ -32,7 +32,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dev.wolveringer.BungeeUtil.Main;
+import dev.wolveringer.BungeeUtil.Material;
 import dev.wolveringer.BungeeUtil.configuration.Configuration;
+import dev.wolveringer.BungeeUtil.gameprofile.SkinFactory;
+import dev.wolveringer.BungeeUtil.item.ItemStack;
+import dev.wolveringer.BungeeUtil.item.ItemStack.Click;
+import dev.wolveringer.BungeeUtil.item.itemmeta.SkullMeta;
 import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 import dev.wolveringer.util.MathUtil;
 import lombok.NonNull;
@@ -89,7 +94,7 @@ public class Updater {
 	}
 	
 	public void installUpdate(){
-		File ownFile = new File(Main.getMain().getDataFolder().getAbsoluteFile().getAbsolutePath() + ".jar");
+		File ownFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getFile());
 		downloadUpdate(data.getString("Download"), ownFile);
 		Configuration.setLastVersion(getCurrentVersion());
 	}
@@ -127,7 +132,7 @@ public class Updater {
 		BigInteger errorMask = new BigInteger("0");
 		errorMask.setBit(8);
 		Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aUpdating from "+getCurrentVersion()+" to "+getNewestVersion());
-		Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aStarting to download the update ("+url+")");
+		Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aStarting to download the update ("+url+") to "+targetFile.getAbsolutePath());
 		programm:
 		try {
 			Main.setInformation(ChatColorUtils.COLOR_CHAR + "aDownloading update " + ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "e000%" + ChatColorUtils.COLOR_CHAR + "7]");
@@ -139,8 +144,8 @@ public class Updater {
 				in = new BufferedInputStream(com.getInputStream());
 				File df;
 				if (targetFile.exists()) {
-					fout = new FileOutputStream(df = new File(targetFile.toString() + ".download"));
-					df.deleteOnExit();
+					Main.setInformation(ChatColorUtils.COLOR_CHAR + "aUsing .download file ("+targetFile.getPath() + "BungeeUtil.download)!");
+					fout = new FileOutputStream(df = new File(targetFile.getPath() + "BungeeUtil.download"));
 				}
 				else fout = new FileOutputStream(df = targetFile);
 				final byte data[] = new byte[1024];
@@ -159,14 +164,6 @@ public class Updater {
 				fout.close();
 				in.close();
 				Main.setInformation(ChatColorUtils.COLOR_CHAR + "aDownload done!");
-				if (targetFile.exists()) targetFile.delete();
-				try {
-					targetFile.createNewFile();
-				}
-				catch (IOException e) {
-					errorMask.setBit(0);
-					e.printStackTrace();
-				}
 				Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aUpdate downloaded!");
 				Main.setInformation(ChatColorUtils.COLOR_CHAR + "aCheck update for errors!");
 				Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aCheck update for errors!");
@@ -191,10 +188,14 @@ public class Updater {
 				Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aUpdate valid.");
 				Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aInstalling update!");
 				Main.setInformation(ChatColorUtils.COLOR_CHAR + "aInstalling update");
-				if (!targetFile.delete()) {
+				if (!targetFile.equals(df) && !targetFile.delete()) {
 					Main.sendMessage(ChatColorUtils.COLOR_CHAR + "6Cant delete the old plugin jar.");
 				}
-				targetFile.createNewFile();
+				boolean deleteOld = !targetFile.equals(df);
+				if(!targetFile.createNewFile()){
+					deleteOld = false;
+					Main.sendMessage(ChatColorUtils.COLOR_CHAR + "6Cant create new jar.");
+				}
 				FileInputStream fis = new FileInputStream(df);
 				FileOutputStream fos = new FileOutputStream(targetFile);
 				while ((count = fis.read(data, 0, 1024)) != -1) {
@@ -202,7 +203,7 @@ public class Updater {
 				}
 				fis.close();
 				fos.close();
-				if (!df.delete()) Main.sendMessage(ChatColorUtils.COLOR_CHAR + "6Cant delte cache file!");
+				if (deleteOld && !df.delete()) Main.sendMessage(ChatColorUtils.COLOR_CHAR + "6Cant delte cache file!");
 				Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aRestarting bungeecord!");
 				Main.setInformation(ChatColorUtils.COLOR_CHAR + "aUpdate installed!");
 			}
