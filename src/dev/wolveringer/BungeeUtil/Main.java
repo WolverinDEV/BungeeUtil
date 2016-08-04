@@ -1,32 +1,16 @@
 package dev.wolveringer.BungeeUtil;
 
-import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
 
-import jline.TerminalFactory;
-import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.plugin.Plugin;
-import dev.wolveringer.BungeeUtil.RamStatistics.RamStatistic;
 import dev.wolveringer.BungeeUtil.configuration.Configuration;
-import dev.wolveringer.BungeeUtil.injector.InjectFiles;
 import dev.wolveringer.BungeeUtil.packets.Packet;
-import dev.wolveringer.api.bossbar.BossBarListener;
-import dev.wolveringer.api.scoreboard.PacketListenerScoreboard;
-import dev.wolveringer.chat.ChatColor.BukkitColorFormater;
 import dev.wolveringer.chat.ChatColor.ChatColorUtils;
-import dev.wolveringer.commands.BungeeTimings;
-import dev.wolveringer.network.IIInitialHandler;
-import dev.wolveringer.network.ProxiedPlayerUserConnection;
-import dev.wolveringer.network.channel.init.ChannelInizializer;
 import dev.wolveringer.terminal.table.TerminalTable;
 import dev.wolveringer.terminal.table.TerminalTable.Align;
 import dev.wolveringer.terminal.table.TerminalTable.TerminalRow;
@@ -49,7 +33,8 @@ public class Main extends Plugin {
 	@Override
 	public void onEnable() {
 		main = this;
-		BungeeUtil.createInstance(main);
+		if(BungeeUtil.getInstance() == null)
+			BungeeUtil.createInstance(main);
 		Configuration.init();
 		BungeeUtil.getInstance().setInformation("Check for updates");
 		
