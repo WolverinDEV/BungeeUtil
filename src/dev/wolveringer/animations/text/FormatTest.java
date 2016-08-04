@@ -1,5 +1,6 @@
 package dev.wolveringer.animations.text;
 
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.Main;
 import net.md_5.bungee.api.ChatColor;
 
@@ -15,8 +16,8 @@ class scroler extends Thread {
 	@Override
 	public void run() {
 		while (true){
-			Main.sendMessage("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-			Main.sendMessage("\"" + ChatColor.stripColor(s.getNextString()) + "\"");
+			BungeeUtil.getInstance().sendMessage("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+			BungeeUtil.getInstance().sendMessage("\"" + ChatColor.stripColor(s.getNextString()) + "\"");
 			try{
 				Thread.sleep(s.getTick());
 			}catch (InterruptedException e){

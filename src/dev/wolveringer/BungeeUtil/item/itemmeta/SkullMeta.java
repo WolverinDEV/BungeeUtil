@@ -3,6 +3,7 @@ package dev.wolveringer.BungeeUtil.item.itemmeta;
 import java.util.UUID;
 
 import net.md_5.bungee.BungeeCord;
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.OperationCalback;
 import dev.wolveringer.BungeeUtil.gameprofile.GameProfile;
@@ -43,7 +44,7 @@ public class SkullMeta extends CraftItemMeta {
 	}
 
 	public void setSkin(final String owner) {
-		BungeeCord.getInstance().getScheduler().runAsync(Main.getMain(), new Runnable() {
+		BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), new Runnable() {
 			@Override
 			public void run() {
 				try{

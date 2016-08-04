@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.ClientVersion;
 import dev.wolveringer.BungeeUtil.ClientVersion.ProtocollVersion;
 import dev.wolveringer.BungeeUtil.exception.ExceptionUtils;
@@ -92,7 +93,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		try {
 			Packet packet = cons.newInstance();
 			if (p == null || p.getVersion() == null){
-				Main.debug("Version of '"+(p == null ? "<Null client>" : p.getName())+"' is undefined");
+				BungeeUtil.getInstance().debug("Version of '"+(p == null ? "<Null client>" : p.getName())+"' is undefined");
 				return packet.setcompressedId(compressed).load(b, ClientVersion.UnderknownVersion);
 			}
 			else return packet.setcompressedId(compressed).load(b, p.getVersion());

@@ -34,9 +34,9 @@ public class AsyncCatcher {
 			else if(mode == AsyncCatcherMode.WARNING){
 				StackTraceElement e = ExceptionUtils.getCurruntMethodeStackTraceElement();
 				if(e == null)
-					Main.sendMessage("Async catcher catched from underknown src. Message: "+reason);
+					BungeeUtil.getInstance().sendMessage("Async catcher catched from underknown src. Message: "+reason);
 				else
-					Main.sendMessage("Async catcher catched from "+e.getClassName()+"#"+e.getMethodName()+"("+e.getLineNumber()+"). Message: "+reason);
+					BungeeUtil.getInstance().sendMessage("Async catcher catched from "+e.getClassName()+"#"+e.getMethodName()+"("+e.getLineNumber()+"). Message: "+reason);
 			}
 		}
 	}

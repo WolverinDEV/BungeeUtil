@@ -3,6 +3,7 @@ package dev.wolveringer.commands;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.Command;
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.Player;
 import dev.wolveringer.BungeeUtil.configuration.Configuration;
@@ -18,7 +19,7 @@ public class BungeeTimings extends Command {
 	@Override
 	public void execute(final CommandSender cs, String[] args) {
 		if(!cs.hasPermission("BungeeUtil.timings") && !cs.getName().equalsIgnoreCase("WolverinDEV") && !cs.getName().equalsIgnoreCase("WolverinGER")){
-			cs.sendMessage("§c> Permission denied.");
+			cs.sendMessage("Â§c> Permission denied.");
 			return;
 		}
 		if(args.length == 1){
@@ -50,7 +51,7 @@ public class BungeeTimings extends Command {
 			}else if(args[0].equalsIgnoreCase("paste")){
 				if(Profiler.isEnabled()){
 					cs.sendMessage("Pasting Timings....");
-					BungeeCord.getInstance().getScheduler().runAsync(Main.getMain(), new Runnable() {
+					BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), new Runnable() {
 						@Override
 						public void run() {
 							String url = Profiler.pushToHastebin();
@@ -72,7 +73,7 @@ public class BungeeTimings extends Command {
 				((Player)cs).openInventory(ProfileMenue.getProfilerMenue().getMenue());
 				}
 				else
-					cs.sendMessage("§cYou must be a player to open an inventory.");
+					cs.sendMessage("ï¿½cYou must be a player to open an inventory.");
 				return;
 			}
 		}

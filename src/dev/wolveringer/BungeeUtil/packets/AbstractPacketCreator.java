@@ -13,6 +13,7 @@ import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 import dev.wolveringer.BungeeUtil.ClientVersion.ProtocollVersion;
 import dev.wolveringer.BungeeUtil.packets.Packet.ProtocollId;
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.CostumPrintStream;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.Player;
@@ -173,12 +174,12 @@ public abstract class AbstractPacketCreator {
 		listPackets(new CostumPrintStream() {
 			@Override
 			public void println(String s) {
-				Main.sendMessage(s);
+				BungeeUtil.getInstance().sendMessage(s);
 			}
 
 			@Override
 			public void print(String s) {
-				Main.sendMessage(s);
+				BungeeUtil.getInstance().sendMessage(s);
 			}
 		});
 	}

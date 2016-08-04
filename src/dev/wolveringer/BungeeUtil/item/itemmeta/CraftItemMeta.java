@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.item.Item;
 import dev.wolveringer.BungeeUtil.item.ItemStack;
@@ -135,9 +136,9 @@ public class CraftItemMeta implements ItemMeta {
 			try{
 				Method m = UtilReflection.getMethod(is.getClass(), "click", Click.class);
 				sync = m.isAnnotationPresent(SyncHandle.class) ? 1 : 0;
-				Main.debug((sync == 1 ? "Sync-":"Ansync-")+"Click handeling for "+m.getDeclaringClass().getName()+"#"+m.getName());
+				BungeeUtil.getInstance().debug((sync == 1 ? "Sync-":"Ansync-")+"Click handeling for "+m.getDeclaringClass().getName()+"#"+m.getName());
 			}catch(Exception e){
-				Main.debug(e, "Exception while try to detect sync handeling....");
+				BungeeUtil.getInstance().debug(e, "Exception while try to detect sync handeling....");
 			}
 		}
 		return sync == 1;

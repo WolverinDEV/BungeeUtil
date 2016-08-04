@@ -3,6 +3,7 @@ package dev.wolveringer.animations.inventory;
 import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.BungeeCord;
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.Main;
 
 public abstract class LimetedScheduller implements Runnable {
@@ -41,7 +42,7 @@ public abstract class LimetedScheduller implements Runnable {
 	}
 
 	public void start() {
-		ID = BungeeCord.getInstance().getScheduler().schedule(Main.getMain(), this, 0, repeat_time, unit).getId();
+		ID = BungeeCord.getInstance().getScheduler().schedule(BungeeUtil.getPluginInstance(), this, 0, repeat_time, unit).getId();
 	}
 
 	public void stop() {

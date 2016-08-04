@@ -13,6 +13,7 @@ import java.net.Proxy.Type;
 import java.net.Socket;
 
 import net.md_5.bungee.api.ChatColor;
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.nbt.NBTBase;
 import dev.wolveringer.nbt.NBTCompressedStreamTools;
@@ -30,7 +31,7 @@ public class ServerDatReader {
 		for(NBTBase comp : list.asList()){
 			NBTTagCompound c = (NBTTagCompound) comp;
 			c.set("name", new NBTTagString("§a§l§n"+reset(c.getString("name"))));
-			Main.sendMessage(comp.toString());
+			BungeeUtil.getInstance().sendMessage(comp.toString());
 		}
 		//FileOutputStream out = new FileOutputStream(f);
 		//write(base, out);

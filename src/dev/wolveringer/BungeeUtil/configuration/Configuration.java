@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dev.wolveringer.BungeeUtil.AsyncCatcher.AsyncCatcherMode;
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.HandleErrorAction;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.configuration.file.YamlConfiguration;
 import dev.wolveringer.strings.Messages;
+import net.md_5.bungee.BungeeCord;
 
 public class Configuration {
 	private static YamlConfiguration conf;
@@ -21,12 +23,12 @@ public class Configuration {
 	
 	@SuppressWarnings("deprecation")
 	public static void init(){
-		conf = YamlConfiguration.loadConfiguration(new File(Main.getMain().getDataFolder(),Messages.getString("configuration.name")));
+		conf = YamlConfiguration.loadConfiguration(new File(BungeeUtil.getPluginInstance().getDataFolder().getParentFile().getAbsolutePath()+"/BungeeUtil/"+Messages.getString("configuration.name")));
 		conf.setDefaults(YamlConfiguration.loadConfiguration(Configuration.class.getResourceAsStream("/"+Messages.getString("configuration.name"))));
 		conf.options().copyHeader(true);
 		conf.options().copyDefaults(true);
 		try{
-			conf.save(new File(Main.getMain().getDataFolder(),Messages.getString("configuration.name")));
+			conf.save(new File(BungeeUtil.getPluginInstance().getDataFolder().getParentFile().getAbsolutePath()+"/BungeeUtil/"+Messages.getString("configuration.name")));
 		}catch (IOException ex){
 			ex.printStackTrace();
 		}
@@ -59,7 +61,7 @@ public class Configuration {
 	public static void setTimingsActive(boolean enabled) {
 		conf.set(Messages.getString("configuration.timings"), enabled);
 		try{
-			conf.save(new File(Main.getMain().getDataFolder(),Messages.getString("configuration.name")));
+			conf.save(new File(BungeeUtil.getPluginInstance().getDataFolder().getParentFile().getAbsolutePath()+"/BungeeUtil/"+Messages.getString("configuration.name")));
 		}catch (IOException ex){
 			ex.printStackTrace();
 		}
@@ -77,7 +79,7 @@ public class Configuration {
 		else
 			conf.set("lastVersion", oldVerstion);
 		try {
-			conf.save(new File(Main.getMain().getDataFolder(),Messages.getString("configuration.name")));
+			conf.save(new File(BungeeUtil.getPluginInstance().getDataFolder().getParentFile().getAbsolutePath()+"/BungeeUtil/"+Messages.getString("configuration.name")));
 		} catch (IOException e) {
 		}
 	}

@@ -3,6 +3,7 @@ package dev.wolveringer.profiler;
 import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.BungeeCord;
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.Material;
 import dev.wolveringer.BungeeUtil.item.ItemStack;
@@ -25,7 +26,7 @@ public class ProfileMenue {
 	private Inventory inv_disabled = new Inventory(9, ""+ChatColorUtils.COLOR_CHAR+"cTimings Disabled");
 
 	public ProfileMenue() {
-		BungeeCord.getInstance().getScheduler().schedule(Main.getMain(), new Runnable() {
+		BungeeCord.getInstance().getScheduler().schedule(BungeeUtil.getPluginInstance(), new Runnable() {
 			@Override
 			public void run() {
 				rebuild();

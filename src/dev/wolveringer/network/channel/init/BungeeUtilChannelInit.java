@@ -22,6 +22,7 @@ import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 import net.md_5.bungee.protocol.Varint21FrameDecoder;
 import net.md_5.bungee.protocol.Varint21LengthFieldPrepender;
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.network.Decoder;
 import dev.wolveringer.network.Encoder;
@@ -116,8 +117,8 @@ public class BungeeUtilChannelInit <T extends InitialHandler> extends ChannelIni
 			BungeeCord.getInstance().stop();
 			return;
 		}
-		BungeeCord.getInstance().getPluginManager().unregisterListeners(Main.getMain());
-		Main.getMain().onDisable();
+		BungeeCord.getInstance().getPluginManager().unregisterListeners(BungeeUtil.getPluginInstance()); //TODO onley bungeeutil
+		BungeeUtil.getInstance().disable();
 		for (ProxiedPlayer p : BungeeCord.getInstance().getPlayers())
 			p.disconnect(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cBungeeUntil Class error");
 		BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cBungeeUntil is disabled!");

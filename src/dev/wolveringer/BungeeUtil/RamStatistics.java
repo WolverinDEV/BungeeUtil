@@ -40,7 +40,7 @@ public class RamStatistics {
 	
 	public void start(){
 		if(task == null){
-			task = BungeeCord.getInstance().getScheduler().runAsync(Main.getMain(), new Runnable() {
+			task = BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), new Runnable() {
 				@Override
 				public void run() {
 					while (true) {

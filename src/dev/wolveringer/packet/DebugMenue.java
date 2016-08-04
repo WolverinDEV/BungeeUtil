@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import dev.wolveringer.BungeeUtil.ClientVersion.BigClientVersion;
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.CostumPrintStream;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.Material;
@@ -60,7 +61,7 @@ public class DebugMenue {
 		};
 		i.getItemMeta().setGlow(true);
 		i.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR + "bYEY");
-		i.getItemMeta().setLore(Arrays.asList(ChatColorUtils.COLOR_CHAR + "aDieser Server nutzt", ChatColorUtils.COLOR_CHAR + "adein Plugin: ", " " + ChatColorUtils.COLOR_CHAR + "7- " + ChatColorUtils.COLOR_CHAR + "eBungeeUntil", " " + ChatColorUtils.COLOR_CHAR + "7- " + ChatColorUtils.COLOR_CHAR + "eVerion " + ChatColorUtils.COLOR_CHAR + "b" + Main.getMain().getDescription().getVersion()));
+		i.getItemMeta().setLore(Arrays.asList(ChatColorUtils.COLOR_CHAR + "aDieser Server nutzt", ChatColorUtils.COLOR_CHAR + "adein Plugin: ", " " + ChatColorUtils.COLOR_CHAR + "7- " + ChatColorUtils.COLOR_CHAR + "eBungeeUntil", " " + ChatColorUtils.COLOR_CHAR + "7- " + ChatColorUtils.COLOR_CHAR + "eVerion " + ChatColorUtils.COLOR_CHAR + "b" + BungeeUtil.getPluginInstance().getDescription().getVersion()));
 		inv.setItem(1, i);
 		
 		i = new ItemStack(159, 1, (short) 14) {
@@ -105,12 +106,12 @@ public class DebugMenue {
 				c.getEquipment().setHelmet(new dev.wolveringer.BungeeUtil.item.Item(Material.LEATHER_HELMET));
 				Skin s = SkinFactory.getSkin("WolverinDEV");
 				s.setPublic(true);
-				Main.sendMessage(s + "");
+				BungeeUtil.getInstance().sendMessage(s + "");
 				
 				GameProfile profile = s.applay(c.getProfile());
 				
-				Main.sendMessage(s + "");
-				Main.sendMessage(profile + "");
+				BungeeUtil.getInstance().sendMessage(s + "");
+				BungeeUtil.getInstance().sendMessage(profile + "");
 				
 				c.setProfile(profile);
 				c.setVisiable(p.getPlayer(), true);
@@ -202,7 +203,7 @@ public class DebugMenue {
 							s.removeObjektive("test");
 							if (bar != null) {
 								bar.setColor(BarColor.RED);
-								BungeeCord.getInstance().getScheduler().runAsync(Main.getMain(), new Runnable() {
+								BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), new Runnable() {
 									@Override
 									public void run() {
 										try {
@@ -231,7 +232,7 @@ public class DebugMenue {
 				p.getPlayer().openInventory(base);
 				final ItemContainer container = new ItemContainer(27);
 				container.fill(new Item(Material.BARRIER));
-				BungeeCord.getInstance().getScheduler().schedule(Main.getMain(), new Runnable() {
+				BungeeCord.getInstance().getScheduler().schedule(BungeeUtil.getPluginInstance(), new Runnable() {
 					public void run() {
 						InventoryViewChangeAnimations.runAnimation(AnimationType.SCROLL_LEFT, base, container, "sexy", new Item(Material.BEDROCK), 500);
 					}
@@ -241,7 +242,7 @@ public class DebugMenue {
 		
 		is.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR + "7##### " + ChatColorUtils.COLOR_CHAR + "eStatistics " + ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "aMB" + ChatColorUtils.COLOR_CHAR + "7] #####");
 		
-		BungeeCord.getInstance().getScheduler().runAsync(Main.getMain(), new Runnable() {
+		BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), new Runnable() {
 			@Override
 			public void run() {
 				int mb = 1024 * 1024;

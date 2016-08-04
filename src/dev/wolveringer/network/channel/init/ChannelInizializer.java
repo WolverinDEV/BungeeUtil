@@ -8,6 +8,7 @@ import java.lang.reflect.Modifier;
 
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.netty.PipelineUtils;
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 import dev.wolveringer.network.IIInitialHandler;
@@ -16,7 +17,7 @@ public abstract class ChannelInizializer extends ChannelInitializer<Channel> {
 	private static ChannelInizializer init;
 	
 	public static void setChannelInitializer(ChannelInizializer init) {
-		Main.sendMessage("Set channel inizializer to "+init.getClass().getName());
+		BungeeUtil.getInstance().sendMessage("Set channel inizializer to "+init.getClass().getName());
 		ChannelInizializer.init = init;
 	}
 	

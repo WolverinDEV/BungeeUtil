@@ -7,7 +7,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
+import dev.wolveringer.BungeeUtil.Player;
 import net.md_5.bungee.ServerConnection;
+import net.md_5.bungee.UserConnection;
 import net.md_5.bungee.api.Callback;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.ProxyServer;
@@ -15,6 +17,8 @@ import net.md_5.bungee.api.Title;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.Connection;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.score.Scoreboard;
 import net.md_5.bungee.connection.InitialHandler;
 import net.md_5.bungee.entitymap.EntityMap;
@@ -25,7 +29,7 @@ import net.md_5.bungee.protocol.PacketWrapper;
 import net.md_5.bungee.protocol.packet.ClientSettings;
 import net.md_5.bungee.tab.TabList;
 
-public abstract class AbstraktUserConnection {
+public class AbstraktUserConnection implements ProxiedPlayer{
 	@ConstructorProperties({ "bungee", "ch", "name", "pendingConnection" })
 	public AbstraktUserConnection(ProxyServer bungee, ChannelWrapper ch, String name, InitialHandler pendingConnection) {
 	}
@@ -35,10 +39,6 @@ public abstract class AbstraktUserConnection {
 	}
 
 	public InitialHandler getPendingConnection() {
-		return null;
-	}
-
-	public ServerConnection getServer() {
 		return null;
 	}
 
@@ -278,5 +278,15 @@ public abstract class AbstraktUserConnection {
 	}
 
 	public void setCompressionThreshold(int compressionThreshold) {
+	}
+
+	@Override
+	public boolean isConnected() {
+		return false;
+	}
+
+	@Override
+	public Server getServer() {
+		return null;
 	}
 }

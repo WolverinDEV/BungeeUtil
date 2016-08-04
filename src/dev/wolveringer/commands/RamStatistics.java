@@ -1,5 +1,6 @@
 package dev.wolveringer.commands;
 
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.RamStatistics.RamStatistic;
 import dev.wolveringer.chat.ChatColor.ChatColorUtils;
@@ -25,7 +26,7 @@ public class RamStatistics extends Command{
 			return;
 		}
 		if(cs instanceof ConsoleCommandSender){
-			TerminalGraph graph = Main.getMain().ramStatistiks.createGrath(120, 1024*1024);
+			TerminalGraph graph = BungeeUtil.getInstance().ramStatistiks.createGrath(120, 1024*1024);
 			graph.setYAxisName(new ColoredString("§amb"));
 			graph.setXAxisName(new ColoredString("§aseconds"));
 			for(ColoredString line : graph.buildLines(TerminalFactory.get().getWidth()-1, TerminalFactory.get().getHeight()-4, false))
@@ -33,7 +34,7 @@ public class RamStatistics extends Command{
 		}
 		else
 		{
-			RamStatistic last = Main.getMain().ramStatistiks.getLastState();
+			RamStatistic last = BungeeUtil.getInstance().ramStatistiks.getLastState();
 			int mb = 1024*1024;
 			cs.sendMessage("");
 			cs.sendMessage("§aReserved Used Memory: §7"+((int)(last.getUsedMemory()/mb))+"M");

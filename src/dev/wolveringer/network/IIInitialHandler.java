@@ -48,6 +48,7 @@ import net.md_5.bungee.protocol.packet.EncryptionRequest;
 import net.md_5.bungee.protocol.packet.EncryptionResponse;
 import net.md_5.bungee.protocol.packet.LoginRequest;
 import net.md_5.bungee.protocol.packet.LoginSuccess;
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.ClientVersion;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.Player;
@@ -118,7 +119,7 @@ public class IIInitialHandler extends IInitialHandler {
 				clazz.setName("ProxiedPlayerUserConnectionRedefined" + (redifned_count == 0 ? "" : redifned_count));
 				clazz.setSuperclass(cp.get(UserConnection.class.getName()));
 				base_class_connection = class_connection = clazz.toClass(getClassLoader());
-				Main.sendMessage("§aInit Base class");
+				BungeeUtil.getInstance().sendMessage("§aInit Base class");
 				redifned_count++;
 			}catch (Exception e){
 				e.printStackTrace();
@@ -138,7 +139,7 @@ public class IIInitialHandler extends IInitialHandler {
 				clazz.setSuperclass(super_class);
 				clazz.setName("ProxiedPlayerUserConnectionRedefined_" + (redifned_count == 0 ? "" : redifned_count));
 				class_connection = clazz.toClass(getClassLoader()); //Create the class
-				Main.sendMessage("§aInit extra class " + class_connection.getSuperclass());
+				BungeeUtil.getInstance().sendMessage("§aInit extra class " + class_connection.getSuperclass());
 				redifned_count++;
 			}catch (Exception e){
 				e.printStackTrace();

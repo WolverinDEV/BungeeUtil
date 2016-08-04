@@ -15,6 +15,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.OperationCalback;
 
@@ -52,7 +53,7 @@ public class SkinFactory {
 
 	@SuppressWarnings("unchecked")
 	public static void getSkin(final UUID uuid, final OperationCalback<Skin>... c) {
-		BungeeCord.getInstance().getScheduler().runAsync(Main.getMain(), new Runnable() {
+		BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), new Runnable() {
 			@SuppressWarnings({ "rawtypes" })
 			@Override
 			public void run() {
@@ -91,7 +92,7 @@ public class SkinFactory {
 	
 	@SuppressWarnings("unchecked")
 	public static void getSkin(final String name, final OperationCalback<Skin>... c) {
-		BungeeCord.getInstance().getScheduler().runAsync(Main.getMain(), new Runnable() {
+		BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), new Runnable() {
 			@SuppressWarnings({ "rawtypes" })
 			@Override
 			public void run() {

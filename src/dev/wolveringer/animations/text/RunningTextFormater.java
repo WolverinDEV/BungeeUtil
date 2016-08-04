@@ -3,6 +3,7 @@ package dev.wolveringer.animations.text;
 import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.BungeeCord;
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.Main;
 
 public abstract class RunningTextFormater {
@@ -15,7 +16,7 @@ public abstract class RunningTextFormater {
 
 	public void start(){
 		if(PID == -1){
-			BungeeCord.getInstance().getScheduler().schedule(Main.getMain(), new Runnable() {
+			BungeeCord.getInstance().getScheduler().schedule(BungeeUtil.getPluginInstance(), new Runnable() {
 				@Override
 				public void run() {
 					update(format.getNextString());

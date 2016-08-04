@@ -1,5 +1,6 @@
 package dev.wolveringer;
 
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.hastebin.HastebinDocument;
 import dev.wolveringer.nbt.NBTCompressedStreamTools;
@@ -9,7 +10,7 @@ public class TimingsDataReader {
 	public static void main(String[] args) {
 		try{
 			NBTTagCompound s = NBTCompressedStreamTools.read(getNBTTagString());
-			Main.sendMessage(s.toFormatedString());
+			BungeeUtil.getInstance().sendMessage(s.toFormatedString());
 		}catch (Exception ex){
 			ex.printStackTrace();
 		}

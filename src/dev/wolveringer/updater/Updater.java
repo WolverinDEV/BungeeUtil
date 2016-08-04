@@ -31,6 +31,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.Material;
 import dev.wolveringer.BungeeUtil.configuration.Configuration;
@@ -79,7 +80,7 @@ public class Updater {
 	
 	public boolean checkUpdate() {
 		updateData();
-		Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aChecking for Plugin updates");
+		BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aChecking for Plugin updates");
 		if (data == null) throw new NullPointerException("HTTP Data is null. Invpoke getData() first");
 		if (!isNewstVersion()) {
 			installUpdate();
@@ -87,8 +88,8 @@ public class Updater {
 			return true;
 		}
 		else {
-			if (!isDevBuild()) Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aNo plugin update found! Your version is alredy the newest! (" + getCurrentVersion() + ")");
-			else Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aYou plugin version is newer than the currunt public version. I think i'm a dev build... All bugs will be ignored");
+			if (!isDevBuild()) BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aNo plugin update found! Your version is alredy the newest! (" + getCurrentVersion() + ")");
+			else BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aYou plugin version is newer than the currunt public version. I think i'm a dev build... All bugs will be ignored");
 		}
 		return false;
 	}
@@ -131,11 +132,11 @@ public class Updater {
 	private int downloadUpdate(String url, File targetFile) {
 		BigInteger errorMask = new BigInteger("0");
 		errorMask.setBit(8);
-		Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aUpdating from "+getCurrentVersion()+" to "+getNewestVersion());
-		Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aStarting to download the update ("+url+") to "+targetFile.getAbsolutePath());
+		BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aUpdating from "+getCurrentVersion()+" to "+getNewestVersion());
+		BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aStarting to download the update ("+url+") to "+targetFile.getAbsolutePath());
 		programm:
 		try {
-			Main.setInformation(ChatColorUtils.COLOR_CHAR + "aDownloading update " + ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "e000%" + ChatColorUtils.COLOR_CHAR + "7]");
+			BungeeUtil.getInstance().setInformation(ChatColorUtils.COLOR_CHAR + "aDownloading update " + ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "e000%" + ChatColorUtils.COLOR_CHAR + "7]");
 			BufferedInputStream in = null;
 			FileOutputStream fout = null;
 			try {
@@ -144,7 +145,7 @@ public class Updater {
 				in = new BufferedInputStream(com.getInputStream());
 				File df;
 				if (targetFile.exists()) {
-					Main.setInformation(ChatColorUtils.COLOR_CHAR + "aUsing .download file ("+targetFile.getPath() + "BungeeUtil.download)!");
+					BungeeUtil.getInstance().setInformation(ChatColorUtils.COLOR_CHAR + "aUsing .download file ("+targetFile.getPath() + "BungeeUtil.download)!");
 					fout = new FileOutputStream(df = new File(targetFile.getPath() + "BungeeUtil.download"));
 				}
 				else fout = new FileOutputStream(df = targetFile);
@@ -159,14 +160,14 @@ public class Updater {
 					String p = "000" + MathUtil.calculatePercent(readed, fileLength);
 					p = p.substring(0, p.indexOf("."));
 					p = p.substring(p.length() - 3, p.length());
-					Main.setInformation(ChatColorUtils.COLOR_CHAR + "aDownloading update " + ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "e" + p + "%" + ChatColorUtils.COLOR_CHAR + "7]");
+					BungeeUtil.getInstance().setInformation(ChatColorUtils.COLOR_CHAR + "aDownloading update " + ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "e" + p + "%" + ChatColorUtils.COLOR_CHAR + "7]");
 				}
 				fout.close();
 				in.close();
-				Main.setInformation(ChatColorUtils.COLOR_CHAR + "aDownload done!");
-				Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aUpdate downloaded!");
-				Main.setInformation(ChatColorUtils.COLOR_CHAR + "aCheck update for errors!");
-				Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aCheck update for errors!");
+				BungeeUtil.getInstance().setInformation(ChatColorUtils.COLOR_CHAR + "aDownload done!");
+				BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aUpdate downloaded!");
+				BungeeUtil.getInstance().setInformation(ChatColorUtils.COLOR_CHAR + "aCheck update for errors!");
+				BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aCheck update for errors!");
 				try {
 					JarInputStream is = new JarInputStream(new FileInputStream(df));
 					while (null != is.getNextJarEntry()) {
@@ -175,8 +176,8 @@ public class Updater {
 				}
 				catch (Exception e) {
 					errorMask.setBit(1);
-					Main.sendMessage(ChatColorUtils.COLOR_CHAR + "cThe update contains an error. (Message: " + e.getLocalizedMessage() + ")");
-					Main.sendMessage(ChatColorUtils.COLOR_CHAR + "cDeleting the update!");
+					BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "cThe update contains an error. (Message: " + e.getLocalizedMessage() + ")");
+					BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "cDeleting the update!");
 					try {
 						df.delete();
 					}
@@ -185,16 +186,16 @@ public class Updater {
 					}
 					break programm;
 				}
-				Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aUpdate valid.");
-				Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aInstalling update!");
-				Main.setInformation(ChatColorUtils.COLOR_CHAR + "aInstalling update");
+				BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aUpdate valid.");
+				BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aInstalling update!");
+				BungeeUtil.getInstance().setInformation(ChatColorUtils.COLOR_CHAR + "aInstalling update");
 				if (!targetFile.equals(df) && !targetFile.delete()) {
-					Main.sendMessage(ChatColorUtils.COLOR_CHAR + "6Cant delete the old plugin jar.");
+					BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "6Cant delete the old plugin jar.");
 				}
 				boolean deleteOld = !targetFile.equals(df);
 				if(!targetFile.createNewFile()){
 					deleteOld = false;
-					Main.sendMessage(ChatColorUtils.COLOR_CHAR + "6Cant create new jar.");
+					BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "6Cant create new jar.");
 				}
 				FileInputStream fis = new FileInputStream(df);
 				FileOutputStream fos = new FileOutputStream(targetFile);
@@ -203,14 +204,14 @@ public class Updater {
 				}
 				fis.close();
 				fos.close();
-				if (deleteOld && !df.delete()) Main.sendMessage(ChatColorUtils.COLOR_CHAR + "6Cant delte cache file!");
-				Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aRestarting bungeecord!");
-				Main.setInformation(ChatColorUtils.COLOR_CHAR + "aUpdate installed!");
+				if (deleteOld && !df.delete()) BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "6Cant delte cache file!");
+				BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aRestarting bungeecord!");
+				BungeeUtil.getInstance().setInformation(ChatColorUtils.COLOR_CHAR + "aUpdate installed!");
 			}
 			catch (Exception e) {
 				errorMask.setBit(3);
 				e.printStackTrace();
-				Main.sendMessage(ChatColorUtils.COLOR_CHAR + "cAn error happend while downloading the update");
+				BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "cAn error happend while downloading the update");
 			}
 			finally {
 				if (in != null) {
@@ -224,7 +225,7 @@ public class Updater {
 		catch (Exception e) {
 			errorMask.setBit(4);
 			e.printStackTrace();
-			Main.sendMessage(ChatColorUtils.COLOR_CHAR + "cAn error happend while downloading the update");
+			BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "cAn error happend while downloading the update");
 		}
 		return errorMask.intValue();
 	}
@@ -236,7 +237,7 @@ public class Updater {
 	
 	public Updater loadData() {
 		last = System.currentTimeMillis();
-		Main.sendMessage(ChatColorUtils.COLOR_CHAR + "aLoading update data!");
+		BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aLoading update data!");
 		try {
 			URL i = new URL(url);
 			HttpURLConnection c = (HttpURLConnection) i.openConnection();

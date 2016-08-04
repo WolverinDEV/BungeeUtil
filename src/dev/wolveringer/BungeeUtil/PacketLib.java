@@ -92,7 +92,7 @@ public class PacketLib {
 				try{
 					ArrayList<Class<? extends Packet>> list = new ArrayList<Class<? extends Packet>>();
 					Class c = (Class) paramObject;
-					Main.debug("Sarching for subinstances of "+c);
+					BungeeUtil.getInstance().debug("Sarching for subinstances of "+c);
 					if(c != Packet.class)
 						for(Class<? extends Packet> clazz : Packet.getRegisteredPackets()){
 							if(c.isAssignableFrom(clazz)){
@@ -102,7 +102,7 @@ public class PacketLib {
 					list.add(c);
 					r = (list = new ArrayList<>(new HashSet<>(list)));
 					for(Class x : list)
-						Main.debug("Found class instance of "+c+" -> "+x);
+						BungeeUtil.getInstance().debug("Found class instance of "+c+" -> "+x);
 					super.put((Class<? extends Packet>) paramObject, r);
 				}catch (Exception e){ }
 			return r;

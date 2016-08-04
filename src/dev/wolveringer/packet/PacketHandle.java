@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.BungeeCord;
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.PacketHandleEvent;
 import dev.wolveringer.BungeeUtil.Player;
@@ -178,7 +179,7 @@ public class PacketHandle {
 	
 	private static void handleItemClick(final Player player,final ItemStack is,final Click c,final boolean sync,final boolean looped){
 		if(!sync && !looped){
-			BungeeCord.getInstance().getScheduler().runAsync(Main.getMain(), new Runnable() {
+			BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), new Runnable() {
 				public void run() {
 					handleItemClick(player, is, c, sync, true);
 				}

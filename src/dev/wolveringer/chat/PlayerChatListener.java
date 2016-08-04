@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.BungeeCord;
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.PacketHandleEvent;
 import dev.wolveringer.BungeeUtil.PacketHandler;
@@ -22,7 +23,7 @@ public class PlayerChatListener implements PacketHandler<Packet> {
 	private HashMap<String, Date> out = new HashMap<String, Date>();
 
 	public PlayerChatListener() {
-		BungeeCord.getInstance().getScheduler().runAsync(Main.getMain(), new Runnable() {
+		BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), new Runnable() {
 			@Override
 			public void run() {
 				while (true){
