@@ -1,6 +1,6 @@
 {
-    "CurrentVersion": "1.6.7.9",
-    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.9.jar",
+    "CurrentVersion": "1.6.7.10",
+    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.10.jar",
     "VersionsHistory": [
         {
             "Version": "1.6.7.6",
@@ -13,6 +13,10 @@
         {
             "Version": "1.6.7.8",
             "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.8.jar"
+        },
+        {
+            "Version": "1.6.7.9",
+            "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.9.jar"
         }
     ],
     "Changelog": [
@@ -37,6 +41,13 @@
             "Changed": [
                 "Fixed bytecode error",
                 "Made BungeeUtils maven shadeable"
+            ]
+        },
+        {
+            "Verion": "1.6.7.10",
+            "Changed": [
+                "Fixed shared inventory bug",
+                "Use original UserConnection class"
             ]
         }
     ]
