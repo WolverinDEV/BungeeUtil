@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.BungeeCord;
 import dev.wolveringer.BungeeUtil.BungeeUtil;
-import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.PacketHandleEvent;
 import dev.wolveringer.BungeeUtil.Player;
 import dev.wolveringer.BungeeUtil.configuration.Configuration;
@@ -35,6 +34,7 @@ public class PacketHandle {
 	static PacketPlayOutNamedEntitySpawn a;
 	static ArrayList<String> b = new ArrayList<String>();
 	private static CachedHashMap<Player, Long> lastInventortyUpdate = new CachedHashMap<>(100, TimeUnit.MILLISECONDS);
+	
 	public static boolean handlePacket(PacketHandleEvent<?> e) {
 		final Packet pack = e.getPacket();
 		final Player player = e.getPlayer();
@@ -174,6 +174,8 @@ public class PacketHandle {
 			PacketPlayOutPlayerListHeaderFooter packet = (PacketPlayOutPlayerListHeaderFooter) pack;
 			player.getInitialHandler().setTabHeaderFromPacket(packet.getHeader(), packet.getFooter());
 		}
+		
+		
 		return false;
 	}
 	

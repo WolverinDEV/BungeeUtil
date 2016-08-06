@@ -45,12 +45,11 @@ import dev.wolveringer.api.inventory.InventoryType;
 import dev.wolveringer.api.inventory.PlayerInventory;
 import dev.wolveringer.api.position.Location;
 import dev.wolveringer.api.scoreboard.Scoreboard;
-import dev.wolveringer.bungee.AbstraktUserConnection;
 import dev.wolveringer.chat.IChatBaseComponent;
 import dev.wolveringer.network.inject.XChannelFutureListener;
 import dev.wolveringer.network.inject.XChannelInitializer;
 
-public class ProxiedPlayerUserConnection extends AbstraktUserConnection implements Player {
+public class ProxiedPlayerUserConnection extends UserConnection implements Player {
 	private static final int CURSOR_ITEM_SLOT = 50;
 	private IInitialHandler i;
 	private Inventory inv;

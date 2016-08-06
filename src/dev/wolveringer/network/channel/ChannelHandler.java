@@ -20,6 +20,7 @@ import com.google.common.base.Preconditions;
 
 import dev.wolveringer.BungeeUtil.configuration.Configuration;
 import dev.wolveringer.chat.ChatColor.ChatColorUtils;
+import dev.wolveringer.network.IInitialHandler;
 import dev.wolveringer.strings.Messages;
 
 public class ChannelHandler extends HandlerBoss {
@@ -84,6 +85,11 @@ public class ChannelHandler extends HandlerBoss {
 					packet.trySingleRelease();
 				}
 			}catch (Exception e){
+				if(this.handler instanceof IInitialHandler){
+					((IInitialHandler)this.handler).disconnect(e);
+				}
+				else
+					this.channel.getHandle().close();
 				e.printStackTrace();
 			}
 		}

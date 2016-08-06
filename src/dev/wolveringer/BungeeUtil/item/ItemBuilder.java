@@ -69,7 +69,7 @@ public class ItemBuilder {
 		return this;
 	}
 
-	public ItemBuilder amouth(int n) {
+	public ItemBuilder amount(int n) {
 		this.amouth = n;
 		return this;
 	}
@@ -126,5 +126,10 @@ public class ItemBuilder {
 		if (glow)
 			i.getItemMeta().setGlow(true);
 		return i;
+	}
+
+	public ItemBuilder clearLore() {
+		lore.clear();
+		return this;
 	}
 }

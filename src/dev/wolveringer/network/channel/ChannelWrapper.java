@@ -47,7 +47,7 @@ public class ChannelWrapper extends net.md_5.bungee.netty.ChannelWrapper {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void setProtocol(Protocol protocol) {
 		if(ch.pipeline().get(MinecraftEncoder.class) != null)
 			ch.pipeline().get(MinecraftEncoder.class).setProtocol(protocol);
