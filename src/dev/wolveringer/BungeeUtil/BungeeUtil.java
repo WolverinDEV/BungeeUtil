@@ -15,6 +15,7 @@ import dev.wolveringer.BungeeUtil.packets.Packet;
 import dev.wolveringer.chat.ChatColor.BukkitColorFormater;
 import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 import dev.wolveringer.commands.BungeeTimings;
+import dev.wolveringer.listener.InventoryResetListener;
 import dev.wolveringer.network.IIInitialHandler;
 import dev.wolveringer.network.ProxiedPlayerUserConnection;
 import dev.wolveringer.network.channel.init.BungeeConnectionInit;
@@ -112,6 +113,7 @@ public final class BungeeUtil {
 			sleep(500);
 			setInformation("§aRegister commands and scheduler");
 			sendMessage("§aRegister commands and scheduler");
+			BungeeCord.getInstance().getPluginManager().registerListener(pluginInstance, new InventoryResetListener());
 			BungeeCord.getInstance().getPluginManager().registerCommand(pluginInstance, new BungeeTimings());
 			BungeeCord.getInstance().getScheduler().runAsync(pluginInstance, new Runnable() {
 				@Override

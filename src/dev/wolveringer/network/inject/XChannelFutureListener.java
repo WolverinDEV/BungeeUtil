@@ -26,8 +26,10 @@ public class XChannelFutureListener implements ChannelFutureListener {
 		if(callback != null){
 			callback.done(Boolean.valueOf(future.isSuccess()), future.cause());
 		}
-		if(future.isSuccess())
+		if(future.isSuccess()){
+			
 			return;
+		}
 		future.channel().close();
 		conn.getPendingConnects().remove(target);
 
