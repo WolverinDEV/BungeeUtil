@@ -49,6 +49,7 @@ public class Decoder extends MinecraftDecoder {
 	@Getter
 	@Setter
 	private IInitialHandler initHandler;
+	private Protocol prot;
 	private int version;
 	private ClientVersion clientVersion = ClientVersion.UnderknownVersion;
 	private Direction dir;
@@ -94,6 +95,7 @@ public class Decoder extends MinecraftDecoder {
 	@Override
 	public void setProtocol(Protocol protocol) {
 		super.setProtocol(protocol);
+		this.prot = protocol;
 	}
 
 	@Override
