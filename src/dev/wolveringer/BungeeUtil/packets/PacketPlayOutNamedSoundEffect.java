@@ -6,8 +6,19 @@ import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
 import dev.wolveringer.api.SoundEffect;
 import dev.wolveringer.api.position.Location;
 import dev.wolveringer.packet.PacketDataSerializer;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 //1.8 -> 0x29
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@ToString
 public class PacketPlayOutNamedSoundEffect extends Packet implements PacketPlayOut{
 	private float volume;
 	private float pitch;
@@ -56,52 +67,4 @@ public class PacketPlayOutNamedSoundEffect extends Packet implements PacketPlayO
 			s.writeByte((int) pitch);
 		}
 	}
-	
-	public float getVolume() {
-		return volume;
-	}
-
-	public void setVolume(float volume) {
-		this.volume = volume;
-	}
-
-	public float getPitch() {
-		return pitch;
-	}
-
-	public void setPitch(short pitch) {
-		this.pitch = pitch;
-	}
-
-	public Location getLoc() {
-		return loc;
-	}
-
-	public void setLoc(Location loc) {
-		this.loc = loc;
-	}
-
-	
-
-	public String getSound() {
-		return sound;
-	}
-
-	public void setSound(String sound) {
-		this.sound = sound;
-	}
-
-	public int getSoundCategory() {
-		return soundCategory;
-	}
-
-	public void setSoundCategory(int soundCategory) {
-		this.soundCategory = soundCategory;
-	}
-
-	@Override
-	public String toString() {
-		return "PacketPlayOutNamedSoundEffect [volume=" + volume + ", pitch=" + pitch + ", loc=" + loc + ", sound=" + sound + ", soundCategory=" + soundCategory + "]";
-	}
-	
 }

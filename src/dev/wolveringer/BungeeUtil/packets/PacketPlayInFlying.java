@@ -5,7 +5,6 @@ import dev.wolveringer.api.position.Location;
 import dev.wolveringer.packet.PacketDataSerializer;
 
 public class PacketPlayInFlying extends Packet implements PacketPlayIn {
-
 	protected boolean onground;
 	protected boolean hasLook = false;
 	protected boolean hasPos = false;
