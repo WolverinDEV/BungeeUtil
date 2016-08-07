@@ -1,6 +1,6 @@
 {
-    "CurrentVersion": "1.6.7.10",
-    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.10.jar",
+    "CurrentVersion": "1.6.7.11",
+    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.11.jar",
     "VersionsHistory": [
         {
             "Version": "1.6.7.6",
@@ -17,6 +17,10 @@
         {
             "Version": "1.6.7.9",
             "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.9.jar"
+        },
+        {
+            "Version": "1.6.7.10",
+            "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.10.jar"
         }
     ],
     "Changelog": [
@@ -48,6 +52,12 @@
             "Changed": [
                 "Fixed shared inventory bug",
                 "Use original UserConnection class"
+            ]
+        },
+        {
+            "Verion": "1.6.7.11",
+            "Changed": [
+                "Fixed PacketPlayOutNamedSound bug"
             ]
         }
     ]
