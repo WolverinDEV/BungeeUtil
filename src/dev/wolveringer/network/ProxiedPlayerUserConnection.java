@@ -37,14 +37,14 @@ import dev.wolveringer.BungeeUtil.packets.PacketPlayOutSetSlot;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutWindowItems;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayIn;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
-import dev.wolveringer.api.SoundEffect;
-import dev.wolveringer.api.SoundCategory;
 import dev.wolveringer.api.bossbar.BossBarManager;
 import dev.wolveringer.api.inventory.Inventory;
 import dev.wolveringer.api.inventory.InventoryType;
 import dev.wolveringer.api.inventory.PlayerInventory;
 import dev.wolveringer.api.position.Location;
 import dev.wolveringer.api.scoreboard.Scoreboard;
+import dev.wolveringer.api.sound.SoundCategory;
+import dev.wolveringer.api.sound.SoundEffect;
 import dev.wolveringer.chat.IChatBaseComponent;
 import dev.wolveringer.network.inject.XChannelFutureListener;
 import dev.wolveringer.network.inject.XChannelInitializer;
@@ -277,11 +277,29 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 	public Item getHandItem() {
 		return getPlayerInventory().getItem(36+slot);
 	}
+	
+	@Override
+	public void playSound(SoundEffect effect) {
+		playSound(effect, 1F);
+	}
+
+	@Override
+	public void playSound(SoundEffect effect, float volume) {
+		playSound(effect, volume, 0);
+	}
+
+	@Override
+	public void playSound(SoundEffect effect, float volume, float pitch) {
+		playSound(effect, getLocation() , volume, pitch);
+		
+	}
+	
 	@Override
 	public void playSound(SoundEffect effect, Location location, float volume, float pitch) {
 		playSound(effect, SoundCategory.MASTER, location, volume, pitch);
 	}
 
+	@Override
 	public void playSound(SoundEffect effect,SoundCategory category, Location location, float volume, float pitch) {
 		if(!effect.isAvariable(getVersion().getBigVersion()))
 			throw new RuntimeException("Sound not avariable for client version");

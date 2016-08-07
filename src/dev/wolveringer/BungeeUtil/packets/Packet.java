@@ -75,7 +75,7 @@ public abstract class Packet {
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutWindowData.class, new ProtocollId(BigClientVersion.v1_8, 0x31), new ProtocollId(BigClientVersion.v1_9, 0x15), new ProtocollId(BigClientVersion.v1_10, 0x15));// -> 0x15
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutSetSlot.class, new ProtocollId(BigClientVersion.v1_8, 0x2F), new ProtocollId(BigClientVersion.v1_9, 0x16), new ProtocollId(BigClientVersion.v1_10, 0x16)); // -> 0x16
 		
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayOutPluginMessage.class, new ProtocollId(BigClientVersion.v1_8, 0x3F), new ProtocollId(BigClientVersion.v1_9, 0x18), new ProtocollId(BigClientVersion.v1_10, 0x18));
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutPluginMessage.class, new ProtocollId(BigClientVersion.v1_8, 0x3F), new ProtocollId(BigClientVersion.v1_9, 0x18), new ProtocollId(BigClientVersion.v1_10, 0x18));
 		
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutEntityEquipment.class, new ProtocollId(BigClientVersion.v1_8, 0x04), new ProtocollId(BigClientVersion.v1_9, 0x3C), new ProtocollId(BigClientVersion.v1_10, 0x3C)); // Chaned
 		

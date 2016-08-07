@@ -29,7 +29,6 @@ import dev.wolveringer.NPC.NPC;
 import dev.wolveringer.animations.inventory.InventoryViewChangeAnimations;
 import dev.wolveringer.animations.inventory.InventoryViewChangeAnimations.AnimationType;
 import dev.wolveringer.animations.inventory.LimetedScheduller;
-import dev.wolveringer.api.SoundEffect;
 import dev.wolveringer.api.bossbar.BossBarManager.BossBar;
 import dev.wolveringer.api.datawatcher.HumanDataWatcher;
 import dev.wolveringer.api.gui.AnvilGui;
@@ -39,6 +38,7 @@ import dev.wolveringer.api.inventory.ItemContainer;
 import dev.wolveringer.api.particel.ParticleEffect;
 import dev.wolveringer.api.position.Location;
 import dev.wolveringer.api.scoreboard.Scoreboard;
+import dev.wolveringer.api.sound.SoundEffect;
 import dev.wolveringer.chat.ChatComponentText;
 import dev.wolveringer.chat.ChatSerializer;
 import dev.wolveringer.chat.ChatColor.ChatColorUtils;
@@ -284,6 +284,10 @@ public class DebugMenue {
 			@Override
 			public void click(Click p) {
 				p.getPlayer().sendMessage("Sound sended");
+				if(SoundEffect.BLOCK_ANVIL_FALL.isAvariable(p.getPlayer().getVersion().getBigVersion()))
+					p.getPlayer().playSound(SoundEffect.BLOCK_ANVIL_LAND, p.getPlayer().getLocation(), 1F, 0);
+				else
+					p.getPlayer().sendMessage("Sound not avariable for "+p.getPlayer().getVersion().toString());
 				//p.getPlayer().playSound(SoundEffect.getEffect("block.anvil.land"), SoundCategory.MASTER, p.getPlayer().getLocation(), 1F, 0);
 			}
 		};

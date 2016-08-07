@@ -3,6 +3,7 @@ package dev.wolveringer.BungeeUtil.packets;
 import io.netty.buffer.ByteBuf;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -15,7 +16,6 @@ import dev.wolveringer.BungeeUtil.ClientVersion.ProtocollVersion;
 import dev.wolveringer.BungeeUtil.packets.Packet.ProtocollId;
 import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.CostumPrintStream;
-import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.Player;
 import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 import dev.wolveringer.terminal.table.TerminalTable;
@@ -51,8 +51,7 @@ public abstract class AbstractPacketCreator {
 		if(x.readableBytes() < 1)
 			return null;
 		x.markReaderIndex().markWriterIndex();
-		int id;
-		Packet y = getPacket0(version,s, d, (int)(id = x.readUnsignedByte()), x, p); // faster
+		Packet y = getPacket0(version,s, d, (int)(x.readUnsignedByte()), x, p); // faster
 		x.resetReaderIndex().resetWriterIndex();
 		return y;
 	}
@@ -69,8 +68,9 @@ public abstract class AbstractPacketCreator {
 		
 		for (Class<? extends Packet> packet : getRegisteredPackets()) {
 			for(ProtocollVersion version : packets.keySet()){
-				int compressed = getPacketId(version ,packet);
-				packets.get(version).get(getDirection(compressed)).put(getPacketId(compressed), packet);
+				int compressed = getPacketId(version, packet);
+				if(getPacketId(compressed) != 0xFF)
+					packets.get(version).get(getDirection(compressed)).put(getPacketId(compressed), packet);
 			}
 		}
 		
@@ -78,7 +78,16 @@ public abstract class AbstractPacketCreator {
 		List<TerminalColumn> columns = new ArrayList<>();
 		columns.add(new TerminalColumn("§eName", Align.RIGHT));
 		columns.add(new TerminalColumn("§eDirection", Align.CENTER));
-		for(ProtocollVersion version : packets.keySet()){
+		List<ProtocollVersion> versions = Arrays.asList(ProtocollVersion.values());
+		Collections.sort(versions,new Comparator<ProtocollVersion>() {
+			@Override
+			public int compare(ProtocollVersion o1, ProtocollVersion o2) {
+				return Integer.compare(o1.getProtocollVersion(), o2.getProtocollVersion());
+			}
+		});
+		for(ProtocollVersion version : versions){
+			if(version == ProtocollVersion.Unsupported)
+				continue;
 			rowMapping.put(version, columns.size());
 			columns.add(new TerminalColumn("§e"+version.name(), Align.CENTER));
 		}
@@ -96,8 +105,11 @@ public abstract class AbstractPacketCreator {
 				});
 				
 				for(Entry<Integer, Class<? extends Packet>> packet : packetIds){
-					if(!packetRow.containsKey(packet.getValue()))
-						packetRow.put(packet.getValue(), new String[columns.size()]);
+					if(!packetRow.containsKey(packet.getValue())){
+						String[] ids = new String[columns.size()];
+						Arrays.fill(ids, 2, ids.length, "§6nan");
+						packetRow.put(packet.getValue(), ids);
+					}
 					String packetIdHex = "§c0x"+(Integer.toHexString(packet.getKey()).length() == 1 ? "0":"")+Integer.toHexString(packet.getKey()).toUpperCase();
 					packetRow.get(packet.getValue())[rowMapping.get(protocolls.getKey())] = packetIdHex;
 					if(packetRow.get(packet.getValue())[0] == null){
@@ -109,65 +121,6 @@ public abstract class AbstractPacketCreator {
 				}
 			}
 		}
-		
-		for(String[] row : packetRow.values())
-			table.addRow(row);
-		
-		for(String line : table.buildLines())
-			out.println(line);
-		/*
-		HashMap<Protocol, HashMap<Direction, HashMap<Integer, Class<? extends Packet>>>> packets = new HashMap<Protocol, HashMap<Direction, HashMap<Integer, Class<? extends Packet>>>>();
-		for (Protocol c : Protocol.values()) {
-			packets.put(c, new HashMap<Direction, HashMap<Integer, Class<? extends Packet>>>());
-			for (Direction d : Direction.values())
-				packets.get(c).put(d, new HashMap<Integer, Class<? extends Packet>>());
-		}
-		
-		for (Class<? extends Packet> packet : getRegisteredPackets()) {
-			int compressed = getPacketId(ProtocollVersion.v1_9,packet); //TODO list bouth id's
-			if(compressed == -1)
-				compressed = getPacketId(ProtocollVersion.v1_8,packet);
-			packets.get(getProtocoll(compressed)).get(getDirection(compressed)).put(getPacketId(compressed), packet);
-		}
-		
-		out.println(ChatColorUtils.COLOR_CHAR+"cPackete:");
-		for (Protocol x : Protocol.values()) {
-			out.println(" "+ChatColorUtils.COLOR_CHAR+"eProtocol: "+ChatColorUtils.COLOR_CHAR+"5" + x.name());
-			ArrayList typs = new ArrayList();
-			
-			for (Direction d : Direction.values())
-				typs.addAll(packets.get(x).get(d).values());
-				
-			int i = 0;
-			boolean conatainsRedefined = false;
-			for (Object o : typs)
-				if (o != null) {
-					if (o.toString().endsWith("$-1")) conatainsRedefined = true;
-				}
-			for (Object o : typs)
-				if (o != null) if (o.toString().length() + (conatainsRedefined ? " (Redefined)".length() : 0) > i) i = o.toString().length() + (conatainsRedefined ? " (Redefined)".length() : 0);
-			for (Direction d : Direction.values()) {
-				TreeMap<Integer, String> a = new TreeMap<Integer, String>();
-				for (Integer c : packets.get(x).get(d).keySet()) {
-					String s = "  "+ChatColorUtils.COLOR_CHAR+"6PacketName: "+ChatColorUtils.COLOR_CHAR+"a";
-					if (packets.get(x).get(d).get(c) == null) continue;
-					String name = packets.get(x).get(d).get(c).getName().replace("$-1", "");
-					s += right( name.replaceAll(name.split("\\.")[name.split("\\.").length - 1], ChatColorUtils.COLOR_CHAR+"b" + name.split("\\.")[name.split("\\.").length - 1]), i); //"+COLOR_CHAR+"c(Redefined)
-					s += "  "+ChatColorUtils.COLOR_CHAR+"6ID: "+ChatColorUtils.COLOR_CHAR+"e" + right("0x" + (Integer.toHexString(c).length() == 1 ? "0" + Integer.toHexString(c) : Integer.toHexString(c)).toUpperCase(), 4) + " "+ChatColorUtils.COLOR_CHAR+"6Direction: "+ChatColorUtils.COLOR_CHAR+"5" + d.toString().toUpperCase();
-					a.put(c, s);
-				}
-				for (Integer c : a.keySet())
-					out.println(a.get(c));
-			}
-		}
-		*/
-	}
-	
-	private String right(String s, int i) {
-		while (s.length() < i) {
-			s += " ";
-		}
-		return s;
 	}
 
 	public void listPackets() {
@@ -184,16 +137,6 @@ public abstract class AbstractPacketCreator {
 		});
 	}
 
-	/**
-	 * 20000 ns faster
-	 * 
-	 * @param protocol
-	 * @param d
-	 * @param id
-	 * @param b
-	 * @param p
-	 * @return
-	 */
 	public abstract Packet getPacket0(ProtocollVersion version,Protocol protocol, Direction d, Integer id, ByteBuf b, Player p);
 
 	public abstract int loadPacket(ProtocollVersion version,Protocol p, Direction d, Integer id, Class<? extends Packet> clazz);

@@ -4,13 +4,13 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import dev.wolveringer.BungeeUtil.item.Item;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayIn;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
-import dev.wolveringer.api.SoundEffect;
-import dev.wolveringer.api.SoundCategory;
 import dev.wolveringer.api.bossbar.BossBarManager;
 import dev.wolveringer.api.inventory.Inventory;
 import dev.wolveringer.api.inventory.PlayerInventory;
 import dev.wolveringer.api.position.Location;
 import dev.wolveringer.api.scoreboard.Scoreboard;
+import dev.wolveringer.api.sound.SoundCategory;
+import dev.wolveringer.api.sound.SoundEffect;
 import dev.wolveringer.chat.IChatBaseComponent;
 import dev.wolveringer.network.IInitialHandler;
 
@@ -70,13 +70,19 @@ public interface Player extends ProxiedPlayer {
 
 	public void disconnect(Exception e);
 	
+	public void playSound(SoundEffect effect);
+	
+	public void playSound(SoundEffect effect,float volume);
+	
+	public void playSound(SoundEffect effect,float volume,float pitch);
+	
 	/**
 	 * @param effect
 	 * @param location
 	 * @param volume
 	 * @param pitch (0-360)
 	 */
-	public void playSound(SoundEffect effect,Location location,float volume,float pitch);
+	public void playSound(SoundEffect effect, Location location,float volume,float pitch);
 
 	public void playSound(SoundEffect effect, SoundCategory blocks, Location location, float f, float g);
 	

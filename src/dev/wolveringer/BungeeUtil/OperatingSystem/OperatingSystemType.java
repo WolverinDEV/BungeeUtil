@@ -10,13 +10,13 @@ public class OperatingSystemType {
 		public abstract String getIdentifier();
 		
 		public boolean isWindows(){
-			return getIdentifier().contains("Windows");
+			return getIdentifier().toLowerCase().contains("windows");
 		}
 		public boolean isLinux(){
-			return getIdentifier().contains("Linux");
+			return getIdentifier().toLowerCase().contains("linux");
 		}
 		public boolean isMac(){
-			return getIdentifier().contains("Mac");
+			return getIdentifier().toLowerCase().contains("mac");
 		}
 	}
 	private static HashMap<String, OperatingSystem> types = new HashMap<String, OperatingSystemType.OperatingSystem>();
@@ -120,6 +120,7 @@ public class OperatingSystemType {
 		};
 	}
 	public static abstract class OperatingSystemLinux extends OperatingSystem{}
+	
 	public static abstract class OperatingSystemMac extends OperatingSystem{
 		public static final OperatingSystem MAC_OS = new OperatingSystemMac() {
 			public String getIdentifier() {

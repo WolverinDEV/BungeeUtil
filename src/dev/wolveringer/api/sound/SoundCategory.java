@@ -1,4 +1,4 @@
-package dev.wolveringer.api;
+package dev.wolveringer.api.sound;
 
 public enum SoundCategory {
 	MASTER("master"),

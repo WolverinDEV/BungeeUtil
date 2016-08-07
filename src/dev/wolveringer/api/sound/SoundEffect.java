@@ -1,4 +1,4 @@
-package dev.wolveringer.api;
+package dev.wolveringer.api.sound;
 
 import java.util.HashMap;
 
@@ -1387,7 +1387,7 @@ public enum SoundEffect {
 		addSound(WEATHER_RAIN, BigClientVersion.v1_9, "weather.rain");
 		addSound(WEATHER_RAIN_ABOVE, BigClientVersion.v1_9, "weather.rain.above");
 
-		//...
+		//TODO implement sound for 1.8?
 	}
 	
 	private HashMap<BigClientVersion,String> versions;
