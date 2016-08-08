@@ -1,6 +1,6 @@
 {
-    "CurrentVersion": "1.6.7.11",
-    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.11.jar",
+    "CurrentVersion": "1.6.7.12",
+    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.12.jar",
     "VersionsHistory": [
         {
             "Version": "1.6.7.6",
@@ -21,6 +21,10 @@
         {
             "Version": "1.6.7.10",
             "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.10.jar"
+        },
+        {
+            "Version": "1.6.7.11",
+            "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.11.jar"
         }
     ],
     "Changelog": [
@@ -58,6 +62,14 @@
             "Verion": "1.6.7.11",
             "Changed": [
                 "Fixed PacketPlayOutNamedSound bug"
+            ]
+        },
+        {
+            "Verion": "1.6.7.12",
+            "Changed": [
+                "Fixed packet error handeling",
+                "Reimplemented sound API (Working now)",
+                "Try to fix plugin message bug"
             ]
         }
     ]
