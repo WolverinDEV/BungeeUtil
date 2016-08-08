@@ -1,11 +1,17 @@
 package dev.wolveringer.BungeeUtil;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+
+import org.fusesource.jansi.Ansi;
+import org.fusesource.jansi.AnsiConsole;
 
 import net.md_5.bungee.api.plugin.Plugin;
 import dev.wolveringer.BungeeUtil.configuration.Configuration;
@@ -15,6 +21,7 @@ import dev.wolveringer.terminal.table.TerminalTable;
 import dev.wolveringer.terminal.table.TerminalTable.Align;
 import dev.wolveringer.terminal.table.TerminalTable.TerminalRow;
 import dev.wolveringer.updater.Updater;
+import jline.TerminalFactory;
 
 public class Main extends Plugin {
 	public Updater updater;
@@ -36,8 +43,9 @@ public class Main extends Plugin {
 		if(BungeeUtil.getInstance() == null)
 			BungeeUtil.createInstance(main);
 		Configuration.init();
+		//AnsiConsole.err.getClass()
+		BungeeUtil.getInstance().sendMessage("Ansi consolen class: "+AnsiConsole.out.getClass());
 		BungeeUtil.getInstance().setInformation("Check for updates");
-		
 		try {
 			updater = new Updater("https://raw.githubusercontent.com/WolverinDEV/BungeeUtil/jars/versions.json");
 			updater.loadData();

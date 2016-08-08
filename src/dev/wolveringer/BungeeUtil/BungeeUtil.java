@@ -23,6 +23,7 @@ import dev.wolveringer.network.channel.init.ChannelInizializer;
 import lombok.Getter;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.command.ConsoleCommandSender;
 
 public final class BungeeUtil {
 	@Getter

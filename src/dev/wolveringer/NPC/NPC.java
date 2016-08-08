@@ -13,6 +13,7 @@ import dev.wolveringer.BungeeUtil.Player;
 import dev.wolveringer.BungeeUtil.gameprofile.GameProfile;
 import dev.wolveringer.BungeeUtil.gameprofile.PlayerInfoData;
 import dev.wolveringer.BungeeUtil.gameprofile.Skin;
+import dev.wolveringer.BungeeUtil.gameprofile.SkinFactory;
 import dev.wolveringer.BungeeUtil.packets.Packet;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInUseEntity;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInUseEntity.Action;
