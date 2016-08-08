@@ -163,7 +163,6 @@ public class Decoder extends MinecraftDecoder {
 				switch (Configuration.getHandleExceptionAction()) {
 				case DISCONNECT:
 					initHandler.disconnect(e);
-					break;
 				case PRINT:
 					e.printStackTrace();
 				default:
