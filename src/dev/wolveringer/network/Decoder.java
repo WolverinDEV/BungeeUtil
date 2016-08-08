@@ -17,6 +17,7 @@ import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 import dev.wolveringer.BungeeUtil.ClientVersion;
 import dev.wolveringer.BungeeUtil.PacketHandleEvent;
 import dev.wolveringer.BungeeUtil.PacketLib;
+import dev.wolveringer.BungeeUtil.configuration.Configuration;
 import dev.wolveringer.BungeeUtil.packets.Packet;
 import dev.wolveringer.packet.ByteBuffCreator;
 import dev.wolveringer.packet.PacketHandle;
@@ -157,9 +158,17 @@ public class Decoder extends MinecraftDecoder {
 				System.out.print("Error: 102");
 				return;
 			}catch (Exception e){
-				if(initHandler.isConnected)
+				if(!initHandler.isConnected)
+					return;
+				switch (Configuration.getHandleExceptionAction()) {
+				case DISCONNECT:
+					initHandler.disconnect(e);
+					break;
+				case PRINT:
 					e.printStackTrace();
-				initHandler.disconnect(e);
+				default:
+					break;
+				}
 				return;
 			}
 	

@@ -43,7 +43,6 @@ public class Main extends Plugin {
 		if(BungeeUtil.getInstance() == null)
 			BungeeUtil.createInstance(main);
 		Configuration.init();
-		//AnsiConsole.err.getClass()
 		BungeeUtil.getInstance().sendMessage("Ansi consolen class: "+AnsiConsole.out.getClass());
 		BungeeUtil.getInstance().setInformation("Check for updates");
 		try {

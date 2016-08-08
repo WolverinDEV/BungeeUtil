@@ -1390,7 +1390,7 @@ public enum SoundEffect {
 		//TODO implement sound for 1.8?
 	}
 	
-	private HashMap<BigClientVersion,String> versions;
+	private HashMap<BigClientVersion,String> versions = new HashMap<>();
 	
 	private SoundEffect() {}
 	

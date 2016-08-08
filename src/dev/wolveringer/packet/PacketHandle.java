@@ -196,8 +196,14 @@ public class PacketHandle {
 			le.addAll(Arrays.asList(ExceptionUtils.deleteDownward(e.getStackTrace(), ExceptionUtils.getCurrentMethodeIndex(e))));
 			le.add(new StackTraceElement("dev.wolveringer.BungeeUtil.PacketHandler."+player.getVersion().name(), "handleInventoryClickPacket"+(sync?"Sync":"Ansync"), null, -1));
 			e.setStackTrace(le.toArray(new StackTraceElement[0]));
-			e.printStackTrace();
-			player.disconnect(e);
+			switch (Configuration.getHandleExceptionAction()) {
+			case DISCONNECT:
+				player.disconnect(e);
+			case PRINT:
+				e.printStackTrace();
+			default:
+				break;
+			}
 		}
 		Profiler.packet_handle.stop("itemClickListener");
 	}

@@ -26,6 +26,7 @@ public class PacketPlayInChat extends Packet implements PacketPlayIn {
 	@Override
 	public void read(PacketDataSerializer s) {
 		msg = s.readString(-1);
+		s.readInt();
 	}
 
 	public void setMessage(String c) {
