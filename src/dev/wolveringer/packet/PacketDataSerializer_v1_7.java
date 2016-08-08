@@ -29,7 +29,7 @@ public class PacketDataSerializer_v1_7 extends PacketDataSerializer {
 		writeByte(b);
 	}
 
-	public int readInteger() {
+	public int readVariableInteger() {
 		int returns = 0;
 		int byte_pos = 0;
 		byte readbyte;
@@ -63,7 +63,7 @@ public class PacketDataSerializer_v1_7 extends PacketDataSerializer {
 	}
 
 	public String readString(int i) {
-		int j = this.readInteger();
+		int j = this.readVariableInteger();
 		if(i == -1)
 			i = j * 4;
 		if(j > i * 4){

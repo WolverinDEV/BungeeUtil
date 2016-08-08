@@ -16,9 +16,16 @@ public class PacketPlayOutPluginMessage extends Packet implements PacketPlayIn{
 	
 	@Override
 	public void read(PacketDataSerializer s) {
-		channel = s.readString(-1);
-		if(s.readableBytes() + s.readerIndex() != s.writerIndex()){
-			System.out.println("Incorrect length: "+(s.readableBytes() + s.readerIndex()+" - "+s.writerIndex()));
+		s.markReaderIndex();
+		try{
+			channel = s.readString(-1);
+			if(s.readableBytes() + s.readerIndex() != s.writerIndex()){
+				System.out.println("Incorrect length: "+(s.readableBytes() + s.readerIndex()+" - "+s.writerIndex()));
+			}
+		}catch(Exception e){
+			channel = null;
+			e.printStackTrace();
+			s.resetReaderIndex();
 		}
 		int length = Math.min(s.readableBytes(), s.readableBytes() + s.readerIndex());
 		data = s.copy(s.readerIndex(), length);
@@ -27,7 +34,8 @@ public class PacketPlayOutPluginMessage extends Packet implements PacketPlayIn{
 
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeString(channel);
+		if(channel != null)
+			s.writeString(channel);
 		data.resetReaderIndex();
 		data.readBytes(s,data.readableBytes());
 		data.release();

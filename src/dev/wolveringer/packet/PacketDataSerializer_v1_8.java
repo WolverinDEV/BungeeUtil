@@ -228,7 +228,7 @@ public class PacketDataSerializer_v1_8 extends PacketDataSerializer {
 
 	@Override
 	public String readString(int max) {
-		return c(-1);
+		return c(max);
 	}
 
 	@Override

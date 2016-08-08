@@ -116,6 +116,8 @@ public abstract class PacketDataSerializer extends ByteBuf {
 				return new PacketDataSerializer_v1_8(b);
 			case v1_9:
 				return new PacketDataSerializer_v1_8(b);
+			case v1_10:
+				return new PacketDataSerializer_v1_8(b);
 			default:
 				return new PacketDataSerializer_vX_X(b);
 		}
@@ -132,6 +134,8 @@ public abstract class PacketDataSerializer extends ByteBuf {
 			case v1_8:
 				return new PacketDataSerializer_v1_8((byte) b,buf);
 			case v1_9:
+				return new PacketDataSerializer_v1_8((byte) b,buf);
+			case v1_10:
 				return new PacketDataSerializer_v1_8((byte) b,buf);
 			default:
 				return new PacketDataSerializer_vX_X((byte) b,buf);
