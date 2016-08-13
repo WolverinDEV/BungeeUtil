@@ -143,7 +143,7 @@ public final class BungeeUtil {
 							}
 							catch (InterruptedException e) {
 							}
-							if (!active) return;
+							if (!isActive()) return;
 							if (ramStatistiks.getLastState() == null) continue;
 							
 							int mb = 1024 * 1024;
@@ -197,6 +197,7 @@ public final class BungeeUtil {
 			sleep(500);
 			setInformation(null);
 			state.setBit(1);
+			active = true;
 		}catch(Exception e){
 			throw e;
 		}finally{
