@@ -199,9 +199,9 @@ public final class BungeeUtil {
 			state.setBit(1);
 			active = true;
 		}catch(Exception e){
+			active = false;
 			throw e;
 		}finally{
-			active = false;
 			state.clearBit(0);
 		}
 	}

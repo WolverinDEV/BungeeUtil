@@ -2,6 +2,8 @@ package dev.wolveringer.BungeeUtil.packets;
 
 import io.netty.buffer.ByteBuf;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -10,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 import dev.wolveringer.BungeeUtil.ClientVersion.ProtocollVersion;
@@ -18,9 +21,11 @@ import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.CostumPrintStream;
 import dev.wolveringer.BungeeUtil.Player;
 import dev.wolveringer.chat.ChatColor.ChatColorUtils;
+import dev.wolveringer.string.ColoredChar;
 import dev.wolveringer.terminal.table.TerminalTable;
 import dev.wolveringer.terminal.table.TerminalTable.Align;
 import dev.wolveringer.terminal.table.TerminalTable.TerminalColumn;
+import dev.wolveringer.terminal.table.TerminalTable.TerminalRow;
 
 public abstract class AbstractPacketCreator {
 	public int calculate(ProtocollVersion version, Protocol p, Direction d, Integer id) {
@@ -124,7 +129,37 @@ public abstract class AbstractPacketCreator {
 
 		for (String[] row : packetRow.values())
 			table.addRow(row);
-
+		table.setRowSeperator(new TerminalTable.RowSeperator() {
+			@Override
+			public ColoredChar getSeperator(TerminalRow row, int rowIndex, int columnFrom, int columnTo) {
+				if(columnFrom < 2)
+					return new ColoredChar("|");
+				String oldPacketIds = row.getColumns()[columnFrom].get(rowIndex);
+				String newPacketIds = row.getColumns()[columnTo].get(rowIndex);
+				if(oldPacketIds.equalsIgnoreCase("§6nan"))
+					oldPacketIds = "0x-1";
+				if(newPacketIds.equalsIgnoreCase("§6nan"))
+					newPacketIds = "0x-1";
+				BigInteger oldPacketId = new BigInteger(ChatColor.stripColor(oldPacketIds).substring(2),16);
+				BigInteger newPacketId = new BigInteger(ChatColor.stripColor(newPacketIds).substring(2),16);
+				switch (oldPacketId.compareTo(newPacketId)) {
+				case -1:
+					return new ColoredChar("§a≠");
+				case 0:
+					return new ColoredChar("§7|");
+				case 1:
+					return new ColoredChar("§a≠");
+				default:
+					break;
+				}
+				return new ColoredChar("§5X");
+			}
+			@Override
+			public ColoredChar getDefaultSeperator() {
+				return new ColoredChar("§7|");
+			}
+		});
+		
 		for (String line : table.buildLines())
 			out.println(line);
 	}
