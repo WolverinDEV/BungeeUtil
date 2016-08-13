@@ -181,12 +181,12 @@ public final class BungeeUtil {
 							lines.add(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "a-----------------------------" + format("", var5).replaceAll(" ", "-") + "   " + diffSpace + ChatColorUtils.COLOR_CHAR + "7#");
 							lines.add(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aAllowed Reservable Memory: " + ChatColorUtils.COLOR_CHAR + "e" + var4 + "M    " + diffSpace + ChatColorUtils.COLOR_CHAR + "7#");
 							lines.add(ChatColorUtils.COLOR_CHAR + "7############################################" + diffSpace.replaceAll(" ", "#"));
-							int h = 2;
+							int h = 1;
 							int w = 0;
 							for(String m : lines)
 								if(ChatColor.stripColor(m).length()>w)
 									w = ChatColor.stripColor(m).length();
-							w = TerminalFactory.get().getWidth()-w+2;
+							w = TerminalFactory.get().getWidth()-w+1;
 							for(int i = 0;i<lines.size();i++,h++){
 								AnsiConsole.out.print("\033["+h+";"+w+"H"+BukkitColorFormater.getFormater().format(lines.get(i)));
 							}
