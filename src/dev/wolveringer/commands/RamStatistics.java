@@ -1,7 +1,10 @@
 package dev.wolveringer.commands;
 
+import org.fusesource.jansi.AnsiConsole;
+
 import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.RamStatistics.RamStatistic;
+import dev.wolveringer.chat.ChatColor.AnsiColorFormater;
 import dev.wolveringer.string.ColoredString;
 import dev.wolveringer.terminal.graph.TerminalGraph;
 import jline.TerminalFactory;
@@ -27,7 +30,7 @@ public class RamStatistics extends Command{
 			graph.setYAxisName(new ColoredString("§amb"));
 			graph.setXAxisName(new ColoredString("§aseconds"));
 			for(ColoredString line : graph.buildLines(TerminalFactory.get().getWidth()-1, TerminalFactory.get().getHeight()-4, false))
-				System.out.println("\r"+line.toString());
+				AnsiConsole.out.println("\r"+AnsiColorFormater.getFormater().format(line.toString()));
 		}
 		else
 		{

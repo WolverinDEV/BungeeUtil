@@ -17,7 +17,7 @@ import dev.wolveringer.BungeeUtil.RamStatistics.RamStatistic;
 import dev.wolveringer.BungeeUtil.configuration.Configuration;
 import dev.wolveringer.BungeeUtil.injector.InjectFiles;
 import dev.wolveringer.BungeeUtil.packets.Packet;
-import dev.wolveringer.chat.ChatColor.BukkitColorFormater;
+import dev.wolveringer.chat.ChatColor.AnsiColorFormater;
 import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 import dev.wolveringer.commands.BungeeTimings;
 import dev.wolveringer.listener.InventoryResetListener;
@@ -188,7 +188,7 @@ public final class BungeeUtil {
 									w = ChatColor.stripColor(m).length();
 							w = TerminalFactory.get().getWidth()-w+1;
 							for(int i = 0;i<lines.size();i++,h++){
-								AnsiConsole.out.print("\033["+h+";"+w+"H"+BukkitColorFormater.getFormater().format(lines.get(i)));
+								AnsiConsole.out.print("\033["+h+";"+w+"H"+AnsiColorFormater.getFormater().format(lines.get(i)));
 							}
 							int cw = 2+BungeeCord.getInstance().getConsoleReader().getCursorBuffer().cursor; //2 = Promt = ' >'
 							AnsiConsole.out.print("\033["+TerminalFactory.get().getHeight()+";"+cw+"H");
@@ -311,7 +311,7 @@ public final class BungeeUtil {
 	
 	private void setPromt(String info) {
 		try {
-			if (costumPromtLine) BungeeCord.getInstance().getConsoleReader().resetPromptLine(costumPormtLineMessage = BukkitColorFormater.getFormater().format(ChatColorUtils.COLOR_CHAR + "aLoading BungeeUtil >> " + ChatColorUtils.COLOR_CHAR + "b" + info), "", 0);
+			if (costumPromtLine) BungeeCord.getInstance().getConsoleReader().resetPromptLine(costumPormtLineMessage = AnsiColorFormater.getFormater().format(ChatColorUtils.COLOR_CHAR + "aLoading BungeeUtil >> " + ChatColorUtils.COLOR_CHAR + "b" + info), "", 0);
 			else BungeeCord.getInstance().getConsoleReader().resetPromptLine(">", "", 1);
 		}
 		catch (IOException ex) {

@@ -7,23 +7,23 @@ import net.md_5.bungee.api.ChatColor;
 
 import org.fusesource.jansi.Ansi;
 
-public class BukkitColorFormater {
+public class AnsiColorFormater {
 
-	public static BukkitColorFormater formater = new BukkitColorFormater();
+	public static AnsiColorFormater formater = new AnsiColorFormater();
 
-	public static BukkitColorFormater getFormater() {
+	public static AnsiColorFormater getFormater() {
 		if (formater == null)
-			formater = new BukkitColorFormater();
+			formater = new AnsiColorFormater();
 		return formater;
 	}
 
-	public static void setFormater(BukkitColorFormater formater) {
-		BukkitColorFormater.formater = formater;
+	public static void setFormater(AnsiColorFormater formater) {
+		AnsiColorFormater.formater = formater;
 	}
 
 	private final Map<String, String> replacements = new HashMap<String, String>();
 
-	public BukkitColorFormater() {
+	public AnsiColorFormater() {
 		this.replacements.put(ChatColor.BLACK.toString(), Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.BLACK).boldOff().toString());
 		this.replacements.put(ChatColor.DARK_BLUE.toString(), Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.BLUE).boldOff().toString());
 		this.replacements.put(ChatColor.DARK_GREEN.toString(), Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.GREEN).boldOff().toString());
