@@ -26,10 +26,6 @@
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <version>2.3.1</version>
-        <configuration>
-          <outputDirectory>/home/wolverindev/bungee/plugins/</outputDirectory>
-          <jarName>BungeeUtils</jarName>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>com.google.code.maven-replacer-plugin</groupId>
