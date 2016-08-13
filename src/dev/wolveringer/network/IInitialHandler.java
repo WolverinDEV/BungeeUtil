@@ -93,7 +93,7 @@ public abstract class IInitialHandler extends InitialHandler {
 	public void disconnect(final BaseComponent... reason) {
 		if (isDisconnecting) return;
 		isDisconnecting = true;
-		if (getHandshake().getRequestedProtocol() == 2 && (getEncoder().getProtocoll() == Protocol.LOGIN || getEncoder().getProtocoll() == Protocol.GAME || (getEncoder().getProtocoll() == Protocol.HANDSHAKE && getHandshake() != null))) {
+		if (getHandshake() != null && getHandshake().getRequestedProtocol() == 2) {
 			if(getEncoder().getProtocoll() == Protocol.HANDSHAKE)
 				setProtocol(Protocol.LOGIN);
 			unsafe().sendPacket(new Kick(ComponentSerializer.toString(reason)));
@@ -109,18 +109,14 @@ public abstract class IInitialHandler extends InitialHandler {
 		if (isDisconnecting) return;
 		isDisconnecting = true;
 		if (getChannel().isClosed()) { return; }
-		if (getHandshake().getRequestedProtocol() == 2 && (getEncoder().getProtocoll() == Protocol.LOGIN || getEncoder().getProtocoll() == Protocol.GAME)) {
-			String message = "" + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "4Error Message: " + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "b" + e.getLocalizedMessage() + "\n";
-			for (int i = 0; i < (e.getStackTrace().length > stackDeep ? stackDeep : e.getStackTrace().length); i++) {
-				StackTraceElement ex = e.getStackTrace()[i];
-				if(ex.getMethodName().equalsIgnoreCase("channelRead") && ex.getClassName().equalsIgnoreCase("io.netty.handler.codec.MessageToMessageDecoder") && ex.getLineNumber() == 89)
-					break;
-				message += format(ex) + "\n";
-			}
-			final IChatBaseComponent comp = ChatSerializer.fromMessage(message);
-			unsafe().sendPacket(new Kick(ChatSerializer.toJSONString(comp)));
+		String message = "" + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "4Error Message: " + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "b" + e.getLocalizedMessage() + "\n";
+		for (int i = 0; i < (e.getStackTrace().length > stackDeep ? stackDeep : e.getStackTrace().length); i++) {
+			StackTraceElement ex = e.getStackTrace()[i];
+			if(ex.getMethodName().equalsIgnoreCase("channelRead") && ex.getClassName().equalsIgnoreCase("io.netty.handler.codec.MessageToMessageDecoder") && ex.getLineNumber() == 89)
+				break;
+			message += format(ex) + "\n";
 		}
-		closeChannel();
+		disconnect(message);
 	}
 	
 	public void closeChannel() {

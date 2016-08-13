@@ -35,8 +35,8 @@ public class PacketPlayOutNamedSoundEffect extends Packet implements PacketPlayO
 			soundCategory = s.readVarInt();
 			loc = new Location(s.readInt(), s.readInt(), s.readInt()).dividide(8D);
 			volume = s.readFloat();
-			pitch = s.readUnsignedByte();
-		} else if(getBigVersion().equals(BigClientVersion.v1_8)) {
+			pitch = getBigVersion() == BigClientVersion.v1_10 ? s.readFloat() : s.readUnsignedByte();
+		} else if(getBigVersion() == BigClientVersion.v1_8) {
 			sound = s.readString(-1);
 			loc = new Location(s.readInt(), s.readInt(), s.readInt()).dividide(8D);
 			volume = s.readFloat();
@@ -55,7 +55,10 @@ public class PacketPlayOutNamedSoundEffect extends Packet implements PacketPlayO
 			s.writeInt(loc.getBlockZ());
 			loc.dividide(8D);
 			s.writeFloat(volume);
-			s.writeFloat(pitch);
+			if(getBigVersion() == BigClientVersion.v1_10)
+				s.writeFloat(pitch);
+			else
+				s.writeByte((int) pitch);
 		} else if(getBigVersion() == BigClientVersion.v1_8){
 			s.writeString(sound);
 			loc.multiply(8D);
