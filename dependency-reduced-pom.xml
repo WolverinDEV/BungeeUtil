@@ -89,7 +89,22 @@
   </build>
   <profiles>
     <profile>
-      <id>test</id>
+      <id>laptop-testdir</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.3.1</version>
+            <configuration>
+              <outputDirectory>/home/wolverindev/bungee/plugins/</outputDirectory>
+              <jarName>BungeeUtils</jarName>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>testdir</id>
       <build>
         <plugins>
           <plugin>

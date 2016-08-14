@@ -6,8 +6,10 @@ import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.RamStatistics.RamStatistic;
 import dev.wolveringer.chat.ChatColor.AnsiColorFormater;
 import dev.wolveringer.string.ColoredString;
+import dev.wolveringer.terminal.TerminalListener;
 import dev.wolveringer.terminal.graph.TerminalGraph;
 import jline.TerminalFactory;
+import jline.internal.TerminalLineSettings;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.command.ConsoleCommandSender;
@@ -26,11 +28,14 @@ public class RamStatistics extends Command{
 			return;
 		}
 		if(cs instanceof ConsoleCommandSender){
+			TerminalListener.getInstance().setTerminalEnabled(false);
 			TerminalGraph graph = BungeeUtil.getInstance().ramStatistiks.createGrath(120, 1024*1024);
 			graph.setYAxisName(new ColoredString("§amb"));
 			graph.setXAxisName(new ColoredString("§aseconds"));
 			for(ColoredString line : graph.buildLines(TerminalFactory.get().getWidth()-1, TerminalFactory.get().getHeight()-4, false))
-				AnsiConsole.out.println("\r"+AnsiColorFormater.getFormater().format(line.toString()));
+				AnsiConsole.out.print("\r"+AnsiColorFormater.getFormater().format(line.toString())+"\n");
+			AnsiConsole.out.flush();
+			TerminalListener.getInstance().setTerminalEnabled(true);
 		}
 		else
 		{

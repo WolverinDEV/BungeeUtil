@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -16,6 +17,7 @@ import org.fusesource.jansi.Ansi.Erase;
 
 import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.chat.ChatColor.AnsiColorFormater;
+import gnu.trove.list.linked.TLinkedList;
 
 import org.fusesource.jansi.AnsiConsole;
 import org.fusesource.jansi.AnsiRenderWriter;
@@ -121,7 +123,7 @@ public class TerminalListener {
 	private boolean terminalEnabled = true;
 	private ScheduledTask task;
 	private ColouredWriterAdapter writer;
-	private List<String> lines = new ArrayList<>();
+	private LinkedList<String> lines = new LinkedList<>();
 	@Getter
 	private CopyOnWriteArrayList<Listener> listener = new CopyOnWriteArrayList<>();
 
@@ -168,10 +170,7 @@ public class TerminalListener {
 		this.terminalEnabled = terminalEnabled;
 		if (terminalEnabled) {
 			try {
-				for (String s : lineBffer)
-					BungeeCord.getInstance().getConsoleReader().print(s);
-				BungeeCord.getInstance().getConsoleReader().drawLine();
-				BungeeCord.getInstance().getConsoleReader().flush();
+				repaintTerminal();
 				writer.writed = true;
 			} catch (Exception e) {
 			}
@@ -180,27 +179,30 @@ public class TerminalListener {
 	}
 
 	protected void addMessage(String message) {
-		lines.add(message);
-		while (lines.size() > 200)
-			lines.remove(0);
+		lines.push(message);
+		while (lines.size() > 1000)
+			lines.removeLast();
 	}
 
 	public void repaintTerminal() {
 		try {
+			AnsiConsole.out.print("\033[H\033[2J");
 			AnsiConsole.out.print("\033[0;0H");
 			int h = TerminalFactory.get().getHeight();
 			int w = TerminalFactory.get().getWidth();
-			for (int i = h; i > 0; i--) {
-				if(lines.size() > i){
-					String message = lines.get(i);
-					while(AnsiColorFormater.getFormater().stripAnsi(message).length() > w){
-						message = message.substring(0,message.length()-1); //TODO Ansi color chars not count
-					}
+			int fs = Math.max(0, h-lines.size());
+			
+			for (int i = 0; i < h; i++) {
+				if(h-i > -1 && lines.size() > (h-i)){
+					String message = lines.get(h-i);
+					//while(AnsiColorFormater.getFormater().stripAnsi(message).length() > w){
+					//	message = message.substring(0,message.length()-1); //TODO Ansi color chars not count
+					//}
 					AnsiConsole.out.print("\033["+(i)+";0H"+message);
-					AnsiConsole.out.flush();
 				}
-				else
-					continue;
+				//else
+				//	AnsiConsole.out.print("\033["+(i)+";0H"+Ansi.ansi().a(Ansi.Erase.ALL).toString());
+				AnsiConsole.out.flush();
 			}
 			BungeeCord.getInstance().getConsoleReader().drawLine();
 			//BungeeCord.getInstance().getConsoleReader().flush();
