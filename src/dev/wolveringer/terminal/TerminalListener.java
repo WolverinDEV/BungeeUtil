@@ -170,7 +170,8 @@ public class TerminalListener {
 		this.terminalEnabled = terminalEnabled;
 		if (terminalEnabled) {
 			try {
-				repaintTerminal();
+				for(String line : lineBffer)
+					AnsiConsole.out.println(line);
 				writer.writed = true;
 			} catch (Exception e) {
 			}
