@@ -25,6 +25,7 @@ import dev.wolveringer.network.IIInitialHandler;
 import dev.wolveringer.network.ProxiedPlayerUserConnection;
 import dev.wolveringer.network.channel.init.BungeeConnectionInit;
 import dev.wolveringer.network.channel.init.ChannelInizializer;
+import dev.wolveringer.terminal.TerminalListener;
 import dev.wolveringer.terminal.table.TerminalTable.TerminalRow;
 import jline.TerminalFactory;
 import lombok.Getter;
@@ -87,6 +88,7 @@ public final class BungeeUtil {
 			AsyncCatcher.init();
 			AsyncCatcher.disable(pluginInstance);
 			AsyncCatcher.catchOp("Async test failed");
+			TerminalListener.setInstance(new TerminalListener());
 			sleep(500);
 			setInformation("§aAsyncCatcher successfull loaded");
 			sendMessage("§aAsyncCatcher successfull loaded");
@@ -142,67 +144,9 @@ public final class BungeeUtil {
 			if (Configuration.ramStatistics()) {
 				ramStatistiks = new RamStatistics();
 				ramStatistiks.start();
-				BungeeCord.getInstance().getScheduler().runAsync(pluginInstance, new Runnable() {
-					@Override
-					public void run() {
-						while (Configuration.ramStatistics()) {
-							try {
-								Thread.sleep(100);
-							}
-							catch (InterruptedException e) {
-							}
-							if (!isActive()) return;
-							if (ramStatistiks.getLastState() == null) continue;
-							
-							int mb = 1024 * 1024;
-							
-							RamStatistic state = ramStatistiks.getLastState();
-							String var1 = (state.getUsedMemory()) / mb + "";
-							String var2 = (state.getReservedMemory() - state.getUsedMemory()) / mb + "";
-							String var3 = state.getReservedMemory() / mb + "";
-							String var4 = state.getMaxMemory() / mb + "";
-							
-							int var5 = 5;
-							var1 = format(var1, var5);
-							var2 = format(var2, var5);
-							var3 = format(var3, var5);
-							var4 = format(var4, var5);
-							
-							int diff = 0;
-							if (state.getPreviousStatistic(10, TimeUnit.SECONDS) != null) diff = (int) (((int) (state.getUsedMemory() / mb)) - ((int) (state.getPreviousStatistic(10, TimeUnit.SECONDS).getUsedMemory() / mb)));
-							String diffSpace = "";
-							for (int i = 0; i < ("(*" + Math.abs(diff) + ")").length(); i++)
-								diffSpace += " ";
-							List<String> lines = new ArrayList<>();
-							lines.add(ChatColorUtils.COLOR_CHAR + "7#####" + diffSpace.substring(0, diffSpace.length() / 2).replaceAll(" ", "#") + " " + ChatColorUtils.COLOR_CHAR + "6Heap utilization statistics [MB] " + ChatColorUtils.COLOR_CHAR + "7#####" + diffSpace.substring(0, diffSpace.length() / 2).replaceAll(" ", "#") + (diffSpace.length() % 2 != 0 ? "#" : ""));
-							lines.add(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aReserved Used Memory:      " + ChatColorUtils.COLOR_CHAR + "e" + var1 + "M " + ChatColorUtils.COLOR_CHAR + "7(" + (diff > 0 ? ChatColorUtils.COLOR_CHAR + "a+" : diff < 0 ? ChatColorUtils.COLOR_CHAR + "c-" : ChatColorUtils.COLOR_CHAR + "6±") + Math.abs(diff) + ChatColorUtils.COLOR_CHAR + "7)   " + ChatColorUtils.COLOR_CHAR + "7#");
-							lines.add(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aReserved Free Memory:      " + ChatColorUtils.COLOR_CHAR + "e" + var2 + "M    " + diffSpace + ChatColorUtils.COLOR_CHAR + "7#");
-							lines.add(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aReserved Memory:           " + ChatColorUtils.COLOR_CHAR + "e" + var3 + "M    " + diffSpace + ChatColorUtils.COLOR_CHAR + "7#");
-							lines.add(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "a-----------------------------" + format("", var5).replaceAll(" ", "-") + "   " + diffSpace + ChatColorUtils.COLOR_CHAR + "7#");
-							lines.add(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aAllowed Reservable Memory: " + ChatColorUtils.COLOR_CHAR + "e" + var4 + "M    " + diffSpace + ChatColorUtils.COLOR_CHAR + "7#");
-							lines.add(ChatColorUtils.COLOR_CHAR + "7############################################" + diffSpace.replaceAll(" ", "#"));
-							int h = 1;
-							int w = 0;
-							for(String m : lines)
-								if(ChatColor.stripColor(m).length()>w)
-									w = ChatColor.stripColor(m).length();
-							w = TerminalFactory.get().getWidth()-w+1;
-							for(int i = 0;i<lines.size();i++,h++){
-								AnsiConsole.out.print("\033["+h+";"+w+"H"+AnsiColorFormater.getFormater().format(lines.get(i)));
-							}
-							int cw = 2+BungeeCord.getInstance().getConsoleReader().getCursorBuffer().cursor; //2 = Promt = ' >'
-							AnsiConsole.out.print("\033["+TerminalFactory.get().getHeight()+";"+cw+"H");
-							AnsiConsole.out.flush();
-						}
-					}
-					
-					private String format(String in, int space) {
-						while (in.length() < space) {
-							in = in + " ";
-						}
-						return in;
-					}
-				});
+				RamStatisticsPainter tsp = new RamStatisticsPainter();
+				TerminalListener.getInstance().getListener().add(tsp);
+				BungeeCord.getInstance().getScheduler().runAsync(pluginInstance, tsp);
 				BungeeCord.getInstance().getPluginManager().registerCommand(pluginInstance, new dev.wolveringer.commands.RamStatistics());
 			}
 			
@@ -265,7 +209,10 @@ public final class BungeeUtil {
 	}
 	
 	public static void debug(Exception e, String otherMessage) {
-		if (pluginInstance == null || Configuration.isDebugEnabled()) e.printStackTrace(); // Debug if this not a plugin
+		if (pluginInstance == null || Configuration.isDebugEnabled()) 
+			e.printStackTrace(); // Debug isf this not a plugin
+		else
+			System.out.println(otherMessage);
 	}
 	
 	public static void debug(Exception e) {
