@@ -55,4 +55,13 @@ public class AnsiColorFormater {
 		}
 		return s + Ansi.ansi().a(Ansi.Attribute.RESET).toString();
 	}
+
+	public String stripAnsi(String message) {
+		message = message.replaceAll("\033\\[m", "");
+		return message;
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(AnsiColorFormater.getFormater().stripAnsi(AnsiColorFormater.getFormater().format("§c§z§rHello world")));
+	}
 }

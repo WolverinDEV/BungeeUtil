@@ -252,7 +252,7 @@ public class Updater {
 			this.data = new JSONObject(response.toString());
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			BungeeUtil.debug(e);
 		}
 		return this;
 	}
@@ -297,21 +297,25 @@ public class Updater {
 	
 	public HashMap<String, List<String>> createChanges(@NonNull String lastVersion){
 		HashMap<String, List<String>> out = new HashMap<>();
-		JSONArray changelogArray = data.getJSONArray("Changelog");
-		Iterator<Object> objects = changelogArray.iterator();
-		while (objects.hasNext()) {
-			JSONObject object = (JSONObject) objects.next();
-			String version; 
-			System.out.print((Long.parseLong((version = object.getString("Verion")).replaceAll("\\.", "")) > Long.parseLong(lastVersion.replaceAll("\\.", "")))+"-"+(Long.parseLong((version = object.getString("Verion")).replaceAll("\\.", "")) +":"+ Long.parseLong(getCurrentVersion().replaceAll("\\.", ""))));
-			if(Long.parseLong((version = object.getString("Verion")).replaceAll("\\.", "")) > Long.parseLong(lastVersion.replaceAll("\\.", "")) && Long.parseLong((version = object.getString("Verion")).replaceAll("\\.", "")) <= Long.parseLong(getCurrentVersion().replaceAll("\\.", ""))){
-				ArrayList<String> changes = new ArrayList<>();
-				Iterator<Object> message = object.getJSONArray("Changed").iterator();
-				while (message.hasNext()) {
-					changes.add((String) message.next());
+		if(data != null){
+			JSONArray changelogArray = data.getJSONArray("Changelog");
+			Iterator<Object> objects = changelogArray.iterator();
+			while (objects.hasNext()) {
+				JSONObject object = (JSONObject) objects.next();
+				String version; 
+				System.out.print((Long.parseLong((version = object.getString("Verion")).replaceAll("\\.", "")) > Long.parseLong(lastVersion.replaceAll("\\.", "")))+"-"+(Long.parseLong((version = object.getString("Verion")).replaceAll("\\.", "")) +":"+ Long.parseLong(getCurrentVersion().replaceAll("\\.", ""))));
+				if(Long.parseLong((version = object.getString("Verion")).replaceAll("\\.", "")) > Long.parseLong(lastVersion.replaceAll("\\.", "")) && Long.parseLong((version = object.getString("Verion")).replaceAll("\\.", "")) <= Long.parseLong(getCurrentVersion().replaceAll("\\.", ""))){
+					ArrayList<String> changes = new ArrayList<>();
+					Iterator<Object> message = object.getJSONArray("Changed").iterator();
+					while (message.hasNext()) {
+						changes.add((String) message.next());
+					}
+					out.put(version, changes);
 				}
-				out.put(version, changes);
 			}
 		}
+		else
+			out.put("error", Arrays.asList("§cCant featch versions data.","Make shure you have an valid internet connection."));
 		return out;
 	}
 	
