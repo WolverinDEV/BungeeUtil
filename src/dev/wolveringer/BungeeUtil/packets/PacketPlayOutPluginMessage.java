@@ -14,6 +14,7 @@ public class PacketPlayOutPluginMessage extends Packet implements PacketPlayIn{
 	private ByteBuf data;
 	private ByteBufOutputStream os;
 	private ByteBufInputStream is;
+	private int length = -1;
 	
 	@Override
 	public void read(PacketDataSerializer s) {
@@ -28,7 +29,7 @@ public class PacketPlayOutPluginMessage extends Packet implements PacketPlayIn{
 			e.printStackTrace();
 			s.resetReaderIndex();
 		}
-		int length = Math.min(s.readableBytes(), s.writerIndex() - s.readerIndex());
+		length = Math.min(s.readableBytes(), s.writerIndex() - s.readerIndex());
 		data = Unpooled.buffer(length);
 		s.readBytes(data, length);
 	}
@@ -37,9 +38,15 @@ public class PacketPlayOutPluginMessage extends Packet implements PacketPlayIn{
 	public void write(PacketDataSerializer s) {
 		if(channel != null)
 			s.writeString(channel);
-		data.resetReaderIndex();
-		data.readBytes(s, data.readableBytes());
-		data.release();
+		try{
+			s.ensureWritable(data.readableBytes(), true);
+			data.resetReaderIndex();
+			data.readBytes(s, data.readableBytes());
+			data.release();
+		}catch(Exception e){
+			System.out.println("Buffer: "+data+" - "+data.readableBytes()+" - "+length);
+			throw e;
+		}
 	}
 	
 	public String getChannel() {

@@ -56,7 +56,7 @@ public abstract class AbstractPacketCreator {
 		if (x.readableBytes() < 1)
 			return null;
 		x.markReaderIndex().markWriterIndex();
-		Packet y = getPacket0(version, s, d, (int) (x.readUnsignedByte()), x, p); // faster
+		Packet y = getPacket0(version, s, d, (int) x.readUnsignedByte(), x, p); // faster
 		x.resetReaderIndex().resetWriterIndex();
 		return y;
 	}

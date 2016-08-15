@@ -26,6 +26,7 @@ public class PacketPlayInPluginMessage extends Packet implements PacketPlayIn{
 	@Override
 	public void write(PacketDataSerializer s) {
 		s.writeString(channel);
+		s.ensureWritable(data.readableBytes(), true);
 		data.resetReaderIndex();
 		data.readBytes(s,data.readableBytes());
 		data.release();
