@@ -5,6 +5,7 @@ import dev.wolveringer.packet.PacketDataSerializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
+import io.netty.buffer.Unpooled;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -27,9 +28,9 @@ public class PacketPlayOutPluginMessage extends Packet implements PacketPlayIn{
 			e.printStackTrace();
 			s.resetReaderIndex();
 		}
-		int length = Math.min(s.readableBytes(), s.readableBytes() + s.readerIndex());
-		data = s.copy(s.readerIndex(), length);
-		s.skipBytes(s.readableBytes());
+		int length = Math.min(s.readableBytes(), s.writerIndex() - s.readerIndex());
+		data = Unpooled.buffer(length);
+		s.readBytes(data, length);
 	}
 
 	@Override
@@ -37,7 +38,7 @@ public class PacketPlayOutPluginMessage extends Packet implements PacketPlayIn{
 		if(channel != null)
 			s.writeString(channel);
 		data.resetReaderIndex();
-		data.readBytes(s,data.readableBytes());
+		data.readBytes(s, data.readableBytes());
 		data.release();
 	}
 	

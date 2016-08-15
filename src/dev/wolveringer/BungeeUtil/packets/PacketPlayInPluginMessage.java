@@ -18,8 +18,9 @@ public class PacketPlayInPluginMessage extends Packet implements PacketPlayIn{
 	@Override
 	public void read(PacketDataSerializer s) {
 		channel = s.readString(-1);
-		data = s.copy(s.readerIndex(), s.readableBytes());
-		s.skipBytes(s.readableBytes());
+		data = Unpooled.buffer(s.readableBytes());
+		data.readBytes(s,s.readableBytes());
+		s.readBytes(data, s.readableBytes());
 	}
 
 	@Override
