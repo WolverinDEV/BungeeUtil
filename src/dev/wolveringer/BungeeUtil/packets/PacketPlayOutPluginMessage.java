@@ -49,10 +49,10 @@ public class PacketPlayOutPluginMessage extends Packet implements PacketPlayIn{
 			data.readerIndex(0);
 			int length = data.readableBytes();
 			s.ensureWritable(length, true);
-			System.out.println("out - Buffer: "+data+" - "+length);
 			s.writeBytes(data, length);
 			data.release();
 		}catch(Exception e){
+			System.out.println("out - Buffer: "+data+" - "+length);
 			throw e;
 		}
 	}
