@@ -14,22 +14,39 @@ public class PacketPlayInPluginMessage extends Packet implements PacketPlayIn{
 	private ByteBuf data;
 	private ByteBufOutputStream os;
 	private ByteBufInputStream is;
+	private int length;
 	
 	@Override
 	public void read(PacketDataSerializer s) {
-		channel = s.readString(-1);
-		data = Unpooled.buffer(s.readableBytes());
-		data.readBytes(s,s.readableBytes());
-		s.readBytes(data, s.readableBytes());
+		s.markReaderIndex();
+		try{
+			channel = s.readString(-1);
+			if(s.readableBytes() + s.readerIndex() != s.writerIndex()){
+				System.out.println("Incorrect length: "+(s.readableBytes() + s.readerIndex()+" - "+s.writerIndex()));
+			}
+		}catch(Exception e){
+			channel = null;
+			e.printStackTrace();
+			s.resetReaderIndex();
+		}
+		length = Math.min(s.readableBytes(), s.writerIndex() - s.readerIndex());
+		data = Unpooled.buffer(length);
+		s.readBytes(data, length);
 	}
 
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeString(channel);
-		s.ensureWritable(data.readableBytes(), true);
-		data.resetReaderIndex();
-		data.readBytes(s,data.readableBytes());
-		data.release();
+		if(channel != null)
+			s.writeString(channel);
+		try{
+			s.ensureWritable(data.readableBytes(), true);
+			data.resetReaderIndex();
+			data.readBytes(s, data.readableBytes());
+			data.release();
+		}catch(Exception e){
+			System.out.println("Buffer: "+data+" - "+data.readableBytes()+" - "+length);
+			throw e;
+		}
 	}
 	
 	public String getChannel() {
