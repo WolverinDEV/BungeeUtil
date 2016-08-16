@@ -1,5 +1,6 @@
 package dev.wolveringer.BungeeUtil.packets;
 
+import dev.wolveringer.BungeeUtil.ClientVersion;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayIn;
 import dev.wolveringer.api.position.BlockPosition;
 import dev.wolveringer.packet.PacketDataSerializer;
@@ -24,14 +25,22 @@ public class PacketPlayInBlockDig extends Packet implements PacketPlayIn {
 	
 	@Override
 	public void read(PacketDataSerializer s) {
-		state = State.values()[s.readByte()];
+		if (getVersion().getVersion() <= ClientVersion.v1_8_0.getVersion()) {
+			state = State.values()[s.readByte()];
+		} else {
+			state = State.values()[s.readVarInt()];
+		}
 		loc = s.readBlockPosition();
 		face = s.readUnsignedByte();
 	}
 	
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeByte(state.ordinal());
+		if (getVersion().getVersion() <= ClientVersion.v1_8_0.getVersion()) {
+			s.writeByte(state.ordinal());
+		} else {
+			s.writeVarInt(state.ordinal());
+		}
 		s.writeBlockPosition(loc);
 		s.writeByte(face);
 	}
