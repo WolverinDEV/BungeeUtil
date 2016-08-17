@@ -32,8 +32,7 @@ public class PacketPlayInPluginMessage extends Packet implements PacketPlayIn{
 			e.printStackTrace();
 			s.readerIndex(readerIndex);
 		}
-		Validate.isTrue(s.readableBytes() == s.writerIndex() - s.readerIndex(),
-				"bytebuf has drunk: " + s.readableBytes() + " " + (s.writerIndex() - s.readerIndex()));
+		Validate.isTrue(s.readableBytes() == s.writerIndex() - s.readerIndex(), "bytebuf has drunk: " + s.readableBytes() + " " + (s.writerIndex() - s.readerIndex()));
 //		length = s.readableBytes();
 		data = s.readBytes(s.readableBytes());
 //		data = Unpooled.buffer(length);
@@ -48,7 +47,6 @@ public class PacketPlayInPluginMessage extends Packet implements PacketPlayIn{
 			data.readerIndex(0);
 			int length = data.readableBytes();
 			s.ensureWritable(length, true);
-			System.out.println("in - Buffer: "+data+" - "+length);
 			s.writeBytes(data, length);
 			data.release();
 		}catch(Exception e){
