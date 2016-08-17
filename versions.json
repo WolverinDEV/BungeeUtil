@@ -1,5 +1,5 @@
 {
-    "CurrentVersion": "1.6.7.14.2",
+    "CurrentVersion": "1.6.7.14.3",
     "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.14.2.jar",
     "VersionsHistory": [
         {
@@ -33,6 +33,14 @@
         {
             "Version": "1.6.7.13",
             "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.13.jar"
+        },
+        {
+            "Version": "1.6.7.14",
+            "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.14.jar"
+        },
+        {
+            "Version": "1.6.7.14.2",
+            "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.14.2.jar"
         }
     ],
     "Changelog": [
@@ -98,6 +106,12 @@
             "Verion": "1.6.7.14.2",
             "Changed": [
                 "Copied PacketPlayOutPluginMessage to PacketPlayInPluginMessage"
+            ]
+        },
+        {
+            "Verion": "1.6.7.14.3",
+            "Changed": [
+                "Fixed anvil plugin message bug."
             ]
         }
     ]
