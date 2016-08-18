@@ -19,6 +19,8 @@ import dev.wolveringer.BungeeUtil.PacketHandleEvent;
 import dev.wolveringer.BungeeUtil.PacketLib;
 import dev.wolveringer.BungeeUtil.configuration.Configuration;
 import dev.wolveringer.BungeeUtil.packets.Packet;
+import dev.wolveringer.network.channel.init.BungeeUtilChannelInit;
+import dev.wolveringer.network.channel.init.ChannelInizializer;
 import dev.wolveringer.packet.ByteBuffCreator;
 import dev.wolveringer.packet.PacketHandle;
 import dev.wolveringer.profiler.Profiler;
@@ -154,10 +156,22 @@ public class Decoder extends MinecraftDecoder {
 						return;
 					}
 				}
-			}catch (NoClassDefFoundError e){
-				System.out.print("Error: 102");
-				return;
 			}catch (Exception e){
+				if(e instanceof ClassNotFoundException){
+					e.printStackTrace();
+					System.err.println("Could not find class '"+e.getMessage()+"' in decode methode.");
+					if(e.getMessage().startsWith("dev.wolveringer.BungeeUtil") || e.getMessage().startsWith("dev.wolveringer.packet") || e.getMessage().startsWith("dev.wolveringer.network")){
+						System.err.println("");
+						System.err.println("");
+						System.err.println("-----------------------------------------------------------------------------------------------");
+						System.err.println("                      Missing inital class! Shuting down BungeeUtils!");
+						if(ChannelInizializer.getChannelInitializer() instanceof BungeeUtilChannelInit){
+							BungeeUtilChannelInit channelInit = (BungeeUtilChannelInit) ChannelInizializer.getChannelInitializer();
+							channelInit.throwClassNotFoundError((ClassNotFoundException) e);
+						}
+						System.err.println("-----------------------------------------------------------------------------------------------");
+					}
+				}
 				if(!initHandler.isConnected)
 					return;
 				switch (Configuration.getHandleExceptionAction()) {
@@ -201,5 +215,9 @@ public class Decoder extends MinecraftDecoder {
 				e.printStackTrace();
 		}
 		Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.read")); //$NON-NLS-1$
+	}
+	
+	public static void main(String[] args) throws ClassNotFoundException {
+		Class.forName("xxx");
 	}
 }

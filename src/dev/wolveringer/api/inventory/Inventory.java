@@ -20,6 +20,11 @@ import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayOut;
  *
  */
 public class Inventory {
+	public static interface Unsave {
+		public ItemContainer getItemContainer();
+		public List<Player> getModificableViewerList();
+		public MetaListener getItemMetaListener();
+	}
 	public static final int ID = 99;
 
 	protected ItemContainer container;
@@ -30,7 +35,26 @@ public class Inventory {
 	protected boolean clickable = true;
 	protected boolean resend_inventory = false;
 	private MetaListener imcil;
-
+	private Unsave unsave = new Unsave() {
+		@Override
+		public List<Player> getModificableViewerList() {
+			return viewer;
+		}
+		
+		@Override
+		public MetaListener getItemMetaListener() {
+			return imcil;
+		}
+		
+		@Override
+		public ItemContainer getItemContainer() {
+			return container;
+		}
+	};
+	public Unsave unsave() {
+		return unsave;
+	}
+	
 	public Inventory(int size, String name) {
 		this(size, name, true);
 	}
@@ -173,7 +197,7 @@ public class Inventory {
 	}
 
 	public List<Player> getViewer() {
-		return viewer;
+		return Collections.unmodifiableList(viewer);
 	}
 
 	public void clear() {

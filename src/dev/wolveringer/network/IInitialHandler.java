@@ -122,7 +122,7 @@ public abstract class IInitialHandler extends InitialHandler {
 	public void closeChannel() {
 		if (!getChannel().isClosed()) getChannel().close();
 		if (isConnected) {
-			if (getPlayer().getInventoryView() != null) getPlayer().getInventoryView().getViewer().remove(this);
+			if (getPlayer().getInventoryView() != null) getPlayer().getInventoryView().unsave().getModificableViewerList().remove(this);
 			getPlayer().getPlayerInventory().reset();
 			isConnected = false;
 			b = null;

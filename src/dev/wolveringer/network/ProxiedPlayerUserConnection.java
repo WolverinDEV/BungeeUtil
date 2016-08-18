@@ -85,7 +85,7 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 			return;
 		if(b)
 			sendPacket(new PacketPlayOutCloseWindow(Inventory.ID));
-		inv.getViewer().remove(this);
+		inv.unsave().getModificableViewerList().remove(this);
 		inv = null;
 	}
 
@@ -117,7 +117,7 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 		e.UTF_8 = true;
 		sendPacket(e);
 		sendPacket(new PacketPlayOutWindowItems(Inventory.ID, inv.getContains()));
-		inv.getViewer().add(this);
+		inv.unsave().getModificableViewerList().add(this);
 		this.inv = inv;
 	}
 

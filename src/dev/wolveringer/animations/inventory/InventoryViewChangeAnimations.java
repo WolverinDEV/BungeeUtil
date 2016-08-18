@@ -1,12 +1,16 @@
 package dev.wolveringer.animations.inventory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.Callback;
 import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.BungeeUtil.Material;
+import dev.wolveringer.BungeeUtil.Player;
 import dev.wolveringer.BungeeUtil.item.Item;
+import dev.wolveringer.animations.inventory.InventoryViewChangeAnimations.AnimationType;
 import dev.wolveringer.api.inventory.Inventory;
 import dev.wolveringer.api.inventory.ItemContainer;
 
@@ -30,17 +34,37 @@ public class InventoryViewChangeAnimations {
 	}
 
 	public static void runAnimation(AnimationType type, Inventory base, ItemContainer new_contains, String new_name, Item spacer,int delay) {
-		if(type == AnimationType.SCROLL_DOWN)
-			runScroolUpAnimation(base, new_contains, new_name, spacer,delay);
-		else if(type == AnimationType.SCROLL_UP)
-			runScroolDownAnimation(base, new_contains, new_name, spacer, delay);
+		runAnimation(type, base, new_contains, new_name, spacer, delay, null);
 	}
 	
-	private static void runScroolLeftAnimation(final Inventory base, final ItemContainer new_contains, final String new_name, final Item space,int delay) {
+	public static void runAnimation(AnimationType type,final Inventory base,final Inventory new_inventory, String new_name, Item spacer,int delay,final Callback<Void> callback) {
+		Callback _callback = new Callback<Void>() {
+			@Override
+			public void done(Void arg0, Throwable arg1) {
+				for(Player p : new ArrayList<>(base.getViewer()))
+					p.openInventory(new_inventory);
+				if(callback != null)
+					callback.done(arg0, arg1);
+			}
+		};
+		if(type == AnimationType.SCROLL_DOWN)
+			runScroolUpAnimation(base, new_inventory.unsave().getItemContainer(), new_name, spacer,delay,_callback);
+		else if(type == AnimationType.SCROLL_UP)
+			runScroolDownAnimation(base, new_inventory.unsave().getItemContainer(), new_name, spacer, delay,_callback);
+	}
+	
+	public static void runAnimation(AnimationType type, Inventory base, ItemContainer new_contains, String new_name, Item spacer,int delay,final Callback<Void> callback) {
+		if(type == AnimationType.SCROLL_DOWN)
+			runScroolUpAnimation(base, new_contains, new_name, spacer,delay,callback);
+		else if(type == AnimationType.SCROLL_UP)
+			runScroolDownAnimation(base, new_contains, new_name, spacer, delay,callback);
+	}
+	
+	private static void runScroolLeftAnimation(final Inventory base, final ItemContainer new_contains, final String new_name, final Item space,int delay,final Callback<Void> callback) {
 		
 	}
-
-	private static void runScroolUpAnimation(final Inventory base, final ItemContainer new_contains, final String new_name, final Item space,int delay) {
+	
+	private static void runScroolUpAnimation(final Inventory base, final ItemContainer new_contains, final String new_name, final Item space,int delay,final Callback<Void> callback) {
 		final Item[][] old_rows = buildCollums(base);
 		final Item[][] new_rows = buildCollums(new_contains);
 
@@ -85,11 +109,16 @@ public class InventoryViewChangeAnimations {
 					base.setName(new_name);
 				base.enableUpdate();
 			}
+			@Override
+			public void done() {
+				if(callback != null)
+					callback.done(null, null);
+			}
 		};
 		scheduller.start();
 	}
 
-	private static void runScroolDownAnimation(final Inventory base, final ItemContainer new_contains, final String new_name, final Item space,int delay) {
+	private static void runScroolDownAnimation(final Inventory base, final ItemContainer new_contains, final String new_name, final Item space,int delay,final Callback<Void> callback) {
 		final Item[][] old_rows = buildCollums(base);
 		final Item[][] new_rows = buildCollums(new_contains);
 
@@ -146,6 +175,11 @@ public class InventoryViewChangeAnimations {
 				if(this.count ==(int) (this.limit/2) && !base.getName().equalsIgnoreCase(new_name))
 					base.setName(new_name);
 				base.enableUpdate();
+			}
+			@Override
+			public void done() {
+				if(callback != null)
+					callback.done(null, null);
 			}
 		};
 		scheduller.start();

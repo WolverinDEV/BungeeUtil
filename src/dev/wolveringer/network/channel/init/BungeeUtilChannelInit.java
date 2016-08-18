@@ -23,10 +23,8 @@ import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 import net.md_5.bungee.protocol.Varint21FrameDecoder;
 import net.md_5.bungee.protocol.Varint21LengthFieldPrepender;
 import dev.wolveringer.BungeeUtil.BungeeUtil;
-import dev.wolveringer.BungeeUtil.Main;
 import dev.wolveringer.network.Decoder;
 import dev.wolveringer.network.Encoder;
-import dev.wolveringer.network.IIInitialHandler;
 import dev.wolveringer.network.channel.ChannelHandler;
 
 public class BungeeUtilChannelInit <T extends InitialHandler> extends ChannelInizializer {
@@ -58,11 +56,10 @@ public class BungeeUtilChannelInit <T extends InitialHandler> extends ChannelIni
 		catch (SecurityException e1) {
 			e1.printStackTrace();
 		}
-		f.setAccessible(true);
+		f.setAccessible(true); 
 		try {
 			framePrepender = (Varint21LengthFieldPrepender) f.get(null);
-		}
-		catch (IllegalArgumentException | IllegalAccessException e) {
+		} catch (IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
 	}
@@ -82,8 +79,8 @@ public class BungeeUtilChannelInit <T extends InitialHandler> extends ChannelIni
 			ch.pipeline().get(HandlerBoss.class).setHandler(createInitialHandler(ch, b, a));
 		}
 		catch (Throwable e) {
-			if ((e instanceof NoClassDefFoundError)) {
-				throwClassNotFoundError();
+			if (e instanceof NoClassDefFoundError) {
+				throwClassNotFoundError((ClassNotFoundException) e);
 				return;
 			}
 			e.printStackTrace();
@@ -104,7 +101,7 @@ public class BungeeUtilChannelInit <T extends InitialHandler> extends ChannelIni
 	}
 	
 	@SuppressWarnings("deprecation")
-	public void throwClassNotFoundError() {
+	public void throwClassNotFoundError(ClassNotFoundException exception) {
 		BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cBungeeUntil cant load some Classes!");
 		BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cDisable BungeeUntil!");
 		try {
