@@ -216,7 +216,7 @@ public final class BungeeUtil {
 	}
 	
 	public static void debug(Exception e) {
-		debug(e, "Exception message -> " + e.getMessage());
+		debug(e, "An error happed. "+e.getClass().getName().substring(e.getClass().getName().lastIndexOf('.'))+" message -> " + e.getMessage());
 	}
 	
 	void sleep(int millis) {
@@ -258,8 +258,21 @@ public final class BungeeUtil {
 	
 	private void setPromt(String info) {
 		try {
-			if (costumPromtLine) BungeeCord.getInstance().getConsoleReader().resetPromptLine(costumPormtLineMessage = AnsiColorFormater.getFormater().format(ChatColorUtils.COLOR_CHAR + "aLoading BungeeUtil >> " + ChatColorUtils.COLOR_CHAR + "b" + info), "", 0);
-			else BungeeCord.getInstance().getConsoleReader().resetPromptLine(">", "", 1);
+			if (costumPromtLine){
+				try{
+					BungeeCord.getInstance().getConsoleReader().resetPromptLine(costumPormtLineMessage = AnsiColorFormater.getFormater().format(ChatColorUtils.COLOR_CHAR + "aLoading BungeeUtil >> " + ChatColorUtils.COLOR_CHAR + "b" + info), "", 0);
+				}catch(Exception e){
+					try{
+						BungeeCord.getInstance().getConsoleReader().resetPromptLine("", "", 0);
+						BungeeCord.getInstance().getConsoleReader().resetPromptLine(costumPormtLineMessage = AnsiColorFormater.getFormater().format(ChatColorUtils.COLOR_CHAR + "aLoading BungeeUtil >> " + ChatColorUtils.COLOR_CHAR + "b" + info), "", 0);
+					}catch(Exception e2){
+						debug(e2);
+					}
+				}
+			}
+			else{
+				BungeeCord.getInstance().getConsoleReader().resetPromptLine(">", "", 1);
+			}
 		}
 		catch (IOException ex) {
 			ex.printStackTrace();
