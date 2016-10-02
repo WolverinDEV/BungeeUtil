@@ -42,6 +42,11 @@ public final class BungeeUtil {
 	
 	public static BungeeUtil createInstance(Plugin plugin){
 		if(instance == null){
+			if(System.getProperty("bungeetil.instance") == null){
+				System.setProperty("bungeetil.instance", "WolverinDEV");
+			}
+			else
+				throw new NullPointerException("BungeeUtil have alredy an instance!");
 			pluginInstance = plugin;
 			instance = new BungeeUtil();
 		}
@@ -60,7 +65,7 @@ public final class BungeeUtil {
 	private BungeeUtil() {}
 	
 	public void load(){
-		if(state.testBit(0))
+		if(state.testBit(0) || active)
 			throw new RuntimeException("Alredy loading plugin.");
 		if(state.testBit(1))
 			throw new RuntimeException("BungeeUtil alredy loaded!");

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map.Entry;
 
 import dev.wolveringer.BungeeUtil.packets.Packet;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInFlying;
@@ -31,7 +32,7 @@ public class PacketLib {
 			final int prime = 31;
 			int result = 1;
 			result = prime * result + ((handler == null) ? 0 : handler.hashCode());
-			result = prime * result + importance;
+			//result = prime * result + importance;
 			return result;
 		}
 
@@ -56,6 +57,18 @@ public class PacketLib {
 			return true;
 		}
 	}
+	
+	@Deprecated
+	public static void printListener(){
+		for(Entry<Class<? extends Packet>, ArrayList<PacketHandlerHolder>> e : handlers.entrySet()){
+			StringBuilder out = new StringBuilder();
+			for(PacketHandlerHolder h : e.getValue())
+				out.append(", "+h.getHandler().toString());
+			if( e.getValue().size() > 0)
+			System.out.print(e.getKey()+" -> "+out.toString().substring(2));
+		}
+	}
+	
 	private static HashMap<Class<? extends Packet>, ArrayList<PacketHandlerHolder>> handlers = new HashMap<Class<? extends Packet>, ArrayList<PacketHandlerHolder>>() {
 		private static final long serialVersionUID = 1L;
 
@@ -122,8 +135,13 @@ public class PacketLib {
 	
 	public static void removeHandler(PacketHandler h) {
 		for(Class c : superclazzes.get(getPacketType(h))){
-			handlers.get(c).remove(h);
+			for(PacketHandlerHolder h1 : new ArrayList<>(handlers.get(c)))
+				if(h1 != null && h1.getHandler() != null && h1.getHandler().equals(h))
+					handlers.get(c).remove(h1);
 		}
+		for(PacketHandlerHolder h1 : handlers.get(Packet.class))
+			if(h1 != null && h1.getHandler() != null && h1.getHandler().equals(h))
+				handlers.get(Packet.class).remove(h1);
 	}
 	
 	public static PacketHandleEvent handle(PacketHandleEvent e) {

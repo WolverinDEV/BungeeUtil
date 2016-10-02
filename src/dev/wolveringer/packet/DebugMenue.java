@@ -337,6 +337,7 @@ public class DebugMenue {
 					@Override
 					public void onConfirmInput(AnvilGui guy, String message) {
 						click.getPlayer().sendMessage("You confirmed you input. Your input: "+message);
+						click.getPlayer().closeInventory();
 					}
 					
 					@Override

@@ -161,7 +161,9 @@ public class AnvilGui {
 						curruntMessage = handleMessage;
 						for(AnvilGuiListener listener : new ArrayList<>(AnvilGui.this.listener))
 							listener.onMessageChange(AnvilGui.this, handleMessage);
-						
+						if(!inv.equals(owner.getInventoryView())){
+							PacketLib.removeHandler(this);
+						}
 					//	System.out.println("Boarderreach: "+new AnvilWindowSizeStringCalculator(handleMessage).reachBoarder(18)); 
 					}
 				}
@@ -172,6 +174,8 @@ public class AnvilGui {
 					for(AnvilGuiListener listener : new ArrayList<>(AnvilGui.this.listener))
 						listener.onClose(AnvilGui.this);
 					PacketLib.removeHandler(this);
+					System.out.println("Removing this. ("+this+"/"+")");
+					PacketLib.printListener();
 				}
 			}
 		}

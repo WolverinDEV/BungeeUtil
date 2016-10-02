@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>dev.wolveringer</groupId>
   <artifactId>BungeeUtil</artifactId>
-  <version>1.6.7.14.3</version>
+  <version>1.6.7.15</version>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -69,6 +69,11 @@
                   </excludes>
                 </filter>
               </filters>
+              <artifactSet>
+                <excludes>
+                  <exclude>io.netty:**</exclude>
+                </excludes>
+              </artifactSet>
             </configuration>
           </execution>
         </executions>
@@ -120,6 +125,12 @@
     </profile>
   </profiles>
   <dependencies>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-handler</artifactId>
+      <version>4.0.41.Final</version>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <groupId>net.md-5</groupId>
       <artifactId>bungeecord-api</artifactId>

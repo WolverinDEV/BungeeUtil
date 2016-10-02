@@ -14,7 +14,9 @@ import dev.wolveringer.BungeeUtil.packets.PacketPlayOutBossBar.BarDivision;
 import dev.wolveringer.animations.inventory.LimetedScheduller;
 import dev.wolveringer.chat.ChatSerializer;
 import dev.wolveringer.chat.IChatBaseComponent;
+import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 import lombok.Getter;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 
 public class BossBarManager {
@@ -46,7 +48,7 @@ public class BossBarManager {
 			color = BarColor.PING;
 			division = BarDivision.TEN_DIVISIONS;
 			health = 0.5F;
-			message = ChatSerializer.fromMessage("§cUndefined");
+			message = ChatSerializer.fromMessage(ChatColorUtils.COLOR_CHAR+"cUndefined");
 		}
 		
 		public void setColor(PacketPlayOutBossBar.BarColor color) {

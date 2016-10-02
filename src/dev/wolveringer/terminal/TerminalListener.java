@@ -137,8 +137,10 @@ public class TerminalListener {
 			}
 		logger.addHandler(writer = new ColouredWriterAdapter(this, BungeeCord.getInstance().getConsoleReader()));
 		writer.setLevel( Level.INFO );
-		writer.setFormatter(org.getFormatter());
-		
+		if(org != null)
+			writer.setFormatter(org.getFormatter());
+		else
+			addMessage("§cCant find BungeeCord Terminal handler!");
 		task = BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), new Runnable() {
 			int oldWidth = -1, oldHeight = -1;
 

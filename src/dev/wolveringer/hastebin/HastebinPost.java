@@ -5,11 +5,10 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
-
-import com.google.common.base.Charsets;
 
 public class HastebinPost {
 	private StringBuilder text = new StringBuilder();
@@ -65,13 +64,13 @@ public class HastebinPost {
 		InputStream inputStream = null;
 		try{
 			inputStream = connection.getInputStream();
-			String result = IOUtils.toString(inputStream, Charsets.UTF_8);
+			String result = IOUtils.toString(inputStream, Charset.forName("UTF-8"));
 			return result;
 		}catch (IOException e){
 			IOUtils.closeQuietly(inputStream);
 			inputStream = connection.getErrorStream();
 			if(inputStream != null){
-				String result = IOUtils.toString(inputStream, Charsets.UTF_8);
+				String result = IOUtils.toString(inputStream, Charset.forName("UTF-8"));
 				return result;
 			}
 			throw e;
