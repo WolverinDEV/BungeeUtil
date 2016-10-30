@@ -16,19 +16,8 @@ import dev.wolveringer.chat.ChatSerializer;
 import dev.wolveringer.chat.IChatBaseComponent;
 import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 import lombok.Getter;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.scheduler.ScheduledTask;
 
 public class BossBarManager {
-	
-	private static class DynamicBossBarRunner implements Runnable{
-
-		@Override
-		public void run() {
-			
-		}
-		
-	}
 	
 	@Getter
 	public static class BossBar {
@@ -96,12 +85,12 @@ public class BossBarManager {
 			int millis = (int) unit.toMillis(time);
 			int loopsTime = (int) (millis/stepCount);
 			
-			new LimetedScheduller(millis,Math.abs(loopsTime),TimeUnit.MILLISECONDS) {
+			(curruntTask = new LimetedScheduller(millis,Math.abs(loopsTime),TimeUnit.MILLISECONDS) {
 				@Override
 				public void run(int count) {
 					setHealth(base+(addPerStep*count));
 				}
-			}.start();
+			}).start();
 		}
 		
 		protected BossBar(BossBarManager manager, UUID uuid, BarColor color, BarDivision division, float value, IChatBaseComponent message, boolean visiable) {
