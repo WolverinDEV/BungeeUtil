@@ -179,14 +179,7 @@ public class AnvilGui {
 				}
 			}
 		}
-		/**
-		 * 
-		 * @param in
-		 *            XXXXX
-		 * @param in2
-		 *            YYXYY
-		 * @return
-		 */
+
 		
 		private String buildOutString(String in, String in2) {
 			char[] ca = in.toCharArray();
