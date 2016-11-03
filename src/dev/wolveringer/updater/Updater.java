@@ -110,7 +110,9 @@ public class Updater {
 	}
 	
 	public boolean isNewstVersion() {
-		int minBounds = 0;
+		int minBounds = Math.min(getNewestVersion().length(), getCurrentVersion().length());
+		if(minBounds == 0)
+			return true;
 		Long a = Long.parseLong(getNewestVersion().substring(0, minBounds).replaceAll("\\.", ""));
 		Long b = Long.parseLong(getCurrentVersion().substring(0, minBounds).replaceAll("\\.", ""));
 		if(a == b)
