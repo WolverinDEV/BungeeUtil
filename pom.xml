@@ -146,6 +146,7 @@
 		    <artifactId>netty-handler</artifactId>
 		    <version>4.0.41.Final</version>
 		</dependency>
+		<!-- https://github.com/WolverinDEV/BungeeCord -->
 		<dependency>
 			<groupId>net.md-5</groupId>
 			<artifactId>bungeecord-api</artifactId>

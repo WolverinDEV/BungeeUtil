@@ -11,9 +11,11 @@ import io.netty.channel.ChannelPromise;
 import io.netty.util.Attribute;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.EventExecutor;
+import lombok.Getter;
 
 import java.lang.reflect.Field;
 import java.net.SocketAddress;
+import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.compress.PacketCompressor;
 import net.md_5.bungee.compress.PacketDecompressor;
@@ -34,48 +36,51 @@ public class ChannelWrapper extends net.md_5.bungee.netty.ChannelWrapper {
 
 	private Channel ch;
 	private IInitialHandler handler;
+	@Getter
 	private volatile boolean closed;
+	@Getter
+	private volatile boolean closing;
 
 	public ChannelWrapper(net.md_5.bungee.netty.ChannelWrapper ctx, IInitialHandler h) {
 		super(new EmptyChannelWrapper());
 		this.handler = h;
-		try{
+		try {
 			Field f = net.md_5.bungee.netty.ChannelWrapper.class.getDeclaredField("ch");
 			f.setAccessible(true);
 			this.ch = (Channel) f.get(ctx);
-		}catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void setProtocol(Protocol protocol) {
-		if(ch.pipeline().get(MinecraftEncoder.class) != null)
+		if (ch.pipeline().get(MinecraftEncoder.class) != null)
 			ch.pipeline().get(MinecraftEncoder.class).setProtocol(protocol);
-		if(ch.pipeline().get(MinecraftDecoder.class) != null)
+		if (ch.pipeline().get(MinecraftDecoder.class) != null)
 			ch.pipeline().get(MinecraftDecoder.class).setProtocol(protocol);
-		if(ch.pipeline().get(Encoder.class) != null)
+		if (ch.pipeline().get(Encoder.class) != null)
 			ch.pipeline().get(Encoder.class).setProtocol(protocol);
-		if(ch.pipeline().get(Decoder.class) != null)
+		if (ch.pipeline().get(Decoder.class) != null)
 			ch.pipeline().get(Decoder.class).setProtocol(protocol);
 	}
 
 	public void setVersion(int protocol) {
-		if(ch.pipeline().get(MinecraftEncoder.class) != null)
+		if (ch.pipeline().get(MinecraftEncoder.class) != null)
 			ch.pipeline().get(MinecraftEncoder.class).setProtocolVersion(protocol);
-		if(ch.pipeline().get(MinecraftDecoder.class) != null)
+		if (ch.pipeline().get(MinecraftDecoder.class) != null)
 			ch.pipeline().get(MinecraftDecoder.class).setProtocolVersion(protocol);
-		if(ch.pipeline().get(Encoder.class) != null)
+		if (ch.pipeline().get(Encoder.class) != null)
 			ch.pipeline().get(Encoder.class).setProtocolVersion(protocol);
-		if(ch.pipeline().get(Decoder.class) != null)
+		if (ch.pipeline().get(Decoder.class) != null)
 			ch.pipeline().get(Decoder.class).setProtocolVersion(protocol);
 	}
 
 	public void write(Object packet) {
-		if(!closed && (handler.isConnected || (getProtocol() != Protocol.GAME))){
-			if(packet instanceof PacketWrapper){
+		if (!closed && (handler.isConnected || (getProtocol() != Protocol.GAME))) {
+			if (packet instanceof PacketWrapper) {
 				((PacketWrapper) packet).setReleased(true);
 				ch.write(((PacketWrapper) packet).buf, ch.voidPromise());
-			}else{
+			} else {
 				ch.write(packet, ch.voidPromise());
 			}
 			ch.flush();
@@ -83,23 +88,54 @@ public class ChannelWrapper extends net.md_5.bungee.netty.ChannelWrapper {
 	}
 
 	public Protocol getProtocol() {
-		if(handler.getEncoder() != null){
+		if (handler.getEncoder() != null) {
 			return Until.getProtocol(handler.getEncoder());
-		}else if(ch.pipeline().get(Decoder.class) != null){
+		} else if (ch.pipeline().get(Decoder.class) != null) {
 			System.out.print(ch.pipeline().get(Decoder.class).getProtocol());
 			return ch.pipeline().get(Decoder.class).getProtocol();
-		}else if(ch.pipeline().get(Encoder.class) != null){
+		} else if (ch.pipeline().get(Encoder.class) != null) {
 			return Until.getProtocol(ch.pipeline().get(Encoder.class));
-		}else if(ch.pipeline().get(MinecraftDecoder.class) != null){
+		} else if (ch.pipeline().get(MinecraftDecoder.class) != null) {
 			return Until.getProtocol(ch.pipeline().get(MinecraftDecoder.class));
-		}else if(ch.pipeline().get(MinecraftEncoder.class) != null){
+		} else if (ch.pipeline().get(MinecraftEncoder.class) != null) {
 			return Until.getProtocol(ch.pipeline().get(MinecraftEncoder.class));
 		}
 		return Protocol.GAME;
 	}
 
+	@Override
+	public void delayedClose(final Runnable runnable) {
+		Preconditions.checkArgument(runnable != null, "runnable");
+
+		if (!closing) {
+			closing = true;
+			if(ch == null){
+				System.err.println("One Channel of "+handler.getName()+" is null.");
+				return;
+			}
+			if(ch.eventLoop() == null){
+				System.err.println("One ChannelEventLoop of "+handler.getName()+" is null. ChanneL "+ch);
+				return;
+			}
+			// Minecraft client can take some time to switch protocols.
+			// Sending the wrong disconnect packet whilst a protocol switch is in progress will crash it.
+			// Delay 500ms to ensure that the protocol switch (if any) has definitely taken place.
+			ch.eventLoop().schedule(new Runnable() {
+
+				@Override
+				public void run() {
+					try {
+						runnable.run();
+					} finally {
+						ChannelWrapper.this.close();
+					}
+				}
+			}, 500, TimeUnit.MILLISECONDS);
+		}
+	}
+
 	public void close() {
-		if(!closed){
+		if (!closed) {
 			closed = true;
 			ch.flush();
 			ch.close();
@@ -107,13 +143,13 @@ public class ChannelWrapper extends net.md_5.bungee.netty.ChannelWrapper {
 	}
 
 	public void addBefore(String baseName, String name, ChannelHandler handler) {
-		try{
-			if(!ch.eventLoop().inEventLoop())
+		try {
+			if (!ch.eventLoop().inEventLoop())
 				this.handler.disconnect("Error");
 			Preconditions.checkState(ch.eventLoop().inEventLoop(), "cannot add handler outside of event loop");
 			ch.pipeline().flush();
 			ch.pipeline().addBefore(baseName, name, handler);
-		}catch (Exception e){
+		} catch (Exception e) {
 			this.handler.disconnect(e);
 		}
 	}
@@ -123,19 +159,19 @@ public class ChannelWrapper extends net.md_5.bungee.netty.ChannelWrapper {
 	}
 
 	public void setCompressionThreshold(int compressionThreshold) {
-		if(ch.pipeline().get(PacketCompressor.class) == null && compressionThreshold != -1){
+		if (ch.pipeline().get(PacketCompressor.class) == null && compressionThreshold != -1) {
 			addBefore(PipelineUtils.PACKET_ENCODER, "compress", new PacketCompressor());
 		}
 
-		if(ch.pipeline().get(PacketDecompressor.class) == null && compressionThreshold != -1){
+		if (ch.pipeline().get(PacketDecompressor.class) == null && compressionThreshold != -1) {
 			addBefore(PipelineUtils.PACKET_DECODER, "decompress", new PacketDecompressor());
 		}
-		if(compressionThreshold != -1){
+		if (compressionThreshold != -1) {
 			ch.pipeline().get(PacketCompressor.class).setThreshold(compressionThreshold);
-		}else{
+		} else {
 			ch.pipeline().remove("compress");
 		}
-		if(compressionThreshold == -1){
+		if (compressionThreshold == -1) {
 			ch.pipeline().remove("decompress");
 		}
 	}
