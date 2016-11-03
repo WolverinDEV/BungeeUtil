@@ -1,5 +1,5 @@
 {
-    "CurrentVersion": "1.6.8.1.0",
+    "CurrentVersion": "1.6.8.2.0",
     "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.8.1.jar",
     "VersionsHistory": [
         {
@@ -51,8 +51,8 @@
             "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.8.jar"
         },
         {
-            "Version": "1.6.8.1.0",
-            "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.8.1.jar"
+            "Version": "1.6.8.2",
+            "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.8.2.jar"
         }
     ],
     "Changelog": [
@@ -142,6 +142,12 @@
             "Verion": "1.6.8.1.0",
             "Changed": [
                 "Fixed updater bug. Invalid version check"
+            ]
+        },
+        {
+            "Verion": "1.6.8.2.0",
+            "Changed": [
+                "Fixed updater bug."
             ]
         }
     ]
