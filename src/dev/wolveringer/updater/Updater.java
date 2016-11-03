@@ -110,11 +110,16 @@ public class Updater {
 	}
 	
 	public boolean isNewstVersion() {
-		return Long.parseLong(getNewestVersion().replaceAll("\\.", "")) <= Long.parseLong(getCurrentVersion().replaceAll("\\.", ""));
+		int minBounds = 0;
+		Long a = Long.parseLong(getNewestVersion().substring(0, minBounds).replaceAll("\\.", ""));
+		Long b = Long.parseLong(getCurrentVersion().substring(0, minBounds).replaceAll("\\.", ""));
+		if(a == b)
+			return getNewestVersion().length() > getCurrentVersion().length();
+		return a <= b;
 	}
 	
 	public boolean isDevBuild(){
-		return Long.parseLong(getCurrentVersion().replaceAll("\\.", "")) > Long.parseLong(getNewestVersion().replaceAll("\\.", ""));
+		return false;
 	}
 	
 	/**
