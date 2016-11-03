@@ -1,5 +1,5 @@
 {
-    "CurrentVersion": "1.6.8",
+    "CurrentVersion": "1.6.8.1.0",
     "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.14.2.jar",
     "VersionsHistory": [
         {
@@ -49,6 +49,10 @@
         {
             "Version": "1.6.8",
             "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.8.jar"
+        },
+        {
+            "Version": "1.6.8.1.0",
+            "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.8.1.jar"
         }
     ],
     "Changelog": [
@@ -132,6 +136,12 @@
             "Verion": "1.6.8",
             "Changed": [
                 "Fixed error with newest Bungeecord."
+            ]
+        },
+        {
+            "Verion": "1.6.8.1.0",
+            "Changed": [
+                "Fixed updater bug. Invalid version check"
             ]
         }
     ]
