@@ -14,9 +14,11 @@ import net.md_5.bungee.protocol.MinecraftDecoder;
 import net.md_5.bungee.protocol.PacketWrapper;
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
+import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.ClientVersion;
 import dev.wolveringer.BungeeUtil.PacketHandleEvent;
 import dev.wolveringer.BungeeUtil.PacketLib;
+import dev.wolveringer.BungeeUtil.ProxyType;
 import dev.wolveringer.BungeeUtil.configuration.Configuration;
 import dev.wolveringer.BungeeUtil.packets.Packet;
 import dev.wolveringer.network.channel.init.BungeeUtilChannelInit;
@@ -126,7 +128,7 @@ public class Decoder extends MinecraftDecoder {
 					return;
 				}
 				if(clientVersion == null){
-					System.out.println("Client version = null | Version id -> "+version);
+					BungeeUtil.debug("Could not resolve ClientVersion for "+version+". Disconnecting client");
 					initHandler.disconnect("§cYour client versions isnt supported!");
 					return;
 				}
@@ -190,13 +192,22 @@ public class Decoder extends MinecraftDecoder {
 			try{
 				int packetId = DefinedPacket.readVarInt(in);
 				DefinedPacket bungeePacket = null;
-				if((bungeePacket = prot.createPacket(packetId, getProtocolVersion())) != null){
+				switch (ProxyType.getType()) {
+				case BUNGEECORD:
+					bungeePacket = prot.createPacket(packetId, getProtocolVersion());
+					break;
+				case WATERFALL:
+					bungeePacket = prot.createPacket(packetId, getProtocolVersion(), false); //Dont support forge
+					break;
+				default:
+					break;
+				}
+				if(bungeePacket != null){
 					bungeePacket.read(in, prot.getDirection(), getProtocolVersion());
 					if(in.readableBytes() != 0){
 						Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.read")); //$NON-NLS-1$
 						throw new BadPacketException("Did not read all bytes from packet " + bungeePacket.getClass() + " " + packetId + " Protocol " + this.getProtocolVersion() + " Direction " + prot+"! Left bytes: "+in.readableBytes());
 					}
-					//Main.sendMessage("Decode: " + bungeePacket);
 				}else{
 					in.skipBytes(in.readableBytes());
 				}
@@ -215,9 +226,5 @@ public class Decoder extends MinecraftDecoder {
 				e.printStackTrace();
 		}
 		Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.read")); //$NON-NLS-1$
-	}
-	
-	public static void main(String[] args) throws ClassNotFoundException {
-		Class.forName("xxx");
 	}
 }
