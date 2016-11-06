@@ -159,19 +159,17 @@ public class ChannelWrapper extends net.md_5.bungee.netty.ChannelWrapper {
 	}
 
 	public void setCompressionThreshold(int compressionThreshold) {
-		if (ch.pipeline().get(PacketCompressor.class) == null && compressionThreshold != -1) {
-			addBefore(PipelineUtils.PACKET_ENCODER, "compress", new PacketCompressor());
+		if(compressionThreshold != -1){
+			if (ch.pipeline().get(PacketCompressor.class) == null) 
+				addBefore(PipelineUtils.PACKET_ENCODER, "compress", new PacketCompressor());
+			if (ch.pipeline().get(PacketDecompressor.class) == null) 
+				addBefore(PipelineUtils.PACKET_DECODER, "decompress", new PacketDecompressor());
 		}
 
-		if (ch.pipeline().get(PacketDecompressor.class) == null && compressionThreshold != -1) {
-			addBefore(PipelineUtils.PACKET_DECODER, "decompress", new PacketDecompressor());
-		}
 		if (compressionThreshold != -1) {
 			ch.pipeline().get(PacketCompressor.class).setThreshold(compressionThreshold);
 		} else {
 			ch.pipeline().remove("compress");
-		}
-		if (compressionThreshold == -1) {
 			ch.pipeline().remove("decompress");
 		}
 	}

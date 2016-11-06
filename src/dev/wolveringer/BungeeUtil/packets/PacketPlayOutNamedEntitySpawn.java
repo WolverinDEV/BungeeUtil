@@ -73,7 +73,7 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutEntityAbstract i
 		if(getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10)
 			loc = new Location(paramPacketDataSerializer.readDouble(), paramPacketDataSerializer.readDouble(), paramPacketDataSerializer.readDouble());
 		else
-			loc = new Location(paramPacketDataSerializer.readInt()/32, paramPacketDataSerializer.readInt()/32, paramPacketDataSerializer.readInt()/32);
+			loc = new Location((double) paramPacketDataSerializer.readInt()/32D,(double) paramPacketDataSerializer.readInt()/32D,(double) paramPacketDataSerializer.readInt()/32D);
 		this.yaw = paramPacketDataSerializer.readByte();
 		this.pitch = paramPacketDataSerializer.readByte();
 		if(getBigVersion() == BigClientVersion.v1_8)
