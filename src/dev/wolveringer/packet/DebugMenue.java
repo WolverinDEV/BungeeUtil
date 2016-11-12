@@ -17,8 +17,11 @@ import dev.wolveringer.BungeeUtil.gameprofile.Property;
 import dev.wolveringer.BungeeUtil.gameprofile.PropertyMap;
 import dev.wolveringer.BungeeUtil.gameprofile.Skin;
 import dev.wolveringer.BungeeUtil.gameprofile.SkinFactory;
+import dev.wolveringer.BungeeUtil.item.ClickListener;
 import dev.wolveringer.BungeeUtil.item.Item;
+import dev.wolveringer.BungeeUtil.item.ItemBuilder;
 import dev.wolveringer.BungeeUtil.item.ItemStack;
+import dev.wolveringer.BungeeUtil.item.ItemStack.Click;
 import dev.wolveringer.BungeeUtil.packets.Packet;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutBossBar.BarColor;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutBossBar.BarDivision;
@@ -350,6 +353,24 @@ public class DebugMenue {
 		};
 		i.getItemMeta().setDisplayName("§aTesting anvil guy");
 		inv.setItem(10, i);
+		
+		i = new ItemStack(Material.EMERALD){
+			@Override
+			public void click(final Click click) {
+				click.getPlayer().sendMessage("Adding item");
+				final Item old = click.getPlayer().getPlayerInventory().getItem(0);
+				click.getPlayer().getPlayerInventory().setItem(11, ItemBuilder.create(Material.DIAMOND).name("§aClick me!").listener(new ClickListener() {
+					@Override
+					public void click(Click click) {
+						click.getPlayer().sendMessage("§bHey cou clicked me :)");
+						click.getPlayer().getPlayerInventory().setItem(11, old);
+					}
+				}).build());
+				click.getPlayer().updateInventory();
+			}
+		};
+		i.getItemMeta().setDisplayName("§aTesting player inv click");
+		inv.setItem(12, i);
 		
 		Profiler.packet_handle.stop("buildDebugInventory");
 	}

@@ -56,7 +56,7 @@ public final class PlayerInventory {
 	}
 
 	public Item[] getContains() {
-		return items.toArray(new Item[Math.min(items.size(), player.getVersion().getBigVersion() != BigClientVersion.v1_8 ? 46 : 45)]); //46/45=Max slots
+		return items.toArray(new Item[Math.min(items.size(), getSlots())]); //46/45=Max slots
 	}
 
 	public Item getItem(int slot) {
@@ -68,7 +68,7 @@ public final class PlayerInventory {
 	}
 
 	public int getSlots() {
-		return items.size();
+		return player.getVersion().getBigVersion() != BigClientVersion.v1_8 ? 46 : 45;
 	}
 
 	public int getType() {

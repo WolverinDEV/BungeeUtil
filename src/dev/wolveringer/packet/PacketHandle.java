@@ -26,6 +26,7 @@ import dev.wolveringer.BungeeUtil.packets.PacketPlayOutPlayerListHeaderFooter;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutPosition;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutSetSlot;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayOutTransaction;
+import dev.wolveringer.BungeeUtil.packets.PacketPlayOutWindowItems;
 import dev.wolveringer.BungeeUtil.packets.Abstract.PacketPlayXXXHeldItemSlot;
 import dev.wolveringer.api.inventory.Inventory;
 import dev.wolveringer.api.position.Location;
@@ -71,12 +72,18 @@ public class PacketHandle {
 			final PacketPlayInWindowClick pl = (PacketPlayInWindowClick) pack;
 			player.getInitialHandler().setWindow((short) pl.getWindow());
 			player.getInitialHandler().setTransaktionId(pl.getActionNumber());
+			//BungeeUtil.debug("Player clicked in window: "+pl.getWindow());
 			if(pl.getWindow() == 0){
 				if(pl.getSlot() < 0 || pl.getSlot() > 50)
 					return true;
 				Item item = player.getPlayerInventory().getItem(pl.getSlot());
 				if(item instanceof ItemStack){
 					ItemStack is = (ItemStack) item;
+					BungeeUtil.debug("Player itemstack "+is+" at slot "+pl.getSlot()+" clicked.");
+					e.setCancelled(true);
+					player.sendPacket(new PacketPlayOutTransaction(Inventory.ID, pl.getActionNumber(), false));
+					player.sendPacket(new PacketPlayOutSetSlot(null, -1, 0));
+					player.updateInventory();
 					
 					boolean sync = ((CraftItemMeta)is.getItemMeta()).isClickSync() || Configuration.isSyncInventoryClickActive();
 					handleItemClick(player,is,new Click(player, pl.getSlot(), player.getInventoryView(), pl.getItem(), pl.getMode(), sync),sync,false, new Callback<Click>(){
@@ -85,9 +92,8 @@ public class PacketHandle {
 							if(!c.isCancelled())
 								player.getInitialHandler().sendPacketToServer(pl);
 						}
-						
 					});
-					return true;
+					return false;
 				}
 				return false;
 			}
@@ -111,10 +117,7 @@ public class PacketHandle {
 					return false;
 				}
 				player.sendPacket(new PacketPlayOutSetSlot(player.getInventoryView().getContains()[pl.getSlot()], Inventory.ID, pl.getSlot()));
-				//if(Math.abs(lastInventortyUpdate.getOrDefault(e.getPlayer(), System.currentTimeMillis())-System.currentTimeMillis())<=1){
-						player.updateInventory();
-				//		lastInventortyUpdate.put(e.getPlayer(), System.currentTimeMillis());
-				//}
+				player.updateInventory();
 				if (player.getInventoryView().isClickable()){
 					boolean sync = ((CraftItemMeta)is.getItemMeta()).isClickSync() || Configuration.isSyncInventoryClickActive();
 					handleItemClick(player,is,new Click(player, pl.getSlot(), player.getInventoryView(), pl.getItem(), pl.getMode(), sync),sync,false);
@@ -133,13 +136,55 @@ public class PacketHandle {
 				return false;
 			}
 		}
+		
+		handleSetSlot:
 		if (pack instanceof PacketPlayOutSetSlot) {
 			PacketPlayOutSetSlot pl = (PacketPlayOutSetSlot) pack;
 			if (pl.getWindow() == 0) {
+				BungeeUtil.debug("Setslot "+pl.getSlot());
+				if(pl.getItemStack() == null || pl.getItemStack().getTypeId() == 0) {
+					if(player.getPlayerInventory().getItem(pl.getSlot()) instanceof ItemStack){
+						pl.setItemStack(player.getPlayerInventory().getItem(pl.getSlot()));
+						break handleSetSlot;
+					}
+				}
 				player.getPlayerInventory().setItem(pl.getSlot(), pl.getItemStack());
 			}
 			else if(pl.getWindow() == -1){
 				player.getPlayerInventory().setItem(999, pl.getItemStack());
+			}
+		}
+		
+		if(pack instanceof PacketPlayOutWindowItems){
+			PacketPlayOutWindowItems pl = (PacketPlayOutWindowItems) pack;
+			BungeeUtil.debug("Setslots "+pl.getItems().length+" for window "+pl.getWindow());
+			if(pl.getWindow() == 0){
+				BungeeUtil.debug("Setslots "+pl.getItems().length);
+				for(int i = 0;i<pl.getItems().length;i++){
+					Item _new = pl.getItems()[i];
+					Item other = null;
+					if(_new == null || _new.getTypeId() == 0) {
+						if((other = player.getPlayerInventory().getItem(i)) instanceof ItemStack){
+							pl.getItems()[i] = other; //Replace in update packet :)
+							continue;
+						}
+					}
+					player.getPlayerInventory().setItem(i, _new);
+				}
+			}
+			else { //Sots of inv - Player inventory
+				int base = pl.getItems().length-e.getPlayer().getPlayerInventory().getSlots()+9; //Armor and crafting dont will be sended
+				for(int i = base;i<pl.getItems().length;i++){
+					Item _new = pl.getItems()[i];
+					Item other = null;
+					if(_new == null || _new.getTypeId() == 0) {
+						if((other = player.getPlayerInventory().getItem(i-base+9)) instanceof ItemStack){
+							pl.getItems()[i] = other; //Replace in update packet :)
+							continue;
+						}
+					}
+					player.getPlayerInventory().setItem(i-base+9, _new);
+				}
 			}
 		}
 		/**
