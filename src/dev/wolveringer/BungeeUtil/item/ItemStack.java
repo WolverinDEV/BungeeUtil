@@ -27,8 +27,14 @@ public abstract class ItemStack extends Item {
 		super(type, amount, damage);
 	}
 
+	public static enum InteractType {
+		RIGHT_CLICK,
+		LEFT_CLICK;
+	}
+	
 	public abstract void click(Click click);
-
+	public void onInteract(Player player,InteractType type){}
+	
 	public static class Click {
 		private Player player;
 		private int slot;

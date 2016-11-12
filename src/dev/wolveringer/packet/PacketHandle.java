@@ -15,8 +15,12 @@ import dev.wolveringer.BungeeUtil.exception.ExceptionUtils;
 import dev.wolveringer.BungeeUtil.item.Item;
 import dev.wolveringer.BungeeUtil.item.ItemStack;
 import dev.wolveringer.BungeeUtil.item.ItemStack.Click;
+import dev.wolveringer.BungeeUtil.item.ItemStack.InteractType;
 import dev.wolveringer.BungeeUtil.item.itemmeta.CraftItemMeta;
 import dev.wolveringer.BungeeUtil.packets.Packet;
+import dev.wolveringer.BungeeUtil.packets.PacketPlayInArmAnimation;
+import dev.wolveringer.BungeeUtil.packets.PacketPlayInBlockDig;
+import dev.wolveringer.BungeeUtil.packets.PacketPlayInBlockPlace;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInChat;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInCloseWindow;
 import dev.wolveringer.BungeeUtil.packets.PacketPlayInFlying;
@@ -72,7 +76,6 @@ public class PacketHandle {
 			final PacketPlayInWindowClick pl = (PacketPlayInWindowClick) pack;
 			player.getInitialHandler().setWindow((short) pl.getWindow());
 			player.getInitialHandler().setTransaktionId(pl.getActionNumber());
-			//BungeeUtil.debug("Player clicked in window: "+pl.getWindow());
 			if(pl.getWindow() == 0){
 				if(pl.getSlot() < 0 || pl.getSlot() > 50)
 					return true;
@@ -127,6 +130,23 @@ public class PacketHandle {
 				return false;
 			}
 		}
+		
+		if(pack instanceof PacketPlayInBlockPlace){
+			Item current = player.getHandItem();
+			if(current instanceof ItemStack){
+				ItemStack is = (ItemStack) current;
+				is.onInteract(player, InteractType.RIGHT_CLICK);
+			}
+		}
+		
+		if(pack instanceof PacketPlayInArmAnimation){
+			Item current = player.getHandItem();
+			if(current instanceof ItemStack){
+				ItemStack is = (ItemStack) current;
+				is.onInteract(player, InteractType.LEFT_CLICK);
+			}
+		}
+		
 		if (pack instanceof PacketPlayInCloseWindow) {
 			PacketPlayInCloseWindow pl = (PacketPlayInCloseWindow) pack;
 			if (pl.getWindow() == Inventory.ID && player.isInventoryOpened()) {
@@ -157,9 +177,7 @@ public class PacketHandle {
 		
 		if(pack instanceof PacketPlayOutWindowItems){
 			PacketPlayOutWindowItems pl = (PacketPlayOutWindowItems) pack;
-			BungeeUtil.debug("Setslots "+pl.getItems().length+" for window "+pl.getWindow());
 			if(pl.getWindow() == 0){
-				BungeeUtil.debug("Setslots "+pl.getItems().length);
 				for(int i = 0;i<pl.getItems().length;i++){
 					Item _new = pl.getItems()[i];
 					Item other = null;

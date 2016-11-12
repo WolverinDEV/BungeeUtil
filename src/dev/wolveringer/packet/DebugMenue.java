@@ -354,7 +354,7 @@ public class DebugMenue {
 		i.getItemMeta().setDisplayName("§aTesting anvil guy");
 		inv.setItem(10, i);
 		
-		i = new ItemStack(Material.EMERALD){
+		i = new ItemStack(Material.STONE_AXE){
 			@Override
 			public void click(final Click click) {
 				click.getPlayer().sendMessage("Adding item");
@@ -371,6 +371,23 @@ public class DebugMenue {
 		};
 		i.getItemMeta().setDisplayName("§aTesting player inv click");
 		inv.setItem(12, i);
+		
+		i = new ItemStack(Material.IRON_AXE){
+			@Override
+			public void click(final Click click) {
+				click.getPlayer().sendMessage("Adding item");
+				ItemStack is = new ItemStack(Material.DIAMOND_AXE){
+					public void click(Click click) {};
+					@Override
+					public void onInteract(Player player, InteractType type) {
+						player.sendMessage("You interacted: "+type);
+					}
+				};
+				click.getPlayer().getPlayerInventory().setItem(9+3*9+1, is);
+			}
+		};
+		i.getItemMeta().setDisplayName("§aTesting player item");
+		inv.setItem(14, i);
 		
 		Profiler.packet_handle.stop("buildDebugInventory");
 	}
