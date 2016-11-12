@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.Callback;
 import dev.wolveringer.BungeeUtil.BungeeUtil;
 import dev.wolveringer.BungeeUtil.PacketHandleEvent;
 import dev.wolveringer.BungeeUtil.Player;
 import dev.wolveringer.BungeeUtil.configuration.Configuration;
 import dev.wolveringer.BungeeUtil.exception.ExceptionUtils;
+import dev.wolveringer.BungeeUtil.item.Item;
 import dev.wolveringer.BungeeUtil.item.ItemStack;
 import dev.wolveringer.BungeeUtil.item.ItemStack.Click;
 import dev.wolveringer.BungeeUtil.item.itemmeta.CraftItemMeta;
@@ -69,6 +71,26 @@ public class PacketHandle {
 			final PacketPlayInWindowClick pl = (PacketPlayInWindowClick) pack;
 			player.getInitialHandler().setWindow((short) pl.getWindow());
 			player.getInitialHandler().setTransaktionId(pl.getActionNumber());
+			if(pl.getWindow() == 0){
+				if(pl.getSlot() < 0 || pl.getSlot() > 50)
+					return true;
+				Item item = player.getPlayerInventory().getItem(pl.getSlot());
+				if(item instanceof ItemStack){
+					ItemStack is = (ItemStack) item;
+					
+					boolean sync = ((CraftItemMeta)is.getItemMeta()).isClickSync() || Configuration.isSyncInventoryClickActive();
+					handleItemClick(player,is,new Click(player, pl.getSlot(), player.getInventoryView(), pl.getItem(), pl.getMode(), sync),sync,false, new Callback<Click>(){
+						@Override
+						public void done(Click c, Throwable arg1) {
+							if(!c.isCancelled())
+								player.getInitialHandler().sendPacketToServer(pl);
+						}
+						
+					});
+					return true;
+				}
+				return false;
+			}
 			if (player.isInventoryOpened()) {
 				player.sendPacket(new PacketPlayOutTransaction(Inventory.ID, pl.getActionNumber(), false));
 				player.sendPacket(new PacketPlayOutSetSlot(null, -1, 0));
@@ -179,11 +201,11 @@ public class PacketHandle {
 		return false;
 	}
 	
-	private static void handleItemClick(final Player player,final ItemStack is,final Click c,final boolean sync,final boolean looped){
+	private static void handleItemClick(final Player player,final ItemStack is,final Click c,final boolean sync,final boolean looped,final Callback<Click>... callbacks){
 		if(!sync && !looped){
 			BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), new Runnable() {
 				public void run() {
-					handleItemClick(player, is, c, sync, true);
+					handleItemClick(player, is, c, sync, true, callbacks);
 				}
 			});
 			return;
@@ -191,7 +213,11 @@ public class PacketHandle {
 		Profiler.packet_handle.start("itemClickListener");
 		try {
 			 is.click(c);
+			 for(Callback<Click> cl : callbacks)
+				 cl.done(c, null);
 		} catch (Exception e) {
+			 for(Callback<Click> cl : callbacks)
+				 cl.done(c, e);
 			List<StackTraceElement> le = new ArrayList<>();
 			le.addAll(Arrays.asList(ExceptionUtils.deleteDownward(e.getStackTrace(), ExceptionUtils.getCurrentMethodeIndex(e))));
 			le.add(new StackTraceElement("dev.wolveringer.BungeeUtil.PacketHandler."+player.getVersion().name(), "handleInventoryClickPacket"+(sync?"Sync":"Ansync"), null, -1));
