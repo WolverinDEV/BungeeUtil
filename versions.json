@@ -1,6 +1,6 @@
 {
-    "CurrentVersion": "1.6.8.2.0",
-    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.8.2.jar",
+    "CurrentVersion": "1.6.9",
+    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.9.jar",
     "VersionsHistory": [
         {
             "Version": "1.6.7.6",
@@ -53,6 +53,10 @@
         {
             "Version": "1.6.8.2",
             "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.8.2.jar"
+        },
+        {
+            "Version": "1.6.9",
+            "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.9.jar"
         }
     ],
     "Changelog": [
@@ -148,6 +152,15 @@
             "Verion": "1.6.8.2.0",
             "Changed": [
                 "Fixed updater bug."
+            ]
+        },
+        {
+            "Verion": "1.6.9",
+            "Changed": [
+                "Fixed 'old phantom inventory' bug",
+                "Updated Virtual Bungee Inventory updating",
+                "Created new function (onInteract)",
+                "Implemented ItemStacks in Player inventory (now click will be handled if a player clicks on the item in his own inventory)"
             ]
         }
     ]
