@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.BungeeCord;
-import dev.wolveringer.BungeeUtil.BungeeUtil;
-import dev.wolveringer.BungeeUtil.Main;
-import dev.wolveringer.BungeeUtil.PacketHandleEvent;
-import dev.wolveringer.BungeeUtil.PacketHandler;
-import dev.wolveringer.BungeeUtil.PacketLib;
-import dev.wolveringer.BungeeUtil.packets.Packet;
-import dev.wolveringer.BungeeUtil.packets.PacketPlayInChat;
+import dev.wolveringer.BungeeUtil.packetlib.PacketHandleEvent;
+import dev.wolveringer.BungeeUtil.packetlib.PacketHandler;
+import dev.wolveringer.BungeeUtil.packetlib.PacketLib;
+import dev.wolveringer.bungeeutil.BungeeUtil;
+import dev.wolveringer.bungeeutil.packets.Packet;
+import dev.wolveringer.bungeeutil.packets.PacketPlayInChat;
+import dev.wolveringer.bungeeutil.plugin.Main;
 
 public class PlayerChatListener implements PacketHandler<Packet> {
 	static{

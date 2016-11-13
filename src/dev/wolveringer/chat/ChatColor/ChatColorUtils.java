@@ -7,8 +7,6 @@ import net.md_5.bungee.api.ChatColor;
 
 import com.google.common.collect.Maps;
 
-import dev.wolveringer.chat.ChatModifier;
-
 public class ChatColorUtils {
 	private final static Map<Character, ChatColor> BY_CHAR = Maps.newHashMap();
 	public static final char COLOR_CHAR = '§';// \u00A7
@@ -71,43 +69,6 @@ public class ChatColorUtils {
 			}
 		}
 		return result;
-	}
-
-	/**
-	 * Gets the ChatColors used at the end of the given input string.
-	 *
-	 * @param input
-	 *            Input string to retrieve the colors from.
-	 * @return Any remaining ChatColors to pass onto the next line.
-	 */
-	public static ChatModifier getLastModifierColors(String input) {
-		String in = getLastColors(input);
-		ChatModifier mod = new ChatModifier();
-		for (String s : in.split("(?<=\\G.{2})")) {
-			switch (getByChar(s.charAt(1))) {
-			case MAGIC:
-				mod.setRandom(true);
-				break;
-			case UNDERLINE:
-				mod.setUnderline(true);
-				break;
-			case STRIKETHROUGH:
-				mod.setStrikethrough(true);
-				break;
-			case BOLD:
-				mod.setBold(true);
-				break;
-			case ITALIC:
-				mod.setItalic(true);
-				break;
-			case RESET:
-				break;
-			default:
-				mod.setColor(getByChar(s.charAt(1)));
-				break;
-			}
-		}
-		return mod;
 	}
 
 	/**

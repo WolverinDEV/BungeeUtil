@@ -17,9 +17,9 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.UserConnection;
-import dev.wolveringer.BungeeUtil.BungeeUtil;
-import dev.wolveringer.BungeeUtil.Main;
-import dev.wolveringer.BungeeUtil.configuration.Configuration;
+import dev.wolveringer.bungeeutil.BungeeUtil;
+import dev.wolveringer.bungeeutil.Configuration;
+import dev.wolveringer.bungeeutil.plugin.Main;
 import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 
 public class InjectFiles {

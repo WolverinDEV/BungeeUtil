@@ -26,14 +26,9 @@
 		</profile>
 	</profiles>
 	<distributionManagement> <!-- TODO add responsetories -->
-	<!--<snapshotRepository>
-		<id>ossrh</id>
-		<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-	</snapshotRepository>
-	<repository>
-	<id>ossrh</id>
-		<url>https://oss.sonatype.org/content/repositories/releases/</url>
-	</repository>-->
+		<!--<snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots/</url> 
+			</snapshotRepository> <repository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/releases/</url> 
+			</repository> -->
 	</distributionManagement>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
@@ -103,11 +98,11 @@
 								</filter>
 							</filters>
 							<artifactSet>
-				                <excludes>
-				                  <exclude>io.netty:**</exclude>
-				                  <exclude>net.md-5:**</exclude>
-				                </excludes>
-				              </artifactSet>
+								<excludes>
+									<exclude>io.netty:**</exclude>
+									<exclude>net.md-5:**</exclude>
+								</excludes>
+							</artifactSet>
 						</configuration>
 					</execution>
 				</executions>
@@ -124,7 +119,7 @@
 						</goals>
 					</execution>
 				</executions>
-        	</plugin>
+			</plugin>
 		</plugins>
 	</build>
 	<properties>
@@ -133,9 +128,9 @@
 	</properties>
 	<dependencies>
 		<dependency>
-		    <groupId>io.netty</groupId>
-		    <artifactId>netty-handler</artifactId>
-		    <version>4.0.41.Final</version>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-handler</artifactId>
+			<version>4.0.41.Final</version>
 		</dependency>
 		<!-- https://github.com/WolverinDEV/BungeeCord -->
 		<dependency>
@@ -176,6 +171,11 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>dev.wolveringer.lib</groupId>
+			<artifactId>NBTTag</artifactId>
+			<version>1.2.1</version>
 		</dependency>
 	</dependencies>
 </project>
