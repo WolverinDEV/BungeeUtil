@@ -3,8 +3,8 @@ package dev.wolveringer.bungeeutil.animations.text;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import net.md_5.bungee.api.ChatColor;
-import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 
 public class Scroller {
 	private int position;
@@ -23,7 +23,7 @@ public class Scroller {
 		if(spaceBetween < 0)
 			spaceBetween = 0;
 
-		if(colourChar != dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR)
+		if(colourChar != dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR)
 			message = ChatColor.translateAlternateColorCodes(colourChar, message);
 
 		String raw = ChatColor.stripColor(message);
@@ -36,7 +36,7 @@ public class Scroller {
 		}
 		String color = "";
 		for(int i = 0;i < raw.length();i++){
-			while (i - 1 >= 0 && msg.charAt(i - 1) == dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR){
+			while (i - 1 >= 0 && msg.charAt(i - 1) == dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR){
 				ChatColor g = ChatColor.getByChar(msg.charAt(i));
 				if(ChatColorUtils.isColor(g)) //WORK?
 					color = g + "";
@@ -44,7 +44,7 @@ public class Scroller {
 					color += g;
 				i++;
 			}
-			while (msg.charAt(i % msg.length()) == dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR){
+			while (msg.charAt(i % msg.length()) == dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR){
 				ChatColor g = ChatColor.getByChar(msg.charAt((i % msg.length()) + 1));
 				if(ChatColorUtils.isColor(g)) //WORK?
 					color = g + "";

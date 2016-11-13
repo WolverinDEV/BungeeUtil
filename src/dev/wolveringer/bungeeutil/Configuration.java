@@ -7,8 +7,8 @@ import java.util.List;
 
 import dev.wolveringer.bungeeutil.AsyncCatcher.AsyncCatcherMode;
 import dev.wolveringer.bungeeutil.plugin.Main;
+import dev.wolveringer.bungeeutil.translation.Messages;
 import dev.wolveringer.configuration.file.YamlConfiguration;
-import dev.wolveringer.strings.Messages;
 import net.md_5.bungee.BungeeCord;
 
 public class Configuration {

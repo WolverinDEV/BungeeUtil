@@ -3,8 +3,8 @@ package dev.wolveringer.bungeeutil.packets;
 import java.util.Random;
 
 import dev.wolveringer.BungeeUtil.packetlib.reader.PacketDataSerializer;
+import dev.wolveringer.bungeeutil.MathUtil;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
-import dev.wolveringer.util.MathUtil;
 
 public class PacketPlayOutEntityHeadRotation extends Packet implements PacketPlayOut{
 	private int entityId;

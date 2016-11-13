@@ -207,7 +207,7 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 
 	@Override
 	public String toString() {
-		return "Player{name=\""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"r" + getName() + ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"r\" DisplayName=\""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"r" + getDisplayName() + ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"r\" ping=\"" + getPing() + "\"}";
+		return "Player{name=\""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r" + getName() + ""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r\" DisplayName=\""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r" + getDisplayName() + ""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r\" ping=\"" + getPing() + "\"}";
 	}
 
 	@Override

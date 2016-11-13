@@ -6,6 +6,7 @@ import java.util.HashMap;
 import dev.wolveringer.BungeeUtil.packetlib.PacketHandleEvent;
 import dev.wolveringer.BungeeUtil.packetlib.PacketHandler;
 import dev.wolveringer.BungeeUtil.packetlib.PacketLib;
+import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
 import dev.wolveringer.bungeeutil.inventory.InventoryType;
 import dev.wolveringer.bungeeutil.item.Item;
@@ -15,7 +16,6 @@ import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.packets.PacketPlayInCloseWindow;
 import dev.wolveringer.bungeeutil.packets.PacketPlayInPluginMessage;
 import dev.wolveringer.bungeeutil.player.Player;
-import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 import net.md_5.bungee.protocol.DefinedPacket;
 
 public class AnvilGui {

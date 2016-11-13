@@ -18,7 +18,7 @@ public class TextFormater {
 	private long kgn;
 
 	public TextFormater(String raw) {
-		this.raw = loadElement(Jsoup.parse(raw.replaceAll("&", ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"")));
+		this.raw = loadElement(Jsoup.parse(raw.replaceAll("&", ""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"")));
 	}
 	private String loadElement(Element e) {
 		long[] l = new long[e.getElementsByTag("scroller").size()];
@@ -56,7 +56,7 @@ class SpecScroll extends Scroller {
 	private String now;
 
 	public SpecScroll(String message, int width, int spaceBetween, int tics) {
-		super(message, width, spaceBetween, dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR);
+		super(message, width, spaceBetween, dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR);
 		t = ft = tics;
 		now = super.next();
 	}

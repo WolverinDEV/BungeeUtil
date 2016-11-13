@@ -109,7 +109,7 @@ public abstract class IInitialHandler extends InitialHandler {
 		if (isDisconnecting) return;
 		isDisconnecting = true;
 		if (getChannel().isClosed()) { return; }
-		String message = "" + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "4Error Message: " + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "b" + e.getLocalizedMessage() + "\n";
+		String message = "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "4Error Message: " + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "b" + e.getLocalizedMessage() + "\n";
 		for (int i = 0; i < (e.getStackTrace().length > stackDeep ? stackDeep : e.getStackTrace().length); i++) {
 			StackTraceElement ex = e.getStackTrace()[i];
 			if(ex.getMethodName().equalsIgnoreCase("channelRead") && ex.getClassName().equalsIgnoreCase("io.netty.handler.codec.MessageToMessageDecoder") && ex.getLineNumber() == 89)
@@ -150,7 +150,7 @@ public abstract class IInitialHandler extends InitialHandler {
 	}
 	
 	private String format(StackTraceElement e) {
-		return "" + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "eat " + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "5" + e.getClassName() + "." + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "b" + e.getMethodName() + (e.getFileName() != null ? "(" + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "a" + e.getFileName() + ":"+e.getLineNumber() + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "b)" : (e.getFileName() != null) && (e.getLineNumber() >= 0) ? "(" + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "a" + e.getFileName() + "" + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "b:" + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "c" + e.getLineNumber() + "" + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "b)" : e.isNativeMethod() ? "" + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "1(Native Method)" : "" + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "c(Unknown Source)");
+		return "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "eat " + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "5" + e.getClassName() + "." + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "b" + e.getMethodName() + (e.getFileName() != null ? "(" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "a" + e.getFileName() + ":"+e.getLineNumber() + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "b)" : (e.getFileName() != null) && (e.getLineNumber() >= 0) ? "(" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "a" + e.getFileName() + "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "b:" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "c" + e.getLineNumber() + "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "b)" : e.isNativeMethod() ? "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "1(Native Method)" : "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "c(Unknown Source)");
 	}
 	
 	@Deprecated
@@ -225,7 +225,7 @@ public abstract class IInitialHandler extends InitialHandler {
 	
 	@Override
 	public String toString() {
-		if (Configuration.isTerminalColored()) return "[" + (getHandshake().getRequestedProtocol() == 2 ? "" + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "aGAME" : "" + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "ePING") + "" + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "7][" + (getHandshake().getRequestedProtocol() == 0 ? "" + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "6" + getName() : "" + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "c" + getAddress().getHostString()) + "" + dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR + "7]";
+		if (Configuration.isTerminalColored()) return "[" + (getHandshake().getRequestedProtocol() == 2 ? "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "aGAME" : "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "ePING") + "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "7][" + (getHandshake().getRequestedProtocol() == 0 ? "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "6" + getName() : "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "c" + getAddress().getHostString()) + "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "7]";
 		else return super.toString();
 	}
 }

@@ -7,10 +7,10 @@ import org.fusesource.jansi.AnsiConsole;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
+import dev.wolveringer.bungeeutil.chat.AnsiColorFormater;
+import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.statistics.RamStatistics.RamStatistic;
 import dev.wolveringer.bungeeutil.terminal.TerminalListener.Listener;
-import dev.wolveringer.chat.ChatColor.AnsiColorFormater;
-import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 import jline.TerminalFactory;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;

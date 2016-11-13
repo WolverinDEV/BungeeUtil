@@ -3,9 +3,9 @@ package dev.wolveringer.bungeeutil.commands;
 import org.fusesource.jansi.AnsiConsole;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
+import dev.wolveringer.bungeeutil.chat.AnsiColorFormater;
 import dev.wolveringer.bungeeutil.statistics.RamStatistics.RamStatistic;
 import dev.wolveringer.bungeeutil.terminal.TerminalListener;
-import dev.wolveringer.chat.ChatColor.AnsiColorFormater;
 import dev.wolveringer.string.ColoredString;
 import dev.wolveringer.terminal.graph.TerminalGraph;
 import jline.TerminalFactory;

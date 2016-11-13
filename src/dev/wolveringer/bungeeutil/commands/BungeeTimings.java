@@ -5,11 +5,11 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.Command;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
+import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.player.Player;
 import dev.wolveringer.bungeeutil.plugin.Main;
 import dev.wolveringer.bungeeutil.statistics.profiler.ProfileMenue;
 import dev.wolveringer.bungeeutil.statistics.profiler.Profiler;
-import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 
 public class BungeeTimings extends Command {
 	public BungeeTimings() {

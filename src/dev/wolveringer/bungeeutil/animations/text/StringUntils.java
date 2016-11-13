@@ -8,11 +8,11 @@ public class StringUntils {
 		while (rpos<max){
 			if(s.length()<pos)
 				break;
-			while (s.charAt(pos) == dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR){
+			while (s.charAt(pos) == dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR){
 				if(s.length()<pos)
 					break;
 				pos++;
-				out += ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+""+s.charAt(pos);
+				out += ""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+""+s.charAt(pos);
 				pos++;
 			}
 			out+=s.charAt(pos);

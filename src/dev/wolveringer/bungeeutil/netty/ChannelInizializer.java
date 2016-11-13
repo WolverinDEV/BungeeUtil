@@ -9,8 +9,8 @@ import java.lang.reflect.Modifier;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.netty.PipelineUtils;
 import dev.wolveringer.bungeeutil.BungeeUtil;
+import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.player.connection.IIInitialHandler;
-import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 
 public abstract class ChannelInizializer extends ChannelInitializer<Channel> {
 	private static ChannelInizializer init;

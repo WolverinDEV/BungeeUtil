@@ -19,8 +19,8 @@ import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.UserConnection;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
+import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.plugin.Main;
-import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 
 public class InjectFiles {
 	public static int inject() {

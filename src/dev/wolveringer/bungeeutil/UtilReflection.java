@@ -1,4 +1,4 @@
-package dev.wolveringer.util;
+package dev.wolveringer.bungeeutil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

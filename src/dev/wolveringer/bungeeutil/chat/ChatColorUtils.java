@@ -1,4 +1,4 @@
-package dev.wolveringer.chat.ChatColor;
+package dev.wolveringer.bungeeutil.chat;
 
 import java.util.Map;
 import java.util.regex.Pattern;

@@ -6,8 +6,6 @@ import java.util.List;
 
 import com.mysql.jdbc.Util;
 
-import dev.wolveringer.util.UtilReflection;
-
 public class ExceptionUtils {
 	private static final String class_name;
 

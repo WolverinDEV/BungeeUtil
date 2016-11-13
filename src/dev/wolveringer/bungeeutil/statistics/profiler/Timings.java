@@ -6,10 +6,10 @@ import java.util.LinkedList;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.item.ItemStack;
 import dev.wolveringer.bungeeutil.item.Material;
 import dev.wolveringer.bungeeutil.item.MultiClickItemStack;
-import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 
 public class Timings {
 	private LinkedList<Long> times = new LinkedList<Long>();

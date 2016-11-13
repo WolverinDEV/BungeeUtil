@@ -255,7 +255,7 @@ public class Inventory {
 
 	@Override
 	public String toString() {
-		return "Inventory{name=\""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"r" + getName() + ""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"r\" viewer=" + getViewer() + " ObjektID=\"" + super.toString().split("@")[1] + "\"}";
+		return "Inventory{name=\""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r" + getName() + ""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r\" viewer=" + getViewer() + " ObjektID=\"" + super.toString().split("@")[1] + "\"}";
 	}
 
 	public void setContains(ItemStack[] contains) {

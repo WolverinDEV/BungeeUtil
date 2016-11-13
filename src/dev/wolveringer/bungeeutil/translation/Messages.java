@@ -1,4 +1,4 @@
-package dev.wolveringer.strings;
+package dev.wolveringer.bungeeutil.translation;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 

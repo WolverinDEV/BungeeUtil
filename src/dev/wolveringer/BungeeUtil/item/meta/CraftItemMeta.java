@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
+import dev.wolveringer.bungeeutil.UtilReflection;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
 import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.item.ItemStack;
@@ -13,7 +14,6 @@ import dev.wolveringer.bungeeutil.item.ItemStack.Click;
 import dev.wolveringer.nbt.NBTTagCompound;
 import dev.wolveringer.nbt.NBTTagList;
 import dev.wolveringer.nbt.NBTTagString;
-import dev.wolveringer.util.UtilReflection;
 
 public class CraftItemMeta implements ItemMeta {
 	protected Item item;

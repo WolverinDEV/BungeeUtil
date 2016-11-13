@@ -25,7 +25,7 @@ import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
 import dev.wolveringer.bungeeutil.statistics.profiler.Profiler;
 import dev.wolveringer.bungeeutil.system.ProxyType;
-import dev.wolveringer.strings.Messages;
+import dev.wolveringer.bungeeutil.translation.Messages;
 
 public class WarpedMinecraftDecoder extends MinecraftDecoder {
 	private static final Field field_protocol = getField(MinecraftDecoder.class, "protocol");

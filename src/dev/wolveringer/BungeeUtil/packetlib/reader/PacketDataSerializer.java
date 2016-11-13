@@ -16,11 +16,11 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import dev.wolveringer.bungeeutil.ByteString;
 import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.nbt.NBTTagCompound;
 import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.position.BlockPosition;
-import dev.wolveringer.util.ByteString;
 
 public abstract class PacketDataSerializer extends ByteBuf {
 	public static long clazz = 0;

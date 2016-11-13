@@ -99,23 +99,23 @@ public class BungeeUtilChannelInizializer <T extends InitialHandler> extends Cha
 	
 	@SuppressWarnings("deprecation")
 	public void throwClassNotFoundError(ClassNotFoundException exception) {
-		BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cBungeeUntil cant load some Classes!");
-		BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cDisable BungeeUntil!");
+		BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"cBungeeUntil cant load some Classes!");
+		BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"cDisable BungeeUntil!");
 		try {
 			setStaticFinalValue(PipelineUtils.class.getDeclaredField("SERVER_CHILD"), dinti);
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
-			BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cError while setting default ConnectionHandler.");
-			BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cRestarting BungeeCord!");
+			BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"cError while setting default ConnectionHandler.");
+			BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"cRestarting BungeeCord!");
 			BungeeCord.getInstance().stop();
 			return;
 		}
 		BungeeCord.getInstance().getPluginManager().unregisterListeners(BungeeUtil.getPluginInstance()); //TODO onley bungeeutil
 		BungeeUtil.getInstance().disable();
 		for (ProxiedPlayer p : BungeeCord.getInstance().getPlayers())
-			p.disconnect(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cBungeeUntil Class error");
-		BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"cBungeeUntil is disabled!");
+			p.disconnect(""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"cBungeeUntil Class error");
+		BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"cBungeeUntil is disabled!");
 	}
 	
 	public T createInitialHandler(Channel ch, WarpedMinecraftEncoder e, WarpedMinecraftDecoder d) throws Exception {

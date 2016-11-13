@@ -12,6 +12,7 @@ import dev.wolveringer.bungeeutil.animations.inventory.InventoryViewChangeAnimat
 import dev.wolveringer.bungeeutil.animations.inventory.LimetedScheduller;
 import dev.wolveringer.bungeeutil.animations.inventory.InventoryViewChangeAnimations.AnimationType;
 import dev.wolveringer.bungeeutil.bossbar.BossBarManager.BossBar;
+import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.entity.datawatcher.HumanDataWatcher;
 import dev.wolveringer.bungeeutil.entity.player.InteractListener;
 import dev.wolveringer.bungeeutil.entity.player.PlayerNPC;
@@ -44,7 +45,6 @@ import dev.wolveringer.bungeeutil.scoreboard.Scoreboard;
 import dev.wolveringer.bungeeutil.sound.SoundEffect;
 import dev.wolveringer.bungeeutil.statistics.profiler.ProfileMenue;
 import dev.wolveringer.bungeeutil.statistics.profiler.Profiler;
-import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;

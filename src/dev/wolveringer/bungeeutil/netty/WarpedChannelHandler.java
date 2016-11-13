@@ -19,9 +19,9 @@ import net.md_5.bungee.protocol.PacketWrapper;
 import com.google.common.base.Preconditions;
 
 import dev.wolveringer.bungeeutil.Configuration;
+import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
-import dev.wolveringer.chat.ChatColor.ChatColorUtils;
-import dev.wolveringer.strings.Messages;
+import dev.wolveringer.bungeeutil.translation.Messages;
 
 public class WarpedChannelHandler extends HandlerBoss {
 	private ChannelWrapper channel;

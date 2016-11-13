@@ -16,7 +16,7 @@ import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.Ansi.Erase;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
-import dev.wolveringer.chat.ChatColor.AnsiColorFormater;
+import dev.wolveringer.bungeeutil.chat.AnsiColorFormater;
 import gnu.trove.list.linked.TLinkedList;
 
 import org.fusesource.jansi.AnsiConsole;

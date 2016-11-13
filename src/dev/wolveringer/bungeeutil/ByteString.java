@@ -1,4 +1,4 @@
-package dev.wolveringer.util;
+package dev.wolveringer.bungeeutil;
 
 public class ByteString {
 	private byte[] string;

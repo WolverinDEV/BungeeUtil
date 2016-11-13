@@ -2,9 +2,9 @@ package dev.wolveringer.bungeeutil.statistics.profiler;
 
 import java.util.HashMap;
 
+import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
 import dev.wolveringer.bungeeutil.inventory.ScrolingInventory;
-import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 
 public class MethodProfiler {
 	private String name;
