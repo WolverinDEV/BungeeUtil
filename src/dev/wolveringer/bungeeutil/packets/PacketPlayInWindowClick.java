@@ -1,7 +1,7 @@
 package dev.wolveringer.bungeeutil.packets;
 
-import dev.wolveringer.BungeeUtil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.item.Item;
+import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayIn;
 
 public class PacketPlayInWindowClick extends Packet implements PacketPlayIn {

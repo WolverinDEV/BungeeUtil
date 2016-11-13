@@ -1,6 +1,6 @@
 package dev.wolveringer.bungeeutil.packets;
 
-import dev.wolveringer.BungeeUtil.packetlib.reader.PacketDataSerializer;
+import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 
 public class PacketPlayOutSetExperience extends Packet implements PacketPlayOut{

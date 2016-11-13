@@ -1,4 +1,4 @@
-package dev.wolveringer.BungeeUtil.packetlib.reader;
+package dev.wolveringer.bungeeutil.packetlib.reader;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

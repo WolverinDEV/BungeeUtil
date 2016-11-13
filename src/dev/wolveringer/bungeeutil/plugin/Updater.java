@@ -31,7 +31,6 @@ import net.md_5.bungee.api.plugin.Plugin;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import dev.wolveringer.BungeeUtil.item.meta.SkullMeta;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.MathUtil;
@@ -39,6 +38,7 @@ import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.item.ItemStack;
 import dev.wolveringer.bungeeutil.item.Material;
 import dev.wolveringer.bungeeutil.item.ItemStack.Click;
+import dev.wolveringer.bungeeutil.item.meta.SkullMeta;
 import dev.wolveringer.bungeeutil.profile.SkinFactory;
 import lombok.NonNull;
 

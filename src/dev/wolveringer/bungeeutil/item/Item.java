@@ -3,9 +3,9 @@ package dev.wolveringer.bungeeutil.item;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import dev.wolveringer.BungeeUtil.item.meta.ItemMeta;
-import dev.wolveringer.BungeeUtil.item.meta.MetaFactory;
 import dev.wolveringer.nbt.NBTTagCompound;
+import dev.wolveringer.bungeeutil.item.meta.ItemMeta;
+import dev.wolveringer.bungeeutil.item.meta.MetaFactory;
 import dev.wolveringer.configuration.serialization.ConfigurationSerializable;
 
 public class Item{

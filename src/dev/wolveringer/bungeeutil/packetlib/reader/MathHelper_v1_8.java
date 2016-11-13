@@ -1,4 +1,4 @@
-package dev.wolveringer.BungeeUtil.packetlib.reader;
+package dev.wolveringer.bungeeutil.packetlib.reader;
 
 import java.util.Random;
 import java.util.UUID;

@@ -2,8 +2,8 @@ package dev.wolveringer.bungeeutil.packets;
 
 import java.util.List;
 
-import dev.wolveringer.BungeeUtil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.item.Item;
+import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 
 public class PacketPlayOutWindowItems extends Packet implements PacketPlayOut {

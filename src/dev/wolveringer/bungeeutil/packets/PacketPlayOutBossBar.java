@@ -2,7 +2,7 @@ package dev.wolveringer.bungeeutil.packets;
 
 import java.util.UUID;
 
-import dev.wolveringer.BungeeUtil.packetlib.reader.PacketDataSerializer;
+import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
 import net.md_5.bungee.api.chat.BaseComponent;

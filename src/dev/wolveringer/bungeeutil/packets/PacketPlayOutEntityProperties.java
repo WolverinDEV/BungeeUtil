@@ -3,7 +3,7 @@ package dev.wolveringer.bungeeutil.packets;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import dev.wolveringer.BungeeUtil.packetlib.reader.PacketDataSerializer;
+import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutEntityProperties.EntityProperty.EntityPropertyModifier;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 

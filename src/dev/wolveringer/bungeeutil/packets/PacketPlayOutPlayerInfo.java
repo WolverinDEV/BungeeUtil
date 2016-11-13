@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import dev.wolveringer.BungeeUtil.packetlib.reader.PacketDataSerializer;
+import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.profile.GameProfile;
 import dev.wolveringer.bungeeutil.profile.PlayerInfoData;

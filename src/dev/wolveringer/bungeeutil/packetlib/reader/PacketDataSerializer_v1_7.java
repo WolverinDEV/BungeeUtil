@@ -1,4 +1,4 @@
-package dev.wolveringer.BungeeUtil.packetlib.reader;
+package dev.wolveringer.bungeeutil.packetlib.reader;
 
 import io.netty.buffer.ByteBuf;
 import net.md_5.bungee.api.chat.BaseComponent;

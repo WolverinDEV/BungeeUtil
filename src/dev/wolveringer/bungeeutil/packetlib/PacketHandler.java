@@ -1,4 +1,4 @@
-package dev.wolveringer.BungeeUtil.packetlib;
+package dev.wolveringer.bungeeutil.packetlib;
 
 import dev.wolveringer.bungeeutil.packets.Packet;
 

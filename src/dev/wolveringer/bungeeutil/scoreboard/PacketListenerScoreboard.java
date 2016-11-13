@@ -3,11 +3,11 @@ package dev.wolveringer.bungeeutil.scoreboard;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import dev.wolveringer.BungeeUtil.packetlib.PacketHandleEvent;
-import dev.wolveringer.BungeeUtil.packetlib.PacketHandler;
-import dev.wolveringer.BungeeUtil.packetlib.PacketLib;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
+import dev.wolveringer.bungeeutil.packetlib.PacketHandleEvent;
+import dev.wolveringer.bungeeutil.packetlib.PacketHandler;
+import dev.wolveringer.bungeeutil.packetlib.PacketLib;
 import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardDisplayObjective;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardObjective;

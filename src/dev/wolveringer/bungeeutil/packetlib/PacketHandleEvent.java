@@ -1,4 +1,4 @@
-package dev.wolveringer.BungeeUtil.packetlib;
+package dev.wolveringer.bungeeutil.packetlib;
 
 import net.md_5.bungee.api.plugin.Cancellable;
 import net.md_5.bungee.api.plugin.Event;

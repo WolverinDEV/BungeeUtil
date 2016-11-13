@@ -1,9 +1,9 @@
 package dev.wolveringer.bungeeutil.entity.datawatcher;
 
-import dev.wolveringer.BungeeUtil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.entity.datawatcher.impl.v1_10_DataWatcher;
 import dev.wolveringer.bungeeutil.entity.datawatcher.impl.v1_8_DataWatcher;
 import dev.wolveringer.bungeeutil.entity.datawatcher.impl.v1_9_DataWatcher;
+import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
 
 public abstract class DataWatcher {

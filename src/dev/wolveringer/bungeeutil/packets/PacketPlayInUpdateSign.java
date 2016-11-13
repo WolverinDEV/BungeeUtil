@@ -1,6 +1,6 @@
 package dev.wolveringer.bungeeutil.packets;
 
-import dev.wolveringer.BungeeUtil.packetlib.reader.PacketDataSerializer;
+import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayIn;
 import dev.wolveringer.bungeeutil.position.BlockPosition;
 import lombok.NoArgsConstructor;

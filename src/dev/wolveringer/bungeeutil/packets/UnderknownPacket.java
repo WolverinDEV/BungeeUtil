@@ -1,6 +1,6 @@
 package dev.wolveringer.bungeeutil.packets;
 
-import dev.wolveringer.BungeeUtil.packetlib.reader.PacketDataSerializer;
+import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 
 @SuppressWarnings("deprecation")
 public class UnderknownPacket extends Packet {

@@ -1,7 +1,7 @@
 package dev.wolveringer.bungeeutil.packets;
 
-import dev.wolveringer.BungeeUtil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.ByteString;
+import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import lombok.Getter;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;

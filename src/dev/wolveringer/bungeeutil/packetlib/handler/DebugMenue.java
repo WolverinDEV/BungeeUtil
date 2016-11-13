@@ -1,4 +1,4 @@
-package dev.wolveringer.BungeeUtil.packetlib.handler;
+package dev.wolveringer.bungeeutil.packetlib.handler;
 
 import java.util.ArrayList;
 import java.util.Arrays;

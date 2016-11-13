@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import dev.wolveringer.BungeeUtil.item.meta.CraftItemMeta;
-import dev.wolveringer.BungeeUtil.item.meta.MetaListener;
 import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.item.ItemStack;
+import dev.wolveringer.bungeeutil.item.meta.CraftItemMeta;
+import dev.wolveringer.bungeeutil.item.meta.MetaListener;
 import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutOpenWindow;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutSetSlot;

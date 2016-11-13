@@ -2,7 +2,7 @@ package dev.wolveringer.bungeeutil.packets;
 
 import java.util.HashMap;
 
-import dev.wolveringer.BungeeUtil.packetlib.reader.PacketDataSerializer;
+import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 
 public class PacketPlayOutStatistic extends Packet implements PacketPlayOut{

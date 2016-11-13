@@ -1,4 +1,4 @@
-package dev.wolveringer.BungeeUtil.injector;
+package dev.wolveringer.bungeeutil.injector;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

@@ -3,7 +3,7 @@ package dev.wolveringer.bungeeutil.packets;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import dev.wolveringer.BungeeUtil.packetlib.reader.PacketDataSerializer;
+import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.particel.ParticleEffect;
 import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;

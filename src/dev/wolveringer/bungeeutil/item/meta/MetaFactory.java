@@ -1,4 +1,4 @@
-package dev.wolveringer.BungeeUtil.item.meta;
+package dev.wolveringer.bungeeutil.item.meta;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

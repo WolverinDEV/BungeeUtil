@@ -1,4 +1,4 @@
-package dev.wolveringer.BungeeUtil.packetlib.handler;
+package dev.wolveringer.bungeeutil.packetlib.handler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,8 +7,6 @@ import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.Callback;
-import dev.wolveringer.BungeeUtil.item.meta.CraftItemMeta;
-import dev.wolveringer.BungeeUtil.packetlib.PacketHandleEvent;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.ExceptionUtils;
@@ -18,6 +16,8 @@ import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.item.ItemStack;
 import dev.wolveringer.bungeeutil.item.ItemStack.Click;
 import dev.wolveringer.bungeeutil.item.ItemStack.InteractType;
+import dev.wolveringer.bungeeutil.item.meta.CraftItemMeta;
+import dev.wolveringer.bungeeutil.packetlib.PacketHandleEvent;
 import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.packets.PacketPlayInArmAnimation;
 import dev.wolveringer.bungeeutil.packets.PacketPlayInBlockDig;
