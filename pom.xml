@@ -177,5 +177,10 @@
 			<artifactId>NBTTag</artifactId>
 			<version>1.2.1</version>
 		</dependency>
+		<dependency>
+			<groupId>dev.wolveringer</groupId>
+			<artifactId>YamlConfiguration</artifactId>
+			<version>1.2</version>
+		</dependency>
 	</dependencies>
 </project>
