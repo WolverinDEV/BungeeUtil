@@ -1,6 +1,6 @@
 {
-    "CurrentVersion": "1.6.9",
-    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.9.jar",
+    "CurrentVersion": "1.6.10",
+    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.10.jar",
     "VersionsHistory": [
         {
             "Version": "1.6.7.6",
@@ -57,6 +57,10 @@
         {
             "Version": "1.6.9",
             "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.9.jar"
+        },
+        {
+            "Version": "1.6.10",
+            "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.10.jar"
         }
     ],
     "Changelog": [
@@ -161,6 +165,13 @@
                 "Updated Virtual Bungee Inventory updating",
                 "Created new function (onInteract)",
                 "Implemented ItemStacks in Player inventory (now click will be handled if a player clicks on the item in his own inventory)"
+            ]
+        },
+        {
+            "Verion": "1.6.10",
+            "Changed": [
+                "BungeeUtil is not compatible with Waterfall",
+                "Some minor error fixes"
             ]
         }
     ]
