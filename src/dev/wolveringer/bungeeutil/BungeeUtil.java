@@ -120,19 +120,16 @@ public final class BungeeUtil {
 			sendMessage("§aRegister commands and scheduler");
 			BungeeCord.getInstance().getPluginManager().registerListener(pluginInstance, new InventoryResetListener());
 			BungeeCord.getInstance().getPluginManager().registerCommand(pluginInstance, new BungeeTimings());
-			BungeeCord.getInstance().getScheduler().runAsync(pluginInstance, new Runnable() {
-				@Override
-				public void run() {
-					sendMessage("§eSystem.gc() -> Enabled: " + Configuration.isGCEnabled());
-					while (Configuration.isGCEnabled()) {
-						try {
-							Thread.sleep(5 * 1000);
-						}
-						catch (InterruptedException e) {
-						}
-						if (!active) return;
-						System.gc();
+			BungeeCord.getInstance().getScheduler().runAsync(pluginInstance, ()->{
+				sendMessage("§eSystem.gc() -> Enabled: " + Configuration.isGCEnabled());
+				while (Configuration.isGCEnabled()) {
+					try {
+						Thread.sleep(5 * 1000);
 					}
+					catch (InterruptedException e) {
+					}
+					if (!active) return;
+					System.gc();
 				}
 			});
 			if (Configuration.ramStatistics()) {
