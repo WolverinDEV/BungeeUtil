@@ -50,7 +50,7 @@ public class Main extends Plugin {
 			{
 				if (Configuration.isUpdaterActive() && updater.checkUpdate()) {
 					BungeeUtil.getInstance().setInformation("§cRestarting bungeecord");
-					BungeeUtil.getInstance().sleep(1000);
+					BungeeUtil.getInstance().displayedSleep(1000);
 					BungeeUtil.getInstance().setInformation(null);
 					System.exit(-1);
 					return;

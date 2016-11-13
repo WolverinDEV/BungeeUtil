@@ -6,13 +6,13 @@ import com.google.common.collect.Lists;
 
 import dev.wolveringer.BungeeUtil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
-import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
 import dev.wolveringer.bungeeutil.profile.GameProfile;
 import dev.wolveringer.bungeeutil.profile.PlayerInfoData;
 import dev.wolveringer.bungeeutil.profile.Property;
-import dev.wolveringer.chat.ChatSerializer;
-import dev.wolveringer.chat.IChatBaseComponent;
+import lombok.NoArgsConstructor;
+import net.md_5.bungee.api.chat.BaseComponent;
 
+@NoArgsConstructor
 public class PacketPlayOutPlayerInfo extends Packet implements PacketPlayOut {
 	
 	public static enum EnumPlayerInfoAction {
@@ -28,12 +28,7 @@ public class PacketPlayOutPlayerInfo extends Packet implements PacketPlayOut {
 	
 	public boolean profile = true;
 	
-	public PacketPlayOutPlayerInfo() {
-		super(0x38);
-	}
-	
 	public PacketPlayOutPlayerInfo(EnumPlayerInfoAction paramEnumPlayerInfoAction, PlayerInfoData... player) {
-		super(0x38);
 		this.action = paramEnumPlayerInfoAction;
 		for (PlayerInfoData localEntityPlayer : player) {
 			this.data.add(localEntityPlayer);
@@ -47,7 +42,7 @@ public class PacketPlayOutPlayerInfo extends Packet implements PacketPlayOut {
 			GameProfile gameporfile = null;
 			int ping = 0;
 			int gamemode = 0;
-			IChatBaseComponent nickname = null;
+			BaseComponent nickname = null;
 			switch (this.action) {
 				case ADD_PLAYER:
 					gameporfile = new GameProfile(s.readUUID(), s.readString(-1));
@@ -65,7 +60,7 @@ public class PacketPlayOutPlayerInfo extends Packet implements PacketPlayOut {
 					gamemode = s.readVarInt();
 					ping = s.readVarInt();
 					if (s.readBoolean()) {
-						nickname = ChatSerializer.fromJSON(s.readString(-1));
+						nickname = s.readRawString();
 					}
 					break;
 				case UPDATE_GAMEMODE:
@@ -87,7 +82,6 @@ public class PacketPlayOutPlayerInfo extends Packet implements PacketPlayOut {
 		}
 	}
 	
-	@SuppressWarnings("static-access")
 	public void write(PacketDataSerializer paramPacketDataSerializer) {
 		paramPacketDataSerializer.writeVarInt(this.action.ordinal());
 		paramPacketDataSerializer.writeVarInt(this.data.size());

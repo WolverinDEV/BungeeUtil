@@ -30,8 +30,6 @@ import dev.wolveringer.bungeeutil.packets.PacketPlayOutRemoveEntityEffect;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutUpdateHealth;
 import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.Player;
-import dev.wolveringer.chat.ChatSerializer;
-import dev.wolveringer.chat.IChatBaseComponent;
 
 public abstract class IInitialHandler extends InitialHandler {
 	public final static Field CHANNEL_FIELD;
@@ -63,7 +61,7 @@ public abstract class IInitialHandler extends InitialHandler {
 	private WarpedMinecraftDecoder a;
 	private short transaktionId;
 	private short window;
-	private IChatBaseComponent[] tab = new IChatBaseComponent[2];
+	private BaseComponent[] tab = new BaseComponent[2];
 	
 	
 	public WarpedMinecraftEncoder getEncoder() {
@@ -212,17 +210,17 @@ public abstract class IInitialHandler extends InitialHandler {
 		return window;
 	}
 	
-	public IChatBaseComponent[] getTabHeader() {
+	public BaseComponent[] getTabHeader() {
 		return tab;
 	}
 	
-	public void setTabHeader(IChatBaseComponent header, IChatBaseComponent footer) {
-		this.tab = new IChatBaseComponent[] { header, footer };
+	public void setTabHeader(BaseComponent header, BaseComponent footer) {
+		this.tab = new BaseComponent[] { header, footer };
 		sendPacket(new PacketPlayOutPlayerListHeaderFooter(header, footer));
 	}
 	
-	public void setTabHeaderFromPacket(IChatBaseComponent header, IChatBaseComponent footer) {
-		this.tab = new IChatBaseComponent[] { header, footer };
+	public void setTabHeaderFromPacket(BaseComponent header, BaseComponent footer) {
+		this.tab = new BaseComponent[] { header, footer };
 	}
 	
 	@Override

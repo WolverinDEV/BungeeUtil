@@ -3,15 +3,13 @@ package dev.wolveringer.bungeeutil.packets;
 import dev.wolveringer.BungeeUtil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayIn;
 import dev.wolveringer.bungeeutil.position.BlockPosition;
-import dev.wolveringer.chat.IChatBaseComponent;
+import lombok.NoArgsConstructor;
+import net.md_5.bungee.api.chat.BaseComponent;
 
+@NoArgsConstructor
 public class PacketPlayInUpdateSign extends Packet implements PacketPlayIn {
 	private BlockPosition loc;
-	private IChatBaseComponent comps[] = new IChatBaseComponent[4];
-	
-	public PacketPlayInUpdateSign() {
-		// TODO Auto-generated constructor stub
-	}
+	private BaseComponent comps[] = new BaseComponent[4];
 	
 	@Override
 	public void read(PacketDataSerializer s) {
@@ -31,7 +29,7 @@ public class PacketPlayInUpdateSign extends Packet implements PacketPlayIn {
 		s.writeRawString(comps[3]);
 	}
 	
-	public void setLines(IChatBaseComponent[] comps) {
+	public void setLines(BaseComponent[] comps) {
 		this.comps = comps;
 	}
 	public void setLocation(BlockPosition loc) {
@@ -40,7 +38,7 @@ public class PacketPlayInUpdateSign extends Packet implements PacketPlayIn {
 	public BlockPosition getLoc() {
 		return loc;
 	}
-	public IChatBaseComponent[] getComps() {
+	public BaseComponent[] getComps() {
 		return comps;
 	}
 }

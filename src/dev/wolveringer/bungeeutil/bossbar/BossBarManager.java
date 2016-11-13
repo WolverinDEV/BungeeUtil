@@ -12,10 +12,9 @@ import dev.wolveringer.bungeeutil.packets.PacketPlayOutBossBar.Action;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutBossBar.BarColor;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutBossBar.BarDivision;
 import dev.wolveringer.bungeeutil.player.Player;
-import dev.wolveringer.chat.ChatSerializer;
-import dev.wolveringer.chat.IChatBaseComponent;
-import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 import lombok.Getter;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class BossBarManager {
 	
@@ -27,7 +26,7 @@ public class BossBarManager {
 		private PacketPlayOutBossBar.BarColor color;
 		private PacketPlayOutBossBar.BarDivision division;
 		private float health;
-		private IChatBaseComponent message;
+		private BaseComponent message;
 		private boolean visiable;
 		private LimetedScheduller curruntTask;
 		
@@ -37,7 +36,7 @@ public class BossBarManager {
 			color = BarColor.PING;
 			division = BarDivision.TEN_DIVISIONS;
 			health = 0.5F;
-			message = ChatSerializer.fromMessage(ChatColorUtils.COLOR_CHAR+"cUndefined");
+			message = TextComponent.fromLegacyText("§cundefined")[0];
 		}
 		
 		public void setColor(PacketPlayOutBossBar.BarColor color) {
@@ -55,7 +54,7 @@ public class BossBarManager {
 			if (visiable) this.manager.player.sendPacket(new PacketPlayOutBossBar().setBarId(uuid).setAction(Action.UPDATE_HEALTH).setHealth(value));
 		}
 		
-		public void setMessage(IChatBaseComponent message) {
+		public void setMessage(BaseComponent message) {
 			this.message = message;
 			if (visiable) this.manager.player.sendPacket(new PacketPlayOutBossBar().setBarId(uuid).setAction(Action.UPDATE_TITLE).setTitle(message));
 		}
@@ -93,7 +92,7 @@ public class BossBarManager {
 			}).start();
 		}
 		
-		protected BossBar(BossBarManager manager, UUID uuid, BarColor color, BarDivision division, float value, IChatBaseComponent message, boolean visiable) {
+		protected BossBar(BossBarManager manager, UUID uuid, BarColor color, BarDivision division, float value, BaseComponent message, boolean visiable) {
 			this.manager = manager;
 			this.uuid = uuid;
 			this.color = color;

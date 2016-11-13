@@ -2,6 +2,7 @@ package dev.wolveringer.bungeeutil.entity.datawatcher.impl;
 
 import gnu.trove.map.TObjectIntMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -21,7 +22,6 @@ import dev.wolveringer.bungeeutil.entity.datawatcher.OptionalUUID;
 import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.position.BlockPosition;
 import dev.wolveringer.bungeeutil.position.Vector3f;
-import dev.wolveringer.chat.IChatBaseComponent;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class v1_10_DataWatcher extends DataWatcher{
@@ -32,7 +32,7 @@ public class v1_10_DataWatcher extends DataWatcher{
 		v1_10_classToId.put(Integer.class, 1);
 		v1_10_classToId.put(Float.class, 2);
 		v1_10_classToId.put(String.class, 3);
-		v1_10_classToId.put(IChatBaseComponent.class, 4);
+		v1_10_classToId.put(BaseComponent.class, 4);
 		v1_10_classToId.put(Item.class, 5);
 		v1_10_classToId.put(Boolean.class, 6);
 		v1_10_classToId.put(Vector3f.class, 7);
@@ -109,7 +109,7 @@ public class v1_10_DataWatcher extends DataWatcher{
 					s.writeString((String) o.getValue());
 					break;
 				case 4:
-					s.writeRawString((IChatBaseComponent) o.getValue());
+					s.writeRawString((BaseComponent) o.getValue());
 					break;
 				case 5:
 					s.writeItem((Item) o.getValue());

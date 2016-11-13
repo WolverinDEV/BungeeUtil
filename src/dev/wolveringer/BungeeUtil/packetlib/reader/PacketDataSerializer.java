@@ -3,6 +3,7 @@ package dev.wolveringer.BungeeUtil.packetlib.reader;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufProcessor;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,7 +20,6 @@ import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.nbt.NBTTagCompound;
 import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.position.BlockPosition;
-import dev.wolveringer.chat.IChatBaseComponent;
 import dev.wolveringer.util.ByteString;
 
 public abstract class PacketDataSerializer extends ByteBuf {
@@ -34,9 +34,9 @@ public abstract class PacketDataSerializer extends ByteBuf {
 				serelizer.writeItem(obj);
 			}
 		});
-		serelizer.add(new ObjectSereizer<IChatBaseComponent>() {
+		serelizer.add(new ObjectSereizer<BaseComponent>() {
 			@Override
-			public void write(IChatBaseComponent obj, PacketDataSerializer serelizer) {
+			public void write(BaseComponent obj, PacketDataSerializer serelizer) {
 				serelizer.writeRawString(obj);;
 			}
 		});
@@ -192,9 +192,9 @@ public abstract class PacketDataSerializer extends ByteBuf {
 
 	public abstract String readString(int max);
 
-	public abstract void writeRawString(IChatBaseComponent s);
+	public abstract void writeRawString(BaseComponent s);
 
-	public abstract IChatBaseComponent readRawString();
+	public abstract BaseComponent readRawString();
 
 	public abstract void writeUUID(UUID i);
 

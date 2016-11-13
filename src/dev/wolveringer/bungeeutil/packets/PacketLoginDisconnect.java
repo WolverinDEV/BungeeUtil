@@ -1,15 +1,18 @@
 package dev.wolveringer.bungeeutil.packets;
 
 import dev.wolveringer.BungeeUtil.packetlib.reader.PacketDataSerializer;
-import dev.wolveringer.chat.ChatSerializer;
-import dev.wolveringer.chat.IChatBaseComponent;
 import dev.wolveringer.util.ByteString;
+import lombok.Getter;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 
 public class PacketLoginDisconnect extends Packet {
-	private ByteString reson;
+	@Getter
+	private ByteString rawReason;
 
 	public PacketLoginDisconnect(String reson) {
-		this.reson = new ByteString(reson);
+		this.rawReason = new ByteString(reson);
 	}
 
 	public PacketLoginDisconnect() {
@@ -18,19 +21,19 @@ public class PacketLoginDisconnect extends Packet {
 
 	@Override
 	public void read(PacketDataSerializer s) {
-		reson = s.readStringBytes();
+		rawReason = s.readStringBytes();
 	}
 
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.write(reson);
+		s.write(rawReason);
 	}
 
-	public IChatBaseComponent getReson() {
-		return ChatSerializer.fromJSON(reson.getString());
+	public BaseComponent getReson() {
+		return ComponentSerializer.parse(rawReason.toString())[0];
 	}
 
-	public void setReson(IChatBaseComponent reson) {
-		this.reson = new ByteString(ChatSerializer.toJSONString(reson));
+	public void setReson(BaseComponent reson) {
+		this.rawReason = new ByteString(ComponentSerializer.toString(reson));
 	}
 }

@@ -1,16 +1,16 @@
 package dev.wolveringer.bungeeutil.profile;
 
-import dev.wolveringer.chat.ChatSerializer;
-import dev.wolveringer.chat.IChatBaseComponent;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class PlayerInfoData {
 	private int ping;
 	private int gamemode;
 	private GameProfile gameprofile;
-	private IChatBaseComponent name;
+	private BaseComponent name;
 	private String username;
 	
-	public PlayerInfoData(GameProfile gameprofile, int ping, int gamemode, IChatBaseComponent tab) {
+	public PlayerInfoData(GameProfile gameprofile, int ping, int gamemode, BaseComponent tab) {
 		this.gameprofile = gameprofile;
 		this.ping = ping;
 		this.gamemode = gamemode;
@@ -37,7 +37,7 @@ public class PlayerInfoData {
 		return gameprofile;
 	}
 
-	public IChatBaseComponent getName() {
+	public BaseComponent getName() {
 		return name;
 	}
 	
@@ -53,13 +53,13 @@ public class PlayerInfoData {
 		this.gameprofile = gameprofile;
 	}
 
-	public void setName(IChatBaseComponent name) {
+	public void setName(BaseComponent name) {
 		this.name = name;
 	}
 
 	@Override
 	public String toString() {
-		return "PlayerInfoData [b=" + ping + ", gamemode=" + gamemode + ", gameprofile=" + gameprofile + ", name=" + ChatSerializer.toMessage(name) + "]";
+		return "PlayerInfoData [b=" + ping + ", gamemode=" + gamemode + ", gameprofile=" + gameprofile + ", name=" + TextComponent.toLegacyText(name) + "§r]";
 	}
 	public String getUsername() {
 		return username;

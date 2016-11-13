@@ -44,10 +44,9 @@ import dev.wolveringer.bungeeutil.scoreboard.Scoreboard;
 import dev.wolveringer.bungeeutil.sound.SoundEffect;
 import dev.wolveringer.bungeeutil.statistics.profiler.ProfileMenue;
 import dev.wolveringer.bungeeutil.statistics.profiler.Profiler;
-import dev.wolveringer.chat.ChatComponentText;
-import dev.wolveringer.chat.ChatSerializer;
 import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class DebugMenue {
@@ -100,7 +99,7 @@ public class DebugMenue {
 				});
 				c.setPing(2000);
 				c.setTabListed(true);
-				c.setPlayerListName(ChatSerializer.fromMessage(ChatColorUtils.COLOR_CHAR + "7[NCP] " + ChatColorUtils.COLOR_CHAR + "bEntityID: " + ChatColorUtils.COLOR_CHAR + "a" + c.getEntityID()));
+				c.setPlayerListName(TextComponent.fromLegacyText(ChatColorUtils.COLOR_CHAR + "7[NCP] " + ChatColorUtils.COLOR_CHAR + "bEntityID: " + ChatColorUtils.COLOR_CHAR + "a" + c.getEntityID())[0]);
 				c.getEquipment().setItemInHand(p.getPlayer().getHandItem());
 				if (p.getPlayer().getVersion().getBigVersion() == BigClientVersion.v1_9) {
 					Item i = p.getPlayer().getOffHandItem();
@@ -122,7 +121,7 @@ public class DebugMenue {
 				
 				PlayerNPC npc = new PlayerNPC();
 				npc.setPing(1);
-		        npc.setPlayerListName(new ChatComponentText("§a-----NPC----"));
+		        npc.setPlayerListName(TextComponent.fromLegacyText("§a-----NPC----")[0]);
 		        npc.setTabListed(true);
 		        Item item = new Item(Material.WATCH);
 		        item.getItemMeta().setGlow(true);
@@ -177,12 +176,12 @@ public class DebugMenue {
 					var0.setColor(BarColor.GREEN);
 					var0.setDivision(BarDivision.NO_DIVISION);
 					var0.setHealth(0F);
-					var0.setMessage(ChatSerializer.fromMessage("§cHello world"));
+					var0.setMessage(TextComponent.fromLegacyText("§aHello world")[0]);
 					var0.display();
 					
 					p.getPlayer().sendMessage("Your boss bars:");
 					for (BossBar bar : p.getPlayer().getBossBarManager().getActiveBossBars())
-						p.getPlayer().sendMessage("  §7- " + ChatSerializer.toMessage(bar.getMessage()));
+						p.getPlayer().sendMessage("  §7- " + TextComponent.toLegacyText(bar.getMessage()));
 					final BossBar bar = var0;
 					new LimetedScheduller(32, 250, TimeUnit.MILLISECONDS) {
 						int currunt = 0;
@@ -195,7 +194,7 @@ public class DebugMenue {
 								s.getObjektive("test").setScore(ChatColorUtils.COLOR_CHAR + Integer.toHexString(currunt % 16) + "Testing score", currunt % 16);
 							}
 							if (bar != null) {
-								bar.setMessage(ChatSerializer.fromMessage(ChatColorUtils.COLOR_CHAR + Integer.toHexString((currunt) % 16) + "Hello world"));
+								bar.setMessage(TextComponent.fromLegacyText(ChatColorUtils.COLOR_CHAR + Integer.toHexString((currunt) % 16) + "Hello world")[0]);
 								bar.dynamicChangeHealth((float) ((float) count / (float) limit), 250, TimeUnit.MILLISECONDS);
 							}
 						}

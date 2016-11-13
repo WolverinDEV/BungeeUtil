@@ -14,6 +14,7 @@ import net.md_5.bungee.BungeeServerInfo;
 import net.md_5.bungee.UserConnection;
 import net.md_5.bungee.api.Callback;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ServerConnectEvent;
@@ -46,7 +47,6 @@ import dev.wolveringer.bungeeutil.position.Location;
 import dev.wolveringer.bungeeutil.scoreboard.Scoreboard;
 import dev.wolveringer.bungeeutil.sound.SoundCategory;
 import dev.wolveringer.bungeeutil.sound.SoundEffect;
-import dev.wolveringer.chat.IChatBaseComponent;
 
 public class ProxiedPlayerUserConnection extends UserConnection implements Player {
 	private static final int CURSOR_ITEM_SLOT = 50;
@@ -191,12 +191,12 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 	}
 
 	@Override
-	public IChatBaseComponent[] getTabHeader() {
+	public BaseComponent[] getTabHeader() {
 		return getInitialHandler().getTabHeader();
 	}
 
 	@Override
-	public void setTabHeader(IChatBaseComponent header, IChatBaseComponent footer) {
+	public void setTabHeader(BaseComponent header, BaseComponent footer) {
 		getInitialHandler().setTabHeader(header, footer);
 	}
 	

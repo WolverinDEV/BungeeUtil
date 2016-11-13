@@ -2,32 +2,25 @@ package dev.wolveringer.bungeeutil.packets;
 
 import dev.wolveringer.BungeeUtil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
-import dev.wolveringer.chat.ChatSerializer;
-import dev.wolveringer.chat.IChatBaseComponent;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import net.md_5.bungee.api.chat.BaseComponent;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 public class PacketPlayOutDisconnect extends Packet implements PacketPlayOut{
 
-	private String c;
-	
-	public PacketPlayOutDisconnect() {
-	}
-	
-	public PacketPlayOutDisconnect(IChatBaseComponent c) {
-		this.c = ChatSerializer.toJSONString(c);
-	}
+	private BaseComponent message;
 	
 	@Override
 	public void read(PacketDataSerializer s) {
-		c = s.readString(-1);
+		message = s.readRawString();
 	}
 
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeString(c);
+		s.writeRawString(message);
 	}
-	
-	public IChatBaseComponent getMessage(){
-		return ChatSerializer.fromJSON(c);
-	}
-	
 }

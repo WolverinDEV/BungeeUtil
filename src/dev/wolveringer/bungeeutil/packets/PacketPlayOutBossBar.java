@@ -5,7 +5,7 @@ import java.util.UUID;
 import dev.wolveringer.BungeeUtil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
-import dev.wolveringer.chat.IChatBaseComponent;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 public class PacketPlayOutBossBar extends Packet implements PacketPlayOut{
 	public static enum Action {
@@ -39,7 +39,7 @@ public class PacketPlayOutBossBar extends Packet implements PacketPlayOut{
 	private UUID barId;
 	private Action action;
 	
-	private IChatBaseComponent title;
+	private BaseComponent title;
 	private float health;
 	private BarColor color;
 	private BarDivision division;
@@ -130,11 +130,11 @@ public class PacketPlayOutBossBar extends Packet implements PacketPlayOut{
 		return this;
 	}
 
-	public IChatBaseComponent getTitle() {
+	public BaseComponent getTitle() {
 		return title;
 	}
 
-	public PacketPlayOutBossBar setTitle(IChatBaseComponent title) {
+	public PacketPlayOutBossBar setTitle(BaseComponent title) {
 		this.title = title;
 		return this;
 	}

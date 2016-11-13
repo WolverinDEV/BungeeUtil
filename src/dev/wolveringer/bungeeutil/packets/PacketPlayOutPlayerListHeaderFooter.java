@@ -2,22 +2,22 @@ package dev.wolveringer.bungeeutil.packets;
 
 import dev.wolveringer.BungeeUtil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
-import dev.wolveringer.chat.ChatSerializer;
-import dev.wolveringer.chat.IChatBaseComponent;
 import dev.wolveringer.util.ByteString;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 
 public class PacketPlayOutPlayerListHeaderFooter extends Packet implements PacketPlayOut {
 	private ByteString header;
 	private ByteString footer;
 
-	public PacketPlayOutPlayerListHeaderFooter() {
-	}
+	public PacketPlayOutPlayerListHeaderFooter() { }
 	
 	public PacketPlayOutPlayerListHeaderFooter(String header,String footer) {
-		setHeader(ChatSerializer.fromMessage(header));
-		setFooter(ChatSerializer.fromMessage(footer));
+		setHeader(TextComponent.fromLegacyText(header));
+		setFooter(TextComponent.fromLegacyText(footer));
 	}
-	public PacketPlayOutPlayerListHeaderFooter(IChatBaseComponent header,IChatBaseComponent footer) {
+	public PacketPlayOutPlayerListHeaderFooter(BaseComponent header,BaseComponent footer) {
 		setHeader(header);
 		setFooter(footer);
 	}
@@ -34,19 +34,19 @@ public class PacketPlayOutPlayerListHeaderFooter extends Packet implements Packe
 		s.writeStringBytes(footer);
 	}
 
-	public IChatBaseComponent getHeader() {
-		return ChatSerializer.fromJSON(header.getString());
+	public BaseComponent getHeader() {
+		return ComponentSerializer.parse(header.getString())[0];
 	}
 
-	public IChatBaseComponent getFooter() {
-		return ChatSerializer.fromJSON(footer.getString());
+	public BaseComponent getFooter() {
+		return ComponentSerializer.parse(footer.getString())[0];
 	}
 
-	public void setHeader(IChatBaseComponent header) {
-		this.header = new ByteString(ChatSerializer.toJSONString(header));
+	public void setHeader(BaseComponent... header) {
+		this.header = new ByteString(ComponentSerializer.toString(header));
 	}
 
-	public void setFooter(IChatBaseComponent footer) {
-		this.footer = new ByteString(ChatSerializer.toJSONString(footer));
+	public void setFooter(BaseComponent... footer) {
+		this.footer = new ByteString(ComponentSerializer.toString(footer));
 	}
 }

@@ -2,27 +2,27 @@ package dev.wolveringer.bungeeutil.packets;
 
 import dev.wolveringer.BungeeUtil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
-import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
-import dev.wolveringer.chat.ChatSerializer;
-import dev.wolveringer.chat.IChatBaseComponent;
 import dev.wolveringer.util.ByteString;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class PacketPlayOutChat extends BetaPacket implements PacketPlayOut {
 
 	private byte modus = 0;
-	private ByteString data;
+	private ByteString rawMessage;
 
-	public PacketPlayOutChat() {
-		super(0x02);
+	public PacketPlayOutChat(BaseComponent msg) {
+		rawMessage = new ByteString(ComponentSerializer.toString(msg));
 	}
 
-	public PacketPlayOutChat(IChatBaseComponent msg) {
-		super(0x02);
-		data = new ByteString(ChatSerializer.toJSONString(msg));
-	}
-
-	public IChatBaseComponent getMessage() {
-		return ChatSerializer.fromJSON(data.getString());
+	public BaseComponent getMessage() {
+		return ComponentSerializer.parse(rawMessage.getString())[0];
 	}
 
 	public void setModus(byte modus) {
@@ -35,27 +35,41 @@ public class PacketPlayOutChat extends BetaPacket implements PacketPlayOut {
 
 	@Override
 	public void read(PacketDataSerializer s) {
-		data = s.readStringBytes();
-		if(getVersion().getBigVersion() == BigClientVersion.v1_8 || getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10)
+		rawMessage = s.readStringBytes();
+		switch (getBigVersion()) {
+		case v1_10:
+		case v1_9:
+		case v1_8:
 			modus = s.readByte();
+			break;
+		case v1_7:
+			break;
+		}
 	}
 
-	public void setMessage(IChatBaseComponent c) {
-		this.data = new ByteString(ChatSerializer.toJSONString(c));
+	public void setMessage(BaseComponent c) {
+		this.rawMessage = new ByteString(ComponentSerializer.toString(c));
 	}
 
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeStringBytes(data);
-		if(getVersion().getBigVersion() == BigClientVersion.v1_8 || getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10)
+		s.writeStringBytes(rawMessage);
+		switch (getBigVersion()) {
+		case v1_10:
+		case v1_9:
+		case v1_8:
 			s.writeByte(modus);
+			break;
+		case v1_7:
+			break;
+		}
 	}
 
 	public void setRawMessage(byte[] raw) {
-		this.data = new ByteString(raw);
+		this.rawMessage = new ByteString(raw);
 	}
 
 	public byte[] getRawMessage() {
-		return this.data.getBytes();
+		return this.rawMessage.getBytes();
 	}
 }

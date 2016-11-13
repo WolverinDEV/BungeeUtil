@@ -1,5 +1,6 @@
 package dev.wolveringer.bungeeutil.player;
 
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import dev.wolveringer.bungeeutil.bossbar.BossBarManager;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
@@ -12,7 +13,6 @@ import dev.wolveringer.bungeeutil.position.Location;
 import dev.wolveringer.bungeeutil.scoreboard.Scoreboard;
 import dev.wolveringer.bungeeutil.sound.SoundCategory;
 import dev.wolveringer.bungeeutil.sound.SoundEffect;
-import dev.wolveringer.chat.IChatBaseComponent;
 
 public interface Player extends ProxiedPlayer {
 	public IInitialHandler getInitialHandler();
@@ -61,9 +61,9 @@ public interface Player extends ProxiedPlayer {
 	public int getSelectedSlot();
 
 	
-	public void setTabHeader(IChatBaseComponent header,IChatBaseComponent footer);
+	public void setTabHeader(BaseComponent header,BaseComponent footer);
 	
-	public IChatBaseComponent[] getTabHeader();
+	public BaseComponent[] getTabHeader();
 	
 	
 	public Scoreboard getScoreboard();

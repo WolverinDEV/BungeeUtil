@@ -29,7 +29,7 @@ import dev.wolveringer.bungeeutil.profile.GameProfile;
 import dev.wolveringer.bungeeutil.profile.PlayerInfoData;
 import dev.wolveringer.bungeeutil.profile.Skin;
 import dev.wolveringer.bungeeutil.profile.SkinFactory;
-import dev.wolveringer.chat.IChatBaseComponent;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 public final class PlayerNPC {
 	private static final Random RND_NAME = new Random();
@@ -53,7 +53,7 @@ public final class PlayerNPC {
 	
 	private ArrayList<InteractListener> listener = new ArrayList<InteractListener>();
 	
-	private IChatBaseComponent tabname = null;
+	private BaseComponent tabname = null;
 	
 	private PacketHandler<Packet> handler;
 	
@@ -171,7 +171,7 @@ public final class PlayerNPC {
 	}
 	
 	public void setTabListed(boolean listed) {
-		if (tab != listed) if (tab) broadcastPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.ADD_PLAYER, new PlayerInfoData(profile, ping, 0, (IChatBaseComponent) tabname)));
+		if (tab != listed) if (tab) broadcastPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.ADD_PLAYER, new PlayerInfoData(profile, ping, 0, (BaseComponent) tabname)));
 		else broadcastPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.REMOVE_PLAYER, new PlayerInfoData(profile, ping, 0, tabname)));
 		this.tab = listed;
 	}
@@ -180,12 +180,12 @@ public final class PlayerNPC {
 		return tab;
 	}
 	
-	public void setPlayerListName(IChatBaseComponent name) {
+	public void setPlayerListName(BaseComponent name) {
 		this.tabname = name;
 		broadcastPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, new PlayerInfoData(profile, ping, 0, tabname)));
 	}
 	
-	public IChatBaseComponent getPlayerListName() {
+	public BaseComponent getPlayerListName() {
 		return tabname;
 	}
 	
@@ -226,7 +226,7 @@ public final class PlayerNPC {
 	}
 	
 	private void sendSpawn(final Player p) {
-		p.sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.ADD_PLAYER, new PlayerInfoData(profile, ping, 0, (IChatBaseComponent) tabname)));
+		p.sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.ADD_PLAYER, new PlayerInfoData(profile, ping, 0, (BaseComponent) tabname)));
 		p.sendPacket(new PacketPlayOutNamedEntitySpawn(ID, profile, location, 0, datawatcher.getWatcher(p.getVersion().getBigVersion())));
 		
 		PacketPlayOutScoreboardTeam team = new PacketPlayOutScoreboardTeam();
@@ -243,12 +243,12 @@ public final class PlayerNPC {
 		p.sendPacket(new PacketPlayOutEntityHeadRotation(ID, p.getLocation().getYaw()));
 		
 		if (!tab) p.sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.REMOVE_PLAYER, new PlayerInfoData(profile, ping, 0, tabname)));
-		else p.sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, new PlayerInfoData(profile, ping, 0, (IChatBaseComponent) tabname)));
+		else p.sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, new PlayerInfoData(profile, ping, 0, (BaseComponent) tabname)));
 		equipment.sendItems(p);
 	}
 	
 	private void sendDestroy(Player p) {
-		if (tab) p.sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.REMOVE_PLAYER, new PlayerInfoData(profile, ping, 0, (IChatBaseComponent) null)));
+		if (tab) p.sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.REMOVE_PLAYER, new PlayerInfoData(profile, ping, 0, (BaseComponent) null)));
 		PacketPlayOutScoreboardTeam team = new PacketPlayOutScoreboardTeam();
 		team.setTeam(base_name);
 		team.setAction(PacketPlayOutScoreboardTeam.Action.REMOVE);

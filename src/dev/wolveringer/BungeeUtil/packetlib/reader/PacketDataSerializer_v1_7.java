@@ -1,6 +1,8 @@
 package dev.wolveringer.BungeeUtil.packetlib.reader;
 
 import io.netty.buffer.ByteBuf;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 
 import java.util.UUID;
 
@@ -11,8 +13,6 @@ import dev.wolveringer.nbt.NBTCompressedStreamTools;
 import dev.wolveringer.nbt.NBTReadLimiter;
 import dev.wolveringer.nbt.NBTTagCompound;
 import dev.wolveringer.bungeeutil.position.BlockPosition;
-import dev.wolveringer.chat.ChatSerializer;
-import dev.wolveringer.chat.IChatBaseComponent;
 
 public class PacketDataSerializer_v1_7 extends PacketDataSerializer {
 
@@ -127,13 +127,13 @@ public class PacketDataSerializer_v1_7 extends PacketDataSerializer {
 	}
 
 	@Override
-	public void writeRawString(IChatBaseComponent s) {
-		writeString(ChatSerializer.toJSONString(s));
+	public void writeRawString(BaseComponent s) {
+		writeString(ComponentSerializer.toString(s));
 	}
 
 	@Override
-	public IChatBaseComponent readRawString() {
-		return ChatSerializer.fromJSON(readString(-1));
+	public BaseComponent readRawString() {
+		return ComponentSerializer.parse(readString(-1))[0];
 	}
 
 	@Override

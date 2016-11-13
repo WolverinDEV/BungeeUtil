@@ -9,6 +9,8 @@ import io.netty.handler.codec.EncoderException;
 import java.io.DataOutput;
 import java.util.UUID;
 
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import net.md_5.bungee.protocol.DefinedPacket;
 
 import com.google.common.base.Charsets;
@@ -18,8 +20,6 @@ import dev.wolveringer.nbt.NBTCompressedStreamTools;
 import dev.wolveringer.nbt.NBTReadLimiter;
 import dev.wolveringer.nbt.NBTTagCompound;
 import dev.wolveringer.bungeeutil.position.BlockPosition;
-import dev.wolveringer.chat.ChatSerializer;
-import dev.wolveringer.chat.IChatBaseComponent;
 
 public class PacketDataSerializer_v1_8 extends PacketDataSerializer {
 	public PacketDataSerializer_v1_8(byte pid) {
@@ -232,13 +232,13 @@ public class PacketDataSerializer_v1_8 extends PacketDataSerializer {
 	}
 
 	@Override
-	public void writeRawString(IChatBaseComponent s) {
-		writeString(ChatSerializer.toJSONString(s));
+	public void writeRawString(BaseComponent s) {
+		writeString(ComponentSerializer.toString(s));
 	}
 
 	@Override
-	public IChatBaseComponent readRawString() {
-		return ChatSerializer.fromJSON(readString(32767));
+	public BaseComponent readRawString() {
+		return ComponentSerializer.parse(readString(-1))[0];
 	}
 
 	@Override
