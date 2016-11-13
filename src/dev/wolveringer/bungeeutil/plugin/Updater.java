@@ -75,7 +75,7 @@ public class Updater {
 	}
 	
 	public String getCurrentVersion(){
-		return Main.getMain().getDescription().getVersion();
+		return Main.getMain().getDescription().getVersion().split("-")[0];
 	}
 	
 	public String getNewestVersion() {
