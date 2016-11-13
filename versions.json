@@ -61,6 +61,11 @@
         {
             "Version": "1.6.10",
             "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.10.jar"
+        },
+        {
+            "Version": "2.0",
+            "snapshot": true,
+            "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.0-SNAPSHOT.jar"
         }
     ],
     "Changelog": [
@@ -172,6 +177,13 @@
             "Changed": [
                 "BungeeUtil is not compatible with Waterfall",
                 "Some minor error fixes"
+            ]
+        },
+        {
+            "Verion": "2.0",
+            "snapshot": true,
+            "Changed": [
+                "A lots of structure changes"
             ]
         }
     ]
