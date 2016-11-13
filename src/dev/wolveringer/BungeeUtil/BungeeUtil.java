@@ -3,17 +3,9 @@ package dev.wolveringer.BungeeUtil;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import org.fusesource.jansi.Ansi;
-import org.fusesource.jansi.AnsiConsole;
-
-import dev.wolveringer.BungeeUtil.RamStatistics.RamStatistic;
 import dev.wolveringer.BungeeUtil.configuration.Configuration;
 import dev.wolveringer.BungeeUtil.injector.InjectFiles;
 import dev.wolveringer.BungeeUtil.packets.Packet;
@@ -23,16 +15,12 @@ import dev.wolveringer.commands.BungeeTimings;
 import dev.wolveringer.listener.InventoryResetListener;
 import dev.wolveringer.network.IIInitialHandler;
 import dev.wolveringer.network.ProxiedPlayerUserConnection;
-import dev.wolveringer.network.channel.init.BungeeConnectionInit;
 import dev.wolveringer.network.channel.init.ChannelInizializer;
 import dev.wolveringer.terminal.TerminalListener;
-import dev.wolveringer.terminal.table.TerminalTable.TerminalRow;
-import jline.TerminalFactory;
 import lombok.Getter;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.command.ConsoleCommandSender;
 
 public final class BungeeUtil {
 	@Getter
@@ -251,7 +239,7 @@ public final class BungeeUtil {
 	
 	public void disable(){
 		active = false;
-		BungeeCord.getInstance().getConsole().sendMessage(ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "eBungeeUntil" + ChatColorUtils.COLOR_CHAR + "7] " + ChatColorUtils.COLOR_CHAR + "aThank you for using BungeeUntil");
+		BungeeCord.getInstance().getConsole().sendMessage(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BungeeUntil" + ChatColor.GRAY + "] " + ChatColor.GREEN + "Thank you for using BungeeUntil");
 	}
 	
 	public void setInformation(String info) {

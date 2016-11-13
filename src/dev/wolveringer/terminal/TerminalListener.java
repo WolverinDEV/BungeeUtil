@@ -150,7 +150,6 @@ public class TerminalListener {
 					try {
 						Thread.sleep(5);
 					} catch (InterruptedException e) {
-						e.printStackTrace();
 					}
 					if (TerminalFactory.get().getHeight() != oldHeight || TerminalFactory.get().getWidth() != oldWidth) {
 						for (Listener l : listener)

@@ -2,7 +2,6 @@ package dev.wolveringer.BungeeUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.fusesource.jansi.AnsiConsole;
 
@@ -47,15 +46,10 @@ public class RamStatisticsPainter implements Runnable, Listener {
 		var3 = format(var3, var5);
 		var4 = format(var4, var5);
 
-		int diff = 0;
-		if (state.getPreviousStatistic(10, TimeUnit.SECONDS) != null)
-			diff = (int) (((int) (state.getUsedMemory() / mb)) - ((int) (state.getPreviousStatistic(10, TimeUnit.SECONDS).getUsedMemory() / mb)));
 		String diffSpace = "";
-		for (int i = 0; i < ("(*" + Math.abs(diff) + ")").length(); i++)
-			diffSpace += " ";
 		List<String> lines = new ArrayList<>();
 		lines.add(ChatColorUtils.COLOR_CHAR + "7#####" + diffSpace.substring(0, diffSpace.length() / 2).replaceAll(" ", "#") + " " + ChatColorUtils.COLOR_CHAR + "6Heap utilization statistics [MB] " + ChatColorUtils.COLOR_CHAR + "7#####" + diffSpace.substring(0, diffSpace.length() / 2).replaceAll(" ", "#") + (diffSpace.length() % 2 != 0 ? "#" : ""));
-		lines.add(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aReserved Used Memory:      " + ChatColorUtils.COLOR_CHAR + "e" + var1 + "M " + ChatColorUtils.COLOR_CHAR + "7(" + (diff > 0 ? ChatColorUtils.COLOR_CHAR + "a+" : diff < 0 ? ChatColorUtils.COLOR_CHAR + "c-" : ChatColorUtils.COLOR_CHAR + "6±") + Math.abs(diff) + ChatColorUtils.COLOR_CHAR + "7)   " + ChatColorUtils.COLOR_CHAR + "7#");
+		lines.add(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aReserved Used Memory:      " + ChatColorUtils.COLOR_CHAR + "e" + var1 + "M    " + ChatColorUtils.COLOR_CHAR + "7#");
 		lines.add(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aReserved Free Memory:      " + ChatColorUtils.COLOR_CHAR + "e" + var2 + "M    " + diffSpace + ChatColorUtils.COLOR_CHAR + "7#");
 		lines.add(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "aReserved Memory:           " + ChatColorUtils.COLOR_CHAR + "e" + var3 + "M    " + diffSpace + ChatColorUtils.COLOR_CHAR + "7#");
 		lines.add(ChatColorUtils.COLOR_CHAR + "7#     " + ChatColorUtils.COLOR_CHAR + "a-----------------------------" + format("", var5).replaceAll(" ", "-") + "   " + diffSpace + ChatColorUtils.COLOR_CHAR + "7#");
