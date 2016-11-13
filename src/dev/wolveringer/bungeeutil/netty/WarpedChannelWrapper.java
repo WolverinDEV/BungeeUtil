@@ -198,7 +198,7 @@ class EmptyChannelWrapper implements ChannelHandlerContext {
 
 	@Override
 	public Channel channel() {
-		throw createException();
+		return null;
 	}
 
 	@Override

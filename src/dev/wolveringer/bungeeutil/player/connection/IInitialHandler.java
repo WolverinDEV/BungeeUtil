@@ -17,6 +17,7 @@ import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.packet.Kick;
 import net.md_5.bungee.protocol.packet.LoginSuccess;
 import dev.wolveringer.bungeeutil.AsyncCatcher;
+import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.netty.WarpedChannelWrapper;
 import dev.wolveringer.bungeeutil.netty.WarpedMinecraftDecoder;
@@ -108,6 +109,10 @@ public abstract class IInitialHandler extends InitialHandler {
 	public void disconnect(Exception e, int stackDeep) {
 		if (isDisconnecting) return;
 		isDisconnecting = true;
+		if(getChannel() == null){
+			BungeeUtil.debug("disconnection an null channel.");
+			return;
+		}
 		if (getChannel().isClosed()) { return; }
 		String message = "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "4Error Message: " + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "b" + e.getLocalizedMessage() + "\n";
 		for (int i = 0; i < (e.getStackTrace().length > stackDeep ? stackDeep : e.getStackTrace().length); i++) {
