@@ -27,6 +27,7 @@ import net.md_5.bungee.protocol.Protocol;
 
 import com.google.common.base.Preconditions;
 
+import dev.wolveringer.BungeeUtil.ProxyType;
 import dev.wolveringer.Reflect.Until;
 import dev.wolveringer.network.Decoder;
 import dev.wolveringer.network.Encoder;
@@ -163,7 +164,16 @@ public class ChannelWrapper extends net.md_5.bungee.netty.ChannelWrapper {
 			if (ch.pipeline().get(PacketCompressor.class) == null) 
 				addBefore(PipelineUtils.PACKET_ENCODER, "compress", new PacketCompressor());
 			if (ch.pipeline().get(PacketDecompressor.class) == null) 
-				addBefore(PipelineUtils.PACKET_DECODER, "decompress", new PacketDecompressor());
+				switch (ProxyType.getType()) {
+				case BUNGEECORD:
+					addBefore(PipelineUtils.PACKET_DECODER, "decompress", new PacketDecompressor());
+					break;
+				case WATERFALL:
+					addBefore(PipelineUtils.PACKET_DECODER, "decompress", new PacketDecompressor(compressionThreshold));
+					break;
+				default:
+					break;
+				}
 		}
 
 		if (compressionThreshold != -1) {
