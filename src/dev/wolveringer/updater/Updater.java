@@ -43,31 +43,6 @@ import dev.wolveringer.chat.ChatColor.ChatColorUtils;
 import dev.wolveringer.util.MathUtil;
 import lombok.NonNull;
 
-/*
- * 
-{
-	CurrentVersion: "1.6.7.7",
-	Download: "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.7.jar",
-	VersionsHistory: [
-		{
-			Version: "1.6.7.6",
-			Download: "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.7.6.jar",
-		}
-	],
-	Changelog: [
-		{
-			Verion: "1.6.7.7",
-			Changed: [
-				"Improved ram statistics. (Terminal)",
-				"Fixed PacketPlayOutPluginMessage bug",
-				"Removed java insturmental",
-				"Reimplemented sound API (Currently not working!)"
-			]
-		}
-	]
-}
- * 
- */
 public class Updater {
 	
 	private String url;

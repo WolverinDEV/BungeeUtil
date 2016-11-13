@@ -13,11 +13,6 @@ public class MathUtil {
 		return temp.floatValue();
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(calculatePercent(2310, 23423));
-		System.out.println("X: " + pitchNormalizer(-190));
-	}
-	
 	public static float pitchNormalizer(float pitch) {
 		pitch %= 360.0F;
 		if (pitch >= 180.0F) {
