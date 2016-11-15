@@ -3,11 +3,10 @@ package dev.wolveringer.bungeeutil.packets;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayIn;
 import dev.wolveringer.bungeeutil.position.Location;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class PacketPlayInLook extends PacketPlayInFlying implements PacketPlayIn{
-	public PacketPlayInLook() {
-		super(0x05);
-	}
 	@Override
 	public void read(PacketDataSerializer s) {
 		super.setLocation(new Location(0, 0, 0,s.readFloat(),s.readFloat()));

@@ -63,6 +63,7 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutEntity implement
 		setEntityId(paramPacketDataSerializer.readVarInt());
 		this.uuid = paramPacketDataSerializer.readUUID();
 		switch (getBigVersion()) {
+		case v1_11:
 		case v1_10:
 		case v1_9:
 			loc = new Location(paramPacketDataSerializer.readDouble(), paramPacketDataSerializer.readDouble(), paramPacketDataSerializer.readDouble());
@@ -87,6 +88,7 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutEntity implement
 		switch (getBigVersion()) {
 		case v1_9:
 		case v1_10:
+		case v1_11:
 			paramPacketDataSerializer.writeDouble(loc.getX());
 			paramPacketDataSerializer.writeDouble(loc.getY());
 			paramPacketDataSerializer.writeDouble(loc.getZ());

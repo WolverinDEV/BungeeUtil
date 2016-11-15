@@ -4,16 +4,16 @@ import dev.wolveringer.bungeeutil.entity.datawatcher.DataWatcher;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.position.Location;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@Getter
 public class PacketPlayOutSpawnEntity extends Packet implements PacketPlayOut{
-	Location location;
-	int eid;
-	int type;
-	DataWatcher data;
-	
-	public PacketPlayOutSpawnEntity() {
-		super(0x0E);
-	}
+	private Location location;
+	private int eid;
+	private int type;
+	private DataWatcher data;
 	
 	public PacketPlayOutSpawnEntity(Location location, int eid, int type, DataWatcher data) {
 		this();

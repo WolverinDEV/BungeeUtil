@@ -3,10 +3,7 @@ package dev.wolveringer.bungeeutil.player;
 import java.util.ArrayList;
 
 import dev.wolveringer.bungeeutil.player.connection.ProtocollVersion;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public enum ClientVersion {
 	UnderknownVersion(-1, BigClientVersion.UnderknownVersion, ProtocollVersion.Unsupported),
@@ -39,7 +36,9 @@ public enum ClientVersion {
 	v1_9_3(109, BigClientVersion.v1_9, ProtocollVersion.v1_9_3),
 	v1_9_4(110, BigClientVersion.v1_9, ProtocollVersion.v1_9_4),
 	v1_9_5(110, BigClientVersion.v1_9, ProtocollVersion.v1_9_4),
-	v1_10_0(210, BigClientVersion.v1_10, ProtocollVersion.v1_10);
+	v1_10_0(210, BigClientVersion.v1_10, ProtocollVersion.v1_10),
+	
+	v1_11_0(315, BigClientVersion.v1_11, ProtocollVersion.v1_11);
 	
 	@Getter
 	private int version;
@@ -62,7 +61,8 @@ public enum ClientVersion {
 		v1_7(1),
 		v1_8(2),
 		v1_9(3),
-		v1_10(7);
+		v1_10(7),
+		v1_11(8);
 		
 		private ProtocollVersion protocollVersion;
 		private int protocollVersionInt;

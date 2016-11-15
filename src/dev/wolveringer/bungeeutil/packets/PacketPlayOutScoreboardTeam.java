@@ -7,7 +7,13 @@ import net.md_5.bungee.protocol.packet.Team;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 public class PacketPlayOutScoreboardTeam extends Packet implements PacketPlayOut {
 	public static enum Action {
 		CREATE(0), REMOVE(1), UPDATE(2), PLAYER_ADD(3), PLAYER_REMOVE(4);
@@ -49,24 +55,19 @@ public class PacketPlayOutScoreboardTeam extends Packet implements PacketPlayOut
 		}
 	}
 	
-	String team;
-	Action action;
+	private String team;
+	private Action action;
 	
-	String collisionRule = "always";
-	String displayName;
-	String prefix;
-	String suffix;
-	NameTag tag = NameTag.VISIABLE;
-	int color = -1;
-	int friendly_fire = 0;
-	String[] player;
-	
-	public PacketPlayOutScoreboardTeam() {
-		super(0x3E);
-	}
+	private String collisionRule = "always";
+	private String displayName;
+	private String prefix;
+	private String suffix;
+	private NameTag tag = NameTag.VISIABLE;
+	private int color = -1;
+	private int friendly_fire = 0;
+	private String[] player;
 	
 	public PacketPlayOutScoreboardTeam(Team t) {
-		super(0x3E);
 		action = Action.fromInt(t.getMode());
 		team = t.getName();
 		displayName = t.getDisplayName();
@@ -79,7 +80,6 @@ public class PacketPlayOutScoreboardTeam extends Packet implements PacketPlayOut
 	}
 	
 	public PacketPlayOutScoreboardTeam(dev.wolveringer.bungeeutil.scoreboard.Team team) {
-		super(0x3E);
 		this.team = team.getName();
 		this.displayName = team.getDisplayName();
 		this.prefix = team.getPrefix();
@@ -101,7 +101,7 @@ public class PacketPlayOutScoreboardTeam extends Packet implements PacketPlayOut
 			s.writeByte(friendly_fire);
 			if (tag == null) tag = NameTag.VISIABLE;
 			s.writeString(tag.getIdentifire());
-			if (getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10) s.writeString(collisionRule);
+			if (getBigVersion() != BigClientVersion.v1_8) s.writeString(collisionRule);
 			s.writeByte(color);
 		}
 		if (action.getAction() == 0 || action.getAction() == 3 || action.getAction() == 4) {
@@ -120,7 +120,7 @@ public class PacketPlayOutScoreboardTeam extends Packet implements PacketPlayOut
 			suffix = s.readString(16);
 			friendly_fire = s.readByte();
 			tag = NameTag.fromString(s.readString(32));
-			if (getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10) collisionRule = s.readString(-1);
+			if (getBigVersion() != BigClientVersion.v1_8) collisionRule = s.readString(-1);
 			color = s.readByte();
 		}
 		if (action.getAction() == 0 || action.getAction() == 3 || action.getAction() == 4) {

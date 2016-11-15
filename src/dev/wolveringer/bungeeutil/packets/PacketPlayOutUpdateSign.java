@@ -3,20 +3,14 @@ package dev.wolveringer.bungeeutil.packets;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.position.BlockPosition;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketPlayOutUpdateSign extends Packet implements PacketPlayOut{
 	private BlockPosition loc;
 	private String[] lines = new String[4];
-	
-	public PacketPlayOutUpdateSign() {
-		super(0x33);
-	}
-
-	public PacketPlayOutUpdateSign(BlockPosition loc, String[] lines) {
-		super(0x33);
-		this.loc = loc;
-		this.lines = lines;
-	}
 
 	@Override
 	public void read(PacketDataSerializer s) {

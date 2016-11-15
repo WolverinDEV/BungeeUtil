@@ -3,15 +3,12 @@ package dev.wolveringer.bungeeutil.packets;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayXXXHeldItemSlot;
+import lombok.NoArgsConstructor;
 
-
+@NoArgsConstructor
 public class PacketPlayOutHeldItemSlot extends PacketPlayXXXHeldItemSlot implements PacketPlayOut{
-	public PacketPlayOutHeldItemSlot() {
-		super(0x09);
-	}
 	
 	public PacketPlayOutHeldItemSlot(byte slot) {
-		this();
 		setSlot(slot);
 	}
 
@@ -21,5 +18,5 @@ public class PacketPlayOutHeldItemSlot extends PacketPlayXXXHeldItemSlot impleme
 	}
 	public void write(PacketDataSerializer s) {
 		s.writeByte(getSlot());
-	};
+	}
 }

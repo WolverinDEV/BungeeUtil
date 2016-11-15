@@ -2,8 +2,11 @@ package dev.wolveringer.bungeeutil.packets;
 
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
-import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketPlayOutScoreboardObjective extends Packet implements PacketPlayOut {
 	
 	public static enum Action {
@@ -42,22 +45,10 @@ public class PacketPlayOutScoreboardObjective extends Packet implements PacketPl
 		}
 	}
 	
-	public PacketPlayOutScoreboardObjective(String scorebordName, Action action, String displayName, Type type) {
-		this();
-		this.scorebordName = scorebordName;
-		this.action = action;
-		this.displayName = displayName;
-		this.type = type;
-	}
-	
-	public PacketPlayOutScoreboardObjective() {
-		super(0x3B);
-	}
-	
-	String scorebordName;
-	Action action;
-	String displayName = "";
-	Type type = Type.INTEGER;
+	private String scorebordName;
+	private Action action;
+	private String displayName = "";
+	private Type type = Type.INTEGER;
 	
 	@Override
 	public void read(PacketDataSerializer s) {

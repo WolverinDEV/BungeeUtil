@@ -4,7 +4,6 @@ import dev.wolveringer.bungeeutil.ByteString;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import lombok.Getter;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
 public class PacketLoginDisconnect extends Packet {

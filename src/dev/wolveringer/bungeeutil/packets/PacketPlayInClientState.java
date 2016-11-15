@@ -2,16 +2,13 @@ package dev.wolveringer.bungeeutil.packets;
 
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
+import lombok.Getter;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
+@Getter
 public class PacketPlayInClientState extends Packet implements PacketPlayOut{
 	private int state;
-	public PacketPlayInClientState() {
-		super(0x16);
-	}
-	public PacketPlayInClientState(int state) {
-		super(0x16);
-		this.state = state;
-	}
 	@Override
 	public void read(PacketDataSerializer serelizer) {
 		state = serelizer.readVarInt();
@@ -19,8 +16,5 @@ public class PacketPlayInClientState extends Packet implements PacketPlayOut{
 	@Override
 	public void write(PacketDataSerializer serelizer) {
 		serelizer.writeVarInt(state);
-	}
-	public int getState() {
-		return state;
 	}
 }

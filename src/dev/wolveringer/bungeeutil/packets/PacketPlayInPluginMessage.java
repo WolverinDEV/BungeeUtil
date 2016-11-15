@@ -5,18 +5,15 @@ import dev.wolveringer.bungeeutil.packets.types.PacketPlayIn;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
-import io.netty.buffer.Unpooled;
 import lombok.NoArgsConstructor;
 import org.jsoup.helper.Validate;
 
-@SuppressWarnings("Duplicates")
 @NoArgsConstructor
 public class PacketPlayInPluginMessage extends Packet implements PacketPlayIn{
 	private String channel;
 	private ByteBuf data;
 	private ByteBufOutputStream os;
 	private ByteBufInputStream is;
-//	private int length = -1;
 
 	@Override
 	public void read(PacketDataSerializer s) {
@@ -33,10 +30,7 @@ public class PacketPlayInPluginMessage extends Packet implements PacketPlayIn{
 			s.readerIndex(readerIndex);
 		}
 		Validate.isTrue(s.readableBytes() == s.writerIndex() - s.readerIndex(), "bytebuf has drunk: " + s.readableBytes() + " " + (s.writerIndex() - s.readerIndex()));
-//		length = s.readableBytes();
 		data = s.readBytes(s.readableBytes());
-//		data = Unpooled.buffer(length);
-//		s.readBytes(data, length);
 	}
 
 	@Override

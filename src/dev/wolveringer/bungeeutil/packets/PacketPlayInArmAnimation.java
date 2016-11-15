@@ -3,7 +3,6 @@ package dev.wolveringer.bungeeutil.packets;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayIn;
 import dev.wolveringer.bungeeutil.player.HandType;
-import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
 
 public class PacketPlayInArmAnimation extends Packet implements PacketPlayIn {
 	private int id;
@@ -15,23 +14,42 @@ public class PacketPlayInArmAnimation extends Packet implements PacketPlayIn {
 	
 	@Override
 	public void read(PacketDataSerializer s) {
-		if(getBigVersion() == BigClientVersion.v1_7){
+		switch (getBigVersion()) {
+		case v1_7:
 			this.id = s.readInt();
 			this.type = s.readByte();
-		}else if(getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10)
+			break;
+		case v1_8:
+			type = 0;
+			break;
+		case v1_9:
+		case v1_10:
+		case v1_11:
 			this.type = s.readVarInt();
-		else
-			this.type = 0;
+			break;
+		default:
+			break;
+		}
 	}
 
 	@Override
 	public void write(PacketDataSerializer s) {
-		if(getBigVersion() == BigClientVersion.v1_7){
+		switch (getBigVersion()) {
+		case v1_7:
 			s.writeInt(id);
 			s.writeByte(type);
-		}
-		else if(getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10)
+			break;
+		case v1_8:
+			type = 0;
+			break;
+		case v1_9:
+		case v1_10:
+		case v1_11:
 			s.writeVarInt(type);
+			break;
+		default:
+			break;
+		}
 	}
 	
 	public HandType getArmType() {

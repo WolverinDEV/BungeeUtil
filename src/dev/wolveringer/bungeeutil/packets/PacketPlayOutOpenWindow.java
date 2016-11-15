@@ -2,8 +2,9 @@ package dev.wolveringer.bungeeutil.packets;
 
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
-import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class PacketPlayOutOpenWindow extends Packet implements PacketPlayOut {
 	private int horesID;
 	private boolean horse;
@@ -12,10 +13,6 @@ public class PacketPlayOutOpenWindow extends Packet implements PacketPlayOut {
 	private int slots;
 	private String type;
 	public boolean UTF_8 = false;
-	
-	public PacketPlayOutOpenWindow() {
-		super(0x2D);
-	}
 	
 	public PacketPlayOutOpenWindow(int id, String type, String name, int slots, boolean ishorse) {
 		super(0x2D);

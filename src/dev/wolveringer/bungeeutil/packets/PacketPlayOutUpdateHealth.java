@@ -2,24 +2,18 @@ package dev.wolveringer.bungeeutil.packets;
 
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
-import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 public class PacketPlayOutUpdateHealth extends Packet implements PacketPlayOut{
 
-	float health;
-	int food;
-	float food_indicase;
-	
-	public PacketPlayOutUpdateHealth(float health, int food, float food_indicase) {
-		this();
-		this.health = health;
-		this.food = food;
-		this.food_indicase = food_indicase;
-	}
-	
-	public PacketPlayOutUpdateHealth() {
-		super(0x06);
-	}
+	private float health;
+	private int food;
+	private float food_indicase;
 
 	@Override
 	public void read(PacketDataSerializer s) {

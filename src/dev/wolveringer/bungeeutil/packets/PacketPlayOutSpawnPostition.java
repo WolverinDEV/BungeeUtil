@@ -3,16 +3,17 @@ package dev.wolveringer.bungeeutil.packets;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.position.BlockPosition;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class PacketPlayOutSpawnPostition extends Packet implements PacketPlayOut{
-	BlockPosition loc;
-	public PacketPlayOutSpawnPostition() {
-		super(0x05);
-	}
-	public PacketPlayOutSpawnPostition(BlockPosition loc) {
-		super(0x05);
-		this.loc = loc;
-	}
+	private BlockPosition loc;
 	@Override
 	public void read(PacketDataSerializer s) {
 		loc = s.readBlockPosition();
@@ -20,8 +21,5 @@ public class PacketPlayOutSpawnPostition extends Packet implements PacketPlayOut
 	@Override
 	public void write(PacketDataSerializer s) {
 		s.writeBlockPosition(loc);
-	}
-	public BlockPosition getLocation() {
-		return loc;
 	}
 }

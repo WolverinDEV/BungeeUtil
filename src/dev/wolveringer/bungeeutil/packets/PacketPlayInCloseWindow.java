@@ -2,27 +2,24 @@ package dev.wolveringer.bungeeutil.packets;
 
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayIn;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class PacketPlayInCloseWindow extends Packet implements PacketPlayIn {
-
 	private int window;
 
-	public PacketPlayInCloseWindow() {
-		super(0x0D);
-	}
-
-	public int getWindow() {
-		return window;
-	}
 
 	@Override
 	public void read(PacketDataSerializer packetdataserializer) {
 		this.window = packetdataserializer.readByte();
 	}
 
-	public void setWindow(int window) {
-		this.window = window;
-	}
 
 	@Override
 	public void write(PacketDataSerializer packetdataserializer) {

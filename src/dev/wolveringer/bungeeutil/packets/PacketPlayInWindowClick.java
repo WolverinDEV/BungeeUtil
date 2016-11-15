@@ -3,7 +3,9 @@ package dev.wolveringer.bungeeutil.packets;
 import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayIn;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class PacketPlayInWindowClick extends Packet implements PacketPlayIn {
 
 	public static class Mode {
@@ -79,10 +81,6 @@ public class PacketPlayInWindowClick extends Packet implements PacketPlayIn {
 	private int mode = 0;
 	private int slot;
 	private int window;
-
-	public PacketPlayInWindowClick() {
-		super(0x0E);
-	}
 
 	@Override
 	public String toString() {

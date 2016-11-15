@@ -2,15 +2,15 @@ package dev.wolveringer.bungeeutil.packets;
 
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketPlayOutSetExperience extends Packet implements PacketPlayOut{
-	float exp;
-	int level;
-	int total;
-	
-	public PacketPlayOutSetExperience() {
-		super(0x1F);
-	}
+	private float exp;
+	private int level;
+	private int total;
 	
 	@Override
 	public void read(PacketDataSerializer s) {

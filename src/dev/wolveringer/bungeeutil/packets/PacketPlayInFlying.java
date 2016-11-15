@@ -3,21 +3,15 @@ package dev.wolveringer.bungeeutil.packets;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayIn;
 import dev.wolveringer.bungeeutil.position.Location;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class PacketPlayInFlying extends Packet implements PacketPlayIn {
 	protected boolean onground;
 	protected boolean hasLook = false;
 	protected boolean hasPos = false;
 	protected Location loc = new Location(0, 0, 0);
 	protected double stance;
-
-	public PacketPlayInFlying() {
-		super(-1);
-	}
-
-	public PacketPlayInFlying(int i) {
-		super(i);
-	}
 
 	public void setLocation(Location loc) {
 		if(loc.getYaw() != 0 || loc.getPitch() != 0)

@@ -162,7 +162,6 @@ public abstract class IInitialHandler extends InitialHandler {
 	public void resetClient() {
 		for (int i = 1; i < 24; i++)
 			sendPacket(new PacketPlayOutRemoveEntityEffect(getEntityId(), i));
-		sendPacket(new PacketPlayOutPosition(getPlayer().getLocation().add(0, 10000, 0), true));
 		sendPacket(new PacketPlayOutEntityEffect(getEntityId(), 15, 1, 100000, true));
 		sendPacket(new PacketPlayOutGameStateChange(3, 0));
 		sendPacket(new PacketPlayOutUpdateHealth(20F, 20, 0F));

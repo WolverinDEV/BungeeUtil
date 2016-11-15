@@ -3,16 +3,18 @@ package dev.wolveringer.bungeeutil.packets;
 import dev.wolveringer.bungeeutil.ByteString;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketPlayOutPlayerListHeaderFooter extends Packet implements PacketPlayOut {
 	private ByteString header;
 	private ByteString footer;
 
-	public PacketPlayOutPlayerListHeaderFooter() { }
-	
 	public PacketPlayOutPlayerListHeaderFooter(String header,String footer) {
 		setHeader(TextComponent.fromLegacyText(header));
 		setFooter(TextComponent.fromLegacyText(footer));

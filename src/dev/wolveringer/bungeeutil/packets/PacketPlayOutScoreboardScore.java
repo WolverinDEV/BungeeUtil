@@ -2,8 +2,11 @@ package dev.wolveringer.bungeeutil.packets;
 
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
-import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketPlayOutScoreboardScore extends Packet implements PacketPlayOut{
 
 	public static enum Action {
@@ -24,55 +27,42 @@ public class PacketPlayOutScoreboardScore extends Packet implements PacketPlayOu
 		}
 	}
 	
-	
-	public PacketPlayOutScoreboardScore(String name, String obj_name, int value, Action action) {
-		this();
-		this.name = name;
-		this.string_name = obj_name;
-		this.value = value;
-		this.action = action;
-	}
-
-	public PacketPlayOutScoreboardScore() {
-		super(0x3C);
-	}
-	
-	String name;
-	String string_name;
-	int value;
-	Action action;
+	private String objectiveName;
+	private String scoreName;
+	private int value;
+	private Action action;
 	
 	@Override
 	public void read(PacketDataSerializer s) {
-		name = s.readString(-1);
+		objectiveName = s.readString(-1);
 		action = Action.fromInt(s.readByte());
-		string_name = s.readString(-1);
+		scoreName = s.readString(-1);
 		if(action.i == 0) value = PacketDataSerializer.readVarInt(s);
 	}
 
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeString(name);
+		s.writeString(objectiveName);
 		s.writeByte(action.i);
-		s.writeString(string_name);
+		s.writeString(scoreName);
 		if(action.i == 0) PacketDataSerializer.writeVarInt(value, s);
 		
 	}
 
 	public String getObjektiveName() {
-		return name;
+		return objectiveName;
 	}
 
 	public void setObjektiveName(String name) {
-		this.name = name;
+		this.objectiveName = name;
 	}
 
 	public String getScoreName() {
-		return string_name;
+		return scoreName;
 	}
 
 	public void setScoreName(String obj_name) {
-		this.string_name = obj_name;
+		this.scoreName = obj_name;
 	}
 
 	public int getValue() {

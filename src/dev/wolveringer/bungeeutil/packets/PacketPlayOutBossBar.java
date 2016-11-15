@@ -4,9 +4,12 @@ import java.util.UUID;
 
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
-import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import net.md_5.bungee.api.chat.BaseComponent;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketPlayOutBossBar extends Packet implements PacketPlayOut{
 	public static enum Action {
 		CREATE,
@@ -48,8 +51,6 @@ public class PacketPlayOutBossBar extends Packet implements PacketPlayOut{
 	@SuppressWarnings("incomplete-switch")
 	@Override
 	public void read(PacketDataSerializer s) {
-		if(getBigVersion() == BigClientVersion.v1_8)
-			throw new RuntimeException("BossBar packet is 1.9-1.10 only!");
 		barId = s.readUUID();
 		int action = s.readVarInt();
 		if(action >= Action.values().length){
@@ -84,8 +85,6 @@ public class PacketPlayOutBossBar extends Packet implements PacketPlayOut{
 
 	@Override
 	public void write(PacketDataSerializer s) {
-		if(getBigVersion() == BigClientVersion.v1_8)
-			throw new RuntimeException("BossBar packet is 1.9-1.10 only!");
 		s.writeUUID(barId);
 		s.writeVarInt(action.ordinal());
 		switch (action) {

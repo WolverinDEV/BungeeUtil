@@ -4,12 +4,12 @@ import java.util.HashMap;
 
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@Getter
 public class PacketPlayOutStatistic extends Packet implements PacketPlayOut{
-
-	public PacketPlayOutStatistic() {
-		super(0x37);
-	}
 
 	private HashMap<String, Integer> stats = new HashMap<String, Integer>();
 	private int x = -2;

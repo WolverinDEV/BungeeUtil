@@ -5,30 +5,23 @@ import java.util.List;
 import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketPlayOutWindowItems extends Packet implements PacketPlayOut {
 	private int window;
 	private Item[] items;
 
-	public PacketPlayOutWindowItems() {
-		super(0x30);
-	}
-
 	public PacketPlayOutWindowItems(int window, List<Item> list) {
-		super(0x30);
 		this.window = window;
 		this.items = new Item[list.size()];
 		for(int i = 0;i < this.items.length;++i){
 			this.items[i] = list.get(i);
 		}
 	}
-
-	public PacketPlayOutWindowItems(int i, Item... items) {
-		super(0x30);
-		this.window = i;
-		this.items = items;
-	}
-
+	
 	@Override
 	public void read(PacketDataSerializer s) {
 		this.window = s.readUnsignedByte();

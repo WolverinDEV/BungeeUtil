@@ -2,25 +2,17 @@ package dev.wolveringer.bungeeutil.packets;
 
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketPlayOutWindowData extends Packet implements PacketPlayOut{
 	
 	private int window;
 	private short action;
 	private short value;
 	
-	public PacketPlayOutWindowData() {
-		super(0x31);
-	}
-	
-	
-	
-	public PacketPlayOutWindowData(int window, short action, short value) {
-		super(0x31);
-		this.window = window;
-		this.action = action;
-		this.value = value;
-	}
 
 	@Override
 	public void read(PacketDataSerializer s) {

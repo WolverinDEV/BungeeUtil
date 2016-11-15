@@ -2,7 +2,13 @@ package dev.wolveringer.bungeeutil.packets;
 
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 public class PacketPlayOutScoreboardDisplayObjective extends Packet implements PacketPlayOut{
 	public static enum Position {
 		LIST(0),
@@ -23,34 +29,17 @@ public class PacketPlayOutScoreboardDisplayObjective extends Packet implements P
 			return i;
 		}
 	}
-	String name;
-	Position p;
-	
-	public PacketPlayOutScoreboardDisplayObjective() {
-		super(0x3D);
-	}
-	
-	public PacketPlayOutScoreboardDisplayObjective(String name,Position p) {
-		this();
-		this.name = name;
-		this.p = p;
-	}
+	private String name;
+	private Position position;
 	
 	@Override
 	public void read(PacketDataSerializer s) {
-		p = Position.getPosition(s.readByte());
+		position = Position.getPosition(s.readByte());
 		name = s.readString(-1);
 	}
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeByte(p.i);
+		s.writeByte(position.i);
 		s.writeString(name);
-	}
-	
-	public String getName() {
-		return this.name;
-	}
-	public Position getPosition() {
-		return this.p;
 	}
 }

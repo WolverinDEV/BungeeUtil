@@ -2,8 +2,13 @@ package dev.wolveringer.bungeeutil.packets;
 
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
-import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
 public class PacketPlayOutEntityEffect extends Packet implements PacketPlayOut {
 	
 	int entity;
@@ -11,43 +16,54 @@ public class PacketPlayOutEntityEffect extends Packet implements PacketPlayOut {
 	int amplifier;
 	int duration;
 	boolean hidden = false;
-	
-	public PacketPlayOutEntityEffect(int entity, int effect, int amplifier, int duration, boolean hidden) {
-		this();
-		this.entity = entity;
-		this.effect = effect;
-		this.amplifier = amplifier;
-		this.duration = duration;
-		this.hidden = hidden;
-	}
-	
-	public PacketPlayOutEntityEffect() {
-		super(0x1D);
-	}
+
 	
 	@Override
 	public void read(PacketDataSerializer s) {
-		entity = getVersion().getBigVersion() == BigClientVersion.v1_7 ? s.readInt() : s.readVarInt();
-		effect = s.readByte();
-		amplifier = s.readByte();
-		duration = getVersion().getBigVersion() == BigClientVersion.v1_7 ? s.readShort() : s.readVarInt();
-		hidden = getVersion().getBigVersion() == BigClientVersion.v1_8 ? s.readBoolean() : (getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10) ? s.readByte() == 1 : false;
+		switch (getBigVersion()) {
+		case v1_11:
+		case v1_10:
+		case v1_9:
+		case v1_8:
+			entity = s.readVarInt();
+			effect = s.readByte();
+			amplifier = s.readByte();
+			duration = s.readVarInt();
+			hidden = s.readBoolean(); //Aka s.readByte() == 1
+			break;
+		case v1_7:
+			entity = s.readInt();
+			effect = s.readByte();
+			amplifier = s.readByte();
+			duration = s.readShort();
+			hidden = false;
+			break;
+		default:
+			break;
+		}
 	}
 	
 	public void write(PacketDataSerializer s) {
-		if (getVersion().getBigVersion() == BigClientVersion.v1_8 || getVersion().getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10) {
+		switch (getBigVersion()) {
+		case v1_11:
+		case v1_10:
+		case v1_9:
+		case v1_8:
 			s.writeVarInt(entity);
 			s.writeByte(effect);
 			s.writeByte(amplifier);
 			s.writeVarInt(duration);
-			if (getBigVersion() == BigClientVersion.v1_8) s.writeBoolean(hidden);
-			else if (getBigVersion() == BigClientVersion.v1_9 || getBigVersion() == BigClientVersion.v1_10) s.writeByte(hidden == true ? 1 : 0);
-		}
-		else if (getVersion().getBigVersion() == BigClientVersion.v1_7) {
+			s.writeBoolean(hidden);
+			break;
+		case v1_7:
 			s.writeInt(entity);
 			s.writeByte(effect);
 			s.writeByte(amplifier);
 			s.writeShort(duration);
+			hidden = false;
+			break;
+		default:
+			break;
 		}
 	}
 	

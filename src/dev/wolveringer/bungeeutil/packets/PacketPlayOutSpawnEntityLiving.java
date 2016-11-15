@@ -5,7 +5,9 @@ import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.position.Location;
 import dev.wolveringer.bungeeutil.position.Vector;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class PacketPlayOutSpawnEntityLiving extends BetaPacket implements PacketPlayOut{
 	private byte type;
 	private Location location;
@@ -16,7 +18,6 @@ public class PacketPlayOutSpawnEntityLiving extends BetaPacket implements Packet
 	private int id;
 	private DataWatcher meta;
 	public PacketPlayOutSpawnEntityLiving(byte type, Location location, int yaw, int pitch, int headRotation, Vector vector) {
-		this();
 		this.type = type;
 		this.location = location;
 		this.yaw = yaw;
@@ -25,9 +26,6 @@ public class PacketPlayOutSpawnEntityLiving extends BetaPacket implements Packet
 		this.vector = vector;
 	}
 
-	public PacketPlayOutSpawnEntityLiving() {
-		super(0x0F);
-	}
 	
 	@Override
 	public void read(PacketDataSerializer s) {

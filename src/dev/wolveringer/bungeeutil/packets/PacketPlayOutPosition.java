@@ -4,21 +4,17 @@ import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
 import dev.wolveringer.bungeeutil.position.Location;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketPlayOutPosition extends Packet implements PacketPlayOut{
 	private boolean ground;
 	private Location loc;
 	private byte flag;
 	private int teleportId;
 	
-	public PacketPlayOutPosition() {
-		super((byte) 0x08);
-	}
-
-	public PacketPlayOutPosition(Location loc, boolean b) {
-		super((byte) 0x08);
-		this.loc = loc;
-		this.ground = b;
-	}
 
 	public Location getLocation() {
 		return loc;
@@ -43,7 +39,7 @@ public class PacketPlayOutPosition extends Packet implements PacketPlayOut{
 	public void read(PacketDataSerializer s) {
 		loc = new Location(s.readDouble(), s.readDouble(), s.readDouble(), s.readFloat(), s.readFloat());
 		flag = (byte) s.readUnsignedByte();
-		if(getVersion().getBigVersion() == BigClientVersion.v1_9  || getBigVersion() == BigClientVersion.v1_10)
+		if(getVersion().getBigVersion() != BigClientVersion.v1_8)
 			teleportId = s.readVarInt();
 	}
 
@@ -59,7 +55,7 @@ public class PacketPlayOutPosition extends Packet implements PacketPlayOut{
 		s.writeFloat(loc.getYaw());
 		s.writeFloat(loc.getPitch());
 		s.writeByte(flag);
-		if(getVersion().getBigVersion() == BigClientVersion.v1_9  || getBigVersion() == BigClientVersion.v1_10)
+		if(getVersion().getBigVersion() != BigClientVersion.v1_8)
 			s.writeVarInt(teleportId);
 	}
 

@@ -2,23 +2,17 @@ package dev.wolveringer.bungeeutil.packets;
 
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class PacketPlayOutTransaction extends Packet implements PacketPlayOut{
 
 	private int window;
 	private short id;
 	private boolean cancel;
 
-	public PacketPlayOutTransaction() {
-		super(0x32);
-	}
-
-	public PacketPlayOutTransaction(int window, short id, boolean flag) {
-		super(0x32);
-		this.window = window;
-		this.id = id;
-		this.cancel = flag;
-	}
 
 	public void read(PacketDataSerializer packetdataserializer) {
 		this.window = packetdataserializer.readUnsignedByte();

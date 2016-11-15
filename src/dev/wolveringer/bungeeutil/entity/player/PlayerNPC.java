@@ -138,7 +138,7 @@ public final class PlayerNPC {
 	public void setLocation(Location location) {
 		this.location = location;
 		rebuild();
-		broadcastPacket(new PacketPlayOutEntityTeleport(ID, location));
+		broadcastPacket(new PacketPlayOutEntityTeleport(location, ID, false));
 		broadcastPacket(new PacketPlayOutEntityHeadRotation(ID, location.getYaw()));
 	}
 	

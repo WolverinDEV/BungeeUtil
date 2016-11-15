@@ -3,10 +3,10 @@ package dev.wolveringer.bungeeutil.packets;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
 import dev.wolveringer.bungeeutil.position.Location;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class PacketPlayInPositionLook extends PacketPlayInPosition {
-	
-	public PacketPlayInPositionLook() {}
 	
 	@Override
 	public void read(PacketDataSerializer s) {

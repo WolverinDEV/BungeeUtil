@@ -37,6 +37,7 @@ public class PacketPlayOutChat extends BetaPacket implements PacketPlayOut {
 	public void read(PacketDataSerializer s) {
 		rawMessage = s.readStringBytes();
 		switch (getBigVersion()) {
+		case v1_11:
 		case v1_10:
 		case v1_9:
 		case v1_8:
@@ -55,6 +56,7 @@ public class PacketPlayOutChat extends BetaPacket implements PacketPlayOut {
 	public void write(PacketDataSerializer s) {
 		s.writeStringBytes(rawMessage);
 		switch (getBigVersion()) {
+		case v1_11:
 		case v1_10:
 		case v1_9:
 		case v1_8:
