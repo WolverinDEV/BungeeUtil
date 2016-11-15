@@ -1,13 +1,17 @@
 package dev.wolveringer.bungeeutil.inventory;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.item.ItemStack;
 import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutSetSlot;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.player.Player;
+import lombok.Getter;
+import lombok.Setter;
 import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
 
 public final class PlayerInventory {
@@ -31,6 +35,11 @@ public final class PlayerInventory {
 	private ArrayList<Player> viewer = new ArrayList<Player>();
 	private int ID;
 	private Player player;
+	@Getter
+	@Setter
+	private int dragMode = -1;
+	@Getter
+	private List<Integer> dragSlots = new ArrayList<>();
 	public PlayerInventory(Player player,int ID, String name) {
 		this.name = name;
 		this.ID = ID;
@@ -76,7 +85,7 @@ public final class PlayerInventory {
 	}
 
 	public void setItem(int slot, Item is) {
-		items.set(slot, is);
+		setItemNonUpdating(slot, is);
 		/*
 		if(player.isInventoryOpened()){
 			if(slot > 8){
@@ -88,6 +97,11 @@ public final class PlayerInventory {
 		broadcast(new PacketPlayOutSetSlot(is, ID, slot));
 	}
 
+	public void setItemNonUpdating(int slot, Item is) {
+		BungeeUtil.debug("Changing item in slot "+slot+" from "+getItem(slot)+" to "+is);
+		items.set(slot, is);
+	}
+	
 	public ArrayList<Player> getViewer() {
 		return viewer;
 	}

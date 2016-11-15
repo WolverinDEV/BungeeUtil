@@ -14,6 +14,7 @@ import dev.wolveringer.bungeeutil.cache.CachedHashMap;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
 import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.item.ItemStack;
+import dev.wolveringer.bungeeutil.item.Material;
 import dev.wolveringer.bungeeutil.item.ItemStack.Click;
 import dev.wolveringer.bungeeutil.item.ItemStack.InteractType;
 import dev.wolveringer.bungeeutil.item.meta.CraftItemMeta;
@@ -74,30 +75,159 @@ public class MainPacketHandler {
 		if (pack instanceof PacketPlayInWindowClick) {
 			Profiler.packet_handle.start("handleWindowClick");
 			final PacketPlayInWindowClick pl = (PacketPlayInWindowClick) pack;
+			
+			byte mode = (byte) ((pl.getMode() >> 4) & 0xF);
+			byte button = (byte) (pl.getMode()  & 0xF);
+			BungeeUtil.debug("Having packet click. Window: "+pl.getWindow()+" Slot: "+pl.getSlot()+" Mode: "+ mode +" Button: "+button);
 			player.getInitialHandler().setWindow((short) pl.getWindow());
 			player.getInitialHandler().setTransaktionId(pl.getActionNumber());
 			if(pl.getWindow() == 0){
-				if(pl.getSlot() < 0 || pl.getSlot() > 50)
-					return true;
-				Item item = player.getPlayerInventory().getItem(pl.getSlot());
-				if(item instanceof ItemStack){
-					ItemStack is = (ItemStack) item;
-					BungeeUtil.debug("Player itemstack "+is+" at slot "+pl.getSlot()+" clicked.");
-					e.setCancelled(true);
-					player.sendPacket(new PacketPlayOutTransaction(Inventory.ID, pl.getActionNumber(), false));
-					player.sendPacket(new PacketPlayOutSetSlot(null, -1, 0));
-					player.updateInventory();
-					
-					boolean sync = ((CraftItemMeta)is.getItemMeta()).isClickSync() || Configuration.isSyncInventoryClickActive();
-					handleItemClick(player,is,new Click(player, pl.getSlot(), player.getInventoryView(), pl.getItem(), pl.getMode(), sync),sync,false, new Callback<Click>(){
-						@Override
-						public void done(Click c, Throwable arg1) {
-							if(!c.isCancelled())
-								player.getInitialHandler().sendPacketToServer(pl);
-						}
-					});
-					return false;
+				if(pl.getSlot() >= 0 && pl.getSlot() <= 47){
+					Item item = player.getPlayerInventory().getItem(pl.getSlot());
+					if(item instanceof ItemStack){
+						ItemStack is = (ItemStack) item;
+						BungeeUtil.debug("Player itemstack "+is+" at slot "+pl.getSlot()+" clicked.");
+						e.setCancelled(true);
+						player.sendPacket(new PacketPlayOutTransaction(Inventory.ID, pl.getActionNumber(), false));
+						player.sendPacket(new PacketPlayOutSetSlot(null, -1, 0));
+						player.updateInventory();
+						
+						boolean sync = ((CraftItemMeta)is.getItemMeta()).isClickSync() || Configuration.isSyncInventoryClickActive();
+						handleItemClick(player,is,new Click(player, pl.getSlot(), player.getInventoryView(), pl.getItem(), pl.getMode(), sync),sync,false, new Callback<Click>(){
+							@Override
+							public void done(Click c, Throwable arg1) {
+								if(!c.isCancelled())
+									player.getInitialHandler().sendPacketToServer(pl);
+							}
+						});
+						return false;
+					}
 				}
+				
+				
+				if(mode == 0){
+					if(pl.getSlot() == -999){
+						if(player.getCursorItem() == null){
+							BungeeUtil.debug("Changing inv with null cursor item");
+							return false;
+						}
+						if(button == 0){
+							player.setCursorItem(null); //Drop full stack
+						} else if(button == 1){
+							player.getCursorItem().setAmount(player.getCursorItem().getAmount()-1);
+							if(player.getCursorItem().getAmount() <= 0)
+								player.setCursorItem(null);
+						}
+					}
+					else {
+						if(button == 0){
+							Item slotItem = player.getPlayerInventory().getItem(pl.getSlot());
+							player.getPlayerInventory().setItemNonUpdating(pl.getSlot(), player.getCursorItem());
+							player.setCursorItem(slotItem);
+						} else if(button == 1){
+							if(player.getCursorItem() == null){
+								Item slotItem = player.getPlayerInventory().getItem(pl.getSlot());
+								if(slotItem == null)
+									return false;
+								int restCount = (int) slotItem.getAmount()/2;
+								int pickupCount = slotItem.getAmount()-restCount;
+								if(restCount > 0)
+									slotItem.setAmount(restCount);
+								else
+									player.getPlayerInventory().setItemNonUpdating(pl.getSlot(), null);
+								
+								Item cursor = new Item(slotItem);
+								cursor.setAmount(pickupCount);
+								player.setCursorItem(cursor);
+							} else {
+								Item slotItem = player.getPlayerInventory().getItem(pl.getSlot());
+								Item cursor = player.getCursorItem();
+								if(slotItem == null){
+									slotItem = new Item(player.getCursorItem());
+								}
+								if(slotItem.isSimilar(player.getCursorItem())){
+									slotItem.setAmount(slotItem.getAmount()+1);
+									if(slotItem.getAmount() == 1)
+										player.getPlayerInventory().setItemNonUpdating(pl.getSlot(), slotItem);
+									cursor.setAmount(cursor.getAmount()-1);
+									if(cursor.getAmount() <= 0)
+										player.setCursorItem(null);
+								}
+								else {
+									player.getPlayerInventory().setItemNonUpdating(pl.getSlot(), player.getCursorItem());
+									player.setCursorItem(slotItem);
+								}
+							}
+						}
+					}
+				} else if(mode == 1){
+					//TODO handle item move
+				} else if(mode == 2){
+					int cursorSlot = 36 + button;
+					Item pickedSlot = player.getPlayerInventory().getItem(pl.getSlot());
+					player.getPlayerInventory().setItemNonUpdating(pl.getSlot(), player.getPlayerInventory().getItem(cursorSlot));
+					player.getPlayerInventory().setItemNonUpdating(cursorSlot, pickedSlot);
+				} else if(mode == 3){  //Only on creative i think :D
+				} else if(mode == 4){
+					if(button == 0){
+						if(pl.getSlot() == -999){
+							BungeeUtil.debug("Invalid window click mode!");
+							return false;
+						}
+						Item slotItem = player.getPlayerInventory().getItem(pl.getSlot());
+						if(slotItem == null)
+							return false;
+						slotItem.setAmount(slotItem.getAmount()-1);
+						if(slotItem.getAmount() <= 0)
+							player.getPlayerInventory().setItem(pl.getSlot(), null);
+					} else if(button == 1){
+						player.getPlayerInventory().setItem(pl.getSlot(), null);
+					}
+				} else if(mode == 5){
+					if(button == 0){
+						player.getPlayerInventory().setDragMode(0);
+						player.getPlayerInventory().getDragSlots().clear();
+					} else if(button == 4){
+						player.getPlayerInventory().setDragMode(1);
+						player.getPlayerInventory().getDragSlots().clear();
+					} else if(button == 2 || button == 6){
+						player.getPlayerInventory().setDragMode(-1);
+						if(button == 6){
+							if(player.getCursorItem().getAmount()-player.getPlayerInventory().getDragSlots().size() == 0){ //Server will update inv if cursor item != 0
+								for(Integer slot : player.getPlayerInventory().getDragSlots()){
+									Item sitem = player.getPlayerInventory().getItem(slot);
+									if(sitem == null){
+										sitem = new Item(player.getCursorItem());
+										sitem.setAmount(0);
+										player.getPlayerInventory().setItemNonUpdating(slot, sitem);
+									}
+									sitem.setAmount(sitem.getAmount()+1);
+								}
+								player.setCursorItem(null);
+							}
+						}
+						else if(button == 2){
+							if(player.getCursorItem().getAmount() % player.getPlayerInventory().getDragSlots().size() == 0){  //Server will update inv if cursor item != 0
+								int incCount = player.getCursorItem().getAmount() / player.getPlayerInventory().getDragSlots().size();
+								for(Integer slot : player.getPlayerInventory().getDragSlots()){
+									Item sitem = player.getPlayerInventory().getItem(slot);
+									if(sitem == null){ 
+										sitem = new Item(player.getCursorItem());
+										sitem.setAmount(0);
+										player.getPlayerInventory().setItemNonUpdating(slot, sitem);
+									}
+									sitem.setAmount(sitem.getAmount()+incCount);
+								}
+								player.setCursorItem(null);
+							}
+						}
+						player.getPlayerInventory().getDragSlots().clear();
+						
+					} else if(button == 1 || button == 5){
+						player.getPlayerInventory().getDragSlots().add(pl.getSlot());
+					}
+				}
+				
 				return false;
 			}
 			if (player.isInventoryOpened()) {
@@ -155,23 +285,25 @@ public class MainPacketHandler {
 				e.setCancelled(true);
 				return false;
 			}
+			if(player.getCursorItem() != null)
+				player.setCursorItem(null); //Cant have an cursor item with closed inv!
 		}
 		
 		handleSetSlot:
 		if (pack instanceof PacketPlayOutSetSlot) {
 			PacketPlayOutSetSlot pl = (PacketPlayOutSetSlot) pack;
 			if (pl.getWindow() == 0) {
-				BungeeUtil.debug("Setslot "+pl.getSlot());
+				BungeeUtil.debug("Setslot "+pl.getSlot()+" to "+pl.getItemStack()+" in window "+pl.getWindow());
 				if(pl.getItemStack() == null || pl.getItemStack().getTypeId() == 0) {
 					if(player.getPlayerInventory().getItem(pl.getSlot()) instanceof ItemStack){
 						pl.setItemStack(player.getPlayerInventory().getItem(pl.getSlot()));
 						break handleSetSlot;
 					}
 				}
-				player.getPlayerInventory().setItem(pl.getSlot(), pl.getItemStack());
+				player.getPlayerInventory().setItemNonUpdating(pl.getSlot(), pl.getItemStack());
 			}
 			else if(pl.getWindow() == -1){
-				player.getPlayerInventory().setItem(999, pl.getItemStack());
+				player.getPlayerInventory().setItemNonUpdating(999, pl.getItemStack());
 			}
 		}
 		
@@ -187,7 +319,7 @@ public class MainPacketHandler {
 							continue;
 						}
 					}
-					player.getPlayerInventory().setItem(i, _new);
+					player.getPlayerInventory().setItemNonUpdating(i, _new);
 				}
 			}
 			else { //Sots of inv - Player inventory
@@ -201,7 +333,7 @@ public class MainPacketHandler {
 							continue;
 						}
 					}
-					player.getPlayerInventory().setItem(i-base+9, _new);
+					player.getPlayerInventory().setItemNonUpdating(i-base+9, _new);
 				}
 			}
 		}
@@ -283,7 +415,7 @@ public class MainPacketHandler {
 				 cl.done(c, e);
 			List<StackTraceElement> le = new ArrayList<>();
 			le.addAll(Arrays.asList(ExceptionUtils.deleteDownward(e.getStackTrace(), ExceptionUtils.getCurrentMethodeIndex(e))));
-			le.add(new StackTraceElement("dev.wolveringer.BungeeUtil.PacketHandler."+player.getVersion().name(), "handleInventoryClickPacket"+(sync?"Sync":"Ansync"), null, -1));
+			le.add(new StackTraceElement("dev.wolveringer.bungeeUtil.packetlib.Handler_"+player.getVersion().name(), "handleInventoryClickPacket"+(sync?"Sync":"Async"), null, -1));
 			e.setStackTrace(le.toArray(new StackTraceElement[0]));
 			switch (Configuration.getHandleExceptionAction()) {
 			case DISCONNECT:
