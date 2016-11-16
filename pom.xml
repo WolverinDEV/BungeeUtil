@@ -135,7 +135,7 @@
 	</build>
 	<properties>
 		<bungeeyml.location>src/bungee.yml</bungeeyml.location>
-		<bungeecord.version>1.10-SNAPSHOT</bungeecord.version>
+		<bungeecord.version>1.11-SNAPSHOT</bungeecord.version>
 	</properties>
 	<dependencies>
 		<dependency>
