@@ -1,4 +1,4 @@
-##For what is a BungeeUntil?
+##For what is a BungeeUntil?##
 	BungeeUtil is a very big libary for packet handling and
 	a lots of cool stuff what you can do with Packets.
 	Okey what is this cool stuff? Well i think the
@@ -37,9 +37,9 @@
 	https://github.com/WolverinDEV/BungeeUtil/tree/jars/
 
 ##Compatibility for other Proxies:
-	Since the last update (BungeeUtil 1.6.10), BungeeUtil is compatible with Waterfall and FlexPipe (i think)
-	If you have more compatibility questions, than you can ask on my gitter channel
-	 (Click on the "get support" button on SpigotMC)
+	Since the last update (BungeeUtil 1.6.10), BungeeUtil is compatible with Waterfall
+	and FlexPipe (i think). If you have more compatibility questions,
+	than you can ask on my gitter channel (Click on the "get support" button on SpigotMC)
 
 ##BungeeUtil 2.0 (Informations for Developer):
 	I`m starting or better started a reordering of the packages in my plugin.
@@ -48,4 +48,5 @@
 	I also will not updating futures on the 1.0 version. I only will do some hot fixes.
 
 ##Donate:
-	Please [url=https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GLQVCUZDA8CB8]donate[/url] for me so i can buy some pizza and coffè to create more cool stuff :D
+	Please [url=https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GLQVCUZDA8CB8]donate[/url]
+	for me so i can buy some pizza and coffè to create more cool stuff :D
