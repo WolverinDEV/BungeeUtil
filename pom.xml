@@ -35,6 +35,12 @@
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
 		</repository>
 	</distributionManagement>
+		<repositories>
+		<repository>
+			<id>ossrh-snapshots</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</repository>
+	</repositories>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<resources>
@@ -166,7 +172,6 @@
 			<artifactId>jsoup</artifactId>
 			<version>1.9.2</version>
 		</dependency>
-		<!-- https://gitlab.com/WolverinDEV/TerminalUtils -->
 		<dependency>
 			<groupId>dev.wolveringer</groupId>
 			<artifactId>TerminalUtils</artifactId>
@@ -180,12 +185,12 @@
 		<dependency>
 			<groupId>dev.wolveringer.lib</groupId>
 			<artifactId>NBTTag</artifactId>
-			<version>1.2.1</version>
+			<version>1.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>dev.wolveringer</groupId>
 			<artifactId>YamlConfiguration</artifactId>
-			<version>1.2</version>
+			<version>1.2-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
