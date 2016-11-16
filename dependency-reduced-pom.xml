@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>dev.wolveringer</groupId>
   <artifactId>BungeeUtil</artifactId>
-  <version>2.0-SNAPSHOT</version>
+  <version>2.0</version>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -188,7 +188,16 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
-  <distributionManagement />
+  <distributionManagement>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+    </repository>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
   <properties>
     <bungeecord.version>1.10-SNAPSHOT</bungeecord.version>
     <bungeeyml.location>src/bungee.yml</bungeeyml.location>
