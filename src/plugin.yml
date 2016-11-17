@@ -1,6 +1,6 @@
 name: BungeeUtil
 version: -1
-main: dev.wolveringer.BungeeUtil.bukkit.BukkitMain
+main: dev.wolveringer.bungeeutil.plugin.bukkit.BukkitMain
 
 commands:
   BungeeTimings:

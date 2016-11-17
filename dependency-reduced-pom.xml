@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>dev.wolveringer</groupId>
   <artifactId>BungeeUtil</artifactId>
-  <version>1.6.10</version>
+  <version>2.0</version>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -19,8 +19,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.3</version>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
       <plugin>
@@ -72,6 +72,7 @@
               <artifactSet>
                 <excludes>
                   <exclude>io.netty:**</exclude>
+                  <exclude>net.md-5:**</exclude>
                 </excludes>
               </artifactSet>
             </configuration>
@@ -90,55 +91,9 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>2.8.1</version>
-        <configuration>
-          <altDeploymentRepository>local.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>com.github.github</groupId>
-        <artifactId>site-maven-plugin</artifactId>
-        <version>0.12</version>
-        <executions>
-          <execution>
-            <phase>deploy</phase>
-            <goals>
-              <goal>site</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <message>Uploading Maven artifacts for ${project.version}</message>
-          <noJekyll>true</noJekyll>
-          <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
-          <branch>refs/heads/mvn-repo</branch>
-          <includes>
-            <include>**/*</include>
-          </includes>
-          <repositoryName>BungeeUtil</repositoryName>
-          <repositoryOwner>WolverinDEV</repositoryOwner>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
   <profiles>
-    <profile>
-      <id>laptop-testdir</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-jar-plugin</artifactId>
-            <version>2.3.1</version>
-            <configuration>
-              <outputDirectory>/home/wolverindev/bungee/plugins/</outputDirectory>
-              <jarName>BungeeUtils</jarName>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
     <profile>
       <id>testdir</id>
       <build>
@@ -184,10 +139,6 @@
           <artifactId>bungeecord-protocol</artifactId>
           <groupId>net.md-5</groupId>
         </exclusion>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -228,10 +179,6 @@
           <artifactId>bungeecord-protocol</artifactId>
           <groupId>net.md-5</groupId>
         </exclusion>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -243,13 +190,15 @@
   </dependencies>
   <distributionManagement>
     <repository>
-      <id>local.repo</id>
-      <name>Temporary local repro</name>
-      <url>file://${project.build.directory}/mvn-repo</url>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
     </repository>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
   </distributionManagement>
   <properties>
-    <github.global.server>github</github.global.server>
     <bungeecord.version>1.10-SNAPSHOT</bungeecord.version>
     <bungeeyml.location>src/bungee.yml</bungeeyml.location>
   </properties>
