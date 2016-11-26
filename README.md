@@ -37,9 +37,9 @@
 	https://github.com/WolverinDEV/BungeeUtil/tree/jars/
 
 ##Compatibility for other Proxies:
-	Since the last update (BungeeUtil 1.6.10), BungeeUtil is compatible with Waterfall
-	and FlexPipe (i think). If you have more compatibility questions,
-	than you can ask on my gitter channel (Click on the "get support" button on SpigotMC)
+	Since the last update (BungeeUtil 1.6.10), BungeeUtil is compatible with Waterfall.
+	If you have more compatibility questions, then you can ask on my gitter channel
+	(Click on the "get support" button on SpigotMC)
 
 ##BungeeUtil 2.0 (Informations for Developer):
 	I`m starting or better started a reordering of the packages in my plugin.
