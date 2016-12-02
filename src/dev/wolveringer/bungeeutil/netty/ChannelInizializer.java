@@ -6,7 +6,10 @@ import io.netty.channel.ChannelInitializer;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+import javax.naming.OperationNotSupportedException;
+
 import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.netty.PipelineUtils;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
@@ -20,7 +23,7 @@ public abstract class ChannelInizializer extends ChannelInitializer<Channel> {
 	}
 	
 	public static void setChannelInitializer(ChannelInizializer init) {
-		BungeeUtil.getInstance().sendMessage("Set channel inizializer to "+init.getClass().getName());
+		BungeeUtil.getInstance().sendMessage(ChatColor.GREEN+"Set channel inizializer to "+init.getClass().getName());
 		ChannelInizializer.init = init;
 	}
 	
@@ -38,14 +41,15 @@ public abstract class ChannelInizializer extends ChannelInitializer<Channel> {
 			setStaticFinalValue(PipelineUtils.class.getDeclaredField("SERVER_CHILD"), new ChannelInizializer() {
 				@Override
 				public void initialize(Channel channel) throws Exception {
-					throw new NullPointerException();
+					throw new OperationNotSupportedException();
 				}
 			});
 		}
 		catch (Exception e) {
-			e.printStackTrace();
-			BungeeCord.getInstance().getConsole().sendMessage(ChatColorUtils.COLOR_CHAR+"e"+ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+ChatColorUtils.COLOR_CHAR+"7] "+ChatColorUtils.COLOR_CHAR+"cError while loading ProtocolLIB "+ChatColorUtils.COLOR_CHAR+"4Code: 002");
-			BungeeCord.getInstance().getConsole().sendMessage(ChatColorUtils.COLOR_CHAR+"e"+ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+ChatColorUtils.COLOR_CHAR+"7] "+ChatColorUtils.COLOR_CHAR+"cDisable ProtocolLIB");
+			BungeeUtil.debug(e);
+			BungeeCord.getInstance().getConsole().sendMessage(ChatColorUtils.COLOR_CHAR+"cAn error happend while loading the ChannelInizializer. Message: "+e.getMessage());
+			BungeeCord.getInstance().getConsole().sendMessage(ChatColorUtils.COLOR_CHAR+"cFor more details please enable the debug mode.");
+			BungeeCord.getInstance().getConsole().sendMessage(ChatColorUtils.COLOR_CHAR+"cDisabling ProtocolLIB");
 		}
 	}
 	

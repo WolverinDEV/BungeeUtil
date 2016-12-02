@@ -10,8 +10,6 @@ import java.util.Map.Entry;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.packets.Packet;
-import dev.wolveringer.bungeeutil.packets.PacketPlayInFlying;
-import dev.wolveringer.bungeeutil.packets.PacketPlayInPosition;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -56,17 +54,6 @@ public class PacketLib {
 			if (importance != other.importance)
 				return false;
 			return true;
-		}
-	}
-	
-	@Deprecated
-	public static void printListener(){
-		for(Entry<Class<? extends Packet>, ArrayList<PacketHandlerHolder>> e : handlers.entrySet()){
-			StringBuilder out = new StringBuilder();
-			for(PacketHandlerHolder h : e.getValue())
-				out.append(", "+h.getHandler().toString());
-			if( e.getValue().size() > 0)
-			System.out.print(e.getKey()+" -> "+out.toString().substring(2));
 		}
 	}
 	
@@ -145,7 +132,7 @@ public class PacketLib {
 				handlers.get(Packet.class).remove(h1);
 	}
 	
-	public static PacketHandleEvent handle(PacketHandleEvent e) {
+	public static PacketHandleEvent handlePacket(PacketHandleEvent e) {
 		Class<? extends Packet> c = e.getPacket().getClass();
 		for(PacketHandlerHolder h : new ArrayList<>(handlers.get(c)))
 			h.handler.handle(e);
@@ -171,17 +158,5 @@ public class PacketLib {
 						e.printStackTrace();
 					}
 		return Packet.class;
-	}
-	
-	public static void main(String[] args) {
-		PacketHandler handler = new PacketHandler<PacketPlayInFlying>() {
-			@Override
-			public void handle(PacketHandleEvent<PacketPlayInFlying> e) {
-				System.out.println("Handle "+e);
-			}
-		};
-		System.out.println("Type: "+getPacketType(handler));
-		addHandler(handler);
-		handle(new PacketHandleEvent(new PacketPlayInPosition(), null));
 	}
 }

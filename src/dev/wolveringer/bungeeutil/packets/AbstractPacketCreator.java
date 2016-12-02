@@ -2,7 +2,6 @@ package dev.wolveringer.bungeeutil.packets;
 
 import io.netty.buffer.ByteBuf;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,13 +51,13 @@ public abstract class AbstractPacketCreator {
 		return Direction.values()[size];
 	}
 
-	public Packet getPacket(ProtocollVersion version, Protocol s, Direction d, ByteBuf x, Player p) {
-		if (x.readableBytes() < 1)
+	public Packet getPacket(ProtocollVersion version, Protocol s, Direction d, ByteBuf buffer, Player p) {
+		if (buffer.readableBytes() < 1)
 			return null;
-		x.markReaderIndex().markWriterIndex();
-		Packet y = getPacket0(version, s, d, (int) x.readUnsignedByte(), x, p); // faster
-		x.resetReaderIndex().resetWriterIndex();
-		return y;
+		int readerIndex = buffer.readerIndex();
+		Packet packet = getPacket0(version, s, d, (int) buffer.readUnsignedByte(), buffer, p);
+		buffer.readerIndex(readerIndex);
+		return packet;
 	}
 
 	public void listPackets(CostumPrintStream out) {

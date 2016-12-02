@@ -39,7 +39,7 @@ public class WarpedChannelHandler extends HandlerBoss {
 
 	@Override
 	public void setHandler(PacketHandler handler) {
-		Preconditions.checkArgument(handler != null, "handler"); //$NON-NLS-1$
+		Preconditions.checkArgument(handler != null, "handler");
 		this.handler = handler;
 	}
 

@@ -54,13 +54,13 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 	@Setter
 	private IInitialHandler initHandler;
 	private Protocol prot;
-	private int version;
+	private int version = -1;
 	private ClientVersion clientVersion = ClientVersion.UnderknownVersion;
-	private Direction dir;
+	private Direction direction;
 
 	public WarpedMinecraftDecoder(Protocol protocol, boolean server, int protocolVersion, IInitialHandler i, Direction dir) {
 		super(protocol, server, protocolVersion);
-		this.dir = dir;
+		this.direction = dir;
 		this.initHandler = i;
 		this.setProtocolVersion(protocolVersion);
 	}
@@ -114,7 +114,7 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
 		if(initHandler == null){
 			super.decode(ctx, in, out);
-			System.out.println("Skipping decode()");
+			System.out.println("Missing inithandler in WarpedMinecraftDecoder instance ("+super.toString()+"; initHandler="+initHandler+")");
 			return;
 		}
 		Profiler.decoder_timings.start(Messages.getString("network.timings.decoder.read")); //$NON-NLS-1$
@@ -122,16 +122,13 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 			Packet packet = null;
 			try{
 				Profiler.decoder_timings.start(Messages.getString("network.timings.decoder.create.packet")); //$NON-NLS-1$
-				if(initHandler == null){
-					System.out.println("Connection == null");
-					return;
-				}
 				if(clientVersion == null){
+					System.out.println("Could not find the ClientVersion for the protocollversion "+version);
 					BungeeUtil.debug("Could not resolve ClientVersion for "+version+". Disconnecting client");
 					initHandler.disconnect("§cYour client versions isnt supported!");
 					return;
 				}
-				packet = Packet.getPacket(clientVersion.getProtocollVersion() ,getProtocol(), dir, in, initHandler.getPlayer());
+				packet = Packet.getPacket(clientVersion.getProtocollVersion() ,getProtocol(), direction, in, initHandler.getPlayer());
 				Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.create.packet")); //$NON-NLS-1$
 				if(packet == null){
 					Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.read")); //$NON-NLS-1$
@@ -142,7 +139,7 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 					if(!MainPacketHandler.handlePacket(e)){
 						Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.handle.intern")); //$NON-NLS-1$
 						Profiler.decoder_timings.start(Messages.getString("network.timings.decoder.handle.extern")); //$NON-NLS-1$
-						PacketLib.handle(e);
+						PacketLib.handlePacket(e);
 						Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.handle.extern")); //$NON-NLS-1$
 						if(!e.isCancelled()){
 							packet = e.getPacket();

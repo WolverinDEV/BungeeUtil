@@ -111,7 +111,7 @@ public class BungeeUtilChannelInizializer <T extends InitialHandler> extends Cha
 			BungeeCord.getInstance().stop();
 			return;
 		}
-		BungeeCord.getInstance().getPluginManager().unregisterListeners(BungeeUtil.getPluginInstance()); //TODO onley bungeeutil
+		BungeeCord.getInstance().getPluginManager().unregisterListeners(BungeeUtil.getPluginInstance());
 		BungeeUtil.getInstance().disable();
 		for (ProxiedPlayer p : BungeeCord.getInstance().getPlayers())
 			p.disconnect(""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"cBungeeUntil Class error");

@@ -174,8 +174,6 @@ public class AnvilGui {
 					for(AnvilGuiListener listener : new ArrayList<>(AnvilGui.this.listener))
 						listener.onClose(AnvilGui.this);
 					PacketLib.removeHandler(this);
-					System.out.println("Removing this. ("+this+"/"+")");
-					PacketLib.printListener();
 				}
 			}
 		}

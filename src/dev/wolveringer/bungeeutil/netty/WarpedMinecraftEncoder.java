@@ -42,41 +42,49 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 	}
 	@Override
 	protected void encode(ChannelHandlerContext ctx, DefinedPacket msg, ByteBuf out) throws Exception {
+		if(initHandler == null){
+			System.err.println("Try to send a DefinedPacket ("+msg.getClass().getName()+") over a WarpedMinecraftEncoder without a valid InitialHandler! Skipping packet handling.");
+			super.encode(ctx, msg, out);
+			return;
+		}
+		if(clientVersion == ClientVersion.UnderknownVersion){
+			super.encode(ctx, msg, out);
+			return;
+		}
+		
 		Profiler.encoder_timings.start(Messages.getString("network.timings.encoder.handle"));
 		if(msg instanceof LoginSuccess)
 			initHandler.isConnected = true;
-		ByteBuf in;
-		super.encode(ctx, msg, in = Unpooled.buffer());
+		
+		
+		ByteBuf encodedBuffer;
+		super.encode(ctx, msg, encodedBuffer = Unpooled.buffer());
 
 		Profiler.encoder_timings.start(Messages.getString("network.timings.encoder.create.packet"));
-		Packet packet = Packet.getPacket(clientVersion.getProtocollVersion(),protocoll, Direction.TO_CLIENT, in, initHandler.getPlayer());
+		Packet packet = Packet.getPacket(clientVersion.getProtocollVersion(),protocoll, Direction.TO_CLIENT, encodedBuffer, initHandler.getPlayer());
 		Profiler.encoder_timings.stop(Messages.getString("network.timings.encoder.create.packet"));
 		if(packet == null){
-			ByteBuffCreator.copy(in, out);
-			in.release();
+			ByteBuffCreator.copy(encodedBuffer, out);
+			encodedBuffer.release();
+			Profiler.encoder_timings.stop(Messages.getString("network.timings.encoder.handle"));
 			return;
 		}
-		in.release();
-		PacketHandleEvent e = new PacketHandleEvent(packet, initHandler.getPlayer());
+		encodedBuffer.release();
+		
+		
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		PacketHandleEvent<?> e = new PacketHandleEvent(packet, initHandler.getPlayer());
 		Profiler.encoder_timings.start(Messages.getString("network.timings.encoder.handle.intern"));
-		boolean intern = MainPacketHandler.handlePacket(e);
+		boolean cancelFromIntern = MainPacketHandler.handlePacket(e);
 		Profiler.encoder_timings.stop(Messages.getString("network.timings.encoder.handle.intern"));
-		if(!intern){
+		if(!cancelFromIntern){
 			Profiler.encoder_timings.start(Messages.getString("network.timings.encoder.handle.extern"));
-			PacketLib.handle(e);
+			PacketLib.handlePacket(e);
 			Profiler.encoder_timings.stop(Messages.getString("network.timings.encoder.handle.extern"));
 			if(!e.isCancelled()){
-				Profiler.encoder_timings.start(Messages.getString("network.timings.encoder.write.writeNewbyteBuff"));
-
-				e.getPacket().writeToByteBuff(out,ClientVersion.fromProtocoll(initHandler.getVersion())); //write direct to out
-				//ByteBuffCreator.copy(buf, out);
-				//buf.release();
-				
-				Profiler.encoder_timings.stop(Messages.getString("network.timings.encoder.write.writeNewbyteBuff"));
-			}
-			else
-			{
-				
+				Profiler.encoder_timings.start(Messages.getString("network.timings.encoder.write.writeNewByteBuff"));
+				e.getPacket().writeToByteBuff(out, ClientVersion.fromProtocoll(initHandler.getVersion()));
+				Profiler.encoder_timings.stop(Messages.getString("network.timings.encoder.write.writeNewByteBuff"));
 			}
 		}
 		Profiler.encoder_timings.stop(Messages.getString("network.timings.encoder.handle"));
@@ -91,5 +99,7 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 		super.setProtocolVersion(protocol);
 		this.version = protocol;
 		this.clientVersion = ClientVersion.fromProtocoll(protocol);
+		if(!this.clientVersion.getProtocollVersion().isSupported())
+			this.clientVersion = ClientVersion.UnderknownVersion; //Dont try to handle packies from a client with an unsupported protocol.
 	}
 }

@@ -105,7 +105,7 @@ public class WarpedChannelWrapper extends ChannelWrapper {
 	}
 
 	@Override
-	public void delayedClose(final Runnable runnable) {
+	public synchronized void delayedClose(final Runnable runnable) {
 		Preconditions.checkArgument(runnable != null, "runnable");
 
 		if (!closing) {
@@ -122,7 +122,6 @@ public class WarpedChannelWrapper extends ChannelWrapper {
 			// Sending the wrong disconnect packet whilst a protocol switch is in progress will crash it.
 			// Delay 500ms to ensure that the protocol switch (if any) has definitely taken place.
 			ch.eventLoop().schedule(new Runnable() {
-
 				@Override
 				public void run() {
 					try {
@@ -135,7 +134,7 @@ public class WarpedChannelWrapper extends ChannelWrapper {
 		}
 	}
 
-	public void close() {
+	public synchronized void close() {
 		if (!closed) {
 			closed = true;
 			ch.flush();
@@ -145,8 +144,6 @@ public class WarpedChannelWrapper extends ChannelWrapper {
 
 	public void addBefore(String baseName, String name, ChannelHandler handler) {
 		try {
-			if (!ch.eventLoop().inEventLoop())
-				this.handler.disconnect("Error");
 			Preconditions.checkState(ch.eventLoop().inEventLoop(), "cannot add handler outside of event loop");
 			ch.pipeline().flush();
 			ch.pipeline().addBefore(baseName, name, handler);
