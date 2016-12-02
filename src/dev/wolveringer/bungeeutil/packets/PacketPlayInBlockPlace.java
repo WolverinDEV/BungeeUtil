@@ -38,7 +38,18 @@ public class PacketPlayInBlockPlace extends Packet implements PacketPlayIn {
 		
 		if(face == 255)
 			loc.setY(255);
-		cursorPosition = new Vector3f((float) s.readUnsignedByte() / 16.0F, (float) s.readUnsignedByte() / 16.0F, (float) s.readUnsignedByte() / 16.0F);
+		switch (getBigVersion()) {
+		case v1_11:
+			cursorPosition = new Vector3f(s.readFloat(), s.readFloat(), s.readFloat());
+			break;
+		case v1_10:
+		case v1_9:
+		case v1_8:
+			cursorPosition = new Vector3f((float) s.readUnsignedByte() / 16.0F, (float) s.readUnsignedByte() / 16.0F, (float) s.readUnsignedByte() / 16.0F);
+			break;
+		default:
+			break;
+		}
 	}
 
 	@Override
@@ -60,10 +71,22 @@ public class PacketPlayInBlockPlace extends Packet implements PacketPlayIn {
 			break;
 		}
 		
-		
-		s.writeByte((int) (cursorPosition.getX() * 16.0F));
-		s.writeByte((int) (cursorPosition.getY() * 16.0F));
-		s.writeByte((int) (cursorPosition.getZ() * 16.0F));
+		switch (getBigVersion()) {
+		case v1_11:
+			s.writeFloat(cursorPosition.getX());
+			s.writeFloat(cursorPosition.getY());
+			s.writeFloat(cursorPosition.getZ());
+			break;
+		case v1_10:
+		case v1_9:
+		case v1_8:
+			s.writeByte((int) (cursorPosition.getX() * 16.0F));
+			s.writeByte((int) (cursorPosition.getY() * 16.0F));
+			s.writeByte((int) (cursorPosition.getZ() * 16.0F));
+			break;
+		default:
+			break;
+		}
 	}
 
 	public HandType getHand() {
