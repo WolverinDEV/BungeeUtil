@@ -1,7 +1,7 @@
 /doc/
 /target/
 /bin/
-/.settings/
+.settings/
 .classpath
 .project
 dependecy-reduced-pom.xml
