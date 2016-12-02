@@ -78,7 +78,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 	}
 	
 	public Packet getPacket0(ProtocollVersion version,Protocol protocol, Direction d, Integer id, ByteBuf b, Player p) {
-		int compressed = calculate(version,protocol, d, id);
+		int compressed = calculate(version, protocol, d, id);
 		PacketHolder cons = null;
 		if ((cons = packetsId[compressed]) == null) {
 			if(version.getBasedVersion().getProtocollVersion() == version){ //Fallback (based version) (1.8-1.9)

@@ -89,7 +89,6 @@ public class WarpedChannelHandler extends HandlerBoss {
 				try{
 					if(packet.packet != null){
 						try{
-							System.out.println("Handling packet "+packet.packet);
 							packet.packet.handle(this.handler);
 						}catch (CancelSendSignal ex){
 							sendPacket = false;

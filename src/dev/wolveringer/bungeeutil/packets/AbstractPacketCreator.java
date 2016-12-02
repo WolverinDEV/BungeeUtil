@@ -18,6 +18,7 @@ import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.CostumPrintStream;
 import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.packets.Packet.ProtocollId;
+import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.Player;
 import dev.wolveringer.bungeeutil.player.connection.ProtocollVersion;
 import dev.wolveringer.string.ColoredChar;
@@ -27,7 +28,7 @@ import dev.wolveringer.terminal.table.TerminalTable.TerminalColumn;
 import dev.wolveringer.terminal.table.TerminalTable.TerminalRow;
 
 public abstract class AbstractPacketCreator {
-	public int calculate(ProtocollVersion version, Protocol p, Direction d, Integer id) {
+	public static int calculate(ProtocollVersion version, Protocol p, Direction d, Integer id) {
 		int x = ((version.ordinal() & 0xFF) << 16) | ((p.ordinal() & 0x0F) << 12) | ((d.ordinal() & 0x0F) << 8) | (id & 0xFF);
 		return x;
 	}

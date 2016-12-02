@@ -5,7 +5,6 @@ import io.netty.channel.ChannelHandlerContext;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import net.md_5.bungee.protocol.BadPacketException;
@@ -23,46 +22,45 @@ import dev.wolveringer.bungeeutil.packetlib.reader.ByteBuffCreator;
 import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
-import dev.wolveringer.bungeeutil.player.connection.ProtocollVersion;
 import dev.wolveringer.bungeeutil.statistics.profiler.Profiler;
 import dev.wolveringer.bungeeutil.system.ProxyType;
 import dev.wolveringer.bungeeutil.translation.Messages;
 
 public class WarpedMinecraftDecoder extends MinecraftDecoder {
-	private static final Field field_protocol = getField(MinecraftDecoder.class, "protocol");
-	private static final Field field_protocolVersion = getField(MinecraftDecoder.class, "protocolVersion");
-	private static final Field field_server = getField(MinecraftDecoder.class, "server");
-
-	private static Field getField(Class<?> s, String field) {
-		try{
-			for(Field f : s.getDeclaredFields())
-				if(f.getName().equals(field)){
-					f.setAccessible(true);
-					return f;
-				}
-			for(Field f : s.getFields())
-				if(f.getName().equals(field)){
-					f.setAccessible(true);
-					return f;
-				}
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		return null;
+	private final static String DECODING;
+	private final static String BUNGEE_WRITE;
+	private final static String PACKET_CREATION;
+	private final static String HANDLE_GENERAL;
+	private final static String HANDLE_INTERN;
+	private final static String HANDLE_EXTERN;
+	private final static String WRITE_BUFF;
+	
+	static {
+		BungeeUtil.debug("Loading WarpedMinecraftDecoder timings translations");
+		DECODING = Messages.getString("network.timings.decoder.decoding");
+		BUNGEE_WRITE = Messages.getString("network.timings.decoder.create.bungeepacket");
+		PACKET_CREATION = Messages.getString("network.timings.decoder.create.packet");
+		HANDLE_GENERAL = Messages.getString("network.timings.decoder.handle");
+		HANDLE_INTERN = Messages.getString("network.timings.decoder.handle.intern");
+		HANDLE_EXTERN = Messages.getString("network.timings.decoder.handle.extern");
+		WRITE_BUFF = Messages.getString("network.timings.decoder.write.writeNewByteBuff");
 	}
-
+	
 	@Getter
 	@Setter
 	private IInitialHandler initHandler;
-	private Protocol prot;
+	private Protocol protocol;
 	private int version = -1;
+	private boolean server;
 	private ClientVersion clientVersion = ClientVersion.UnderknownVersion;
 	private Direction direction;
-
+	
 	public WarpedMinecraftDecoder(Protocol protocol, boolean server, int protocolVersion, IInitialHandler i, Direction dir) {
 		super(protocol, server, protocolVersion);
+		this.protocol = protocol;
 		this.direction = dir;
 		this.initHandler = i;
+		this.server = server;
 		this.setProtocolVersion(protocolVersion);
 	}
 
@@ -71,36 +69,21 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 	}
 
 	public Protocol getProtocol() {
-		try{
-			return (Protocol) field_protocol.get(this);
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		return null;
+		return protocol;
 	}
 
 	public int getProtocolVersion() {
-		try{
-			return (int) field_protocolVersion.get(this);
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		return 0;
+		return version;
 	}
 
 	public boolean isServer() {
-		try{
-			return (boolean) field_server.get(this);
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		return false;
+		return server;
 	}
 
 	@Override
 	public void setProtocol(Protocol protocol) {
 		super.setProtocol(protocol);
-		this.prot = protocol;
+		this.protocol = protocol;
 	}
 
 	@Override
@@ -120,39 +103,40 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 			super.decode(ctx, in, out);
 			return;
 		}
-		Profiler.decoder_timings.start(Messages.getString("network.timings.decoder.read")); //$NON-NLS-1$
+		if(clientVersion == null){ //In the theorie impossible :)
+			System.err.println("Could not find the ClientVersion for the ProtocolVersion "+version+". Disconnecting the client.");
+			initHandler.disconnect("§cYour client version isnt supported!");
+			return;
+		}
+		
+		Profiler.decoder_timings.start(DECODING);
 		try{
 			Packet packet = null;
 			try{
-				Profiler.decoder_timings.start(Messages.getString("network.timings.decoder.create.packet")); //$NON-NLS-1$
-				if(clientVersion == null){ //In the theorie impossible :)
-					System.err.println("Could not find the ClientVersion for the ProtocolVersion "+version+". Disconnecting the client.");
-					initHandler.disconnect("§cYour client version isnt supported!");
-					return;
-				}
-				packet = Packet.getPacket(clientVersion.getProtocollVersion() ,getProtocol(), direction, in, initHandler.getPlayer());
-				Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.create.packet")); //$NON-NLS-1$
+				Profiler.decoder_timings.start(PACKET_CREATION);
+				packet = Packet.getPacket(clientVersion.getProtocollVersion(), getProtocol(), direction, in, initHandler.getPlayer());
+				Profiler.decoder_timings.stop(PACKET_CREATION);
 				if(packet == null){
-					Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.read")); //$NON-NLS-1$
+					Profiler.decoder_timings.stop(PACKET_CREATION);
 				}else{
-					Profiler.decoder_timings.start(Messages.getString("network.timings.decoder.handle"));
-					Profiler.decoder_timings.start(Messages.getString("network.timings.decoder.handle.intern")); //$NON-NLS-1$
+					Profiler.decoder_timings.start(HANDLE_GENERAL);
+					Profiler.decoder_timings.start(HANDLE_INTERN);
 					PacketHandleEvent<? extends Packet> e = new PacketHandleEvent(packet, initHandler.getPlayer());
 					if(!MainPacketHandler.handlePacket(e)){
-						Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.handle.intern")); //$NON-NLS-1$
-						Profiler.decoder_timings.start(Messages.getString("network.timings.decoder.handle.extern")); //$NON-NLS-1$
+						Profiler.decoder_timings.stop(HANDLE_INTERN);
+						Profiler.decoder_timings.start(HANDLE_EXTERN);
 						PacketLib.handlePacket(e);
-						Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.handle.extern")); //$NON-NLS-1$
+						Profiler.decoder_timings.stop(HANDLE_EXTERN);
 						if(!e.isCancelled()){
 							packet = e.getPacket();
 						}else{
-							Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.handle.intern")); //$NON-NLS-1$
-							Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.read")); //$NON-NLS-1$
+							Profiler.decoder_timings.stop(HANDLE_INTERN);
+							Profiler.decoder_timings.stop(HANDLE_GENERAL);
 							return;
 						}
 					}else{
-						Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.handle.intern")); //$NON-NLS-1$
-						Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.read")); //$NON-NLS-1$
+						Profiler.decoder_timings.stop(HANDLE_INTERN);
+						Profiler.decoder_timings.stop(HANDLE_GENERAL);
 						return;
 					}
 				}
@@ -172,6 +156,7 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 						System.err.println("-----------------------------------------------------------------------------------------------");
 					}
 				}
+				BungeeUtil.debug(e);
 				if(!initHandler.isConnected)
 					return;
 				switch (Configuration.getHandleExceptionAction()) {
@@ -203,7 +188,7 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 				if(bungeePacket != null){
 					bungeePacket.read(in, prot.getDirection(), getProtocolVersion());
 					if(in.readableBytes() != 0){
-						Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.read")); //$NON-NLS-1$
+						Profiler.decoder_timings.stop(DECODING);
 						throw new BadPacketException("Did not read all bytes from packet " + bungeePacket.getClass() + " " + packetId + " Protocol " + this.getProtocolVersion() + " Direction " + prot+"! Left bytes: "+in.readableBytes());
 					}
 				}else{
@@ -223,6 +208,6 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 			if(initHandler.isConnected)
 				e.printStackTrace();
 		}
-		Profiler.decoder_timings.stop(Messages.getString("network.timings.decoder.read")); //$NON-NLS-1$
+		Profiler.decoder_timings.stop(DECODING);
 	}
 }

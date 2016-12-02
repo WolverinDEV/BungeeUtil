@@ -92,7 +92,6 @@ public class WarpedChannelWrapper extends ChannelWrapper {
 		if (handler.getEncoder() != null) {
 			return NettyUtil.getProtocol(handler.getEncoder());
 		} else if (ch.pipeline().get(WarpedMinecraftDecoder.class) != null) {
-			System.out.print(ch.pipeline().get(WarpedMinecraftDecoder.class).getProtocol());
 			return ch.pipeline().get(WarpedMinecraftDecoder.class).getProtocol();
 		} else if (ch.pipeline().get(WarpedMinecraftEncoder.class) != null) {
 			return NettyUtil.getProtocol(ch.pipeline().get(WarpedMinecraftEncoder.class));

@@ -26,8 +26,11 @@ public class Profiler {
 		Configuration.setTimingsActive(enabled);
 	}
 
+	private static int cachedBoolean = -1;
 	public static boolean isEnabled() {
-		return Configuration.isTimingsActive();
+		if(cachedBoolean == -1)
+			cachedBoolean = Configuration.isTimingsActive() ? 1 : 0;
+		return cachedBoolean == 1;
 	}
 
 	public static void reset() {

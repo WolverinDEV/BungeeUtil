@@ -11,7 +11,6 @@ import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 import net.md_5.bungee.protocol.packet.LoginSuccess;
 import dev.wolveringer.bungeeutil.BungeeUtil;
-import dev.wolveringer.bungeeutil.ExceptionUtils;
 import dev.wolveringer.bungeeutil.packetlib.PacketHandleEvent;
 import dev.wolveringer.bungeeutil.packetlib.PacketLib;
 import dev.wolveringer.bungeeutil.packetlib.handler.MainPacketHandler;
@@ -23,7 +22,20 @@ import dev.wolveringer.bungeeutil.statistics.profiler.Profiler;
 import dev.wolveringer.bungeeutil.translation.Messages;
 
 public class WarpedMinecraftEncoder extends MinecraftEncoder {
-
+	private final static String PACKET_CREATION;
+	private final static String HANDLE_GENERAL;
+	private final static String HANDLE_INTERN;
+	private final static String HANDLE_EXTERN;
+	private final static String WRITE_BUFF;
+	static {
+		BungeeUtil.debug("Loading WarpedMinecraftEncoder timings translations");
+		PACKET_CREATION = Messages.getString("network.timings.encoder.create.packet");
+		HANDLE_GENERAL = Messages.getString("network.timings.encoder.handle");
+		HANDLE_INTERN = Messages.getString("network.timings.encoder.handle.intern");
+		HANDLE_EXTERN = Messages.getString("network.timings.encoder.handle.extern");
+		WRITE_BUFF = Messages.getString("network.timings.encoder.write.writeNewByteBuff");
+	}
+	
 	@Getter
 	@Setter
 	private IInitialHandler initHandler;
@@ -42,6 +54,7 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 		this.server = server;
 		this.clientVersion = ClientVersion.fromProtocoll(protocolVersion);
 	}
+	
 	@Override
 	protected void encode(ChannelHandlerContext ctx, DefinedPacket msg, ByteBuf out) throws Exception {
 		if(initHandler == null){
@@ -55,7 +68,7 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 			return;
 		}
 		
-		Profiler.encoder_timings.start(Messages.getString("network.timings.encoder.handle"));
+		Profiler.encoder_timings.start(HANDLE_GENERAL);
 		if(msg instanceof LoginSuccess)
 			initHandler.isConnected = true;
 		
@@ -63,13 +76,13 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 		ByteBuf encodedBuffer;
 		super.encode(ctx, msg, encodedBuffer = Unpooled.buffer());
 
-		Profiler.encoder_timings.start(Messages.getString("network.timings.encoder.create.packet"));
+		Profiler.encoder_timings.start(PACKET_CREATION);
 		Packet packet = Packet.getPacket(clientVersion.getProtocollVersion(),protocoll, Direction.TO_CLIENT, encodedBuffer, initHandler.getPlayer());
-		Profiler.encoder_timings.stop(Messages.getString("network.timings.encoder.create.packet"));
+		Profiler.encoder_timings.stop(PACKET_CREATION);
 		if(packet == null){
 			ByteBuffCreator.copy(encodedBuffer, out);
 			encodedBuffer.release();
-			Profiler.encoder_timings.stop(Messages.getString("network.timings.encoder.handle"));
+			Profiler.encoder_timings.stop(HANDLE_GENERAL);
 			return;
 		}
 		encodedBuffer.release();
@@ -77,20 +90,20 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 		
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		PacketHandleEvent<?> e = new PacketHandleEvent(packet, initHandler.getPlayer());
-		Profiler.encoder_timings.start(Messages.getString("network.timings.encoder.handle.intern"));
+		Profiler.encoder_timings.start(HANDLE_INTERN);
 		boolean cancelFromIntern = MainPacketHandler.handlePacket(e);
-		Profiler.encoder_timings.stop(Messages.getString("network.timings.encoder.handle.intern"));
+		Profiler.encoder_timings.stop(HANDLE_INTERN);
 		if(!cancelFromIntern){
-			Profiler.encoder_timings.start(Messages.getString("network.timings.encoder.handle.extern"));
+			Profiler.encoder_timings.start(HANDLE_EXTERN);
 			PacketLib.handlePacket(e);
-			Profiler.encoder_timings.stop(Messages.getString("network.timings.encoder.handle.extern"));
+			Profiler.encoder_timings.stop(HANDLE_EXTERN);
 			if(!e.isCancelled()){
-				Profiler.encoder_timings.start(Messages.getString("network.timings.encoder.write.writeNewByteBuff"));
+				Profiler.encoder_timings.start(WRITE_BUFF);
 				e.getPacket().writeToByteBuff(out, ClientVersion.fromProtocoll(initHandler.getVersion()));
-				Profiler.encoder_timings.stop(Messages.getString("network.timings.encoder.write.writeNewByteBuff"));
+				Profiler.encoder_timings.stop(WRITE_BUFF);
 			}
 		}
-		Profiler.encoder_timings.stop(Messages.getString("network.timings.encoder.handle"));
+		Profiler.encoder_timings.stop(HANDLE_GENERAL);
 	}
 	
 	public void setProtocol(Protocol protocol) {
