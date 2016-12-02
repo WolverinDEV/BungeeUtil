@@ -10,6 +10,8 @@ import net.md_5.bungee.protocol.MinecraftEncoder;
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 import net.md_5.bungee.protocol.packet.LoginSuccess;
+import dev.wolveringer.bungeeutil.BungeeUtil;
+import dev.wolveringer.bungeeutil.ExceptionUtils;
 import dev.wolveringer.bungeeutil.packetlib.PacketHandleEvent;
 import dev.wolveringer.bungeeutil.packetlib.PacketLib;
 import dev.wolveringer.bungeeutil.packetlib.handler.MainPacketHandler;
@@ -47,7 +49,8 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 			super.encode(ctx, msg, out);
 			return;
 		}
-		if(clientVersion == ClientVersion.UnderknownVersion){
+		if(clientVersion == null){
+			BungeeUtil.debug("Sending a DefinedPacket ("+msg.getClass().getName()+") to a client with an unknown version. ProtocolVersion is "+version);
 			super.encode(ctx, msg, out);
 			return;
 		}
@@ -99,7 +102,7 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 		super.setProtocolVersion(protocol);
 		this.version = protocol;
 		this.clientVersion = ClientVersion.fromProtocoll(protocol);
-		if(!this.clientVersion.getProtocollVersion().isSupported())
-			this.clientVersion = ClientVersion.UnderknownVersion; //Dont try to handle packies from a client with an unsupported protocol.
+		if(this.clientVersion == null || !this.clientVersion.getProtocollVersion().isSupported())
+			this.clientVersion = null; //Dont try to handle packies from a client with an unsupported protocol.
 	}
 }

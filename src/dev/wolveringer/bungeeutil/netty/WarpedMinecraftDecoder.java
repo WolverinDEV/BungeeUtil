@@ -23,6 +23,7 @@ import dev.wolveringer.bungeeutil.packetlib.reader.ByteBuffCreator;
 import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
+import dev.wolveringer.bungeeutil.player.connection.ProtocollVersion;
 import dev.wolveringer.bungeeutil.statistics.profiler.Profiler;
 import dev.wolveringer.bungeeutil.system.ProxyType;
 import dev.wolveringer.bungeeutil.translation.Messages;
@@ -107,14 +108,16 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 		super.setProtocolVersion(protocolVersion);
 		this.version = protocolVersion;
 		this.clientVersion = ClientVersion.fromProtocoll(protocolVersion);
+		if(!this.clientVersion.getProtocollVersion().isSupported())
+			this.clientVersion = null;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
 		if(initHandler == null){
-			super.decode(ctx, in, out);
 			System.out.println("Missing inithandler in WarpedMinecraftDecoder instance ("+super.toString()+"; initHandler="+initHandler+")");
+			super.decode(ctx, in, out);
 			return;
 		}
 		Profiler.decoder_timings.start(Messages.getString("network.timings.decoder.read")); //$NON-NLS-1$
@@ -122,10 +125,9 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 			Packet packet = null;
 			try{
 				Profiler.decoder_timings.start(Messages.getString("network.timings.decoder.create.packet")); //$NON-NLS-1$
-				if(clientVersion == null){
-					System.out.println("Could not find the ClientVersion for the protocollversion "+version);
-					BungeeUtil.debug("Could not resolve ClientVersion for "+version+". Disconnecting client");
-					initHandler.disconnect("§cYour client versions isnt supported!");
+				if(clientVersion == null){ //In the theorie impossible :)
+					System.err.println("Could not find the ClientVersion for the ProtocolVersion "+version+". Disconnecting the client.");
+					initHandler.disconnect("§cYour client version isnt supported!");
 					return;
 				}
 				packet = Packet.getPacket(clientVersion.getProtocollVersion() ,getProtocol(), direction, in, initHandler.getPlayer());
@@ -184,7 +186,7 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 			}
 	
 			Protocol.DirectionData prot = isServer() ? this.getProtocol().TO_SERVER : this.getProtocol().TO_CLIENT;
-			ByteBuf copy = packet == null ? in.copy() : packet.writeToByteBuff(ByteBuffCreator.createByteBuff(),ClientVersion.fromProtocoll(initHandler.getVersion()));
+			ByteBuf copy = packet == null ? in.copy() : packet.writeToByteBuff(ByteBuffCreator.createByteBuff(),clientVersion);
 			try{
 				int packetId = DefinedPacket.readVarInt(in);
 				DefinedPacket bungeePacket = null;

@@ -15,11 +15,14 @@ import net.md_5.bungee.netty.HandlerBoss;
 import net.md_5.bungee.netty.PacketHandler;
 import net.md_5.bungee.protocol.BadPacketException;
 import net.md_5.bungee.protocol.PacketWrapper;
+import net.md_5.bungee.protocol.ProtocolConstants;
+import net.md_5.bungee.protocol.packet.Handshake;
 
 import com.google.common.base.Preconditions;
 
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
+import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
 import dev.wolveringer.bungeeutil.translation.Messages;
 
@@ -69,10 +72,24 @@ public class WarpedChannelHandler extends HandlerBoss {
 		if(this.handler != null){
 			try{
 				PacketWrapper packet = (PacketWrapper) msg;
+				if(packet.packet instanceof Handshake){
+					int version = ((Handshake)packet.packet).getProtocolVersion();
+					ClientVersion ver = ClientVersion.fromProtocoll(version);
+					if(ver == null || !ver.getProtocollVersion().isSupported())
+						if(ProtocolConstants.SUPPORTED_VERSION_IDS.contains(version)){ //Handle BungeeUtil versions incompatibility. If BungeeCord ist compatible with this version too than BungeeCord can kick the client :)
+							System.err.println("Could not find the ClientVersion for the ProtocolVersion "+version+". Disconnecting the client.");
+							if(this.handler instanceof InitialHandler)
+								((InitialHandler)this.handler).disconnect("§cYour client version isnt supported!");
+							else
+								this.channel.getHandle().close();
+						}
+				}
+				
 				boolean sendPacket = true;
 				try{
 					if(packet.packet != null){
 						try{
+							System.out.println("Handling packet "+packet.packet);
 							packet.packet.handle(this.handler);
 						}catch (CancelSendSignal ex){
 							sendPacket = false;
