@@ -323,6 +323,20 @@ public class MainPacketHandler {
 				}
 			}
 			else { //Sots of inv - Player inventory
+				int equipmentSize = -1;
+				switch (e.getPlayer().getVersion().getBigVersion()) {
+				case v1_11:
+				case v1_10:
+				case v1_9:
+					equipmentSize = 10; //Offhand
+					break;
+				case v1_8:
+					equipmentSize = 9;
+					break;
+				default:
+					break;
+				}
+				
 				int base = pl.getItems().length-e.getPlayer().getPlayerInventory().getSlots()+9; //Armor and crafting dont will be sended
 				for(int i = base;i<pl.getItems().length;i++){
 					Item _new = pl.getItems()[i];

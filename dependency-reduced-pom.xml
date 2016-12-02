@@ -110,6 +110,12 @@
       </build>
     </profile>
   </profiles>
+  <repositories>
+    <repository>
+      <id>ossrh-snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+  </repositories>
   <dependencies>
     <dependency>
       <groupId>io.netty</groupId>
@@ -120,7 +126,7 @@
     <dependency>
       <groupId>net.md-5</groupId>
       <artifactId>bungeecord-api</artifactId>
-      <version>1.10-SNAPSHOT</version>
+      <version>1.11-SNAPSHOT</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -144,7 +150,7 @@
     <dependency>
       <groupId>net.md-5</groupId>
       <artifactId>bungeecord-proxy</artifactId>
-      <version>1.10-SNAPSHOT</version>
+      <version>1.11-SNAPSHOT</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -199,7 +205,7 @@
     </snapshotRepository>
   </distributionManagement>
   <properties>
-    <bungeecord.version>1.10-SNAPSHOT</bungeecord.version>
+    <bungeecord.version>1.11-SNAPSHOT</bungeecord.version>
     <bungeeyml.location>src/bungee.yml</bungeeyml.location>
   </properties>
 </project>
