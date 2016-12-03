@@ -77,8 +77,10 @@ public class Inventory {
 		};
 	}
 
-	public Inventory(int size, String name, boolean check) {
-		if(size % 9 != 0 && check)
+	public Inventory(int size, String name, boolean checkSize) {
+		if(size <= 0)
+			throw new RuntimeException(size + " must cant be smaler or equal to zero");
+		if(size % 9 != 0 && checkSize)
 			throw new RuntimeException(size + " % 9 != 0");
 		this.type = InventoryType.Chest;
 		this.name = name;
