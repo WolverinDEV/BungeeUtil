@@ -14,6 +14,7 @@ import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.packets.Packet;
+import dev.wolveringer.bungeeutil.system.ProxyType;
 import dev.wolveringer.terminal.table.TerminalTable;
 import dev.wolveringer.terminal.table.TerminalTable.Align;
 import dev.wolveringer.terminal.table.TerminalTable.TerminalRow;
@@ -39,6 +40,7 @@ public class Main extends Plugin {
 			BungeeUtil.createInstance(main);
 		Configuration.init();
 		BungeeUtil.getInstance().sendMessage("Ansi consolen class: "+AnsiConsole.out.getClass());
+		BungeeUtil.getInstance().sendMessage("Found proxy type "+ProxyType.getType().toString());
 		BungeeUtil.getInstance().setInformation("Check for updates");
 		try {
 			updater = new Updater("https://raw.githubusercontent.com/WolverinDEV/BungeeUtil/jars/versions.json");

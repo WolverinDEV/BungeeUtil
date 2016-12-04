@@ -25,6 +25,7 @@ import net.md_5.bungee.netty.PipelineUtils;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
+import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.bossbar.BossBarManager;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
@@ -124,6 +125,7 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 		int window = 0;
 		int dslot = 0;
 		Item[] items = p_inv.getContains();
+		BungeeUtil.debug("Updating "+items.length+" slots of the player inventory.");
 		/*
 		if(isInventoryOpened()){
 			window = Inventory.ID;
