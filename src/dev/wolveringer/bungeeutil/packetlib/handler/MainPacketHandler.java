@@ -337,7 +337,7 @@ public class MainPacketHandler {
 					break;
 				}
 				
-				int base = pl.getItems().length-e.getPlayer().getPlayerInventory().getSlots()+9; //Armor and crafting dont will be sended
+				int base = pl.getItems().length-e.getPlayer().getPlayerInventory().getSlots()+equipmentSize; //Armor and crafting dont will be sended
 				for(int i = base;i<pl.getItems().length;i++){
 					Item _new = pl.getItems()[i];
 					Item other = null;
