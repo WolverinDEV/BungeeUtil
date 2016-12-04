@@ -51,15 +51,6 @@ public final class PlayerInventory {
 		this(player,0,"");
 	}
 
-	/**
-	 * Contains spelling mistake
-	 * @deprecated Use {@link #broadcast(Packet a)} instead.  
-	 */
-	@Deprecated
-	private void brotcast(Packet a) {
-		broadcast(a);
-	}
-
 	private void broadcast(Packet a) {
 		player.sendPacket((PacketPlayOut)a);
 	}
