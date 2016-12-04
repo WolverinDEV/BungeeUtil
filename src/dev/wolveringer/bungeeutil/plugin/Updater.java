@@ -5,15 +5,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
-import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,27 +18,76 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.jar.JarInputStream;
 
-import javax.print.DocFlavor.STRING;
-
 import net.md_5.bungee.BungeeCord;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.api.ChatColor;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.MathUtil;
-import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
-import dev.wolveringer.bungeeutil.item.ItemStack;
-import dev.wolveringer.bungeeutil.item.Material;
-import dev.wolveringer.bungeeutil.item.ItemStack.Click;
-import dev.wolveringer.bungeeutil.item.meta.SkullMeta;
-import dev.wolveringer.bungeeutil.profile.SkinFactory;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 public class Updater {
+	@RequiredArgsConstructor
+	@Getter
+	public static class Version implements Comparable<Version>{
+		private final String version;
+		
+		public boolean isSnapshot(){
+			return version.toLowerCase().endsWith("SNAPSHOT".toLowerCase());
+		}
+		
+		public String getPlainVersion(){
+			int index = 0;
+			while (version.length() > index) {
+				if(StringUtils.isNumeric(Character.toString(version.charAt(index))) || version.charAt(index) == '.')
+					index++;
+				else
+					break;
+			}
+			return version.substring(0, index);
+		}
+
+		@Override
+		public int compareTo(Version o) {
+			String[] ownSegments = getPlainVersion().split("\\.");
+			String[] otherSegments = o.getPlainVersion().split("\\.");
+			
+			for(int i = 0;i<Math.max(ownSegments.length, otherSegments.length);i++){
+				if(ownSegments.length <= i){
+					if(otherSegments.length <= i)
+						return Boolean.compare(isSnapshot(), o.isSnapshot());
+					for(int j = i; j < otherSegments.length; j++)
+						if(Integer.parseInt(otherSegments[j]) > 0)
+							return -1;
+				} else if(otherSegments.length <= i){
+					if(ownSegments.length <= i)
+						return Boolean.compare(isSnapshot(), o.isSnapshot());
+					for(int j = i; j < ownSegments.length; j++)
+						if(Integer.parseInt(ownSegments[j]) > 0)
+							return 1;
+				} else {
+					Integer a = Integer.parseInt(ownSegments[i]);
+					Integer b = Integer.parseInt(otherSegments[i]);
+					if(a > b)
+						return 1;
+					else if(a == b)
+						continue;
+					else if(b > a)
+						return -1;
+					else
+						throw new RuntimeException("LOL this is impossible.");
+				}
+			}
+			return 0;
+		}
+		
+	}
 	
 	private String url;
 	private JSONObject data;
@@ -54,7 +99,6 @@ public class Updater {
 	
 	public boolean checkUpdate() {
 		updateData();
-		BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aChecking for Plugin updates");
 		if (data == null) throw new NullPointerException("HTTP Data is null. Invpoke getData() first");
 		if (!isNewstVersion()) {
 			installUpdate();
@@ -62,8 +106,11 @@ public class Updater {
 			return true;
 		}
 		else {
-			if (!isDevBuild()) BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aNo plugin update found! Your version is alredy the newest! (" + getCurrentVersion() + ")");
-			else BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aYou plugin version is newer than the currunt public version. I think i'm a dev build... All bugs will be ignored");
+			if(getCurrentVersion().isSnapshot()){
+				BungeeUtil.getInstance().sendMessage(ChatColor.LIGHT_PURPLE + "Attention: This build is a snapshot. This may containing bugs.");
+			} else {
+				BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "The current version is already the newest version. That's for keeping BungeeUtil up to date.");
+			}
 		}
 		return false;
 	}
@@ -71,27 +118,22 @@ public class Updater {
 	public void installUpdate(){
 		File ownFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getFile());
 		downloadUpdate(data.getString("Download"), ownFile);
-		Configuration.setLastVersion(getCurrentVersion());
+		Configuration.setLastVersion(getCurrentVersion().getVersion());
 	}
 	
-	public String getCurrentVersion(){
-		return Main.getMain().getDescription().getVersion().split("-")[0];
+	public Version getCurrentVersion(){
+		if(Main.getMain() == null)
+			return new Version("2.0-SNAPSHOT");
+		return new Version(Main.getMain().getDescription().getVersion());
 	}
 	
-	public String getNewestVersion() {
+	public Version getNewestVersion() {
 		updateData();
-		return data.getString("CurrentVersion");
+		return new Version(data.getString("CurrentVersion"));
 	}
 	
 	public boolean isNewstVersion() {
-		int minBounds = Math.min(getNewestVersion().length(), getCurrentVersion().length());
-		if(minBounds == 0)
-			return true;
-		Long a = Long.parseLong(getNewestVersion().substring(0, minBounds).replaceAll("\\.", ""));
-		Long b = Long.parseLong(getCurrentVersion().substring(0, minBounds).replaceAll("\\.", ""));
-		if(a == b)
-			return getNewestVersion().length() > getCurrentVersion().length();
-		return a <= b;
+		return getNewestVersion().compareTo(getCurrentVersion()) <= 0;
 	}
 	
 	public boolean isDevBuild(){
@@ -113,11 +155,11 @@ public class Updater {
 	private int downloadUpdate(String url, File targetFile) {
 		BigInteger errorMask = new BigInteger("0");
 		errorMask.setBit(8);
-		BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aUpdating from "+getCurrentVersion()+" to "+getNewestVersion());
-		BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aStarting to download the update ("+url+") to "+targetFile.getAbsolutePath());
+		BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Updating from "+getCurrentVersion()+" to "+getNewestVersion());
+		BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Starting to download the update ("+url+") to "+targetFile.getAbsolutePath());
 		programm:
 		try {
-			BungeeUtil.getInstance().setInformation(ChatColorUtils.COLOR_CHAR + "aDownloading update " + ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "e000%" + ChatColorUtils.COLOR_CHAR + "7]");
+			BungeeUtil.getInstance().setInformation(ChatColor.GREEN + "Downloading update " + ChatColor.GRAY + "[" + ChatColor.GREEN + "000%" + ChatColor.GRAY+ "]");
 			BufferedInputStream in = null;
 			FileOutputStream fout = null;
 			try {
@@ -126,7 +168,7 @@ public class Updater {
 				in = new BufferedInputStream(com.getInputStream());
 				File df;
 				if (targetFile.exists()) {
-					BungeeUtil.getInstance().setInformation(ChatColorUtils.COLOR_CHAR + "aUsing .download file ("+targetFile.getPath() + "BungeeUtil.download)!");
+					BungeeUtil.getInstance().setInformation(ChatColor.GREEN + "Using .download file ("+targetFile.getPath() + "BungeeUtil.download)!");
 					fout = new FileOutputStream(df = new File(targetFile.getPath() + "BungeeUtil.download"));
 				}
 				else fout = new FileOutputStream(df = targetFile);
@@ -141,14 +183,14 @@ public class Updater {
 					String p = "000" + MathUtil.calculatePercent(readed, fileLength);
 					p = p.substring(0, p.indexOf("."));
 					p = p.substring(p.length() - 3, p.length());
-					BungeeUtil.getInstance().setInformation(ChatColorUtils.COLOR_CHAR + "aDownloading update " + ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "e" + p + "%" + ChatColorUtils.COLOR_CHAR + "7]");
+					BungeeUtil.getInstance().setInformation(ChatColor.GREEN + "Downloading update " + ChatColor.GRAY + "[" + ChatColor.GREEN + p + "%" + ChatColor.GRAY+ "]");
 				}
 				fout.close();
 				in.close();
-				BungeeUtil.getInstance().setInformation(ChatColorUtils.COLOR_CHAR + "aDownload done!");
-				BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aUpdate downloaded!");
-				BungeeUtil.getInstance().setInformation(ChatColorUtils.COLOR_CHAR + "aCheck update for errors!");
-				BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aCheck update for errors!");
+				BungeeUtil.getInstance().setInformation(ChatColor.GREEN + "Download done!");
+				BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Update downloaded!");
+				BungeeUtil.getInstance().setInformation(ChatColor.GREEN + "Check update for errors!");
+				BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Check update for errors!");
 				try {
 					JarInputStream is = new JarInputStream(new FileInputStream(df));
 					while (null != is.getNextJarEntry()) {
@@ -157,8 +199,8 @@ public class Updater {
 				}
 				catch (Exception e) {
 					errorMask.setBit(1);
-					BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "cThe update contains an error. (Message: " + e.getLocalizedMessage() + ")");
-					BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "cDeleting the update!");
+					BungeeUtil.getInstance().sendMessage(ChatColor.RED + "The update contains an error. (Message: " + e.getLocalizedMessage() + ")");
+					BungeeUtil.getInstance().sendMessage(ChatColor.RED + "Deleting the update!");
 					try {
 						df.delete();
 					}
@@ -167,16 +209,16 @@ public class Updater {
 					}
 					break programm;
 				}
-				BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aUpdate valid.");
-				BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aInstalling update!");
-				BungeeUtil.getInstance().setInformation(ChatColorUtils.COLOR_CHAR + "aInstalling update");
+				BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Update valid.");
+				BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Installing update!");
+				BungeeUtil.getInstance().setInformation(ChatColor.GREEN + "Installing update");
 				if (!targetFile.equals(df) && !targetFile.delete()) {
-					BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "6Cant delete the old plugin jar.");
+					BungeeUtil.getInstance().sendMessage(ChatColor.GOLD + "Cant delete the old plugin jar.");
 				}
 				boolean deleteOld = !targetFile.equals(df);
 				if(!targetFile.createNewFile()){
 					deleteOld = false;
-					BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "6Cant create new jar.");
+					BungeeUtil.getInstance().sendMessage(ChatColor.GOLD + "Cant create new jar.");
 				}
 				FileInputStream fis = new FileInputStream(df);
 				FileOutputStream fos = new FileOutputStream(targetFile);
@@ -185,14 +227,14 @@ public class Updater {
 				}
 				fis.close();
 				fos.close();
-				if (deleteOld && !df.delete()) BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "6Cant delte cache file!");
-				BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aRestarting bungeecord!");
-				BungeeUtil.getInstance().setInformation(ChatColorUtils.COLOR_CHAR + "aUpdate installed!");
+				if (deleteOld && !df.delete()) BungeeUtil.getInstance().sendMessage(ChatColor.GOLD + "Cant delte cache file!");
+				BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Restarting bungeecord!");
+				BungeeUtil.getInstance().setInformation(ChatColor.GREEN + "Update installed!");
 			}
 			catch (Exception e) {
 				errorMask.setBit(3);
 				e.printStackTrace();
-				BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "cAn error happend while downloading the update");
+				BungeeUtil.getInstance().sendMessage(ChatColor.RED + "An error happend while downloading the update");
 			}
 			finally {
 				if (in != null) {
@@ -206,7 +248,7 @@ public class Updater {
 		catch (Exception e) {
 			errorMask.setBit(4);
 			e.printStackTrace();
-			BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "cAn error happend while downloading the update");
+			BungeeUtil.getInstance().sendMessage(ChatColor.RED + "An error happend while downloading the update");
 		}
 		return errorMask.intValue();
 	}
@@ -218,7 +260,8 @@ public class Updater {
 	
 	public Updater loadData() {
 		last = System.currentTimeMillis();
-		BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aLoading update data!");
+		if(BungeeUtil.getInstance() != null)
+			BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Fetching update data.");
 		try {
 			URL i = new URL(url);
 			HttpURLConnection c = (HttpURLConnection) i.openConnection();
@@ -238,54 +281,19 @@ public class Updater {
 		return this;
 	}
 	
-	/*
-	@SuppressWarnings("deprecation")
-	public boolean isServerWhiteListed() {
-		try {
-			if (data == null) throw new NullPointerException("HTTP Data is null. Invpoke getData() first");
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return true;
-		}
-		JSONObject plugins = data.getJSONObject("plugins");
-		if (plugins.has(Main.getMain().getDescription().getName())) {
-			JSONObject o = plugins.getJSONObject(Main.getMain().getDescription().getName());
-			if (o.has("whitelist")) { // TODO kick out. not longer needed
-				JSONArray a = o.getJSONArray("whitelist");
-				String host = "null";
-				String hostadress = "null";
-				try {
-					host = InetAddress.getLocalHost().getHostName();
-					hostadress = InetAddress.getLocalHost().getHostAddress();
-					if (host.equalsIgnoreCase("test-PC")) return true;
-				}
-				catch (UnknownHostException e) {
-					e.printStackTrace();
-				}
-				for (int i = 0; i < a.length(); i++) {
-					if (a.get(i).toString().equalsIgnoreCase(host) || a.get(i).toString().equalsIgnoreCase(hostadress)) return true;
-				}
-				BungeeCord.getInstance().getConsole().sendMessage(ChatColorUtils.COLOR_CHAR + "aYour Host: " + ChatColorUtils.COLOR_CHAR + "e" + host);
-				BungeeCord.getInstance().getConsole().sendMessage(ChatColorUtils.COLOR_CHAR + "aYour Host-Adress: " + ChatColorUtils.COLOR_CHAR + "e" + hostadress);
-				BungeeCord.getInstance().getConsole().sendMessage(ChatColorUtils.COLOR_CHAR + "cBoth Host's are not whitelisted.");
-				return false;
-			}
-		}
-		return true;
-	}
-	*/
-	
-	public HashMap<String, List<String>> createChanges(@NonNull String lastVersion){
-		HashMap<String, List<String>> out = new HashMap<>();
+	public HashMap<Version, List<String>> createChanges(@NonNull Version lastVersion){
+		HashMap<Version, List<String>> out = new HashMap<>();
 		if(data != null){
 			JSONArray changelogArray = data.getJSONArray("Changelog");
 			Iterator<Object> objects = changelogArray.iterator();
 			while (objects.hasNext()) {
 				JSONObject object = (JSONObject) objects.next();
-				String version; 
-				System.out.print((Long.parseLong((version = object.getString("Verion")).replaceAll("\\.", "")) > Long.parseLong(lastVersion.replaceAll("\\.", "")))+"-"+(Long.parseLong((version = object.getString("Verion")).replaceAll("\\.", "")) +":"+ Long.parseLong(getCurrentVersion().replaceAll("\\.", ""))));
-				if(Long.parseLong((version = object.getString("Verion")).replaceAll("\\.", "")) > Long.parseLong(lastVersion.replaceAll("\\.", "")) && Long.parseLong((version = object.getString("Verion")).replaceAll("\\.", "")) <= Long.parseLong(getCurrentVersion().replaceAll("\\.", ""))){
+				String sversion = object.getString("Verion");
+				if(object.has("snapshot") && sversion.endsWith("-SNAPSHOT")) //Dont break the old updater
+					sversion += "-SNAPSHOT";
+				
+				Version version = new Version(sversion);
+				if(lastVersion.compareTo(version) < 0){
 					ArrayList<String> changes = new ArrayList<>();
 					Iterator<Object> message = object.getJSONArray("Changed").iterator();
 					while (message.hasNext()) {
@@ -296,7 +304,7 @@ public class Updater {
 			}
 		}
 		else
-			out.put("error", Arrays.asList("§cCant featch versions data.","Make shure you have an valid internet connection."));
+			out.put(new Version("ERROR"), Arrays.asList(ChatColor.RED+"Cant featch versions data.","Make shure you have an valid internet connection."));
 		return out;
 	}
 	

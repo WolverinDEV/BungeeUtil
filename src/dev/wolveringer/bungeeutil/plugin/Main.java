@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.fusesource.jansi.AnsiConsole;
-
+import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.plugin.Plugin;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
-import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.packets.Packet;
+import dev.wolveringer.bungeeutil.plugin.Updater.Version;
 import dev.wolveringer.bungeeutil.system.ProxyType;
 import dev.wolveringer.terminal.table.TerminalTable;
 import dev.wolveringer.terminal.table.TerminalTable.Align;
@@ -38,20 +38,31 @@ public class Main extends Plugin {
 		main = this;
 		if(BungeeUtil.getInstance() == null)
 			BungeeUtil.createInstance(main);
+		
+		if(BungeeCord.getInstance().getPluginManager().getPlugin("ViaVersion") != null){
+			BungeeUtil.getInstance().sendMessage("§7------------------------------ §c§nAttantion:§r ------------------------------");
+			BungeeUtil.getInstance().sendMessage("           §5BungeeUtil detected ViaVersion (Bungee).");
+			BungeeUtil.getInstance().sendMessage("           §5BungeeUtil may have conflicts with ViaVersion.");
+			BungeeUtil.getInstance().sendMessage("           §5Any bugs/errors with ViaVersion installed will be ignored.");
+			BungeeUtil.getInstance().sendMessage("§7------------------------------------------------------------------------");
+		}
+		
 		Configuration.init();
-		BungeeUtil.getInstance().sendMessage("Ansi consolen class: "+AnsiConsole.out.getClass());
-		BungeeUtil.getInstance().sendMessage("Found proxy type "+ProxyType.getType().toString());
-		BungeeUtil.getInstance().setInformation("Check for updates");
+		BungeeUtil.getInstance().sendMessage(ChatColor.GRAY+"Minecraft proxy type: "+ProxyType.getType().toString());
+		BungeeUtil.getInstance().setInformation("Loading update data");
 		try {
 			updater = new Updater("https://raw.githubusercontent.com/WolverinDEV/BungeeUtil/jars/versions.json");
 			updater.loadData();
+			BungeeUtil.getInstance().displayedSleep(1000);
+			
 			if(updater.getData() == null){
-				BungeeUtil.getInstance().sendMessage("§cCant get versions informations.");
+				BungeeUtil.getInstance().sendMessage(ChatColor.RED+"Cant get versions informations.");
+				updater = null;
 			}
 			else
 			{
 				if (Configuration.isUpdaterActive() && updater.checkUpdate()) {
-					BungeeUtil.getInstance().setInformation("§cRestarting bungeecord");
+					BungeeUtil.getInstance().setInformation(ChatColor.RED+"Restarting bungeecord");
 					BungeeUtil.getInstance().displayedSleep(1000);
 					BungeeUtil.getInstance().setInformation(null);
 					System.exit(-1);
@@ -64,29 +75,33 @@ public class Main extends Plugin {
 		}
 		
 		if (Configuration.getLastVersion() != null && updater != null) {
-			BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aBungeeUtil successful updated!");
-			BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR + "aUpdates:");
-			TerminalTable table = new TerminalTable(new TerminalTable.TerminalColumn[]{
-					new TerminalTable.TerminalColumn("Version", Align.LEFT),
-					new TerminalTable.TerminalColumn("Changes", Align.LEFT)
-			});
-			HashMap<String, List<String>> _changes = updater.createChanges(Configuration.getLastVersion());
-			List<Entry<String, List<String>>> changes = new ArrayList<>(_changes.entrySet());
-			Collections.sort(changes, new Comparator<Entry<String, List<String>>>() {
-				@Override
-				public int compare(Entry<String, List<String>> o1, Entry<String, List<String>> o2) {
-					return Long.compare(Long.parseLong(o2.getKey().replaceAll("\\.", "")), Long.parseLong(o1.getKey().replaceAll("\\.", "")));
+			HashMap<Updater.Version, List<String>> _changes = updater.createChanges(new Version(Configuration.getLastVersion()));
+			if(_changes.size() > 0){
+				BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "BungeeUtil successful updated!");
+				BungeeUtil.getInstance().sendMessage(ChatColor.GRAY + "Updates:");
+				TerminalTable table = new TerminalTable(new TerminalTable.TerminalColumn[]{
+						new TerminalTable.TerminalColumn("Version", Align.LEFT),
+						new TerminalTable.TerminalColumn("Changes", Align.LEFT)
+				});
+				
+				List<Entry<Updater.Version, List<String>>> changes = new ArrayList<>(_changes.entrySet());
+				Collections.sort(changes, new Comparator<Entry<Version, List<String>>>() {
+					@Override
+					public int compare(Entry<Version, List<String>> o1, Entry<Version, List<String>> o2) {
+						return o1.getKey().compareTo(o2.getKey());
+					}
+				});
+				for(Entry<Updater.Version, List<String>> e : changes){
+					TerminalRow row = new TerminalRow(2);
+					row.getColumns()[1].addAll(e.getValue());
+					row.setText(0, e.getKey().getVersion());
+					table.addRow(row);
 				}
-			});
-			for(Entry<String, List<String>> e : changes){
-				TerminalRow row = new TerminalRow(2);
-				row.getColumns()[1].addAll(e.getValue());
-				row.setText(0, e.getKey());
-				table.addRow(row);
+				for(String message : table.buildLines())
+					BungeeUtil.getInstance().sendMessage(message);
 			}
-			for(String message : table.buildLines())
-				BungeeUtil.getInstance().sendMessage(message);
 		}
+		Configuration.setLastVersion(updater.getCurrentVersion().getPlainVersion());
 		
 		if(!BungeeUtil.getInstance().isInjected()){
 			switch (BungeeUtil.getInstance().inject()) {
