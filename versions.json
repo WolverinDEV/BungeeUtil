@@ -1,6 +1,6 @@
 {
-    "CurrentVersion": "1.6.10",
-    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-1.6.10.jar",
+    "CurrentVersion": "2.0",
+    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.0.jar",
     "VersionsHistory": [
         {
             "Version": "1.6.7.6",
@@ -66,6 +66,10 @@
             "Version": "2.0",
             "snapshot": true,
             "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.0-SNAPSHOT.jar"
+        },
+        {
+            "Version": "2.0",
+            "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.0.jar"
         }
     ],
     "Changelog": [
@@ -184,6 +188,17 @@
             "snapshot": true,
             "Changed": [
                 "A lots of structure changes"
+            ]
+        },
+        {
+            "Verion": "2.0",
+            "Changed": [
+                "Released BungeeUtil vor Minecraft 1.11",
+                "Improved performance",
+                "Improved api structure",
+                "Fixed all know bugs",
+                "Implemented slient loading",
+                "Updated the updater"
             ]
         }
     ]
