@@ -18,7 +18,6 @@ import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.CostumPrintStream;
 import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.packets.Packet.ProtocollId;
-import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.Player;
 import dev.wolveringer.bungeeutil.player.connection.ProtocollVersion;
 import dev.wolveringer.string.ColoredChar;
@@ -102,13 +101,6 @@ public abstract class AbstractPacketCreator {
 		for (Entry<ProtocollVersion, HashMap<Direction, HashMap<Integer, Class<? extends Packet>>>> protocolls : packets.entrySet()) {
 			for (Entry<Direction, HashMap<Integer, Class<? extends Packet>>> directions : protocolls.getValue().entrySet()) {
 				List<Entry<Integer, Class<? extends Packet>>> packetIds = new ArrayList<>(directions.getValue().entrySet());
-				Collections.sort(packetIds, new Comparator<Entry<Integer, Class<? extends Packet>>>() {
-					@Override
-					public int compare(Entry<Integer, Class<? extends Packet>> o1, Entry<Integer, Class<? extends Packet>> o2) {
-						return Integer.compare(o1.getKey(), o1.getKey());
-					}
-				});
-
 				for (Entry<Integer, Class<? extends Packet>> packet : packetIds) {
 					if (!packetRow.containsKey(packet.getValue())) {
 						String[] ids = new String[columns.size()];
@@ -126,8 +118,15 @@ public abstract class AbstractPacketCreator {
 				}
 			}
 		}
-
-		for (String[] row : packetRow.values())
+		
+		List<String[]> rows = new ArrayList<>(packetRow.values());
+		Collections.sort(rows, new Comparator<String[]>() {
+			@Override
+			public int compare(String[] o1, String[] o2) {
+				return o1[0].compareTo(o2[0]);
+			}
+		});
+		for (String[] row : rows)
 			table.addRow(row);
 		table.setRowSeperator(new TerminalTable.RowSeperator() {
 			@Override

@@ -70,6 +70,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 					continue;
 				Constructor<? extends Packet> constructor = packetsId[i].getConstuctor();
 				if (constructor == null) continue;
+				if(!registerPackets.contains(constructor.getDeclaringClass()))
 				registerPackets.add(constructor.getDeclaringClass());
 			}
 			packetListChanged = false;

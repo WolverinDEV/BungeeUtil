@@ -46,6 +46,7 @@ loading:
   inject:
     buffer-size: 65536
   fastboot: false
+  quiet: false
 async-catcher:
   enabled: true
   mode: EXCEPTION

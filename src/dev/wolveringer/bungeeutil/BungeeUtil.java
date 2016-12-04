@@ -63,32 +63,46 @@ public final class BungeeUtil {
 		state.setBit(0);
 		try{
 			active =  true;
-			setInformation("§aLoading configuration.");
-			sendMessage("§aLoading configuration.");
+			if(!Configuration.isQuietBoot()){
+				setInformation("§aLoading configuration.");
+				sendMessage("§aLoading configuration.");
+			}
 			Configuration.init();
-			displayedSleep(500);
-			setInformation("§aValidate configuration.");
-			sendMessage("§aValidate configuration.");
+			
+			if(!Configuration.isQuietBoot()){
+				displayedSleep(500);
+				setInformation("§aValidate configuration.");
+				sendMessage("§aValidate configuration.");
+			}
+			
 			if(Configuration.getHandleExceptionAction() == null){
 				sendMessage("§cCant find the NetworkExceptionAction for "+Configuration.getConfig().getString("network.exception")+". §6Using default ("+HandleErrorAction.DISCONNECT+")");
 				Configuration.getConfig().set("network.exception", HandleErrorAction.DISCONNECT.name().toUpperCase());
 			}
-			displayedSleep(500);
-			setInformation("§aConfiguration valid.");
-			sendMessage("§aConfiguration valid.");
-			displayedSleep(500);
-			setInformation("§aLoading AsyncCatcher");
-			sendMessage("§aLoading AsyncCatcher");
+			if(!Configuration.isQuietBoot()){
+				displayedSleep(500);
+				setInformation("§aConfiguration valid.");
+				sendMessage("§aConfiguration valid.");
+				displayedSleep(500);
+				setInformation("§aLoading AsyncCatcher");
+				sendMessage("§aLoading AsyncCatcher");
+			}
+			
 			AsyncCatcher.init();
 			AsyncCatcher.disable(pluginInstance);
 			AsyncCatcher.catchOp("Async test failed");
+			
 			TerminalListener.setInstance(new TerminalListener());
-			displayedSleep(500);
-			setInformation("§aAsyncCatcher successfull loaded");
-			sendMessage("§aAsyncCatcher successfull loaded");
-			displayedSleep(500);
-			setInformation("§aLoading ChannelInizializer");
-			sendMessage("§aLoading ChannelInizializer");
+			
+			if(!Configuration.isQuietBoot()){
+				displayedSleep(500);
+				setInformation("§aAsyncCatcher successfull loaded");
+				sendMessage("§aAsyncCatcher successfull loaded");
+				displayedSleep(500);
+				setInformation("§aLoading ChannelInizializer");
+				sendMessage("§aLoading ChannelInizializer");
+			}
+			
 			boolean flag = true;
 			try {
 				ChannelInizializer.init();
@@ -98,36 +112,48 @@ public final class BungeeUtil {
 				sendMessage(ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "eBungeeUntil" + ChatColorUtils.COLOR_CHAR + "7] " + ChatColorUtils.COLOR_CHAR + "cError while loading ProtocolLIB " + ChatColorUtils.COLOR_CHAR + "4Code: 002");
 				sendMessage(ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "eBungeeUntil" + ChatColorUtils.COLOR_CHAR + "7] " + ChatColorUtils.COLOR_CHAR + "cDisable ProtocolLIB");
 			}
-			displayedSleep(500);
-			if(!flag){
-				setInformation("§cAn error happend while loading aChannelInizializer.");
-				sendMessage("§cAn error happend while loading aChannelInizializer.");
+			
+			if(!Configuration.isQuietBoot())
 				displayedSleep(500);
+			if(!flag){
+				if(!Configuration.isQuietBoot())
+					setInformation("§cAn error happend while loading aChannelInizializer.");
+				sendMessage("§cAn error happend while loading aChannelInizializer.");
+				if(!Configuration.isQuietBoot())
+					displayedSleep(500);
 				return;
 			}
-			setInformation("§aChannelInizializer successfull loaded.");
-			sendMessage("§aChannelInizializer successfull loaded.");
-			displayedSleep(500);
-			setInformation("§aLoading player class");
-			sendMessage("§aLoading player class");
-			IIInitialHandler.init(ProxiedPlayerUserConnection.class);
-			displayedSleep(500);
-			setInformation("§aPlayer class loaded");
-			sendMessage("§aPlayer class loaded");
 			
-			displayedSleep(500);
-			setInformation("§aRegister commands and scheduler");
-			sendMessage("§aRegister commands and scheduler");
+			if(!Configuration.isQuietBoot()){
+				setInformation("§aChannelInizializer successfull loaded.");
+				sendMessage("§aChannelInizializer successfull loaded.");
+				displayedSleep(500);
+				setInformation("§aLoading player class");
+				sendMessage("§aLoading player class");
+			}
+			
+			IIInitialHandler.init(ProxiedPlayerUserConnection.class);
+			
+			if(!Configuration.isQuietBoot()){
+				displayedSleep(500);
+				setInformation("§aPlayer class loaded");
+				sendMessage("§aPlayer class loaded");
+				
+				displayedSleep(500);
+				setInformation("§aRegister commands and scheduler");
+				sendMessage("§aRegister commands and scheduler");
+			}
+			
 			BungeeCord.getInstance().getPluginManager().registerListener(pluginInstance, new InventoryResetListener());
 			BungeeCord.getInstance().getPluginManager().registerCommand(pluginInstance, new BungeeTimings());
 			BungeeCord.getInstance().getScheduler().runAsync(pluginInstance, ()->{
-				sendMessage("§eSystem.gc() -> Enabled: " + Configuration.isGCEnabled());
+				if(!Configuration.isQuietBoot())
+					sendMessage("§eSystem.gc() -> Enabled: " + Configuration.isGCEnabled());
 				while (Configuration.isGCEnabled()) {
 					try {
-						Thread.sleep(5 * 1000);
+						Thread.sleep(60 * 1000);
 					}
-					catch (InterruptedException e) {
-					}
+					catch (InterruptedException e) { }
 					if (!active) return;
 					System.gc();
 				}
@@ -141,13 +167,19 @@ public final class BungeeUtil {
 				BungeeCord.getInstance().getPluginManager().registerCommand(pluginInstance, new dev.wolveringer.bungeeutil.commands.RamStatistics());
 			}
 			
-			displayedSleep(500);
-			setInformation("§aRegister packets");
-			sendMessage("§aRegister packets");
+			if(!Configuration.isQuietBoot()){
+				displayedSleep(500);
+				setInformation("§aRegister packets");
+				sendMessage("§aRegister packets");
+			}
 			Packet.countPackets();
-			displayedSleep(500);
-			setInformation("§aPackets registered");
-			sendMessage("§aPackets registered");
+			
+			if(!Configuration.isQuietBoot()){
+				displayedSleep(500);
+				setInformation("§aPackets registered");
+				sendMessage("§aPackets registered ("+Packet.countPackets()+" packets are registered)");
+			}
+			sendMessage(ChatColor.GREEN+"BungeeUtil successfully loaded!");
 			displayedSleep(500);
 			setInformation(null);
 			state.setBit(1);
@@ -175,12 +207,12 @@ public final class BungeeUtil {
 			case -1:
 				return -1;
 			case 0:
-				sendMessage(ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "eBungeeUntil" + ChatColorUtils.COLOR_CHAR + "7] " + ChatColorUtils.COLOR_CHAR + "cA fatal error has blocked in the injection of BungeeUtil.");
-				sendMessage(ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "eBungeeUntil" + ChatColorUtils.COLOR_CHAR + "7] " + ChatColorUtils.COLOR_CHAR + "cDisable BungeeUtil");
+				sendMessage(ChatColor.RED+"A fatal error has blocked in the injection of BungeeUtil.");
+				sendMessage(ChatColor.RED+"Disable BungeeUtil");
 				setInformation(null);
 				return 2;
 			case 1:
-				sendMessage(ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "eBungeeUntil" + ChatColorUtils.COLOR_CHAR + "7] " + ChatColorUtils.COLOR_CHAR + "aBungeeUtil injection successful. Need a BungeeCord restart.");
+				sendMessage(ChatColor.GREEN+"BungeeUtil injection successful. Need a BungeeCord restart.");
 				setInformation(null);
 				state.setBit(3);
 				return 0;
@@ -237,7 +269,7 @@ public final class BungeeUtil {
 	
 	public void disable(){
 		active = false;
-		BungeeCord.getInstance().getConsole().sendMessage(ChatColor.GRAY + "[" + ChatColor.YELLOW + "BungeeUntil" + ChatColor.GRAY + "] " + ChatColor.GREEN + "Thank you for using BungeeUntil");
+		sendMessage(ChatColor.GREEN + "Thank you for using BungeeUntil");
 	}
 	
 	public void setInformation(String info) {

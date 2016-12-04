@@ -2,14 +2,11 @@ package dev.wolveringer.bungeeutil;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import dev.wolveringer.bungeeutil.AsyncCatcher.AsyncCatcherMode;
-import dev.wolveringer.bungeeutil.plugin.Main;
 import dev.wolveringer.bungeeutil.translation.Messages;
 import dev.wolveringer.configuration.file.YamlConfiguration;
-import net.md_5.bungee.BungeeCord;
 
 public class Configuration {
 	private static YamlConfiguration conf;
@@ -30,6 +27,10 @@ public class Configuration {
 		}catch (IOException ex){
 			ex.printStackTrace();
 		}
+	}
+	
+	public static boolean isQuietBoot(){
+		return conf.getBoolean("loading.quiet");
 	}
 	
 	public static String getByteBuffType() {

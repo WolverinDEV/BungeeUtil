@@ -115,7 +115,11 @@ public class Main extends Plugin {
 			}
 		}
 		BungeeUtil.getInstance().load();
-		Packet.listPackets();
+		
+		if(!Configuration.isQuietBoot()){
+			BungeeUtil.getInstance().sendMessage(ChatColor.GREEN+"Registered packets:");
+			Packet.listPackets();
+		}
 	}
 	
 	@Override
