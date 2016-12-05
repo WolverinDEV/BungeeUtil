@@ -14,6 +14,7 @@ import dev.wolveringer.bungeeutil.packets.PacketPlayOutSetSlot;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutWindowItems;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.player.Player;
+import net.md_5.bungee.api.ChatColor;
 
 /**
  * @author WolveinGER
@@ -25,16 +26,19 @@ public class Inventory {
 		public List<Player> getModificableViewerList();
 		public MetaListener getItemMetaListener();
 	}
+	
 	public static final int ID = 99;
 
 	protected ItemContainer container;
 	protected String name;
 	protected List<Player> viewer = (List<Player>) Collections.synchronizedList(new ArrayList<Player>());
+	protected List<InventoryListener> listeners = (List<InventoryListener>) Collections.synchronizedList(new ArrayList<InventoryListener>());
 	protected InventoryType type;
 	protected boolean autoUpdate = true;
 	protected boolean clickable = true;
 	protected boolean resend_inventory = false;
 	private MetaListener imcil;
+	
 	private Unsave unsave = new Unsave() {
 		@Override
 		public List<Player> getModificableViewerList() {
@@ -60,7 +64,6 @@ public class Inventory {
 	}
 
 	private Inventory(ItemStack[] items, String name, ArrayList<Player> viewer, InventoryType type) {
-		super();
 		this.container = new ItemContainer(items);
 		this.name = name;
 		this.viewer = viewer;
@@ -211,7 +214,7 @@ public class Inventory {
 
 	public void resize(int size) {
 		if(type != InventoryType.Chest)
-			throw new IllegalStateException("Inventorytype isn�t a Chest!");
+			throw new IllegalStateException("Inventorytype isnt a Chest!");
 		container.resize(size);
 		if(autoUpdate){
 			Item[] items = container.getContains();
@@ -257,7 +260,7 @@ public class Inventory {
 
 	@Override
 	public String toString() {
-		return "Inventory{name=\""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r" + getName() + ""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r\" viewer=" + getViewer() + " ObjektID=\"" + super.toString().split("@")[1] + "\"}";
+		return "Inventory{name=\""+ChatColor.RESET + getName() + ChatColor.RESET +"\" viewer=" + getViewer() + " ObjektID=\"" + super.toString().split("@")[1] + "\"}";
 	}
 
 	public void setContains(ItemStack[] contains) {
@@ -299,5 +302,15 @@ public class Inventory {
 				public void click(Click click) {
 				};
 			};
+	}
+	
+	public void addInventoryListener(InventoryListener listener){
+		this.listeners.add(listener);
+	}
+	public boolean removeInventoryListener(InventoryListener listener){
+		return this.listeners.remove(listener);
+	}
+	public List<InventoryListener> getInventoryListener(){
+		return Collections.unmodifiableList(this.listeners);
 	}
 }

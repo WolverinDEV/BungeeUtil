@@ -9,7 +9,6 @@ import net.md_5.bungee.protocol.DefinedPacket;
 import net.md_5.bungee.protocol.MinecraftEncoder;
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
-import net.md_5.bungee.protocol.packet.LoginSuccess;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.packetlib.PacketHandleEvent;
 import dev.wolveringer.bungeeutil.packetlib.PacketLib;
@@ -69,9 +68,6 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 		}
 		
 		Profiler.encoder_timings.start(HANDLE_GENERAL);
-		if(msg instanceof LoginSuccess)
-			initHandler.isConnected = true;
-		
 		
 		ByteBuf encodedBuffer;
 		super.encode(ctx, msg, encodedBuffer = Unpooled.buffer());

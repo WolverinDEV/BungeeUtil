@@ -8,6 +8,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.util.internal.PlatformDependent;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.BungeeServerInfo;
@@ -28,7 +29,9 @@ import com.google.common.base.Preconditions;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.bossbar.BossBarManager;
+import dev.wolveringer.bungeeutil.inventory.CloseReason;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
+import dev.wolveringer.bungeeutil.inventory.InventoryListener;
 import dev.wolveringer.bungeeutil.inventory.InventoryType;
 import dev.wolveringer.bungeeutil.inventory.PlayerInventory;
 import dev.wolveringer.bungeeutil.item.Item;
@@ -76,6 +79,15 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 	}
 
 	public void closeInventory() {
+		closeInventory(CloseReason.PLUGIN_CLOSED);
+	}
+	
+	@Override
+	public void closeInventory(CloseReason reason) {
+		if(getInventoryView() == null)
+			return;
+		for(InventoryListener l : new ArrayList<>(getInventoryView().getInventoryListener()))
+			l.onClose(getInventoryView(), this, reason);
 		closeInventory(true);
 		updateInventory();
 	}

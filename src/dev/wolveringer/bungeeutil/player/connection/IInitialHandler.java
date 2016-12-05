@@ -13,12 +13,15 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ListenerInfo;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.md_5.bungee.connection.InitialHandler;
+import net.md_5.bungee.netty.ChannelWrapper;
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.packet.Kick;
 import net.md_5.bungee.protocol.packet.LoginSuccess;
+import net.md_5.bungee.protocol.packet.Respawn;
 import dev.wolveringer.bungeeutil.AsyncCatcher;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
+import dev.wolveringer.bungeeutil.inventory.CloseReason;
 import dev.wolveringer.bungeeutil.netty.WarpedChannelWrapper;
 import dev.wolveringer.bungeeutil.netty.WarpedMinecraftDecoder;
 import dev.wolveringer.bungeeutil.netty.WarpedMinecraftEncoder;
@@ -26,7 +29,6 @@ import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutEntityEffect;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutGameStateChange;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutPlayerListHeaderFooter;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutPosition;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutRemoveEntityEffect;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutUpdateHealth;
 import dev.wolveringer.bungeeutil.player.ClientVersion;
@@ -81,6 +83,7 @@ public abstract class IInitialHandler extends InitialHandler {
 	@Override
 	public void handle(LoginSuccess loginSuccess) throws Exception {
 		super.handle(loginSuccess);
+		this.isConnected = true;
 	}
 	
 	public abstract Player getPlayer();
@@ -231,5 +234,19 @@ public abstract class IInitialHandler extends InitialHandler {
 	public String toString() {
 		if (Configuration.isTerminalColored()) return "[" + (getHandshake().getRequestedProtocol() == 2 ? "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "aGAME" : "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "ePING") + "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "7][" + (getHandshake().getRequestedProtocol() == 0 ? "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "6" + getName() : "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "c" + getAddress().getHostString()) + "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "7]";
 		else return super.toString();
+	}
+	
+	@Override
+	public void disconnected(ChannelWrapper channel) throws Exception {
+		if(this.getPlayer().isInventoryOpened())
+			this.getPlayer().closeInventory(CloseReason.CLIENT_DISCONNECTED);
+		super.disconnected(channel);
+	}
+	
+	@Override
+	public void handle(Respawn respawn) throws Exception {
+		super.handle(respawn);
+		if(this.getPlayer().isInventoryOpened())
+			this.getPlayer().closeInventory(CloseReason.SERVER_CLOSED);
 	}
 }

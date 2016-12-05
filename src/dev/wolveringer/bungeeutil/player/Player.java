@@ -3,6 +3,7 @@ package dev.wolveringer.bungeeutil.player;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import dev.wolveringer.bungeeutil.bossbar.BossBarManager;
+import dev.wolveringer.bungeeutil.inventory.CloseReason;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
 import dev.wolveringer.bungeeutil.inventory.PlayerInventory;
 import dev.wolveringer.bungeeutil.item.Item;
@@ -38,7 +39,7 @@ public interface Player extends ProxiedPlayer {
 	public PlayerInventory getPlayerInventory();
 	
 	public void closeInventory();
-	
+	public void closeInventory(CloseReason reason);
 	
 	public void setCursorItem(Item is);
 

@@ -11,6 +11,7 @@ import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.ExceptionUtils;
 import dev.wolveringer.bungeeutil.cache.CachedHashMap;
+import dev.wolveringer.bungeeutil.inventory.CloseReason;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
 import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.item.ItemStack;
@@ -27,7 +28,9 @@ import dev.wolveringer.bungeeutil.packets.PacketPlayInChat;
 import dev.wolveringer.bungeeutil.packets.PacketPlayInCloseWindow;
 import dev.wolveringer.bungeeutil.packets.PacketPlayInFlying;
 import dev.wolveringer.bungeeutil.packets.PacketPlayInWindowClick;
+import dev.wolveringer.bungeeutil.packets.PacketPlayOutCloseWindow;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutNamedEntitySpawn;
+import dev.wolveringer.bungeeutil.packets.PacketPlayOutOpenWindow;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutPlayerListHeaderFooter;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutPosition;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutSetSlot;
@@ -280,13 +283,22 @@ public class MainPacketHandler {
 		if (pack instanceof PacketPlayInCloseWindow) {
 			PacketPlayInCloseWindow pl = (PacketPlayInCloseWindow) pack;
 			if (pl.getWindow() == Inventory.ID && player.isInventoryOpened()) {
-				player.closeInventory();
+				player.closeInventory(CloseReason.CLIENT_CLOSED);
 				player.updateInventory();
 				e.setCancelled(true);
 				return false;
 			}
 			if(player.getCursorItem() != null)
 				player.setCursorItem(null); //Cant have an cursor item with closed inv!
+		}
+		
+		if(pack instanceof PacketPlayOutCloseWindow){
+			if(player.getInventoryView() != null)
+				player.closeInventory(CloseReason.SERVER_CLOSED);
+		}
+		if(pack instanceof PacketPlayOutOpenWindow){
+			if(player.getInventoryView() != null)
+				player.closeInventory(CloseReason.SERVER_OPEN_NEW);
 		}
 		
 		handleSetSlot:
