@@ -1,6 +1,7 @@
 package dev.wolveringer.bungeeutil.entity.datawatcher;
 
 import dev.wolveringer.bungeeutil.entity.datawatcher.impl.v1_10_DataWatcher;
+import dev.wolveringer.bungeeutil.entity.datawatcher.impl.v1_11_DataWatcher;
 import dev.wolveringer.bungeeutil.entity.datawatcher.impl.v1_8_DataWatcher;
 import dev.wolveringer.bungeeutil.entity.datawatcher.impl.v1_9_DataWatcher;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
@@ -20,6 +21,8 @@ public abstract class DataWatcher {
 				return new v1_9_DataWatcher(watcher);
 			case v1_10:
 				return new v1_10_DataWatcher(watcher);
+			case v1_11:
+				return new v1_11_DataWatcher(watcher);
 			default:
 				throw new RuntimeException("Cant find datawatcher for "+version);
 		}
