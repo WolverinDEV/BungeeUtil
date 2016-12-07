@@ -3,11 +3,16 @@ package dev.wolveringer.bungeeutil.netty;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelException;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOption;
+import io.netty.handler.codec.MessageToMessageEncoder;
 import io.netty.handler.timeout.ReadTimeoutHandler;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.util.List;
 
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ProxyServer;
@@ -16,19 +21,38 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.connection.InitialHandler;
 import net.md_5.bungee.netty.HandlerBoss;
 import net.md_5.bungee.netty.PipelineUtils;
+import net.md_5.bungee.protocol.DefinedPacket;
 import net.md_5.bungee.protocol.KickStringWriter;
 import net.md_5.bungee.protocol.LegacyDecoder;
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
+import net.md_5.bungee.protocol.packet.LoginSuccess;
 import net.md_5.bungee.protocol.Varint21FrameDecoder;
 import net.md_5.bungee.protocol.Varint21LengthFieldPrepender;
 import dev.wolveringer.bungeeutil.BungeeUtil;
+import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
 
 public class BungeeUtilChannelInizializer <T extends InitialHandler> extends ChannelInizializer {
 	protected Varint21LengthFieldPrepender framePrepender;
 	
 	public static final DefaultChannelInizializer dinti = new DefaultChannelInizializer();
 	private Constructor<? extends InitialHandler> cons;
+	
+	@NoArgsConstructor
+	@Setter
+	private static class LoginSuccessListener extends MessageToMessageEncoder<DefinedPacket> {
+		private IInitialHandler handler;
+		@Override
+		protected void encode(ChannelHandlerContext arg0, DefinedPacket arg1, List<Object> arg2) throws Exception {
+			if(arg1 instanceof LoginSuccess){
+				if(handler != null)
+					handler.isConnected = true;
+				arg0.pipeline().remove(this);
+			}
+			arg2.add(arg1);
+		}
+		
+	}
 	
 	public BungeeUtilChannelInizializer(Class<T> handler) {
 		if(handler == null)
@@ -71,9 +95,14 @@ public class BungeeUtilChannelInizializer <T extends InitialHandler> extends Cha
 			ch.pipeline().addAfter("frame-prepender", "legacy-kick", new KickStringWriter());
 			
 			ch.pipeline().addAfter("frame-decoder", "packet-decoder", a = new WarpedMinecraftDecoder(Protocol.HANDSHAKE, true, ProxyServer.getInstance().getProtocolVersion(), null, Direction.TO_SERVER));
+			
+			LoginSuccessListener listener;
+			ch.pipeline().addAfter("frame-prepender", "login-listener", listener = new LoginSuccessListener());
 			ch.pipeline().addAfter("frame-prepender", "packet-encoder", b = new WarpedMinecraftEncoder(Protocol.HANDSHAKE, true, ProxyServer.getInstance().getProtocolVersion(), null));
 			
-			ch.pipeline().get(HandlerBoss.class).setHandler(createInitialHandler(ch, b, a));
+			InitialHandler handler;
+			ch.pipeline().get(HandlerBoss.class).setHandler(handler = createInitialHandler(ch, b, a));
+			listener.setHandler((IInitialHandler)handler);
 		}
 		catch (Throwable e) {
 			if (e instanceof NoClassDefFoundError) {

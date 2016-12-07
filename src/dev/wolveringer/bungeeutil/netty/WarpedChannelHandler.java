@@ -84,7 +84,6 @@ public class WarpedChannelHandler extends HandlerBoss {
 								this.channel.getHandle().close();
 						}
 				}
-				
 				boolean sendPacket = true;
 				try{
 					if(packet.packet != null){
