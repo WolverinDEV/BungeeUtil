@@ -1,6 +1,6 @@
 {
-    "CurrentVersion": "2.0",
-    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.0.jar",
+    "CurrentVersion": "2.0.1",
+    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.0.1.jar",
     "VersionsHistory": [
         {
             "Version": "1.6.7.6",
@@ -70,6 +70,10 @@
         {
             "Version": "2.0",
             "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.0.jar"
+        },
+        {
+            "Version": "2.0",
+            "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.0.1.jar"
         }
     ],
     "Changelog": [
@@ -199,6 +203,13 @@
                 "Fixed all know bugs",
                 "Implemented slient loading",
                 "Updated the updater"
+            ]
+        },
+        {
+            "Verion": "2.0.1",
+            "Changed": [
+                "Fixed datawatcher for the 1.11 version",
+                "Fixed issue with isConnected boolean"
             ]
         }
     ]
