@@ -1,6 +1,6 @@
 {
-    "CurrentVersion": "2.0.1",
-    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.0.1.jar",
+    "CurrentVersion": "2.0.2",
+    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.0.2.jar",
     "VersionsHistory": [
         {
             "Version": "1.6.7.6",
@@ -72,8 +72,12 @@
             "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.0.jar"
         },
         {
-            "Version": "2.0",
+            "Version": "2.0.1",
             "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.0.1.jar"
+        },
+        {
+            "Version": "2.0.2",
+            "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.0.2.jar"
         }
     ],
     "Changelog": [
@@ -210,6 +214,12 @@
             "Changed": [
                 "Fixed datawatcher for the 1.11 version",
                 "Fixed issue with isConnected boolean"
+            ]
+        },
+        {
+            "Verion": "2.0.2",
+            "Changed": [
+                "Fixed 'not existing player' but in PostLoginEvent"
             ]
         }
     ]
