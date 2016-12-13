@@ -195,6 +195,7 @@ public class IIInitialHandler extends IInitialHandler {
 								ex.printStackTrace();
 								throw new RuntimeException();
 							}
+							
 							userCon.setCompressionThreshold(BungeeCord.getInstance().config.getCompressionThreshold());
 							userCon.init();
 							conn = userCon;
@@ -204,9 +205,10 @@ public class IIInitialHandler extends IInitialHandler {
 								IIInitialHandler.this.unsafe().sendPacket(new LoginSuccess(IIInitialHandler.this.getUUID(), IIInitialHandler.this.getName()));
 							}
 							getChannel().setProtocol(net.md_5.bungee.protocol.Protocol.GAME);
+							((HandlerBoss) getChannel().getHandle().pipeline().get(HandlerBoss.class)).setHandler(new UpstreamBridge(ProxyServer.getInstance(), userCon));
 							
 							ProxyServer.getInstance().getPluginManager().callEvent(new PostLoginEvent(userCon));
-							((HandlerBoss) getChannel().getHandle().pipeline().get(HandlerBoss.class)).setHandler(new UpstreamBridge(ProxyServer.getInstance(), userCon));
+							
 							ServerInfo server;
 							if(ProxyServer.getInstance().getReconnectHandler() != null){
 								server = ProxyServer.getInstance().getReconnectHandler().getServer(userCon);
