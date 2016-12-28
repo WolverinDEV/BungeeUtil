@@ -91,7 +91,7 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 		super.setProtocolVersion(protocolVersion);
 		this.version = protocolVersion;
 		this.clientVersion = ClientVersion.fromProtocoll(protocolVersion);
-		if(!this.clientVersion.getProtocollVersion().isSupported())
+		if(clientVersion != null && !this.clientVersion.getProtocollVersion().isSupported())
 			this.clientVersion = null;
 	}
 
