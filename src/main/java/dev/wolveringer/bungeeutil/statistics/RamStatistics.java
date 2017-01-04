@@ -4,10 +4,10 @@ import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
-import dev.wolveringer.string.ColoredChar;
 import dev.wolveringer.terminal.graph.TerminalGraph;
 import dev.wolveringer.terminal.graph.TerminalGraph.Graph;
 import dev.wolveringer.terminal.graph.TerminalGraph.Point;
+import dev.wolveringer.terminal.string.ColoredChar;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.scheduler.ScheduledTask;

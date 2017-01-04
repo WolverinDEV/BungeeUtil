@@ -5,12 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import dev.wolveringer.bungeeutil.cache.UsedClassProcessing;
-import dev.wolveringer.bungeeutil.packets.Packet;
-import dev.wolveringer.bungeeutil.player.connection.ProtocollVersion;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
-import net.md_5.bungee.protocol.Protocol;
-import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 
 public class ClassCacheProcessing {
 	

@@ -10,6 +10,7 @@ import dev.wolveringer.configuration.file.YamlConfiguration;
 
 public class Configuration {
 	private static YamlConfiguration conf;
+	@SuppressWarnings("unused")
 	private static List<String> versionsFuture;
 	
 	public static YamlConfiguration getConfig() {
