@@ -18,9 +18,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.jar.JarInputStream;
 
-import net.md_5.bungee.BungeeCord;
-import net.md_5.bungee.api.ChatColor;
-
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,6 +28,8 @@ import dev.wolveringer.bungeeutil.MathUtil;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.ChatColor;
 
 public class Updater {
 	@RequiredArgsConstructor

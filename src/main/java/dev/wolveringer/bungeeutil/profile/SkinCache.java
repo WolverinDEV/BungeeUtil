@@ -6,8 +6,6 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
-import net.md_5.bungee.BungeeCord;
-
 import org.json.JSONObject;
 
 import com.google.common.cache.CacheBuilder;
@@ -16,7 +14,7 @@ import com.google.common.cache.LoadingCache;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.OperationCalback;
-import dev.wolveringer.bungeeutil.plugin.Main;
+import net.md_5.bungee.BungeeCord;
 
 public class SkinCache {
 	private static final String PROFILE_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";

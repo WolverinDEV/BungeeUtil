@@ -2,8 +2,6 @@ package dev.wolveringer.bungeeutil.item;
 
 import java.util.ArrayList;
 
-import dev.wolveringer.bungeeutil.item.Item;
-import dev.wolveringer.bungeeutil.item.ItemStack;
 import dev.wolveringer.bungeeutil.item.ItemStack.Click;
 
 public class ItemBuilder {

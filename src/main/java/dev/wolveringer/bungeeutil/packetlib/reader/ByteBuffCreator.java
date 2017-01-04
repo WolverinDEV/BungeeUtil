@@ -1,17 +1,14 @@
 package dev.wolveringer.bungeeutil.packetlib.reader;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.UUID;
 
-import com.google.common.primitives.SignedBytes;
 import com.google.common.primitives.UnsignedBytes;
 
 import dev.wolveringer.bungeeutil.Configuration;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 
 public class ByteBuffCreator {
 	@SuppressWarnings("serial")

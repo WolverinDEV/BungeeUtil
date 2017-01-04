@@ -1,7 +1,5 @@
 package dev.wolveringer.bungeeutil.player;
 
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import dev.wolveringer.bungeeutil.bossbar.BossBarManager;
 import dev.wolveringer.bungeeutil.inventory.CloseReason;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
@@ -14,6 +12,8 @@ import dev.wolveringer.bungeeutil.position.Location;
 import dev.wolveringer.bungeeutil.scoreboard.Scoreboard;
 import dev.wolveringer.bungeeutil.sound.SoundCategory;
 import dev.wolveringer.bungeeutil.sound.SoundEffect;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public interface Player extends ProxiedPlayer {
 	public IInitialHandler getInitialHandler();

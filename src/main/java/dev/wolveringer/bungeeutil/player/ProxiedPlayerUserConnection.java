@@ -1,27 +1,7 @@
 package dev.wolveringer.bungeeutil.player;
 
-import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.util.internal.PlatformDependent;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-
-import net.md_5.bungee.BungeeCord;
-import net.md_5.bungee.BungeeServerInfo;
-import net.md_5.bungee.UserConnection;
-import net.md_5.bungee.api.Callback;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.event.ServerConnectEvent;
-import net.md_5.bungee.connection.InitialHandler;
-import net.md_5.bungee.netty.ChannelWrapper;
-import net.md_5.bungee.netty.PipelineUtils;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
@@ -51,6 +31,24 @@ import dev.wolveringer.bungeeutil.position.Location;
 import dev.wolveringer.bungeeutil.scoreboard.Scoreboard;
 import dev.wolveringer.bungeeutil.sound.SoundCategory;
 import dev.wolveringer.bungeeutil.sound.SoundEffect;
+import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.util.internal.PlatformDependent;
+import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.BungeeServerInfo;
+import net.md_5.bungee.UserConnection;
+import net.md_5.bungee.api.Callback;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.ServerConnectEvent;
+import net.md_5.bungee.connection.InitialHandler;
+import net.md_5.bungee.netty.ChannelWrapper;
+import net.md_5.bungee.netty.PipelineUtils;
 
 public class ProxiedPlayerUserConnection extends UserConnection implements Player {
 	private static final int CURSOR_ITEM_SLOT = 50;

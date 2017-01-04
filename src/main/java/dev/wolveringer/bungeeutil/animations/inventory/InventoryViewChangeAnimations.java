@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-import net.md_5.bungee.BungeeCord;
-import net.md_5.bungee.api.Callback;
-import dev.wolveringer.bungeeutil.animations.inventory.InventoryViewChangeAnimations.AnimationType;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
 import dev.wolveringer.bungeeutil.inventory.ItemContainer;
 import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.item.Material;
 import dev.wolveringer.bungeeutil.player.Player;
-import dev.wolveringer.bungeeutil.plugin.Main;
+import net.md_5.bungee.api.Callback;
 
 public class InventoryViewChangeAnimations {
 	public static enum AnimationType {

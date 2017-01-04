@@ -2,13 +2,10 @@ package dev.wolveringer.bungeeutil.packets;
 
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayIn;
-import lombok.NoArgsConstructor;
-import org.jsoup.helper.Validate;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
-import io.netty.buffer.Unpooled;
+import lombok.NoArgsConstructor;
 
 @SuppressWarnings("Duplicates")
 @NoArgsConstructor

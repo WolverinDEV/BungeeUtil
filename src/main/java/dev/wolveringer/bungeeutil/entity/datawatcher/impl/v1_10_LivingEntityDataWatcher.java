@@ -2,7 +2,6 @@ package dev.wolveringer.bungeeutil.entity.datawatcher.impl;
 
 import dev.wolveringer.bungeeutil.entity.datawatcher.DataWatcher;
 import dev.wolveringer.bungeeutil.entity.datawatcher.LivingEntityDataWatcher;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class v1_10_LivingEntityDataWatcher extends v1_10_EntityDataWatcher implements LivingEntityDataWatcher{
 	

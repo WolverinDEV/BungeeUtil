@@ -1,15 +1,5 @@
 package dev.wolveringer.bungeeutil.netty;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerContext;
-import lombok.Getter;
-import lombok.Setter;
-import net.md_5.bungee.protocol.DefinedPacket;
-import net.md_5.bungee.protocol.MinecraftEncoder;
-import net.md_5.bungee.protocol.Protocol;
-import net.md_5.bungee.protocol.ProtocolConstants.Direction;
-import net.md_5.bungee.protocol.packet.LoginSuccess;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.packetlib.PacketHandleEvent;
 import dev.wolveringer.bungeeutil.packetlib.PacketLib;
@@ -20,6 +10,15 @@ import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
 import dev.wolveringer.bungeeutil.statistics.profiler.Profiler;
 import dev.wolveringer.bungeeutil.translation.Messages;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandlerContext;
+import lombok.Getter;
+import lombok.Setter;
+import net.md_5.bungee.protocol.DefinedPacket;
+import net.md_5.bungee.protocol.MinecraftEncoder;
+import net.md_5.bungee.protocol.Protocol;
+import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 
 public class WarpedMinecraftEncoder extends MinecraftEncoder {
 	private final static String PACKET_CREATION;

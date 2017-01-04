@@ -1,11 +1,8 @@
 package dev.wolveringer.bungeeutil.terminal;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Handler;
@@ -14,15 +11,9 @@ import java.util.logging.LogRecord;
 
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.Ansi.Erase;
+import org.fusesource.jansi.AnsiConsole;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
-import dev.wolveringer.bungeeutil.chat.AnsiColorFormater;
-import gnu.trove.list.linked.TLinkedList;
-
-import org.fusesource.jansi.AnsiConsole;
-import org.fusesource.jansi.AnsiRenderWriter;
-import org.fusesource.jansi.AnsiString;
-
 import jline.TerminalFactory;
 import jline.console.ConsoleReader;
 import lombok.Getter;

@@ -2,9 +2,8 @@ package dev.wolveringer.bungeeutil.animations.inventory;
 
 import java.util.concurrent.TimeUnit;
 
-import net.md_5.bungee.BungeeCord;
 import dev.wolveringer.bungeeutil.BungeeUtil;
-import dev.wolveringer.bungeeutil.plugin.Main;
+import net.md_5.bungee.BungeeCord;
 
 public abstract class LimetedScheduller implements Runnable {
 	protected int limit;

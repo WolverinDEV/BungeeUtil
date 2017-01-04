@@ -4,12 +4,12 @@ import java.util.UUID;
 
 import dev.wolveringer.bungeeutil.entity.datawatcher.DataWatcher;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
-import dev.wolveringer.nbt.MathHelper;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOutEntity;
 import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
 import dev.wolveringer.bungeeutil.position.Location;
 import dev.wolveringer.bungeeutil.profile.GameProfile;
+import dev.wolveringer.nbt.MathHelper;
 
 public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutEntity implements PacketPlayOut{
 	private GameProfile p = new GameProfile(UUID.randomUUID(), ""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"cProfile error");

@@ -1,7 +1,5 @@
 package dev.wolveringer.bungeeutil.packets.creator;
 
-import io.netty.buffer.ByteBuf;
-
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,9 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.protocol.Protocol;
-import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.CostumPrintStream;
 import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
@@ -26,6 +21,10 @@ import dev.wolveringer.terminal.table.TerminalTable;
 import dev.wolveringer.terminal.table.TerminalTable.Align;
 import dev.wolveringer.terminal.table.TerminalTable.TerminalColumn;
 import dev.wolveringer.terminal.table.TerminalTable.TerminalRow;
+import io.netty.buffer.ByteBuf;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.protocol.Protocol;
+import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 
 public abstract class AbstractPacketCreator {
 	public int calculate(ProtocollVersion version, Protocol p, Direction d, Integer id) {

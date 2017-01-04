@@ -1,18 +1,7 @@
 package dev.wolveringer.bungeeutil.netty;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.List;
 
-import net.md_5.bungee.protocol.BadPacketException;
-import net.md_5.bungee.protocol.DefinedPacket;
-import net.md_5.bungee.protocol.MinecraftDecoder;
-import net.md_5.bungee.protocol.PacketWrapper;
-import net.md_5.bungee.protocol.Protocol;
-import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.packetlib.PacketHandleEvent;
@@ -25,6 +14,16 @@ import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
 import dev.wolveringer.bungeeutil.statistics.profiler.Profiler;
 import dev.wolveringer.bungeeutil.system.ProxyType;
 import dev.wolveringer.bungeeutil.translation.Messages;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import lombok.Getter;
+import lombok.Setter;
+import net.md_5.bungee.protocol.BadPacketException;
+import net.md_5.bungee.protocol.DefinedPacket;
+import net.md_5.bungee.protocol.MinecraftDecoder;
+import net.md_5.bungee.protocol.PacketWrapper;
+import net.md_5.bungee.protocol.Protocol;
+import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 
 public class WarpedMinecraftDecoder extends MinecraftDecoder {
 	private final static String DECODING;

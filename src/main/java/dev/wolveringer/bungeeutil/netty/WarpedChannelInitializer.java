@@ -1,5 +1,6 @@
 package dev.wolveringer.bungeeutil.netty;
 
+import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,6 @@ import net.md_5.bungee.netty.PipelineUtils;
 import net.md_5.bungee.protocol.MinecraftEncoder;
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
-import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
 
 @AllArgsConstructor
 public class WarpedChannelInitializer extends ChannelInitializer<Channel> {

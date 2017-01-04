@@ -4,7 +4,6 @@ import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayIn;
 import dev.wolveringer.bungeeutil.player.HandType;
-import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
 import dev.wolveringer.bungeeutil.position.BlockPosition;
 import dev.wolveringer.bungeeutil.position.Vector3f;
 

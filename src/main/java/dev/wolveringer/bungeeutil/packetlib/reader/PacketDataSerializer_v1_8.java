@@ -1,25 +1,23 @@
 package dev.wolveringer.bungeeutil.packetlib.reader;
 
+import java.io.DataOutput;
+import java.util.UUID;
+
+import com.google.common.base.Charsets;
+
+import dev.wolveringer.bungeeutil.item.Item;
+import dev.wolveringer.bungeeutil.position.BlockPosition;
+import dev.wolveringer.nbt.NBTCompressedStreamTools;
+import dev.wolveringer.nbt.NBTReadLimiter;
+import dev.wolveringer.nbt.NBTTagCompound;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
-
-import java.io.DataOutput;
-import java.util.UUID;
-
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.md_5.bungee.protocol.DefinedPacket;
-
-import com.google.common.base.Charsets;
-
-import dev.wolveringer.bungeeutil.item.Item;
-import dev.wolveringer.nbt.NBTCompressedStreamTools;
-import dev.wolveringer.nbt.NBTReadLimiter;
-import dev.wolveringer.nbt.NBTTagCompound;
-import dev.wolveringer.bungeeutil.position.BlockPosition;
 
 public class PacketDataSerializer_v1_8 extends PacketDataSerializer {
 	public PacketDataSerializer_v1_8(byte pid) {

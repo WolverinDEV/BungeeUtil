@@ -2,14 +2,14 @@ package dev.wolveringer.bungeeutil.packets;
 
 import java.util.Arrays;
 
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.protocol.packet.Team;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.protocol.packet.Team;
 
 @NoArgsConstructor
 @AllArgsConstructor

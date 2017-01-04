@@ -6,9 +6,9 @@ import java.util.List;
 
 import dev.wolveringer.bungeeutil.AsyncCatcher;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardObjective;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardTeam;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardObjective.Action;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardObjective.Type;
+import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardTeam;
 import dev.wolveringer.bungeeutil.player.Player;
 
 public final class Scoreboard {

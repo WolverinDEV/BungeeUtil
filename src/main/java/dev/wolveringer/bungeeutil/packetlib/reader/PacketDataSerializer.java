@@ -1,10 +1,5 @@
 package dev.wolveringer.bungeeutil.packetlib.reader;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
-import io.netty.buffer.ByteBufProcessor;
-import net.md_5.bungee.api.chat.BaseComponent;
-
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
@@ -18,9 +13,13 @@ import java.util.UUID;
 
 import dev.wolveringer.bungeeutil.ByteString;
 import dev.wolveringer.bungeeutil.item.Item;
-import dev.wolveringer.nbt.NBTTagCompound;
 import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.position.BlockPosition;
+import dev.wolveringer.nbt.NBTTagCompound;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.ByteBufProcessor;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 public abstract class PacketDataSerializer extends ByteBuf {
 	public static long clazz = 0;

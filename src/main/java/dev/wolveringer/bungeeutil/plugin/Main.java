@@ -7,9 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import net.md_5.bungee.BungeeCord;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.plugin.Plugin;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.packets.Packet;
@@ -18,6 +15,9 @@ import dev.wolveringer.bungeeutil.system.ProxyType;
 import dev.wolveringer.terminal.table.TerminalTable;
 import dev.wolveringer.terminal.table.TerminalTable.Align;
 import dev.wolveringer.terminal.table.TerminalTable.TerminalRow;
+import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.plugin.Plugin;
 
 public class Main extends Plugin {
 	public Updater updater;

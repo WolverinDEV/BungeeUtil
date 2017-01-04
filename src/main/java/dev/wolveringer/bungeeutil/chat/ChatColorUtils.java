@@ -3,9 +3,9 @@ package dev.wolveringer.bungeeutil.chat;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import net.md_5.bungee.api.ChatColor;
-
 import com.google.common.collect.Maps;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class ChatColorUtils {
 	private final static Map<Character, ChatColor> BY_CHAR = Maps.newHashMap();

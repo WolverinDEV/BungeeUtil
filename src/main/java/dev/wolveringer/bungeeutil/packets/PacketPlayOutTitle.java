@@ -1,7 +1,5 @@
 package dev.wolveringer.bungeeutil.packets;
 
-import org.apache.commons.math3.exception.NullArgumentException;
-
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -2,7 +2,6 @@ package dev.wolveringer.bungeeutil.statistics.profiler;
 
 import java.util.concurrent.TimeUnit;
 
-import net.md_5.bungee.BungeeCord;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
@@ -10,7 +9,7 @@ import dev.wolveringer.bungeeutil.inventory.ScrolingInventory;
 import dev.wolveringer.bungeeutil.item.ItemStack;
 import dev.wolveringer.bungeeutil.item.Material;
 import dev.wolveringer.bungeeutil.item.MultiClickItemStack;
-import dev.wolveringer.bungeeutil.plugin.Main;
+import net.md_5.bungee.BungeeCord;
 
 public class ProfileMenue {
 	private static ProfileMenue menue = new ProfileMenue();

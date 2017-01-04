@@ -1,12 +1,13 @@
 package dev.wolveringer.bungeeutil.packets;
 
+import org.jsoup.helper.Validate;
+
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayIn;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import lombok.NoArgsConstructor;
-import org.jsoup.helper.Validate;
 
 @NoArgsConstructor
 public class PacketPlayInPluginMessage extends Packet implements PacketPlayIn{

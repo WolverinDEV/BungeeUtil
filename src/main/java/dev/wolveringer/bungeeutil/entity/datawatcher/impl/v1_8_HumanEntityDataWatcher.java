@@ -2,7 +2,6 @@ package dev.wolveringer.bungeeutil.entity.datawatcher.impl;
 
 import dev.wolveringer.bungeeutil.entity.datawatcher.DataWatcher;
 import dev.wolveringer.bungeeutil.entity.datawatcher.HumanDataWatcher;
-import dev.wolveringer.bungeeutil.entity.datawatcher.LivingEntityDataWatcher;
 
 public class v1_8_HumanEntityDataWatcher extends v1_8_LivingEntityDataWatcher implements HumanDataWatcher{
 

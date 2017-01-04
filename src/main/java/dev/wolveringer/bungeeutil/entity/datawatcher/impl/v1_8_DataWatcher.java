@@ -1,8 +1,5 @@
 package dev.wolveringer.bungeeutil.entity.datawatcher.impl;
 
-import gnu.trove.map.TObjectIntMap;
-import gnu.trove.map.hash.TObjectIntHashMap;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +14,8 @@ import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.position.BlockPosition;
 import dev.wolveringer.bungeeutil.position.Vector3f;
+import gnu.trove.map.TObjectIntMap;
+import gnu.trove.map.hash.TObjectIntHashMap;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class v1_8_DataWatcher extends DataWatcher{

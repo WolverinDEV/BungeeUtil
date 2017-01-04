@@ -6,18 +6,18 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.md_5.bungee.BungeeCord;
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.hastebin.HastebinPost;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
 import dev.wolveringer.bungeeutil.inventory.ScrolingInventory;
 import dev.wolveringer.bungeeutil.item.ItemStack;
 import dev.wolveringer.bungeeutil.item.Material;
+import dev.wolveringer.bungeeutil.plugin.Main;
 import dev.wolveringer.nbt.NBTCompressedStreamTools;
 import dev.wolveringer.nbt.NBTTagCompound;
 import dev.wolveringer.nbt.NBTTagList;
 import dev.wolveringer.nbt.NBTTagLong;
-import dev.wolveringer.bungeeutil.plugin.Main;
+import net.md_5.bungee.BungeeCord;
 
 public class Profiler {
 	protected static final DecimalFormat TIME_FORMAT = new DecimalFormat("#.000000000");

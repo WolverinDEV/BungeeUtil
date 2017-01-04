@@ -1,11 +1,17 @@
 package dev.wolveringer.bungeeutil.netty;
 
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.timeout.ReadTimeoutException;
-
 import java.io.IOException;
 import java.util.logging.Level;
 
+import com.google.common.base.Preconditions;
+
+import dev.wolveringer.bungeeutil.Configuration;
+import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
+import dev.wolveringer.bungeeutil.player.ClientVersion;
+import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
+import dev.wolveringer.bungeeutil.translation.Messages;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.timeout.ReadTimeoutException;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.connection.CancelSendSignal;
 import net.md_5.bungee.connection.InitialHandler;
@@ -17,14 +23,6 @@ import net.md_5.bungee.protocol.BadPacketException;
 import net.md_5.bungee.protocol.PacketWrapper;
 import net.md_5.bungee.protocol.ProtocolConstants;
 import net.md_5.bungee.protocol.packet.Handshake;
-
-import com.google.common.base.Preconditions;
-
-import dev.wolveringer.bungeeutil.Configuration;
-import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
-import dev.wolveringer.bungeeutil.player.ClientVersion;
-import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
-import dev.wolveringer.bungeeutil.translation.Messages;
 
 public class WarpedChannelHandler extends HandlerBoss {
 	private ChannelWrapper channel;

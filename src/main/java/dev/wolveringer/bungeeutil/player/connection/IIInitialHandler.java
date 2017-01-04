@@ -14,12 +14,18 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 
+import javax.crypto.SecretKey;
+
+import dev.wolveringer.bungeeutil.BungeeUtil;
+import dev.wolveringer.bungeeutil.netty.WarpedMinecraftDecoder;
+import dev.wolveringer.bungeeutil.netty.WarpedMinecraftEncoder;
+import dev.wolveringer.bungeeutil.player.ClientVersion;
+import dev.wolveringer.bungeeutil.player.Player;
+import dev.wolveringer.bungeeutil.player.ProxiedPlayerUserConnection;
+import dev.wolveringer.bungeeutil.plugin.Main;
 import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
-
-import javax.crypto.SecretKey;
-
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.EncryptionUtil;
 import net.md_5.bungee.UserConnection;
@@ -48,13 +54,6 @@ import net.md_5.bungee.protocol.packet.EncryptionRequest;
 import net.md_5.bungee.protocol.packet.EncryptionResponse;
 import net.md_5.bungee.protocol.packet.LoginRequest;
 import net.md_5.bungee.protocol.packet.LoginSuccess;
-import dev.wolveringer.bungeeutil.BungeeUtil;
-import dev.wolveringer.bungeeutil.netty.WarpedMinecraftDecoder;
-import dev.wolveringer.bungeeutil.netty.WarpedMinecraftEncoder;
-import dev.wolveringer.bungeeutil.player.ClientVersion;
-import dev.wolveringer.bungeeutil.player.Player;
-import dev.wolveringer.bungeeutil.player.ProxiedPlayerUserConnection;
-import dev.wolveringer.bungeeutil.plugin.Main;
 
 public class IIInitialHandler extends IInitialHandler {
 	private static int redifned_count = 0;

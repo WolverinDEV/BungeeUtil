@@ -7,12 +7,11 @@ import java.util.List;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardDisplayObjective;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardObjective;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardScore;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardDisplayObjective.Position;
+import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardObjective;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardObjective.Action;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardObjective.Type;
-import dev.wolveringer.bungeeutil.plugin.Main;
+import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardScore;
 
 public final class Objektive {
 	protected Scoreboard owner;

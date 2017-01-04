@@ -1,11 +1,10 @@
 package dev.wolveringer.bungeeutil.packets;
 
-import io.netty.buffer.ByteBuf;
-
 import javax.naming.OperationNotSupportedException;
 
 import dev.wolveringer.bungeeutil.DebugProperties;
 import dev.wolveringer.bungeeutil.player.ClientVersion;
+import io.netty.buffer.ByteBuf;
 
 public abstract class BetaPacket extends Packet{
 	

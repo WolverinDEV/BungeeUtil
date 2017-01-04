@@ -2,9 +2,8 @@ package dev.wolveringer.bungeeutil.animations.text;
 
 import java.util.concurrent.TimeUnit;
 
-import net.md_5.bungee.BungeeCord;
 import dev.wolveringer.bungeeutil.BungeeUtil;
-import dev.wolveringer.bungeeutil.plugin.Main;
+import net.md_5.bungee.BungeeCord;
 
 public abstract class RunningTextFormater {
 	private int PID = -1;

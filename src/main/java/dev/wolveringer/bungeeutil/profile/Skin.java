@@ -3,7 +3,6 @@ package dev.wolveringer.bungeeutil.profile;
 import java.util.UUID;
 
 import org.json.JSONArray;
-import org.json.JSONML;
 import org.json.JSONObject;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 

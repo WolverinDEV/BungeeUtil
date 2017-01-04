@@ -1,23 +1,7 @@
 package dev.wolveringer.bungeeutil.player.connection;
 
-import io.netty.buffer.ByteBuf;
-
 import java.lang.reflect.Field;
 
-import net.md_5.bungee.BungeeCord;
-import net.md_5.bungee.ServerConnection;
-import net.md_5.bungee.UserConnection;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.config.ListenerInfo;
-import net.md_5.bungee.chat.ComponentSerializer;
-import net.md_5.bungee.connection.InitialHandler;
-import net.md_5.bungee.netty.ChannelWrapper;
-import net.md_5.bungee.protocol.Protocol;
-import net.md_5.bungee.protocol.packet.Kick;
-import net.md_5.bungee.protocol.packet.LoginSuccess;
-import net.md_5.bungee.protocol.packet.Respawn;
 import dev.wolveringer.bungeeutil.AsyncCatcher;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
@@ -33,6 +17,21 @@ import dev.wolveringer.bungeeutil.packets.PacketPlayOutRemoveEntityEffect;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutUpdateHealth;
 import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.Player;
+import io.netty.buffer.ByteBuf;
+import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.ServerConnection;
+import net.md_5.bungee.UserConnection;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.config.ListenerInfo;
+import net.md_5.bungee.chat.ComponentSerializer;
+import net.md_5.bungee.connection.InitialHandler;
+import net.md_5.bungee.netty.ChannelWrapper;
+import net.md_5.bungee.protocol.Protocol;
+import net.md_5.bungee.protocol.packet.Kick;
+import net.md_5.bungee.protocol.packet.LoginSuccess;
+import net.md_5.bungee.protocol.packet.Respawn;
 
 public abstract class IInitialHandler extends InitialHandler {
 	public final static Field CHANNEL_FIELD;

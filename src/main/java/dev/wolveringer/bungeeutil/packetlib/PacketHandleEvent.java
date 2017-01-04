@@ -1,9 +1,9 @@
 package dev.wolveringer.bungeeutil.packetlib;
 
-import net.md_5.bungee.api.plugin.Cancellable;
-import net.md_5.bungee.api.plugin.Event;
 import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.player.Player;
+import net.md_5.bungee.api.plugin.Cancellable;
+import net.md_5.bungee.api.plugin.Event;
 
 public class PacketHandleEvent<T extends Packet> extends Event implements Cancellable {
 	private boolean cancelled = false;

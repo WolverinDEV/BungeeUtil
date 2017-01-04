@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.mysql.jdbc.Util;
-
 public class ExceptionUtils {
 	private static final String class_name;
 

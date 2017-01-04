@@ -3,9 +3,9 @@ package dev.wolveringer.bungeeutil.chat;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.md_5.bungee.api.ChatColor;
-
 import org.fusesource.jansi.Ansi;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class AnsiColorFormater {
 

@@ -2,16 +2,16 @@ package dev.wolveringer.bungeeutil.item.meta;
 
 import java.util.UUID;
 
-import net.md_5.bungee.BungeeCord;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.OperationCalback;
 import dev.wolveringer.bungeeutil.item.Item;
-import dev.wolveringer.nbt.NBTTagCompound;
 import dev.wolveringer.bungeeutil.profile.GameProfile;
 import dev.wolveringer.bungeeutil.profile.GameProfileSerializer;
 import dev.wolveringer.bungeeutil.profile.Skin;
 import dev.wolveringer.bungeeutil.profile.SkinFactory;
 import dev.wolveringer.bungeeutil.profile.UUIDFetcher;
+import dev.wolveringer.nbt.NBTTagCompound;
+import net.md_5.bungee.BungeeCord;
 
 public class SkullMeta extends CraftItemMeta {
 

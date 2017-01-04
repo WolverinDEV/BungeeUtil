@@ -1,19 +1,18 @@
 package dev.wolveringer.bungeeutil.netty;
 
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import javax.naming.OperationNotSupportedException;
 
-import net.md_5.bungee.BungeeCord;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.netty.PipelineUtils;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.player.connection.IIInitialHandler;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelInitializer;
+import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.netty.PipelineUtils;
 
 public abstract class ChannelInizializer extends ChannelInitializer<Channel> {
 	private static ChannelInizializer init;

@@ -9,10 +9,10 @@ import dev.wolveringer.bungeeutil.item.ItemStack;
 import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutSetSlot;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
+import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
 import dev.wolveringer.bungeeutil.player.Player;
 import lombok.Getter;
 import lombok.Setter;
-import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
 
 public final class PlayerInventory {
 	@SuppressWarnings("serial")

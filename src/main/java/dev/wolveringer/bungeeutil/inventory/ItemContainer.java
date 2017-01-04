@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.item.ItemStack;
-import dev.wolveringer.bungeeutil.item.Material;
 
 public class ItemContainer {
 	private static Item[] convert(ItemStack... items) {

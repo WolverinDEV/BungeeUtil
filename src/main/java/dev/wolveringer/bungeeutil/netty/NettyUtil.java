@@ -1,10 +1,9 @@
 package dev.wolveringer.bungeeutil.netty;
 
-import io.netty.channel.Channel;
-
 import java.lang.reflect.Field;
 import java.util.Collection;
 
+import io.netty.channel.Channel;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.protocol.MinecraftDecoder;
 import net.md_5.bungee.protocol.MinecraftEncoder;

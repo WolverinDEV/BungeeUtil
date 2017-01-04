@@ -1,16 +1,9 @@
 package dev.wolveringer.bungeeutil.packets;
 
-import io.netty.buffer.ByteBuf;
-import lombok.Getter;
-
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.junit.internal.ExactComparisonCriteria;
-
-import net.md_5.bungee.protocol.Protocol;
-import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 import dev.wolveringer.bungeeutil.CostumPrintStream;
 import dev.wolveringer.bungeeutil.packetlib.reader.ByteBuffCreator;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
@@ -19,9 +12,13 @@ import dev.wolveringer.bungeeutil.packets.creator.CachedPacketCreator;
 import dev.wolveringer.bungeeutil.packets.creator.NormalPacketCreator;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.player.ClientVersion;
-import dev.wolveringer.bungeeutil.player.Player;
 import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
+import dev.wolveringer.bungeeutil.player.Player;
 import dev.wolveringer.bungeeutil.player.connection.ProtocollVersion;
+import io.netty.buffer.ByteBuf;
+import lombok.Getter;
+import net.md_5.bungee.protocol.Protocol;
+import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 
 public abstract class Packet {
 	@Getter

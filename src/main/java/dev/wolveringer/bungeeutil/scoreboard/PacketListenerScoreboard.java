@@ -11,10 +11,9 @@ import dev.wolveringer.bungeeutil.packetlib.PacketLib;
 import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardDisplayObjective;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardObjective;
+import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardObjective.Action;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardScore;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardTeam;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardObjective.Action;
-import dev.wolveringer.bungeeutil.plugin.Main;
 import dev.wolveringer.bungeeutil.scoreboard.Objektive.Score;
 
 public final class PacketListenerScoreboard implements PacketHandler<Packet> {

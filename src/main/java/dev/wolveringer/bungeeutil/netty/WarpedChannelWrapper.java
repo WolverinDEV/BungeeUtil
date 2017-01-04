@@ -1,5 +1,13 @@
 package dev.wolveringer.bungeeutil.netty;
 
+import java.lang.reflect.Field;
+import java.net.SocketAddress;
+import java.util.concurrent.TimeUnit;
+
+import com.google.common.base.Preconditions;
+
+import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
+import dev.wolveringer.bungeeutil.system.ProxyType;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -12,11 +20,6 @@ import io.netty.util.Attribute;
 import io.netty.util.AttributeKey;
 import io.netty.util.concurrent.EventExecutor;
 import lombok.Getter;
-
-import java.lang.reflect.Field;
-import java.net.SocketAddress;
-import java.util.concurrent.TimeUnit;
-
 import net.md_5.bungee.compress.PacketCompressor;
 import net.md_5.bungee.compress.PacketDecompressor;
 import net.md_5.bungee.netty.ChannelWrapper;
@@ -25,11 +28,6 @@ import net.md_5.bungee.protocol.MinecraftDecoder;
 import net.md_5.bungee.protocol.MinecraftEncoder;
 import net.md_5.bungee.protocol.PacketWrapper;
 import net.md_5.bungee.protocol.Protocol;
-
-import com.google.common.base.Preconditions;
-
-import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
-import dev.wolveringer.bungeeutil.system.ProxyType;
 
 public class WarpedChannelWrapper extends ChannelWrapper {
 

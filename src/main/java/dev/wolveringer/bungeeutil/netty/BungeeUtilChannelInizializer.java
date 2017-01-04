@@ -1,5 +1,11 @@
 package dev.wolveringer.bungeeutil.netty;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.util.List;
+
+import dev.wolveringer.bungeeutil.BungeeUtil;
+import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelException;
@@ -7,13 +13,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.codec.MessageToMessageEncoder;
 import io.netty.handler.timeout.ReadTimeoutHandler;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.util.List;
-
+import lombok.Setter;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ListenerInfo;
@@ -26,11 +27,9 @@ import net.md_5.bungee.protocol.KickStringWriter;
 import net.md_5.bungee.protocol.LegacyDecoder;
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
-import net.md_5.bungee.protocol.packet.LoginSuccess;
 import net.md_5.bungee.protocol.Varint21FrameDecoder;
 import net.md_5.bungee.protocol.Varint21LengthFieldPrepender;
-import dev.wolveringer.bungeeutil.BungeeUtil;
-import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
+import net.md_5.bungee.protocol.packet.LoginSuccess;
 
 public class BungeeUtilChannelInizializer <T extends InitialHandler> extends ChannelInizializer {
 	protected Varint21LengthFieldPrepender framePrepender;
