@@ -1,4 +1,4 @@
-package dev.wolveringer.bungeeutil.packets;
+package dev.wolveringer.bungeeutil.packets.creator;
 
 import io.netty.buffer.ByteBuf;
 
@@ -17,6 +17,7 @@ import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.CostumPrintStream;
 import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
+import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.packets.Packet.ProtocollId;
 import dev.wolveringer.bungeeutil.player.Player;
 import dev.wolveringer.bungeeutil.player.connection.ProtocollVersion;

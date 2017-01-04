@@ -20,11 +20,12 @@ public abstract class BetaPacket extends Packet{
 		
 	}
 	@Override
-	protected Packet load(ByteBuf b,ClientVersion version) {
+	public Packet load(ByteBuf b,ClientVersion version) {
 		if(!DebugProperties.PACKET_DEVELOPMENT)
 			throw new RuntimeException(new OperationNotSupportedException("Packet is stille under development!"));
 		return super.load(b,version);
 	}
+	
 	@Override
 	public ByteBuf getByteBuf(ClientVersion version) {
 		if(!DebugProperties.PACKET_DEVELOPMENT)

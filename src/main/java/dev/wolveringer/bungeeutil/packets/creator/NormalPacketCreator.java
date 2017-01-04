@@ -1,4 +1,4 @@
-package dev.wolveringer.bungeeutil.packets;
+package dev.wolveringer.bungeeutil.packets.creator;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -8,6 +8,7 @@ import java.util.List;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.ExceptionUtils;
+import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.packets.Packet.ProtocollId;
 import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.Player;
@@ -21,15 +22,16 @@ import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 public class NormalPacketCreator extends AbstractPacketCreator {
 	@AllArgsConstructor
 	@Getter
-	private static class PacketHolder {
-		private Constructor<? extends Packet> constuctor;
+	private static class PacketHolder<T extends Packet> {
+		private Constructor<T> constuctor;
 
-		public Packet newInstance() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		public T newInstance() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 			return constuctor.newInstance();
 		}
 	}
 	
-	private PacketHolder[] packetsId = new PacketHolder[((ProtocollVersion.values().length & 0x0F) << 16) | ((Protocol.values().length & 0x0F) << 12) | ((Direction.values().length & 0x0F) << 8) | 0xFF]; // Calculate max packet compressed id. (0xFF = Max ID)
+	private PacketHolder<?>[] packetsId = new PacketHolder[((ProtocollVersion.values().length & 0x0F) << 16) | ((Protocol.values().length & 0x0F) << 12) | ((Direction.values().length & 0x0F) << 8) | 0xFF]; // Calculate max packet compressed id. (0xFF = Max ID)
+	
 	@SuppressWarnings("unchecked")
 	private HashMap<Class<? extends Packet>, Integer>[] classToId = new HashMap[ProtocollVersion.values().length];
 	
@@ -75,7 +77,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 	
 	public Packet getPacket0(ProtocollVersion version,Protocol protocol, Direction d, Integer id, ByteBuf b, Player p) {
 		int compressed = calculate(version, protocol, d, id);
-		PacketHolder cons = null;
+		PacketHolder<?> cons = null;
 		if ((cons = packetsId[compressed]) == null) {
 			if(version.getBasedVersion().getProtocollVersion() == version){ //Fallback (based version) (1.8-1.9)
 				return null;
@@ -89,10 +91,10 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		try {
 			Packet packet = cons.newInstance();
 			if (p == null || p.getVersion() == null){
-				BungeeUtil.getInstance().debug("Version of '"+(p == null ? "<Null client>" : p.getName())+"' is undefined");
-				return packet.setcompressedId(compressed).load(b, ClientVersion.UnderknownVersion);
+				BungeeUtil.debug("Version of '"+(p == null ? "<Null client>" : p.getName())+"' is undefined");
+				return packet.setCompressedId(compressed).load(b, ClientVersion.UnderknownVersion);
 			}
-			else return packet.setcompressedId(compressed).load(b, p.getVersion());
+			else return packet.setCompressedId(compressed).load(b, p.getVersion());
 		}
 		catch (Exception e) {
 			throw ExceptionUtils.createRuntimeException(ExceptionUtils.setExceptionMessage(e, "Packet error (Version: " + (p == null ? "unknown" : p.getVersion()) + ", Readed version: "+version+", Class: " + (cons == null || cons.getConstuctor() == null ? "null" : cons.getConstuctor().getDeclaringClass().getName()) + ", Id: 0x"+Integer.toHexString(id).toUpperCase()+") -> "+e.getMessage()));
@@ -114,7 +116,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		try {
 			for(ProtocollId id : ids)
 				if(id != null && id.isValid()){
-					packetsId[loadPacket(id.getVersion(),p, d, id.getId(), clazz)] = new PacketHolder(clazz == null ? null : (Constructor<? extends Packet>) clazz.getConstructor());
+					packetsId[loadPacket(id.getVersion(),p, d, id.getId(), clazz)] = new PacketHolder(clazz == null ? null : (Constructor<?>) clazz.getConstructor());
 				}
 		}
 		catch (NoSuchMethodException | SecurityException ex) {

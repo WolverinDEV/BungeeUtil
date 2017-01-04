@@ -11,6 +11,8 @@ import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 import dev.wolveringer.bungeeutil.CostumPrintStream;
 import dev.wolveringer.bungeeutil.packetlib.reader.ByteBuffCreator;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
+import dev.wolveringer.bungeeutil.packets.creator.AbstractPacketCreator;
+import dev.wolveringer.bungeeutil.packets.creator.NormalPacketCreator;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.Player;
@@ -202,7 +204,8 @@ public abstract class Packet {
 	private ClientVersion readedVersion = ClientVersion.UnderknownVersion;
 	private ClientVersion writtenVersion = ClientVersion.UnderknownVersion;
 	
-	protected Packet setcompressedId(int id) {
+	@Deprecated
+	public Packet setCompressedId(int id) {
 		this.compressedId = id;
 		return this;
 	}
@@ -249,7 +252,7 @@ public abstract class Packet {
 		return s;
 	}
 	
-	protected Packet load(ByteBuf b, ClientVersion version) {
+	public Packet load(ByteBuf b, ClientVersion version) {
 		this.version = (readedVersion = version);
 		read(PacketDataSerializer.create(b, version));
 		this.version = ClientVersion.UnderknownVersion;
@@ -266,17 +269,17 @@ public abstract class Packet {
 	
 	public abstract void write(PacketDataSerializer s);
 	
-	@Deprecated
-	protected BigClientVersion getBigVersion() {
-		return version.getBigVersion();
-	}
-	
 	public ClientVersion getReadedVersion() {
 		return readedVersion;
 	}
 	
 	public ClientVersion getWrittenVersion() {
 		return writtenVersion;
+	}
+	
+	@Deprecated
+	protected BigClientVersion getBigVersion() {
+		return version.getBigVersion();
 	}
 	
 	@Deprecated
