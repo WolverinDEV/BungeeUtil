@@ -12,7 +12,7 @@ import net.md_5.bungee.chat.ComponentSerializer;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PacketPlayOutChat extends BetaPacket implements PacketPlayOut {
+public class PacketPlayOutChat extends Packet implements PacketPlayOut {
 
 	private byte modus = 0;
 	private ByteString rawMessage;
