@@ -1,5 +1,5 @@
 name: BungeeUtil
-version: -1
+version: ${project.version}
 main: dev.wolveringer.BungeeUtil.bukkit.BukkitMain
 
 commands:

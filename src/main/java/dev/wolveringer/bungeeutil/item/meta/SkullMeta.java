@@ -7,7 +7,6 @@ import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.OperationCalback;
 import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.nbt.NBTTagCompound;
-import dev.wolveringer.bungeeutil.plugin.Main;
 import dev.wolveringer.bungeeutil.profile.GameProfile;
 import dev.wolveringer.bungeeutil.profile.GameProfileSerializer;
 import dev.wolveringer.bungeeutil.profile.Skin;

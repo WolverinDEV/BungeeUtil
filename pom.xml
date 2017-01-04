@@ -4,27 +4,7 @@
 	<groupId>dev.wolveringer</groupId>
 	<artifactId>BungeeUtil</artifactId>
 	<version>2.0.3</version>
-	<profiles>
-		<profile>
-			<id>testdir</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-jar-plugin</artifactId>
-						<version>2.3.1</version>
-						<configuration>
-							<outputDirectory>/home/wolverindev/bungee/plugins/</outputDirectory>
-							<jarName>BungeeUtils</jarName>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+	
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
@@ -35,23 +15,38 @@
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
 		</repository>
 	</distributionManagement>
+	
 	<repositories>
 		<repository>
 			<id>ossrh-snapshots</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</repository>
 	</repositories>
+	
 	<build>
-		<sourceDirectory>src</sourceDirectory>
+		<sourceDirectory>src/main/java</sourceDirectory>
 		<resources>
+			<!-- Replacing the version -->
 			<resource>
-				<directory>src</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>bungee.yml</include>
+					<include>plugin.yml</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
 			</resource>
 		</resources>
+		
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.1</version>
+			</plugin>
+			
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.3</version>
@@ -60,34 +55,7 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.3.1</version>
-			</plugin>
-			<plugin>
-				<groupId>com.google.code.maven-replacer-plugin</groupId>
-				<artifactId>maven-replacer-plugin</artifactId>
-				<version>1.4.0</version>
-				<executions>
-					<execution>
-						<phase>process-sources</phase>
-						<goals>
-							<goal>replace</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<file>${bungeeyml.location}</file>
-					<outputFile>${bungeeyml.location}</outputFile>
-					<replacements>
-						<replacement>
-							<token>version: (.*)</token>
-							<value>version: ${project.version}</value>
-						</replacement>
-					</replacements>
-				</configuration>
-			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
@@ -99,15 +67,6 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
-							<minimizeJar>true</minimizeJar>
-							<filters>
-								<filter>
-									<artifact>net.md-5:*</artifact>
-									<excludes>
-										<exclude>**</exclude>
-									</excludes>
-								</filter>
-							</filters>
 							<artifactSet>
 								<excludes>
 									<exclude>io.netty:**</exclude>
@@ -118,6 +77,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -133,10 +93,12 @@
 			</plugin>
 		</plugins>
 	</build>
+	
 	<properties>
-		<bungeeyml.location>src/bungee.yml</bungeeyml.location>
+		<bungeeyml.location>src/main/resources/bungee.yml</bungeeyml.location>
 		<bungeecord.version>1.11-SNAPSHOT</bungeecord.version>
 	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>io.netty</groupId>
