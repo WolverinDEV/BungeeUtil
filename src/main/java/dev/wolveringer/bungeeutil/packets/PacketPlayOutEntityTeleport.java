@@ -13,68 +13,71 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PacketPlayOutEntityTeleport extends Packet implements PacketPlayOut {
-	Location loc;
-	int id;
+	private Location loc;
+	private int id;
 	private boolean onGround;
 
+	@Override
 	public void read(PacketDataSerializer s) {
-		if(getVersion().getVersion() < 16)
-			id = s.readInt();
-		else
-			id = s.readVarInt();
-		
-		switch (getBigVersion()) {
+		if(this.getVersion().getVersion() < 16) {
+			this.id = s.readInt();
+		} else {
+			this.id = s.readVarInt();
+		}
+
+		switch (this.getBigVersion()) {
 		case v1_9:
 		case v1_10:
 		case v1_11:
-			loc = new Location(s.readDouble(), s.readDouble(), s.readDouble(),((float)s.readByte())/ 256.0F * 360.0F,((float)s.readByte())/ 256.0F * 360.0F);
+			this.loc = new Location(s.readDouble(), s.readDouble(), s.readDouble(),s.readByte()/ 256.0F * 360.0F,s.readByte()/ 256.0F * 360.0F);
 			break;
 		case v1_8:
 		case v1_7:
-			loc = new Location(s.readInt(), s.readInt(), s.readInt(), ((float)s.readByte())/ 256.0F * 360.0F,((float)s.readByte())/ 256.0F * 360.0F).dividide(32D);
+			this.loc = new Location(s.readInt(), s.readInt(), s.readInt(), s.readByte()/ 256.0F * 360.0F,s.readByte()/ 256.0F * 360.0F).dividide(32D);
 			break;
 		default:
 			break;
 		}
-		if(getVersion().getVersion() >= 22){
-			onGround = s.readBoolean();
+		if(this.getVersion().getVersion() >= 22){
+			this.onGround = s.readBoolean();
 		}
 	}
 
 	@Override
 	public void write(PacketDataSerializer s) {
-		if(getVersion().getVersion() < 16){
-			s.writeInt(id);
+		if(this.getVersion().getVersion() < 16){
+			s.writeInt(this.id);
 		}else{
-			s.writeVarInt(id);
+			s.writeVarInt(this.id);
 		}
-		
-		switch (getBigVersion()) {
+
+		switch (this.getBigVersion()) {
 		case v1_9:
 		case v1_10:
 		case v1_11:
-			s.writeDouble(loc.getX());
-			s.writeDouble(loc.getY());
-			s.writeDouble(loc.getZ());
-			
-			s.writeByte((int) (loc.getYaw() * 256.0F / 360.0F));
-			s.writeByte((int) (loc.getPitch() * 256.0F / 360.0F));
+			s.writeDouble(this.loc.getX());
+			s.writeDouble(this.loc.getY());
+			s.writeDouble(this.loc.getZ());
+
+			s.writeByte((int) (this.loc.getYaw() * 256.0F / 360.0F));
+			s.writeByte((int) (this.loc.getPitch() * 256.0F / 360.0F));
 			break;
 		case v1_8:
 		case v1_7:
-			loc = loc.multiply(32D);
-			s.writeInt(loc.getBlockX());
-			s.writeInt(loc.getBlockY());
-			s.writeInt(loc.getBlockZ());
+			this.loc = this.loc.multiply(32D);
+			s.writeInt(this.loc.getBlockX());
+			s.writeInt(this.loc.getBlockY());
+			s.writeInt(this.loc.getBlockZ());
 
-			s.writeByte((int) (loc.getYaw() * 256.0F / 360.0F));
-			s.writeByte((int) (loc.getPitch() * 256.0F / 360.0F));
+			s.writeByte((int) (this.loc.getYaw() * 256.0F / 360.0F));
+			s.writeByte((int) (this.loc.getPitch() * 256.0F / 360.0F));
 			break;
 		default:
 			break;
 		}
 
-		if(getVersion().getVersion() >= 22)
+		if(this.getVersion().getVersion() >= 22) {
 			s.writeBoolean(this.onGround);
+		}
 	}
 }

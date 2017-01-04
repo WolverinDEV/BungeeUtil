@@ -155,9 +155,9 @@ public class Vector implements Cloneable {
 	 * @return the same vector
 	 */
 	public Vector add(Vector vec) {
-		x += vec.x;
-		y += vec.y;
-		z += vec.z;
+		this.x += vec.x;
+		this.y += vec.y;
+		this.z += vec.z;
 		return this;
 	}
 
@@ -169,7 +169,7 @@ public class Vector implements Cloneable {
 	 * @return angle in radians
 	 */
 	public float angle(Vector other) {
-		double dot = dot(other) / (length() * other.length());
+		double dot = this.dot(other) / (this.length() * other.length());
 
 		return (float) Math.acos(dot);
 	}
@@ -196,9 +196,9 @@ public class Vector implements Cloneable {
 	 * @return the same vector
 	 */
 	public Vector copy(Vector vec) {
-		x = vec.x;
-		y = vec.y;
-		z = vec.z;
+		this.x = vec.x;
+		this.y = vec.y;
+		this.z = vec.z;
 		return this;
 	}
 
@@ -216,13 +216,13 @@ public class Vector implements Cloneable {
 	 * @return the same vector
 	 */
 	public Vector crossProduct(Vector o) {
-		double newX = y * o.z - o.y * z;
-		double newY = z * o.x - o.z * x;
-		double newZ = x * o.y - o.x * y;
+		double newX = this.y * o.z - o.y * this.z;
+		double newY = this.z * o.x - o.z * this.x;
+		double newZ = this.x * o.y - o.x * this.y;
 
-		x = newX;
-		y = newY;
-		z = newZ;
+		this.x = newX;
+		this.y = newY;
+		this.z = newZ;
 		return this;
 	}
 
@@ -238,7 +238,7 @@ public class Vector implements Cloneable {
 	 * @return the distance
 	 */
 	public double distance(Vector o) {
-		return Math.sqrt(NumberConversions.square(x - o.x) + NumberConversions.square(y - o.y) + NumberConversions.square(z - o.z));
+		return Math.sqrt(NumberConversions.square(this.x - o.x) + NumberConversions.square(this.y - o.y) + NumberConversions.square(this.z - o.z));
 	}
 
 	/**
@@ -249,7 +249,7 @@ public class Vector implements Cloneable {
 	 * @return the distance
 	 */
 	public double distanceSquared(Vector o) {
-		return NumberConversions.square(x - o.x) + NumberConversions.square(y - o.y) + NumberConversions.square(z - o.z);
+		return NumberConversions.square(this.x - o.x) + NumberConversions.square(this.y - o.y) + NumberConversions.square(this.z - o.z);
 	}
 
 	/**
@@ -260,9 +260,9 @@ public class Vector implements Cloneable {
 	 * @return the same vector
 	 */
 	public Vector divide(Vector vec) {
-		x /= vec.x;
-		y /= vec.y;
-		z /= vec.z;
+		this.x /= vec.x;
+		this.y /= vec.y;
+		this.z /= vec.z;
 		return this;
 	}
 
@@ -275,7 +275,7 @@ public class Vector implements Cloneable {
 	 * @return dot product
 	 */
 	public double dot(Vector other) {
-		return x * other.x + y * other.y + z * other.z;
+		return this.x * other.x + this.y * other.y + this.z * other.z;
 	}
 
 	/**
@@ -293,7 +293,7 @@ public class Vector implements Cloneable {
 
 		Vector other = (Vector) obj;
 
-		return Math.abs(x - other.x) < epsilon && Math.abs(y - other.y) < epsilon && Math.abs(z - other.z) < epsilon && this.getClass().equals(obj.getClass());
+		return Math.abs(this.x - other.x) < epsilon && Math.abs(this.y - other.y) < epsilon && Math.abs(this.z - other.z) < epsilon && this.getClass().equals(obj.getClass());
 	}
 
 	/**
@@ -303,7 +303,7 @@ public class Vector implements Cloneable {
 	 * @return block X
 	 */
 	public int getBlockX() {
-		return NumberConversions.floor(x);
+		return NumberConversions.floor(this.x);
 	}
 
 	/**
@@ -313,7 +313,7 @@ public class Vector implements Cloneable {
 	 * @return block y
 	 */
 	public int getBlockY() {
-		return NumberConversions.floor(y);
+		return NumberConversions.floor(this.y);
 	}
 
 	/**
@@ -323,7 +323,7 @@ public class Vector implements Cloneable {
 	 * @return block z
 	 */
 	public int getBlockZ() {
-		return NumberConversions.floor(z);
+		return NumberConversions.floor(this.z);
 	}
 
 	/**
@@ -346,7 +346,7 @@ public class Vector implements Cloneable {
 	 * @return The X component.
 	 */
 	public double getX() {
-		return x;
+		return this.x;
 	}
 
 	/**
@@ -355,7 +355,7 @@ public class Vector implements Cloneable {
 	 * @return The Y component.
 	 */
 	public double getY() {
-		return y;
+		return this.y;
 	}
 
 	/**
@@ -364,7 +364,7 @@ public class Vector implements Cloneable {
 	 * @return The Z component.
 	 */
 	public double getZ() {
-		return z;
+		return this.z;
 	}
 
 	/**
@@ -395,7 +395,7 @@ public class Vector implements Cloneable {
 	 * @return whether this vector is in the AABB
 	 */
 	public boolean isInAABB(Vector min, Vector max) {
-		return x >= min.x && x <= max.x && y >= min.y && y <= max.y && z >= min.z && z <= max.z;
+		return this.x >= min.x && this.x <= max.x && this.y >= min.y && this.y <= max.y && this.z >= min.z && this.z <= max.z;
 	}
 
 	/**
@@ -408,7 +408,7 @@ public class Vector implements Cloneable {
 	 * @return whether this vector is in the sphere
 	 */
 	public boolean isInSphere(Vector origin, double radius) {
-		return NumberConversions.square(origin.x - x) + NumberConversions.square(origin.y - y) + NumberConversions.square(origin.z - z) <= NumberConversions.square(radius);
+		return NumberConversions.square(origin.x - this.x) + NumberConversions.square(origin.y - this.y) + NumberConversions.square(origin.z - this.z) <= NumberConversions.square(radius);
 	}
 
 	/**
@@ -421,7 +421,7 @@ public class Vector implements Cloneable {
 	 * @return the magnitude
 	 */
 	public double length() {
-		return Math.sqrt(NumberConversions.square(x) + NumberConversions.square(y) + NumberConversions.square(z));
+		return Math.sqrt(NumberConversions.square(this.x) + NumberConversions.square(this.y) + NumberConversions.square(this.z));
 	}
 
 	/**
@@ -430,7 +430,7 @@ public class Vector implements Cloneable {
 	 * @return the magnitude
 	 */
 	public double lengthSquared() {
-		return NumberConversions.square(x) + NumberConversions.square(y) + NumberConversions.square(z);
+		return NumberConversions.square(this.x) + NumberConversions.square(this.y) + NumberConversions.square(this.z);
 	}
 
 	/**
@@ -441,9 +441,9 @@ public class Vector implements Cloneable {
 	 * @return this same vector (now a midpoint)
 	 */
 	public Vector midpoint(Vector other) {
-		x = (x + other.x) / 2;
-		y = (y + other.y) / 2;
-		z = (z + other.z) / 2;
+		this.x = (this.x + other.x) / 2;
+		this.y = (this.y + other.y) / 2;
+		this.z = (this.z + other.z) / 2;
 		return this;
 	}
 
@@ -456,9 +456,9 @@ public class Vector implements Cloneable {
 	 * @return the same vector
 	 */
 	public Vector multiply(double m) {
-		x *= m;
-		y *= m;
-		z *= m;
+		this.x *= m;
+		this.y *= m;
+		this.z *= m;
 		return this;
 	}
 
@@ -471,9 +471,9 @@ public class Vector implements Cloneable {
 	 * @return the same vector
 	 */
 	public Vector multiply(float m) {
-		x *= m;
-		y *= m;
-		z *= m;
+		this.x *= m;
+		this.y *= m;
+		this.z *= m;
 		return this;
 	}
 
@@ -486,9 +486,9 @@ public class Vector implements Cloneable {
 	 * @return the same vector
 	 */
 	public Vector multiply(int m) {
-		x *= m;
-		y *= m;
-		z *= m;
+		this.x *= m;
+		this.y *= m;
+		this.z *= m;
 		return this;
 	}
 
@@ -500,9 +500,9 @@ public class Vector implements Cloneable {
 	 * @return the same vector
 	 */
 	public Vector multiply(Vector vec) {
-		x *= vec.x;
-		y *= vec.y;
-		z *= vec.z;
+		this.x *= vec.x;
+		this.y *= vec.y;
+		this.z *= vec.z;
 		return this;
 	}
 
@@ -512,11 +512,11 @@ public class Vector implements Cloneable {
 	 * @return the same vector
 	 */
 	public Vector normalize() {
-		double length = length();
+		double length = this.length();
 
-		x /= length;
-		y /= length;
-		z /= length;
+		this.x /= length;
+		this.y /= length;
+		this.z /= length;
 
 		return this;
 	}
@@ -524,9 +524,9 @@ public class Vector implements Cloneable {
 	public Map<String, Object> serialize() {
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
 
-		result.put("x", getX());
-		result.put("y", getY());
-		result.put("z", getZ());
+		result.put("x", this.getX());
+		result.put("y", this.getY());
+		result.put("z", this.getZ());
 
 		return result;
 	}
@@ -647,9 +647,9 @@ public class Vector implements Cloneable {
 	 * @return the same vector
 	 */
 	public Vector subtract(Vector vec) {
-		x -= vec.x;
-		y -= vec.y;
-		z -= vec.z;
+		this.x -= vec.x;
+		this.y -= vec.y;
+		this.z -= vec.z;
 		return this;
 	}
 
@@ -665,7 +665,7 @@ public class Vector implements Cloneable {
 	 * @return the location
 	 */
 	public Location toLocation(float yaw, float pitch) {
-		return new Location(x, y, z, yaw, pitch);
+		return new Location(this.x, this.y, this.z, yaw, pitch);
 	}
 
 	/**
@@ -673,7 +673,7 @@ public class Vector implements Cloneable {
 	 */
 	@Override
 	public String toString() {
-		return x + "," + y + "," + z;
+		return this.x + "," + this.y + "," + this.z;
 	}
 
 	/**
@@ -682,9 +682,9 @@ public class Vector implements Cloneable {
 	 * @return the same vector
 	 */
 	public Vector zero() {
-		x = 0;
-		y = 0;
-		z = 0;
+		this.x = 0;
+		this.y = 0;
+		this.z = 0;
 		return this;
 	}
 }

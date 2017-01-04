@@ -19,8 +19,9 @@ public class NettyUtil {
 
 	public static Protocol getProtocol(Object o) {
 		try{
-			if(o == null)
+			if(o == null) {
 				throw new RuntimeException("Objekt is null");
+			}
 			Field f = (o instanceof MinecraftDecoder ? MinecraftDecoder.class : MinecraftEncoder.class).getDeclaredField("protocol");
 			f.setAccessible(true);
 			return (Protocol) f.get(o);

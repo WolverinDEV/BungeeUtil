@@ -6,47 +6,53 @@ import java.util.UUID;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutEntityProperties.EntityProperty.EntityPropertyModifier;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 public class PacketPlayOutEntityProperties extends Packet implements PacketPlayOut {
+	@Getter
+	@Setter
 	public static class EntityProperty {
+		@Getter
+		@Setter
+		@AllArgsConstructor
 		public static class EntityPropertyModifier {
 			private UUID uuid;
 			private double amount;
 			private byte operation;
 
-			public EntityPropertyModifier(UUID uuid, double amount, byte operation) {
-				this.uuid = uuid;
-				this.amount = amount;
-				this.operation = operation;
-			}
-
-			public double getAmount() {
-				return amount;
-			}
-
-			public byte getOperation() {
-				return operation;
-			}
-
-			public UUID getUUID() {
-				return uuid;
-			}
-
-			public void setAmount(double amount) {
-				this.amount = amount;
-			}
-
-			public void setOperation(byte operation) {
-				this.operation = operation;
-			}
-
-			public void setUUID(UUID uuid) {
-				this.uuid = uuid;
+			@Override
+			public boolean equals(Object obj) {
+				if (this == obj) {
+					return true;
+				}
+				if (obj == null) {
+					return false;
+				}
+				if (this.getClass() != obj.getClass()) {
+					return false;
+				}
+				EntityPropertyModifier other = (EntityPropertyModifier) obj;
+				if (Double.doubleToLongBits(this.amount) != Double.doubleToLongBits(other.amount)) {
+					return false;
+				}
+				if (this.operation != other.operation) {
+					return false;
+				}
+				if (this.uuid == null) {
+					if (other.uuid != null) {
+						return false;
+					}
+				} else if (!this.uuid.equals(other.uuid)) {
+					return false;
+				}
+				return true;
 			}
 
 			@Override
@@ -54,32 +60,11 @@ public class PacketPlayOutEntityProperties extends Packet implements PacketPlayO
 				final int prime = 31;
 				int result = 1;
 				long temp;
-				temp = Double.doubleToLongBits(amount);
-				result = prime * result + (int) (temp ^ (temp >>> 32));
-				result = prime * result + operation;
-				result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
+				temp = Double.doubleToLongBits(this.amount);
+				result = prime * result + (int) (temp ^ temp >>> 32);
+				result = prime * result + this.operation;
+				result = prime * result + (this.uuid == null ? 0 : this.uuid.hashCode());
 				return result;
-			}
-
-			@Override
-			public boolean equals(Object obj) {
-				if (this == obj)
-					return true;
-				if (obj == null)
-					return false;
-				if (getClass() != obj.getClass())
-					return false;
-				EntityPropertyModifier other = (EntityPropertyModifier) obj;
-				if (Double.doubleToLongBits(amount) != Double.doubleToLongBits(other.amount))
-					return false;
-				if (operation != other.operation)
-					return false;
-				if (uuid == null) {
-					if (other.uuid != null)
-						return false;
-				} else if (!uuid.equals(other.uuid))
-					return false;
-				return true;
 			}
 		}
 
@@ -92,77 +77,53 @@ public class PacketPlayOutEntityProperties extends Packet implements PacketPlayO
 			this.value = value;
 		}
 
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public double getValue() {
-			return value;
-		}
-
-		public void setValue(double value) {
-			this.value = value;
-		}
-
-		public ArrayList<EntityPropertyModifier> getModifiers() {
-			return modifiers;
-		}
-
 		public void addModifier(EntityPropertyModifier mod) {
-			modifiers.add(mod);
+			this.modifiers.add(mod);
 		}
 
 		public void removeModifier(EntityPropertyModifier mod) {
-			modifiers.add(mod);
+			this.modifiers.add(mod);
 		}
 	}
 
-	@Setter
 	private int entityId;
 	private ArrayList<EntityProperty> properties = new ArrayList<>();
 
-	@Override
-	public void write(PacketDataSerializer s) {
-		s.writeVarInt(entityId);
-		s.writeInt(properties.size());
-		for (EntityProperty prop : properties) {
-			s.writeString(prop.getName());
-			s.writeDouble(prop.getValue());
-			s.writeVarInt(prop.getModifiers().size());
-			for (EntityPropertyModifier mod : prop.getModifiers()) {
-				s.writeUUID(mod.getUUID());
-				s.writeDouble(mod.getAmount());
-				s.writeByte(mod.getOperation());
-			}
-		}
+	public PacketPlayOutEntityProperties addProperty(EntityProperty prop) {
+		this.properties.add(prop);
+		return this;
 	}
 
 	@Override
 	public void read(PacketDataSerializer s) {
-		entityId = s.readVarInt();
+		this.entityId = s.readVarInt();
 		int pSize = s.readInt();
 		for (int i = 0; i < pSize; i++) {
 			EntityProperty prop = new EntityProperty(s.readString(-1), s.readDouble());
 			int mSize = s.readVarInt();
-			if (mSize > 0)
-				for (int j = 0; j < mSize; j++)
+			if (mSize > 0) {
+				for (int j = 0; j < mSize; j++) {
 					prop.addModifier(new EntityPropertyModifier(s.readUUID(), s.readDouble(), s.readByte()));
-			properties.add(prop);
+				}
+			}
+			this.properties.add(prop);
 		}
 	}
 
-	public PacketPlayOutEntityProperties setProperties(ArrayList<EntityProperty> properties) {
-		this.properties = properties;
-		return this;
-	}
-
-	public PacketPlayOutEntityProperties addProperty(EntityProperty prop) {
-		properties.add(prop);
-		return this;
+	@Override
+	public void write(PacketDataSerializer s) {
+		s.writeVarInt(this.entityId);
+		s.writeInt(this.properties.size());
+		for (EntityProperty prop : this.properties) {
+			s.writeString(prop.getName());
+			s.writeDouble(prop.getValue());
+			s.writeVarInt(prop.getModifiers().size());
+			for (EntityPropertyModifier mod : prop.getModifiers()) {
+				s.writeUUID(mod.getUuid());
+				s.writeDouble(mod.getAmount());
+				s.writeByte(mod.getOperation());
+			}
+		}
 	}
 
 }

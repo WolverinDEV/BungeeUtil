@@ -20,10 +20,11 @@ public class WarpedChannelInitializer extends ChannelInitializer<Channel> {
 	private UserConnection conn;
 	private ServerInfo target;
 
+	@Override
 	public void initChannel(Channel ch) throws Exception {
 		PipelineUtils.BASE.initChannel(ch);
-		ch.pipeline().addAfter("frame-decoder", "packet-decoder", new WarpedMinecraftDecoder(Protocol.HANDSHAKE, false, conn.getPendingConnection().getVersion(),(IInitialHandler) conn.getPendingConnection(),Direction.TO_CLIENT));
-		ch.pipeline().addAfter("frame-prepender", "packet-encoder", new MinecraftEncoder(Protocol.HANDSHAKE, false, conn.getPendingConnection().getVersion()));
-		((HandlerBoss) ch.pipeline().get(HandlerBoss.class)).setHandler(new ServerConnector(BungeeCord.getInstance(), conn, (BungeeServerInfo) target));
+		ch.pipeline().addAfter("frame-decoder", "packet-decoder", new WarpedMinecraftDecoder(Protocol.HANDSHAKE, false, this.conn.getPendingConnection().getVersion(),(IInitialHandler) this.conn.getPendingConnection(),Direction.TO_CLIENT));
+		ch.pipeline().addAfter("frame-prepender", "packet-encoder", new MinecraftEncoder(Protocol.HANDSHAKE, false, this.conn.getPendingConnection().getVersion()));
+		ch.pipeline().get(HandlerBoss.class).setHandler(new ServerConnector(BungeeCord.getInstance(), this.conn, (BungeeServerInfo) this.target));
 	}
 }

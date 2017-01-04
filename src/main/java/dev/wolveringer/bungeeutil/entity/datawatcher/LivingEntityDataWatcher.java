@@ -2,26 +2,26 @@ package dev.wolveringer.bungeeutil.entity.datawatcher;
 
 public interface LivingEntityDataWatcher extends EntityDataWatcher {
 
-	public void setHealth(float h);
+	public int getArrows();
 
 	public float getHealth();;
 
-	public void setArrows(int amauth);
-
-	public int getArrows();
-
-	public void setParicelColor(int color);
-	
 	public int getParicelColor();
-	
-	public void setParticelVisiable(boolean flag);
-	
-	public boolean isParticelVisiable();
 
-	public void setAI(boolean flag);
-	
 	public boolean hasAI();
 
 	@Override
 	public LivingEntityDataWatcher injektDefault();
+
+	public boolean isParticelVisiable();
+
+	public void setAI(boolean flag);
+
+	public void setArrows(int amauth);
+
+	public void setHealth(float h);
+
+	public void setParicelColor(int color);
+
+	public void setParticelVisiable(boolean flag);
 }

@@ -17,13 +17,13 @@ public class PacketPlayOutGameStateChange extends Packet implements PacketPlayOu
 
 	@Override
 	public void read(PacketDataSerializer s) {
-		state = s.readByte();
-		value = s.readFloat();
+		this.state = s.readByte();
+		this.value = s.readFloat();
 	}
 
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeByte(state);
-		s.writeFloat(value);
+		s.writeByte(this.state);
+		s.writeFloat(this.value);
 	}
 }

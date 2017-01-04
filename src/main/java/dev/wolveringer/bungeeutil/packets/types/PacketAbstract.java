@@ -6,18 +6,18 @@ import dev.wolveringer.bungeeutil.packets.Packet;
 @SuppressWarnings("deprecation")
 public abstract class PacketAbstract extends Packet{
 	private byte[] b;
-	
+
+	public PacketAbstract() {}
+
 	public PacketAbstract(int id) {
 		super(id);
 	}
-	
-	public PacketAbstract() {}
-	
+
 	public void readUnusedBytes(PacketDataSerializer s){
-		b = new byte[s.readableBytes()];
-		s.readBytes(b);
+		this.b = new byte[s.readableBytes()];
+		s.readBytes(this.b);
 	}
 	public void writeUnusedBytes(PacketDataSerializer s){
-		s.writeBytes(b);
+		s.writeBytes(this.b);
 	}
 }

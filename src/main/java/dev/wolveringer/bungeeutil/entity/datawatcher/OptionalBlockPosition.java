@@ -11,12 +11,12 @@ public class OptionalBlockPosition {
 	}
 
 	public BlockPosition getPosition() {
-		return position;
+		return this.position;
 	}
 
 	public void setPosition(BlockPosition position) {
 		this.position = position;
 	}
-	
-	
+
+
 }

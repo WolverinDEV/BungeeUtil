@@ -14,6 +14,11 @@ import dev.wolveringer.bungeeutil.player.Player;
 public final class Scoreboard {
 	@SuppressWarnings({ "serial", "unused" })
 	private static class ScoreboardAlredyExistException extends RuntimeException {
+		/**
+		 *
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public ScoreboardAlredyExistException(String message) {
 			super(message);
 		}
@@ -25,7 +30,7 @@ public final class Scoreboard {
 
 	protected ArrayList<Team> server_teams = new ArrayList<>();
 	protected ArrayList<Objektive> server_objs = new ArrayList<>();
-	
+
 	public Scoreboard(Player player) {
 		//if(player.getScoreboard() != null)
 		//	throw new ScoreboardAlredyExistException("Player " + player.getName() + " has alredy a Scoreboard");
@@ -33,77 +38,89 @@ public final class Scoreboard {
 	}
 
 	public Objektive createObjektive(String name, Type t) {
-		if(getObjektive(name) != null)
-			return getObjektive(name);
+		if(this.getObjektive(name) != null) {
+			return this.getObjektive(name);
+		}
 		Objektive o = new Objektive(this, name);
-		objs.add(o);
-		player.sendPacket(new PacketPlayOutScoreboardObjective(name, Action.CREATE, o.getDisplayName(), t));
+		this.objs.add(o);
+		this.player.sendPacket(new PacketPlayOutScoreboardObjective(name, Action.CREATE, o.getDisplayName(), t));
 		return o;
 	}
 
-	public Objektive getObjektive(String name) {
-		for(Objektive o : objs)
-			if(o.getName().equals(name))
-				return o;
-		for(Objektive o : server_objs)
-			if(o.getName().equals(name))
-				return o;
-		return null;
-	}
-
-	public void removeObjektive(String name) {
-		Objektive o = getObjektive(name);
-		if(o == null)
-			return;
-		AsyncCatcher.catchOp("Async scoreboard changing");
-		player.sendPacket(new PacketPlayOutScoreboardObjective(name, Action.REMOVE, o.getDisplayName(), Type.INTEGER));
-		if(objs.remove(o) && !server_objs.remove(o)){ //Check if proxy side board
-			for(Objektive var0 : server_objs)
-				if(var0.getPosition() == o.getPosition()){
-					var0.display(o.getPosition());
-					break;
-				}
-		}
-	}
-	
-	public List<Objektive> getObjektives(){
-		return Collections.unmodifiableList(objs);
-	}
-
 	public Team createTeam(String name) {
-		if(getTeam(name) != null)
-			return getTeam(name);
+		if(this.getTeam(name) != null) {
+			return this.getTeam(name);
+		}
 		Team t = new Team(this, name);
-		teams.add(t);
+		this.teams.add(t);
 		return t;
 	}
 
-	public void removeTeam(String name) {
-		Team t = getTeam(name);
-		if(t != null){
-			teams.remove(t);
-			PacketPlayOutScoreboardTeam x = new PacketPlayOutScoreboardTeam(t);
-			x.setAction(dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardTeam.Action.REMOVE);
-			player.sendPacket(x);
+	public Objektive getObjektive(String name) {
+		for(Objektive o : this.objs) {
+			if(o.getName().equals(name)) {
+				return o;
+			}
 		}
+		for(Objektive o : this.server_objs) {
+			if(o.getName().equals(name)) {
+				return o;
+			}
+		}
+		return null;
+	}
+
+	public List<Objektive> getObjektives(){
+		return Collections.unmodifiableList(this.objs);
 	}
 
 	public Team getTeam(String name) {
-		for(Team t : teams)
-			if(t.getName().equals(name))
+		for(Team t : this.teams) {
+			if(t.getName().equals(name)) {
 				return t;
-		for(Team t : server_teams)
-			if(t.getName().equals(name))
+			}
+		}
+		for(Team t : this.server_teams) {
+			if(t.getName().equals(name)) {
 				return t;
+			}
+		}
 		return null;
 	}
 
 	public List<Team> getTeams(){
-		return Collections.unmodifiableList(teams);
+		return Collections.unmodifiableList(this.teams);
 	}
-	
+
+	public void removeObjektive(String name) {
+		Objektive o = this.getObjektive(name);
+		if(o == null) {
+			return;
+		}
+		AsyncCatcher.catchOp("Async scoreboard changing");
+		this.player.sendPacket(new PacketPlayOutScoreboardObjective(name, Action.REMOVE, o.getDisplayName(), Type.INTEGER));
+		if(this.objs.remove(o) && !this.server_objs.remove(o)){ //Check if proxy side board
+			for(Objektive var0 : this.server_objs) {
+				if(var0.getPosition() == o.getPosition()){
+					var0.display(o.getPosition());
+					break;
+				}
+			}
+		}
+	}
+
+	public void removeTeam(String name) {
+		Team t = this.getTeam(name);
+		if(t != null){
+			this.teams.remove(t);
+			PacketPlayOutScoreboardTeam x = new PacketPlayOutScoreboardTeam(t);
+			x.setAction(dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardTeam.Action.REMOVE);
+			this.player.sendPacket(x);
+		}
+	}
+
 	@Override
 	public String toString() {
-		return "Scoreboard [Owner="+player.getName()+",Objekt-Count="+(objs.size()+server_objs.size())+"(Bungee: "+objs.size()+"/Server: "+server_objs.size()+"),Team-Count="+(teams.size()+server_teams.size())+"(Bungee:"+teams.size()+"/Server:"+server_teams.size()+")]";
+		return "Scoreboard [Owner="+this.player.getName()+",Objekt-Count="+(this.objs.size()+this.server_objs.size())+"(Bungee: "+this.objs.size()+"/Server: "+this.server_objs.size()+"),Team-Count="+(this.teams.size()+this.server_teams.size())+"(Bungee:"+this.teams.size()+"/Server:"+this.server_teams.size()+")]";
 	}
 }

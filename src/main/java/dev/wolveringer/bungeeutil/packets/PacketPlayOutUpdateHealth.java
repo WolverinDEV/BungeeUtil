@@ -5,10 +5,12 @@ import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 public class PacketPlayOutUpdateHealth extends Packet implements PacketPlayOut{
 
 	private float health;
@@ -17,16 +19,16 @@ public class PacketPlayOutUpdateHealth extends Packet implements PacketPlayOut{
 
 	@Override
 	public void read(PacketDataSerializer s) {
-		health = s.readFloat();
-		food = s.readVarInt();
-		food_indicase = s.readFloat();
+		this.health = s.readFloat();
+		this.food = s.readVarInt();
+		this.food_indicase = s.readFloat();
 	}
 
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeFloat(health);
-		s.writeVarInt(food);
-		s.writeFloat(food_indicase);
+		s.writeFloat(this.health);
+		s.writeVarInt(this.food);
+		s.writeFloat(this.food_indicase);
 	}
 
 }

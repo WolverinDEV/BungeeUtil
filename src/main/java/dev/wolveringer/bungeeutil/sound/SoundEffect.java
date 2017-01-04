@@ -5,12 +5,12 @@ import java.util.HashMap;
 import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
 
 public enum SoundEffect {
-	
+
 	/**
-	 * @author essem 
-	 * 
+	 * @author essem
+	 *
 	 */
-	
+
 	AMBIENT_CAVE,
 	BLOCK_ANVIL_BREAK,
 	BLOCK_ANVIL_DESTROY,
@@ -475,7 +475,7 @@ public enum SoundEffect {
 	WEATHER_RAIN,
 	WEATHER_RAIN_ABOVE;
 	//...
-	
+
 	static {
 		//1.10
 		addSound(AMBIENT_CAVE, BigClientVersion.v1_10, "ambient.cave");
@@ -941,7 +941,7 @@ public enum SoundEffect {
 		addSound(UI_BUTTON_CLICK, BigClientVersion.v1_10, "ui.button.click");
 		addSound(WEATHER_RAIN, BigClientVersion.v1_10, "weather.rain");
 		addSound(WEATHER_RAIN_ABOVE, BigClientVersion.v1_10, "weather.rain.above");
-		
+
 		//1.9
 		addSound(AMBIENT_CAVE, BigClientVersion.v1_9, "ambient.cave");
 		addSound(BLOCK_ANVIL_BREAK, BigClientVersion.v1_9, "block.anvil.break");
@@ -1390,34 +1390,34 @@ public enum SoundEffect {
 
 		//TODO implement sound for 1.8?
 	}
-	
-	private HashMap<BigClientVersion,String> versions = new HashMap<>();
-	
-	private SoundEffect() {}
-	
+
 	private static void addSound(SoundEffect effect, BigClientVersion version, String id) {
 		effect.versions.put(version, id);
 	}
-	
+
+	private HashMap<BigClientVersion,String> versions = new HashMap<>();
+
+	private SoundEffect() {}
+
 	/**
 	 * Get the Sound-String for the BigClientVersion
 	 * @see BigClientVersion
-	 * 
+	 *
 	 * @param BigClientVersion version
 	 * @return Sound-String
 	 * */
 	public String getId(BigClientVersion version) {
-		return versions.get(version);
+		return this.versions.get(version);
 	}
-	
+
 	/**
 	 * checks if the Sound is Aviarible for the specified version
 	 * @see BigClientVersion
-	 * 
+	 *
 	 * @param BigClientVersion version
 	 * @return true if its aviarible
 	 * */
 	public boolean isAvariable(BigClientVersion version) {
-		return versions.containsKey(version);
+		return this.versions.containsKey(version);
 	}
 }

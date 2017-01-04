@@ -16,67 +16,53 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public interface Player extends ProxiedPlayer {
-	public IInitialHandler getInitialHandler();
-	
-	public Location getLocation();
-	
-	public void setLocation(Location loc);
-
-	public Location getLastLocation();
-
-	
-	
-	public void performCommand(String command);
-	
-	public boolean isInventoryOpened();
-
-	public void openInventory(Inventory inv);
-
-	public void updateInventory();
-
-	public Inventory getInventoryView();
-	
-	public PlayerInventory getPlayerInventory();
-	
 	public void closeInventory();
+
 	public void closeInventory(CloseReason reason);
-	
-	public void setCursorItem(Item is);
+
+	public void disconnect(Exception e);
+
+	public BossBarManager getBossBarManager();
+
+
 
 	public Item getCursorItem();
 
 	public Item getHandItem();
-	
+
+	public IInitialHandler getInitialHandler();
+
+	public Inventory getInventoryView();
+
+	public Location getLastLocation();
+
+	public Location getLocation();
+
 	public Item getOffHandItem();
+	public PlayerInventory getPlayerInventory();
 
-	public ClientVersion getVersion();
-
-	public void sendPacket(PacketPlayOut packet);
-	
-	@Deprecated
-	public void sendPacketToServer(PacketPlayIn p);
-
-	
-	public void setSelectedSlot(int slot);
+	public Scoreboard getScoreboard();
 
 	public int getSelectedSlot();
 
-	
-	public void setTabHeader(BaseComponent header,BaseComponent footer);
-	
 	public BaseComponent[] getTabHeader();
-	
-	
-	public Scoreboard getScoreboard();
 
-	public void disconnect(Exception e);
-	
+	public ClientVersion getVersion();
+
+	public boolean isInventoryOpened();
+
+	public void openInventory(Inventory inv);
+
+	public void performCommand(String command);
+
+
 	public void playSound(SoundEffect effect);
-	
+
 	public void playSound(SoundEffect effect,float volume);
-	
+
+
 	public void playSound(SoundEffect effect,float volume,float pitch);
-	
+
 	/**
 	 * @param effect
 	 * @param location
@@ -85,8 +71,23 @@ public interface Player extends ProxiedPlayer {
 	 */
 	public void playSound(SoundEffect effect, Location location,float volume,float pitch);
 
+
 	public void playSound(SoundEffect effect, SoundCategory blocks, Location location, float f, float g);
-	
-	
-	public BossBarManager getBossBarManager();
+
+	public void sendPacket(PacketPlayOut packet);
+
+	@Deprecated
+	public void sendPacketToServer(PacketPlayIn p);
+
+	public void setCursorItem(Item is);
+
+	public void setLocation(Location loc);
+
+	public void setSelectedSlot(int slot);
+
+	@Override
+	public void setTabHeader(BaseComponent header,BaseComponent footer);
+
+
+	public void updateInventory();
 }

@@ -22,26 +22,27 @@ public class WarpedChannelFutureListener implements ChannelFutureListener {
 		this.retry = retry;
 	}
 
+	@Override
 	public void operationComplete(ChannelFuture future) throws Exception {
-		if(callback != null){
-			callback.done(Boolean.valueOf(future.isSuccess()), future.cause());
+		if(this.callback != null){
+			this.callback.done(Boolean.valueOf(future.isSuccess()), future.cause());
 		}
 		if(future.isSuccess()){
-			
+
 			return;
 		}
 		future.channel().close();
-		conn.getPendingConnects().remove(target);
+		this.conn.getPendingConnects().remove(this.target);
 
-		ServerInfo def = (ServerInfo) ProxyServer.getInstance().getServers().get(conn.getPendingConnection().getListener().getFallbackServer());
-		if((retry) && (target != def) && (((conn.getServer() == null) || (def != conn.getServer().getInfo())))){
-			conn.sendMessage(BungeeCord.getInstance().getTranslation("fallback_lobby", new Object[0]));
-			conn.connect(def, null, false);
+		ServerInfo def = ProxyServer.getInstance().getServers().get(this.conn.getPendingConnection().getListener().getFallbackServer());
+		if(this.retry && this.target != def && (this.conn.getServer() == null || def != this.conn.getServer().getInfo())){
+			this.conn.sendMessage(BungeeCord.getInstance().getTranslation("fallback_lobby", new Object[0]));
+			this.conn.connect(def, null, false);
 
-		}else if(conn.isDimensionChange()){
-			conn.disconnect(BungeeCord.getInstance().getTranslation("fallback_kick", new Object[] { future.cause().getClass().getName() }));
+		}else if(this.conn.isDimensionChange()){
+			this.conn.disconnect(BungeeCord.getInstance().getTranslation("fallback_kick", new Object[] { future.cause().getClass().getName() }));
 		}else{
-			conn.sendMessage(BungeeCord.getInstance().getTranslation("fallback_kick", new Object[] { future.cause().getClass().getName() }));
+			this.conn.sendMessage(BungeeCord.getInstance().getTranslation("fallback_kick", new Object[] { future.cause().getClass().getName() }));
 		}
 	}
 }

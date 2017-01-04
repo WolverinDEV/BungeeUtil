@@ -28,301 +28,333 @@ import dev.wolveringer.bungeeutil.profile.PlayerInfoData;
 import dev.wolveringer.bungeeutil.profile.Skin;
 import net.md_5.bungee.api.chat.BaseComponent;
 
+class NameSpliter {
+	private String orginal;
+	private String main, prefix, suffix;
+
+	public String getMain() {
+		return this.main;
+	}
+
+	public String getOrginal() {
+		return this.orginal;
+	}
+
+	public String getPrefix() {
+		return this.prefix;
+	}
+
+	public String getSuffix() {
+		return this.suffix;
+	}
+
+	private void recalculate() {
+		if (this.orginal.length() > 16) {
+			this.prefix = this.orginal.length() > 30 ? this.orginal.substring(0, 15) : "";
+			this.main = this.orginal.length() > 30 ? this.orginal.substring(15, this.orginal.length() < 30 ? this.orginal.length() : 30) : this.orginal.substring(0, 15);
+			this.suffix = this.orginal.length() > 30 ? this.orginal.substring(30, this.orginal.length() > 45 ? 45 : this.orginal.length()) : this.orginal.substring(15, this.orginal.length() > 30 ? 30 : this.orginal.length());
+		}
+		else {
+			this.prefix = this.suffix = "";
+			this.main = this.orginal;
+		}
+	}
+
+	public void setOrginal(String orginal) {
+		this.orginal = orginal;
+		this.recalculate();
+	}
+}
+
 public final class PlayerNPC {
 	private static final Random RND_NAME = new Random();
 	private static ArrayList<String> base_names = new ArrayList<>();
 	private static int npc_count = 1000;
 	private PacketPlayOutEntityDestroy p2;
-	
+
 	private int ID;
 	private MultiVersionPlayerDatawatcher datawatcher = new MultiVersionPlayerDatawatcher();
-	
+
 	private ArrayList<Player> viewer = new ArrayList<Player>();
 	private NameSpliter name;
 	private String base_name;
 	private Location location;
-	
+
 	private int ping = 20;
-	
+
 	private GameProfile profile = new GameProfile(UUID.randomUUID(), "");
-	
+
 	private boolean tab;
-	
+
 	private ArrayList<InteractListener> listener = new ArrayList<InteractListener>();
-	
+
 	private BaseComponent tabname = null;
-	
+
 	private PacketHandler<Packet> handler;
-	
+
 	private Equipment equipment = new Equipment(this);
-	
+
 	public PlayerNPC() {
 		this((System.currentTimeMillis() + "_0x" + Integer.toHexString(RND_NAME.nextInt()) + "00000000000000000").substring(0, 16));
 	}
-	
+
 	public PlayerNPC(String base_name) {
-		if (base_name.length() > 16) throw new NullPointerException("Base Name cant be longer than 16!");
-		if (base_names.contains(base_name)) throw new IllegalArgumentException("Base name is alredy in use!");
+		if (base_name.length() > 16) {
+			throw new NullPointerException("Base Name cant be longer than 16!");
+		}
+		if (base_names.contains(base_name)) {
+			throw new IllegalArgumentException("Base name is alredy in use!");
+		}
 		base_names.add(base_name);
 		this.ID = npc_count++;
 		this.base_name = base_name;
-		
+
 		this.name = new NameSpliter();
-		name.setOrginal(base_name);
-		
+		this.name.setOrginal(base_name);
+
 		this.profile.setName(base_name);
 		this.location = new Location(0, 0, 0);
-		handler = new PacketHandler<Packet>() {
+		this.handler = new PacketHandler<Packet>() {
 			@SuppressWarnings("unchecked")
 			@Override
 			public void handle(PacketHandleEvent<Packet> e) {
 				if (e.getPacket() instanceof PacketPlayInUseEntity) {
 					PacketPlayInUseEntity packet = (PacketPlayInUseEntity) e.getPacket();
-					if (packet.getTarget() == ID) {
-						if (packet.getAction() == Action.ATTACK) for (InteractListener listener : (List<InteractListener>) PlayerNPC.this.listener.clone())
-							listener.leftClick(e.getPlayer());
-						else if (packet.getAction() == Action.INTERACT_AT && packet.getHand() == 0) // 1.9 sends 2 Packets (Hand 0 and hand 1)
-		                    for (InteractListener listener : (List<InteractListener>) PlayerNPC.this.listener.clone())
-							listener.rightClick(e.getPlayer());
+					if (packet.getTarget() == PlayerNPC.this.ID) {
+						if (packet.getAction() == Action.ATTACK) {
+							for (InteractListener listener : (List<InteractListener>) PlayerNPC.this.listener.clone()) {
+								listener.leftClick(e.getPlayer());
+							}
+						} else if (packet.getAction() == Action.INTERACT_AT && packet.getHand() == 0) {
+							for (InteractListener listener : (List<InteractListener>) PlayerNPC.this.listener.clone()) {
+								listener.rightClick(e.getPlayer());
+							}
+						}
 						e.setCancelled(true);
 					}
 				}
 			}
 		};
-		datawatcher.injektDefault();
-		PacketLib.addHandler(handler);
-		rebuild();
+		this.datawatcher.injektDefault();
+		PacketLib.addHandler(this.handler);
+		this.rebuild();
 	}
-	
-	public void setPing(int ping) {
-		this.ping = ping;
-		if (tab) broadcastPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_PING, new PlayerInfoData(profile, ping, 0, tabname)));
-	}
-	
-	public int getPing() {
-		return ping;
-	}
-	
-	public void setVisiable(Player p, boolean b) {
-		if (b) if (!viewer.contains(p)) show(p);
-		else;
-		else if (viewer.contains(p)) hide(p);
-	}
-	
-	public boolean canSee(Player p) {
-		return viewer.contains(p);
-	}
-	
-	public String getName() {
-		return name.getOrginal();
-	}
-	
-	public void setName(String name) {
-		if (name.length() > 48) throw new NullPointerException(name.length() + " > 48");
-		this.name.setOrginal(name);
-		this.profile.setName(this.name.getMain());
-		rebuild();
-		for (Player p : viewer) {
-			sendDestroy(p);
-			sendSpawn(p);
-		}
-	}
-	
-	public Location getLocation() {
-		return location;
-	}
-	
-	public void setLocation(Location location) {
-		this.location = location;
-		rebuild();
-		broadcastPacket(new PacketPlayOutEntityTeleport(location, ID, false));
-		broadcastPacket(new PacketPlayOutEntityHeadRotation(ID, location.getYaw()));
-	}
-	
-	public HumanDataWatcher getDatawatcher() {
-		return datawatcher;
-	}
-	
-	public GameProfile getProfile() {
-		return profile;
-	}
-	
-	public void setSkin(Skin skin) {
-		skin.applay(this.profile);
-		setProfile(this.profile);
-	}
-	
-	public void setProfile(GameProfile profile) {
-		this.profile = profile;
-		if (this.profile == null) this.profile = new GameProfile(UUID.randomUUID(), this.name.getMain());
-		if (this.profile.getName() == null) {
-			System.err.print("Name of the GameProfile cant be null");
-			this.profile.setName("error");
-		}
-		rebuild();
-		ArrayList<Player> player = new ArrayList<>(viewer);
-		for (Player p : player) {
-			hide(p);
-			show(p);
-		}
-	}
-	
-	public void setTabListed(boolean listed) {
-		if (tab != listed) if (tab) broadcastPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.ADD_PLAYER, new PlayerInfoData(profile, ping, 0, (BaseComponent) tabname)));
-		else broadcastPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.REMOVE_PLAYER, new PlayerInfoData(profile, ping, 0, tabname)));
-		this.tab = listed;
-	}
-	
-	public boolean isTabListed() {
-		return tab;
-	}
-	
-	public void setPlayerListName(BaseComponent name) {
-		this.tabname = name;
-		broadcastPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, new PlayerInfoData(profile, ping, 0, tabname)));
-	}
-	
-	public BaseComponent getPlayerListName() {
-		return tabname;
-	}
-	
+
 	public void addListener(InteractListener listener) {
 		this.listener.add(listener);
 	}
-	
-	public void removeListener(InteractListener listener) {
-		this.listener.remove(listener);
-	}
-	
-	public Equipment getEquipment() {
-		return equipment;
-	}
-	
-	private void hide(Player p) {
-		viewer.remove(p);
-		sendDestroy(p);
-	}
-	
-	private void show(Player p) {
-		viewer.add(p);
-		sendSpawn(p);
+
+	private void broadcastPacket(Packet p) {
+		for (Player pl : this.viewer) {
+			pl.sendPacket((PacketPlayOut) p);
+		}
 	}
 
 	/**
 	 * Contains spelling mistake
-	 * @deprecated Use {@link #broadcastPacket(Packet a)} instead.  
+	 * @deprecated Use {@link #broadcastPacket(Packet a)} instead.
 	 */
 	@Deprecated
 	private void brotcastPacket(Packet p) {
-		broadcastPacket(p);
+		this.broadcastPacket(p);
 	}
-	
-	private void broadcastPacket(Packet p) {
-		for (Player pl : viewer)
-			pl.sendPacket((PacketPlayOut) p);
+
+	public boolean canSee(Player p) {
+		return this.viewer.contains(p);
 	}
-	
-	private void sendSpawn(final Player p) {
-		p.sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.ADD_PLAYER, new PlayerInfoData(profile, ping, 0, (BaseComponent) tabname)));
-		p.sendPacket(new PacketPlayOutNamedEntitySpawn(ID, profile, location, 0, datawatcher.getWatcher(p.getVersion().getBigVersion())));
-		
-		PacketPlayOutScoreboardTeam team = new PacketPlayOutScoreboardTeam();
-		team.setTeam(base_name);
-		team.setDisplayName("Error (NCP-Team): 002");
-		team.setAction(PacketPlayOutScoreboardTeam.Action.CREATE);
-		team.setPrefix(name.getPrefix());
-		team.setSuffix(name.getSuffix());
-		team.setFriendlyFire(0);
-		team.setPlayers(new String[] { profile.getName() });
-		team.setTag(NameTag.VISIABLE);
-		p.sendPacket(team);
-		
-		p.sendPacket(new PacketPlayOutEntityHeadRotation(ID, p.getLocation().getYaw()));
-		
-		if (!tab) p.sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.REMOVE_PLAYER, new PlayerInfoData(profile, ping, 0, tabname)));
-		else p.sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, new PlayerInfoData(profile, ping, 0, (BaseComponent) tabname)));
-		equipment.sendItems(p);
-	}
-	
-	private void sendDestroy(Player p) {
-		if (tab) p.sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.REMOVE_PLAYER, new PlayerInfoData(profile, ping, 0, (BaseComponent) null)));
-		PacketPlayOutScoreboardTeam team = new PacketPlayOutScoreboardTeam();
-		team.setTeam(base_name);
-		team.setAction(PacketPlayOutScoreboardTeam.Action.REMOVE);
-		p.sendPacket(team);
-		p.sendPacket(p2);
-	}
-	
-	protected void rebuild() {
-		if (this.profile == null) {
-			System.err.print("NPC Profile is null. it will crash the Client");
-			this.profile = new GameProfile(UUID.randomUUID(), this.name.getMain());
-		}
-		p2 = new PacketPlayOutEntityDestroy(ID);
-	}
-	
+
 	public void delete() {
-		for (Player p : viewer)
-			sendDestroy(p);
-		viewer.clear();
+		for (Player p : this.viewer) {
+			this.sendDestroy(p);
+		}
+		this.viewer.clear();
 		try {
-			finalize();
+			this.finalize();
 		}
 		catch (Throwable e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public int getEntityID() {
-		return ID;
-	}
-	
-	protected ArrayList<Player> getViewer() {
-		return viewer;
-	}
-	
+
 	@Override
 	protected void finalize() throws Throwable {
-		PacketLib.removeHandler(handler);
-		base_names.remove(base_name);
+		PacketLib.removeHandler(this.handler);
+		base_names.remove(this.base_name);
 		super.finalize();
 	}
-}
 
-class NameSpliter {
-	private String orginal;
-	private String main, prefix, suffix;
-	
-	public String getPrefix() {
-		return prefix;
+	public HumanDataWatcher getDatawatcher() {
+		return this.datawatcher;
 	}
-	
-	public String getSuffix() {
-		return suffix;
+
+	public int getEntityID() {
+		return this.ID;
 	}
-	
-	public String getMain() {
-		return main;
+
+	public Equipment getEquipment() {
+		return this.equipment;
 	}
-	
-	public String getOrginal() {
-		return orginal;
+
+	public Location getLocation() {
+		return this.location;
 	}
-	
-	public void setOrginal(String orginal) {
-		this.orginal = orginal;
-		recalculate();
+
+	public String getName() {
+		return this.name.getOrginal();
 	}
-	
-	private void recalculate() {
-		if (orginal.length() > 16) {
-			prefix = orginal.length() > 30 ? orginal.substring(0, 15) : "";
-			main = orginal.length() > 30 ? orginal.substring(15, orginal.length() < 30 ? orginal.length() : 30) : orginal.substring(0, 15);
-			suffix = orginal.length() > 30 ? orginal.substring(30, orginal.length() > 45 ? 45 : orginal.length()) : orginal.substring(15, orginal.length() > 30 ? 30 : orginal.length());
+
+	public int getPing() {
+		return this.ping;
+	}
+
+	public BaseComponent getPlayerListName() {
+		return this.tabname;
+	}
+
+	public GameProfile getProfile() {
+		return this.profile;
+	}
+
+	protected ArrayList<Player> getViewer() {
+		return this.viewer;
+	}
+
+	private void hide(Player p) {
+		this.viewer.remove(p);
+		this.sendDestroy(p);
+	}
+
+	public boolean isTabListed() {
+		return this.tab;
+	}
+
+	protected void rebuild() {
+		if (this.profile == null) {
+			System.err.print("NPC Profile is null. it will crash the Client");
+			this.profile = new GameProfile(UUID.randomUUID(), this.name.getMain());
 		}
-		else {
-			prefix = suffix = "";
-			main = orginal;
+		this.p2 = new PacketPlayOutEntityDestroy(new int[]{this.ID});
+	}
+
+	public void removeListener(InteractListener listener) {
+		this.listener.remove(listener);
+	}
+
+	private void sendDestroy(Player p) {
+		if (this.tab) {
+			p.sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.REMOVE_PLAYER, new PlayerInfoData(this.profile, this.ping, 0, (BaseComponent) null)));
 		}
+		PacketPlayOutScoreboardTeam team = new PacketPlayOutScoreboardTeam();
+		team.setTeam(this.base_name);
+		team.setAction(PacketPlayOutScoreboardTeam.Action.REMOVE);
+		p.sendPacket(team);
+		p.sendPacket(this.p2);
+	}
+
+	private void sendSpawn(final Player p) {
+		p.sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.ADD_PLAYER, new PlayerInfoData(this.profile, this.ping, 0, this.tabname)));
+		p.sendPacket(new PacketPlayOutNamedEntitySpawn(this.ID, this.profile, this.location, 0, this.datawatcher.getWatcher(p.getVersion().getBigVersion())));
+
+		PacketPlayOutScoreboardTeam team = new PacketPlayOutScoreboardTeam();
+		team.setTeam(this.base_name);
+		team.setDisplayName("Error (NCP-Team): 002");
+		team.setAction(PacketPlayOutScoreboardTeam.Action.CREATE);
+		team.setPrefix(this.name.getPrefix());
+		team.setSuffix(this.name.getSuffix());
+		team.setFriendlyFire(0);
+		team.setPlayer(new String[] { this.profile.getName() });
+		team.setTag(NameTag.VISIABLE);
+		p.sendPacket(team);
+
+		p.sendPacket(new PacketPlayOutEntityHeadRotation(this.ID, p.getLocation().getYaw()));
+
+		if (!this.tab) {
+			p.sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.REMOVE_PLAYER, new PlayerInfoData(this.profile, this.ping, 0, this.tabname)));
+		} else {
+			p.sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, new PlayerInfoData(this.profile, this.ping, 0, this.tabname)));
+		}
+		this.equipment.sendItems(p);
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+		this.rebuild();
+		this.broadcastPacket(new PacketPlayOutEntityTeleport(location, this.ID, false));
+		this.broadcastPacket(new PacketPlayOutEntityHeadRotation(this.ID, location.getYaw()));
+	}
+
+	public void setName(String name) {
+		if (name.length() > 48) {
+			throw new NullPointerException(name.length() + " > 48");
+		}
+		this.name.setOrginal(name);
+		this.profile.setName(this.name.getMain());
+		this.rebuild();
+		for (Player p : this.viewer) {
+			this.sendDestroy(p);
+			this.sendSpawn(p);
+		}
+	}
+
+	public void setPing(int ping) {
+		this.ping = ping;
+		if (this.tab) {
+			this.broadcastPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_PING, new PlayerInfoData(this.profile, ping, 0, this.tabname)));
+		}
+	}
+
+	public void setPlayerListName(BaseComponent name) {
+		this.tabname = name;
+		this.broadcastPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.UPDATE_DISPLAY_NAME, new PlayerInfoData(this.profile, this.ping, 0, this.tabname)));
+	}
+
+	public void setProfile(GameProfile profile) {
+		this.profile = profile;
+		if (this.profile == null) {
+			this.profile = new GameProfile(UUID.randomUUID(), this.name.getMain());
+		}
+		if (this.profile.getName() == null) {
+			System.err.print("Name of the GameProfile cant be null");
+			this.profile.setName("error");
+		}
+		this.rebuild();
+		ArrayList<Player> player = new ArrayList<>(this.viewer);
+		for (Player p : player) {
+			this.hide(p);
+			this.show(p);
+		}
+	}
+
+	public void setSkin(Skin skin) {
+		skin.applay(this.profile);
+		this.setProfile(this.profile);
+	}
+
+	public void setTabListed(boolean listed) {
+		if (this.tab != listed) {
+			if (this.tab) {
+				this.broadcastPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.ADD_PLAYER, new PlayerInfoData(this.profile, this.ping, 0, this.tabname)));
+			} else {
+				this.broadcastPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.REMOVE_PLAYER, new PlayerInfoData(this.profile, this.ping, 0, this.tabname)));
+			}
+		}
+		this.tab = listed;
+	}
+
+	public void setVisiable(Player p, boolean b) {
+		if (b) {
+			if (!this.viewer.contains(p)) {
+				this.show(p);
+			} else {
+				;
+			}
+		} else if (this.viewer.contains(p)) {
+			this.hide(p);
+		}
+	}
+
+	private void show(Player p) {
+		this.viewer.add(p);
+		this.sendSpawn(p);
 	}
 }

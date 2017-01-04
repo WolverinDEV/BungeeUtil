@@ -8,13 +8,13 @@ public abstract class ObjectSereizer<T> {
 
 	@SuppressWarnings("unchecked")
 	public ObjectSereizer() {
-		Type[] types = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments();
-		clazz = (Class<T>) types[0];
+		Type[] types = ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments();
+		this.clazz = (Class<T>) types[0];
 	}
-	
+
 	public Class<T> getType(){
-		return clazz;
+		return this.clazz;
 	}
-	
+
 	public abstract void write(T obj,PacketDataSerializer serelizer);
 }

@@ -30,27 +30,14 @@ public class WarpedChannelHandler extends HandlerBoss {
 
 	public WarpedChannelHandler() {
 	}
-	
-	private String formatColor(String in){
-		if(Configuration.isTerminalColored())
-			return in;
-		else
-			return ChatColorUtils.stripColor(in);
-	}
-
-	@Override
-	public void setHandler(PacketHandler handler) {
-		Preconditions.checkArgument(handler != null, "handler");
-		this.handler = handler;
-	}
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		if(this.handler != null){
 			this.channel = new ChannelWrapper(ctx);
 			this.handler.connected(this.channel);
-			if((!(this.handler instanceof InitialHandler)) && (!(this.handler instanceof PingHandler))){
-				ProxyServer.getInstance().getLogger().log(Level.INFO, formatColor(Messages.getString("ChannelHandler.connection.connect")), this.handler); //$NON-NLS-1$
+			if(!(this.handler instanceof InitialHandler) && !(this.handler instanceof PingHandler)){
+				ProxyServer.getInstance().getLogger().log(Level.INFO, this.formatColor(Messages.getString("ChannelHandler.connection.connect")), this.handler); //$NON-NLS-1$
 			}
 		}
 	}
@@ -59,8 +46,8 @@ public class WarpedChannelHandler extends HandlerBoss {
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		if(this.handler != null){
 			this.handler.disconnected(this.channel);
-			if((!(this.handler instanceof InitialHandler)) && (!(this.handler instanceof PingHandler))){
-				ProxyServer.getInstance().getLogger().log(Level.INFO, formatColor(Messages.getString("ChannelHandler.connection.disconnect")), this.handler); //$NON-NLS-1$
+			if(!(this.handler instanceof InitialHandler) && !(this.handler instanceof PingHandler)){
+				ProxyServer.getInstance().getLogger().log(Level.INFO, this.formatColor(Messages.getString("ChannelHandler.connection.disconnect")), this.handler); //$NON-NLS-1$
 			}
 		}
 	}
@@ -73,14 +60,16 @@ public class WarpedChannelHandler extends HandlerBoss {
 				if(packet.packet instanceof Handshake){
 					int version = ((Handshake)packet.packet).getProtocolVersion();
 					ClientVersion ver = ClientVersion.fromProtocoll(version);
-					if(ver == null || !ver.getProtocollVersion().isSupported())
+					if(ver == null || !ver.getProtocollVersion().isSupported()) {
 						if(ProtocolConstants.SUPPORTED_VERSION_IDS.contains(version)){ //Handle BungeeUtil versions incompatibility. If BungeeCord ist compatible with this version too than BungeeCord can kick the client :)
 							System.err.println("Could not find the ClientVersion for the ProtocolVersion "+version+". Disconnecting the client.");
-							if(this.handler instanceof InitialHandler)
+							if(this.handler instanceof InitialHandler) {
 								((InitialHandler)this.handler).disconnect("§cYour client version isnt supported!");
-							else
+							} else {
 								this.channel.getHandle().close();
+							}
 						}
+					}
 				}
 				boolean sendPacket = true;
 				try{
@@ -100,9 +89,9 @@ public class WarpedChannelHandler extends HandlerBoss {
 			}catch (Exception e){
 				if(this.handler instanceof IInitialHandler){
 					((IInitialHandler)this.handler).disconnect(e);
-				}
-				else
+				} else {
 					this.channel.getHandle().close();
+				}
 				e.printStackTrace();
 			}
 		}
@@ -111,24 +100,38 @@ public class WarpedChannelHandler extends HandlerBoss {
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		if(ctx.channel().isActive()){
-			if((cause instanceof ReadTimeoutException)){
-				ProxyServer.getInstance().getLogger().log(Level.WARNING, formatColor(Messages.getString("ChannelHandler.connection.timeout")), this.handler); //$NON-NLS-1$
-			}else if((cause instanceof BadPacketException)){
-				ProxyServer.getInstance().getLogger().log(Level.WARNING, formatColor(Messages.getString("ChannelHandler.connection.bad-packet")), this.handler); //$NON-NLS-1$
-			}else if((cause instanceof IOException)){
-				ProxyServer.getInstance().getLogger().log(Level.WARNING, formatColor(Messages.getString("ChannelHandler.connection.IOException")), new Object[] { this.handler, cause.getMessage() }); //$NON-NLS-1$
+			if(cause instanceof ReadTimeoutException){
+				ProxyServer.getInstance().getLogger().log(Level.WARNING, this.formatColor(Messages.getString("ChannelHandler.connection.timeout")), this.handler); //$NON-NLS-1$
+			}else if(cause instanceof BadPacketException){
+				ProxyServer.getInstance().getLogger().log(Level.WARNING, this.formatColor(Messages.getString("ChannelHandler.connection.bad-packet")), this.handler); //$NON-NLS-1$
+			}else if(cause instanceof IOException){
+				ProxyServer.getInstance().getLogger().log(Level.WARNING, this.formatColor(Messages.getString("ChannelHandler.connection.IOException")), new Object[] { this.handler, cause.getMessage() }); //$NON-NLS-1$
 			}else{
-				ProxyServer.getInstance().getLogger().log(Level.SEVERE, this.handler + formatColor(Messages.getString("ChannelHandler.connection.encounteredException")), cause); //$NON-NLS-1$
+				ProxyServer.getInstance().getLogger().log(Level.SEVERE, this.handler + this.formatColor(Messages.getString("ChannelHandler.connection.encounteredException")), cause); //$NON-NLS-1$
 			}
 
 			if(this.handler != null){
 				try{
 					this.handler.exception(cause);
 				}catch (Exception ex){
-					ProxyServer.getInstance().getLogger().log(Level.SEVERE, this.handler + formatColor(Messages.getString("ChannelHandler.connection.progressingException")), ex); //$NON-NLS-1$
+					ProxyServer.getInstance().getLogger().log(Level.SEVERE, this.handler + this.formatColor(Messages.getString("ChannelHandler.connection.progressingException")), ex); //$NON-NLS-1$
 				}
 			}
 			ctx.close();
 		}
+	}
+
+	private String formatColor(String in){
+		if(Configuration.isTerminalColored()) {
+			return in;
+		} else {
+			return ChatColorUtils.stripColor(in);
+		}
+	}
+
+	@Override
+	public void setHandler(PacketHandler handler) {
+		Preconditions.checkArgument(handler != null, "handler");
+		this.handler = handler;
 	}
 }

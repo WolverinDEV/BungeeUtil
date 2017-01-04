@@ -71,6 +71,13 @@ public class ChatColorUtils {
 		return result;
 	}
 
+	public static boolean isColor(ChatColor color) {
+		if (color == null) {
+			return false;
+		}
+		return !"".equalsIgnoreCase(stripFormat(color.toString()));
+	}
+
 	/**
 	 * Strips the given message of all color codes
 	 *
@@ -113,11 +120,5 @@ public class ChatColorUtils {
 			}
 		}
 		return new String(b);
-	}
-
-	public static boolean isColor(ChatColor color) {
-		if (color == null)
-			return false;
-		return !"".equalsIgnoreCase(stripFormat(color.toString()));
 	}
 }

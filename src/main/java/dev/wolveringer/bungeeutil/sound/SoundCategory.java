@@ -11,14 +11,14 @@ public enum SoundCategory {
 	PLAYERS("player"),
 	AMBIENT("ambient"),
 	VOICE("voice");
-	
+
 	private String name;
-	
+
 	private SoundCategory(String name) {
 		this.name = name;
 	}
-	
+
 	public String getName() {
-		return name;
+		return this.name;
 	}
 }

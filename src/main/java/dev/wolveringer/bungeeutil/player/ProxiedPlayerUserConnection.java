@@ -44,7 +44,6 @@ import net.md_5.bungee.api.Callback;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.connection.InitialHandler;
 import net.md_5.bungee.netty.ChannelWrapper;
@@ -61,200 +60,82 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 	private Scoreboard board;
 	private String[] tab = new String[2];
 	private BossBarManager bossBarManager;
-	
+
 	public ProxiedPlayerUserConnection(ProxyServer bungee, ChannelWrapper ch, String name, InitialHandler pendingConnection) {
 		super(bungee, ch, name, pendingConnection);
 		this.i = (IInitialHandler) pendingConnection;
-		p_inv = new PlayerInventory(this);
-		p_inv.getViewer().add(this);
-		board = new Scoreboard(this);
-		loc = last_loc = new Location(0, 0, 0);
-		bossBarManager = new BossBarManager(this);
+		this.p_inv = new PlayerInventory(this);
+		this.p_inv.getViewer().add(this);
+		this.board = new Scoreboard(this);
+		this.loc = this.last_loc = new Location(0, 0, 0);
+		this.bossBarManager = new BossBarManager(this);
 	}
 
-	public IInitialHandler getInitialHandler() {
-		return i;
-	}
-
-	public void closeInventory() {
-		closeInventory(CloseReason.PLUGIN_CLOSED);
-	}
-	
 	@Override
-	public void closeInventory(CloseReason reason) {
-		if(getInventoryView() == null)
-			return;
-		for(InventoryListener l : new ArrayList<>(getInventoryView().getInventoryListener()))
-			l.onClose(getInventoryView(), this, reason);
-		closeInventory(true);
-		updateInventory();
+	public void closeInventory() {
+		this.closeInventory(CloseReason.PLUGIN_CLOSED);
 	}
 
 	private void closeInventory(boolean b) {
-		if(inv == null)
+		if(this.inv == null) {
 			return;
-		if(b)
-			sendPacket(new PacketPlayOutCloseWindow(Inventory.ID));
-		inv.unsave().getModificableViewerList().remove(this);
-		inv = null;
-	}
-
-	public Location getLocation() {
-		return loc.clone();
-	}
-
-	public Location getLastLocation() {
-		return last_loc.clone();
-	}
-
-	public void performCommand(String command) {
-		sendPacketToServer(new PacketPlayInChat((command.startsWith("/") ? "" : "/") + command));
-	}
-
-	@Deprecated
-	public void sendPacketToServer(PacketPlayIn p) {
-		i.sendPacketToServer((Packet) p);
-	}
-
-	public boolean isInventoryOpened() {
-		return inv != null;
-	}
-
-	public void openInventory(Inventory inv) {
-		if(isInventoryOpened())
-			closeInventory(true);
-		PacketPlayOutOpenWindow e = new PacketPlayOutOpenWindow(Inventory.ID, inv.getType().getType(getVersion()), inv.getName(), inv.getType() == InventoryType.Chest ? inv.getSlots() : inv.getType().getDefaultSlots(), false);
-		e.UTF_8 = true;
-		sendPacket(e);
-		sendPacket(new PacketPlayOutWindowItems(Inventory.ID, inv.getContains()));
-		inv.unsave().getModificableViewerList().add(this);
-		this.inv = inv;
-	}
-
-	public void updateInventory() {
-		int window = 0;
-		int dslot = 0;
-		Item[] items = p_inv.getContains();
-		BungeeUtil.debug("Updating "+items.length+" slots of the player inventory.");
-		/*
-		if(isInventoryOpened()){
-			window = Inventory.ID;
-			dslot = getInventoryView().getSlots();
 		}
-		for(int i = 0;i < items.length;i++){
-			if(isInventoryOpened() && i-9 < 0)
-				continue;
-			Item item = items[i];
-			sendPacket(new PacketPlayOutSetSlot(item, window, dslot+i-(isInventoryOpened()?/*9*//*0:0))); //-9 Player crafting and armor
+		if(b) {
+			this.sendPacket(new PacketPlayOutCloseWindow(Inventory.ID));
 		}
-		*/
-		sendPacket(new PacketPlayOutWindowItems(0, items));
+		this.inv.unsave().getModificableViewerList().remove(this);
+		this.inv = null;
 	}
 
-	public void setCursorItem(Item is) {
-		sendPacket(new PacketPlayOutSetSlot(is, -1, -1));
-		getPlayerInventory().setItem(CURSOR_ITEM_SLOT, is);
-	}
-
-	public Item getCursorItem() {
-		return getPlayerInventory().getItem(CURSOR_ITEM_SLOT);
-	}
-
-	public Item getOffHandItem() {
-		return getPlayerInventory().getItem(45);
-	}
-	
-	public PlayerInventory getPlayerInventory() {
-		return p_inv;
-	}
-
-	public ClientVersion getVersion() {
-		return ClientVersion.fromProtocoll(i.getHandshake() == null ? -1 : i.getHandshake().getProtocolVersion());
-	}
-
-	public Inventory getInventoryView() {
-		return inv;
-	}
-
-	public void sendPacket(PacketPlayOut packet) {
-		Packet p = (Packet) packet;
-		if(p == null)
+	@Override
+	public void closeInventory(CloseReason reason) {
+		if(this.getInventoryView() == null) {
 			return;
-		i.sendPacket(p);
-	}
-
-	public void setLocation(Location loc) {
-		this.last_loc = this.loc.clone();
-		this.loc = loc;
-	}
-
-	public void setSelectedSlot(int slot) {
-		this.slot = slot;
-	}
-
-	public int getSelectedSlot() {
-		return slot;
-	}
-
-	public Scoreboard getScoreboard() {
-		if(Configuration.isScoreboardhandleEnabled())
-			return board;
-		throw new RuntimeException("The Scoreboard manager isnt enabled in the configuration!");
-	}
-
-	@Override
-	public BaseComponent[] getTabHeader() {
-		return getInitialHandler().getTabHeader();
-	}
-
-	@Override
-	public void setTabHeader(BaseComponent header, BaseComponent footer) {
-		getInitialHandler().setTabHeader(header, footer);
-	}
-	
-	@Override
-	public void disconnect(Exception e) {
-		getInitialHandler().disconnect(e);
-	}
-
-	@Override
-	public String toString() {
-		return "Player{name=\""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r" + getName() + ""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r\" DisplayName=\""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r" + getDisplayName() + ""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r\" ping=\"" + getPing() + "\"}";
+		}
+		for(InventoryListener l : new ArrayList<>(this.getInventoryView().getInventoryListener())) {
+			l.onClose(this.getInventoryView(), this, reason);
+		}
+		this.closeInventory(true);
+		this.updateInventory();
 	}
 
 	@Override
 	public void connect(ServerInfo info, Callback<Boolean> callback, boolean retry) {
-		connect0(info, callback, retry);
+		this.connect0(info, callback, retry);
 	}
 
 	public void connect0(ServerInfo info, final Callback<Boolean> callback, final boolean retry) {
 		Preconditions.checkNotNull(info, "info");
 
 		ServerConnectEvent event = new ServerConnectEvent(this, info);
-		if(((ServerConnectEvent) BungeeCord.getInstance().getPluginManager().callEvent(event)).isCancelled()){
+		if(BungeeCord.getInstance().getPluginManager().callEvent(event).isCancelled()){
 			return;
 		}
 
 		final BungeeServerInfo target = (BungeeServerInfo) event.getTarget();
-		if((getServer() != null) && (Objects.equal(getServer().getInfo(), target))){
-			sendMessage(BungeeCord.getInstance().getTranslation("already_connected", new Object[0]));
+		if(this.getServer() != null && Objects.equal(this.getServer().getInfo(), target)){
+			this.sendMessage(BungeeCord.getInstance().getTranslation("already_connected", new Object[0]));
 			return;
 		}
-		if(getPendingConnects().contains(target)){
-			sendMessage(BungeeCord.getInstance().getTranslation("already_connecting", new Object[0]));
+		if(this.getPendingConnects().contains(target)){
+			this.sendMessage(BungeeCord.getInstance().getTranslation("already_connecting", new Object[0]));
 			return;
 		}
-		getPendingConnects().add(target);
-		ChannelInitializer<Channel> initializer = new WarpedChannelInitializer(getUserconnection(), target);
-		ChannelFutureListener listener = new WarpedChannelFutureListener(callback, getUserconnection(), target, retry);
-		Bootstrap b = ((Bootstrap) ((Bootstrap) ((Bootstrap) ((Bootstrap) new Bootstrap().channel(PipelineUtils.getChannel())).group(get("ch", ChannelWrapper.class).getHandle().eventLoop())).handler(initializer)).option(ChannelOption.CONNECT_TIMEOUT_MILLIS, Integer.valueOf(5000))).remoteAddress(target.getAddress());
-		if((getPendingConnection().getListener().isSetLocalAddress()) && (!(PlatformDependent.isWindows()))){
-			b.localAddress(getPendingConnection().getListener().getHost().getHostString(), 0);
+		this.getPendingConnects().add(target);
+		ChannelInitializer<Channel> initializer = new WarpedChannelInitializer(this.getUserconnection(), target);
+		ChannelFutureListener listener = new WarpedChannelFutureListener(callback, this.getUserconnection(), target, retry);
+		Bootstrap b = new Bootstrap().channel(PipelineUtils.getChannel()).group(this.get("ch", ChannelWrapper.class).getHandle().eventLoop()).handler(initializer).option(ChannelOption.CONNECT_TIMEOUT_MILLIS, Integer.valueOf(5000)).remoteAddress(target.getAddress());
+		if(this.getPendingConnection().getListener().isSetLocalAddress() && !PlatformDependent.isWindows()){
+			b.localAddress(this.getPendingConnection().getListener().getHost().getHostString(), 0);
 		}
 		b.connect().addListener(listener);
 	}
-	
-	
+
+	@Override
+	public void disconnect(Exception e) {
+		this.getInitialHandler().disconnect(e);
+	}
+
 	private Object get(String a) {
 		Field f = null;
 		try{
@@ -272,60 +153,207 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 	}
 
 	private <T> T get(String a, Class<T> ref) {
-		return (T) get(a);
-	}
-	
-	private UserConnection getUserconnection(){
-		return (UserConnection) ((ProxiedPlayer)this);
-	}
-
-	@Override
-	public boolean isConnected() {
-		return !((ChannelWrapper)get("ch")).isClosed();
-	}
-
-	@Override
-	public Item getHandItem() {
-		return getPlayerInventory().getItem(36+slot);
-	}
-	
-	@Override
-	public void playSound(SoundEffect effect) {
-		playSound(effect, 1F);
-	}
-
-	@Override
-	public void playSound(SoundEffect effect, float volume) {
-		playSound(effect, volume, 0);
-	}
-
-	@Override
-	public void playSound(SoundEffect effect, float volume, float pitch) {
-		playSound(effect, getLocation() , volume, pitch);
-		
-	}
-	
-	@Override
-	public void playSound(SoundEffect effect, Location location, float volume, float pitch) {
-		playSound(effect, SoundCategory.MASTER, location, volume, pitch);
-	}
-
-	@Override
-	public void playSound(SoundEffect effect,SoundCategory category, Location location, float volume, float pitch) {
-		if(!effect.isAvariable(getVersion().getBigVersion()))
-			throw new RuntimeException("Sound not avariable for client version");
-		PacketPlayOutNamedSoundEffect packet = new PacketPlayOutNamedSoundEffect();
-		packet.setLoc(location);
-		packet.setVolume(volume);
-		packet.setSoundCategory(category.ordinal());
-		packet.setSound(effect.getId(getVersion().getBigVersion()));
-		sendPacket(packet);
+		return (T) this.get(a);
 	}
 
 	@Override
 	public BossBarManager getBossBarManager() {
-		if(Configuration.isBossBarhandleEnabled())
-			return bossBarManager;
+		if(Configuration.isBossBarhandleEnabled()) {
+			return this.bossBarManager;
+		}
 		throw new RuntimeException("The BossBar manager isnt enabled in the configuration!");
+	}
+
+	@Override
+	public Item getCursorItem() {
+		return this.getPlayerInventory().getItem(CURSOR_ITEM_SLOT);
+	}
+
+	@Override
+	public Item getHandItem() {
+		return this.getPlayerInventory().getItem(36+this.slot);
+	}
+
+	@Override
+	public IInitialHandler getInitialHandler() {
+		return this.i;
+	}
+
+	@Override
+	public Inventory getInventoryView() {
+		return this.inv;
+	}
+
+	@Override
+	public Location getLastLocation() {
+		return this.last_loc.clone();
+	}
+
+	@Override
+	public Location getLocation() {
+		return this.loc.clone();
+	}
+
+	@Override
+	public Item getOffHandItem() {
+		return this.getPlayerInventory().getItem(45);
+	}
+
+	@Override
+	public PlayerInventory getPlayerInventory() {
+		return this.p_inv;
+	}
+
+	@Override
+	public Scoreboard getScoreboard() {
+		if(Configuration.isScoreboardhandleEnabled()) {
+			return this.board;
+		}
+		throw new RuntimeException("The Scoreboard manager isnt enabled in the configuration!");
+	}
+
+	@Override
+	public int getSelectedSlot() {
+		return this.slot;
+	}
+
+	@Override
+	public BaseComponent[] getTabHeader() {
+		return this.getInitialHandler().getTabHeader();
+	}
+
+	private UserConnection getUserconnection(){
+		return (UserConnection) this;
+	}
+
+	@Override
+	public ClientVersion getVersion() {
+		return ClientVersion.fromProtocoll(this.i.getHandshake() == null ? -1 : this.i.getHandshake().getProtocolVersion());
+	}
+
+	@Override
+	public boolean isConnected() {
+		return !((ChannelWrapper)this.get("ch")).isClosed();
+	}
+
+	@Override
+	public boolean isInventoryOpened() {
+		return this.inv != null;
+	}
+
+	@Override
+	public void openInventory(Inventory inv) {
+		if(this.isInventoryOpened()) {
+			this.closeInventory(true);
+		}
+		PacketPlayOutOpenWindow e = new PacketPlayOutOpenWindow(Inventory.ID, inv.getType().getType(this.getVersion()), inv.getName(), inv.getType() == InventoryType.Chest ? inv.getSlots() : inv.getType().getDefaultSlots(), false);
+		e.UTF_8 = true;
+		this.sendPacket(e);
+		this.sendPacket(new PacketPlayOutWindowItems(Inventory.ID, inv.getContains()));
+		inv.unsave().getModificableViewerList().add(this);
+		this.inv = inv;
+	}
+
+	@Override
+	public void performCommand(String command) {
+		this.sendPacketToServer(new PacketPlayInChat((command.startsWith("/") ? "" : "/") + command));
+	}
+
+	@Override
+	public void playSound(SoundEffect effect) {
+		this.playSound(effect, 1F);
+	}
+
+	@Override
+	public void playSound(SoundEffect effect, float volume) {
+		this.playSound(effect, volume, 0);
+	}
+
+
+	@Override
+	public void playSound(SoundEffect effect, float volume, float pitch) {
+		this.playSound(effect, this.getLocation() , volume, pitch);
+
+	}
+
+	@Override
+	public void playSound(SoundEffect effect, Location location, float volume, float pitch) {
+		this.playSound(effect, SoundCategory.MASTER, location, volume, pitch);
+	}
+
+	@Override
+	public void playSound(SoundEffect effect,SoundCategory category, Location location, float volume, float pitch) {
+		if(!effect.isAvariable(this.getVersion().getBigVersion())) {
+			throw new RuntimeException("Sound not avariable for client version");
+		}
+		PacketPlayOutNamedSoundEffect packet = new PacketPlayOutNamedSoundEffect();
+		packet.setLoc(location);
+		packet.setVolume(volume);
+		packet.setSoundCategory(category.ordinal());
+		packet.setSound(effect.getId(this.getVersion().getBigVersion()));
+		this.sendPacket(packet);
+	}
+
+	@Override
+	public void sendPacket(PacketPlayOut packet) {
+		Packet p = (Packet) packet;
+		if(p == null) {
+			return;
+		}
+		this.i.sendPacket(p);
+	}
+
+	@Override
+	@Deprecated
+	public void sendPacketToServer(PacketPlayIn p) {
+		this.i.sendPacketToServer((Packet) p);
+	}
+
+	@Override
+	public void setCursorItem(Item is) {
+		this.sendPacket(new PacketPlayOutSetSlot(is, -1, -1));
+		this.getPlayerInventory().setItem(CURSOR_ITEM_SLOT, is);
+	}
+
+	@Override
+	public void setLocation(Location loc) {
+		this.last_loc = this.loc.clone();
+		this.loc = loc;
+	}
+
+	@Override
+	public void setSelectedSlot(int slot) {
+		this.slot = slot;
+	}
+
+	@Override
+	public void setTabHeader(BaseComponent header, BaseComponent footer) {
+		this.getInitialHandler().setTabHeader(header, footer);
+	}
+
+	@Override
+	public String toString() {
+		return "Player{name=\""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r" + this.getName() + ""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r\" DisplayName=\""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r" + this.getDisplayName() + ""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r\" ping=\"" + this.getPing() + "\"}";
+	}
+
+	@Override
+	public void updateInventory() {
+		int window = 0;
+		int dslot = 0;
+		Item[] items = this.p_inv.getContains();
+		BungeeUtil.debug("Updating "+items.length+" slots of the player inventory.");
+		/*
+		if(isInventoryOpened()){
+			window = Inventory.ID;
+			dslot = getInventoryView().getSlots();
+		}
+		for(int i = 0;i < items.length;i++){
+			if(isInventoryOpened() && i-9 < 0)
+				continue;
+			Item item = items[i];
+			sendPacket(new PacketPlayOutSetSlot(item, window, dslot+i-(isInventoryOpened()?/*9*//*0:0))); //-9 Player crafting and armor
+		}
+		*/
+		this.sendPacket(new PacketPlayOutWindowItems(0, items));
 	}
 }

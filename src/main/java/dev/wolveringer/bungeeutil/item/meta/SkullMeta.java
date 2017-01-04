@@ -24,99 +24,103 @@ public class SkullMeta extends CraftItemMeta {
 
 	public SkullMeta(Item i) {
 		super(i);
-		if(getTag().hasKey("SkullOwner"))
-			p = GameProfileSerializer.deserialize(getTag().getCompound("SkullOwner"));
-	}
-
-	@SuppressWarnings("unchecked")
-	public void setSkin(UUID owner) {
-		this.owner = owner;
-		if(p == null)
-			p = new GameProfile(owner, "");
-		p.setId(owner);
-		SkinFactory.getSkin(owner, new OperationCalback<Skin>() {
-			public void done(Skin response) {
-				setSkin(response);
-			};
-		});
-		build();
-	}
-
-	public void setSkin(final String owner) {
-		BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), new Runnable() {
-			@Override
-			public void run() {
-				try{
-					setSkin(UUIDFetcher.getUUIDOf(owner));
-				}catch (Exception e){
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	public void setSkin(Skin s) {
-		s.applay(p);
-		p.setName(p.getName().equalsIgnoreCase("") ? s.getProfileName() : p.getName());
-		build();
-	}
-
-	public void setSkullOwner(String name) {
-		if(p == null)
-			p = new GameProfile(UUID.randomUUID(), name);
-		p.setName(name);
-		build();
-	}
-
-	public GameProfile getProfile() {
-		return p;
-	}
-
-	public void setProfile(GameProfile p) {
-		this.p = p;
-		build();
+		if(this.getTag().hasKey("SkullOwner")) {
+			this.p = GameProfileSerializer.deserialize(this.getTag().getCompound("SkullOwner"));
+		}
 	}
 
 	@Override
 	protected void build() {
-		if(p != null)
-			getTag().set("SkullOwner", GameProfileSerializer.serialize(new NBTTagCompound(), p));
-		fireUpdate();
+		if(this.p != null) {
+			this.getTag().set("SkullOwner", GameProfileSerializer.serialize(new NBTTagCompound(), this.p));
+		}
+		this.fireUpdate();
 	}
 
 	@Override
-	public String toString() {
-		return "SkullMeta@" + System.identityHashCode(this) + "[p=" + p + ", owner=" + owner + "]";
+	public boolean equals(Object obj) {
+		if(this == obj) {
+			return true;
+		}
+		if(!super.equals(obj)) {
+			return false;
+		}
+		if(this.getClass() != obj.getClass()) {
+			return false;
+		}
+		SkullMeta other = (SkullMeta) obj;
+		if(this.owner == null){
+			if(other.owner != null) {
+				return false;
+			}
+		}else if(!this.owner.equals(other.owner)) {
+			return false;
+		}
+		if(this.p == null){
+			if(other.p != null) {
+				return false;
+			}
+		}else if(!this.p.equals(other.p)) {
+			return false;
+		}
+		return super.equals(obj);
+	}
+
+	public GameProfile getProfile() {
+		return this.p;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
-		result = prime * result + ((p == null) ? 0 : p.hashCode());
+		result = prime * result + (this.owner == null ? 0 : this.owner.hashCode());
+		result = prime * result + (this.p == null ? 0 : this.p.hashCode());
 		return result;
 	}
 
+	public void setProfile(GameProfile p) {
+		this.p = p;
+		this.build();
+	}
+
+	public void setSkin(Skin s) {
+		s.applay(this.p);
+		this.p.setName(this.p.getName().equalsIgnoreCase("") ? s.getProfileName() : this.p.getName());
+		this.build();
+	}
+
+	public void setSkin(final String owner) {
+		BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), () -> {
+			try{
+				SkullMeta.this.setSkin(UUIDFetcher.getUUIDOf(owner));
+			}catch (Exception e){
+				e.printStackTrace();
+			}
+		});
+	}
+
+	@SuppressWarnings("unchecked")
+	public void setSkin(UUID owner) {
+		this.owner = owner;
+		if(this.p == null) {
+			this.p = new GameProfile(owner, "");
+		}
+		this.p.setId(owner);
+		SkinFactory.getSkin(owner, (OperationCalback<Skin>) response -> SkullMeta.this.setSkin(response));
+		this.build();
+	}
+
+	public void setSkullOwner(String name) {
+		if(this.p == null) {
+			this.p = new GameProfile(UUID.randomUUID(), name);
+		}
+		this.p.setName(name);
+		this.build();
+	}
+
 	@Override
-	public boolean equals(Object obj) {
-		if(this == obj)
-			return true;
-		if(!super.equals(obj))
-			return false;
-		if(getClass() != obj.getClass())
-			return false;
-		SkullMeta other = (SkullMeta) obj;
-		if(owner == null){
-			if(other.owner != null)
-				return false;
-		}else if(!owner.equals(other.owner))
-			return false;
-		if(p == null){
-			if(other.p != null)
-				return false;
-		}else if(!p.equals(other.p))
-			return false;
-		return super.equals(obj);
+	public String toString() {
+		return "SkullMeta@" + System.identityHashCode(this) + "[p=" + this.p + ", owner=" + this.owner + "]";
 	}
 }

@@ -7,11 +7,11 @@ public class PacketDataSerializer_vX_X extends PacketDataSerializer_v1_8 {
 		super(pid);
 	}
 
-	public PacketDataSerializer_vX_X(ByteBuf bytebuf) {
-		super(bytebuf);
-	}
-
 	public PacketDataSerializer_vX_X(byte b, ByteBuf buf) {
 		super(b,buf);
+	}
+
+	public PacketDataSerializer_vX_X(ByteBuf bytebuf) {
+		super(bytebuf);
 	}
 }

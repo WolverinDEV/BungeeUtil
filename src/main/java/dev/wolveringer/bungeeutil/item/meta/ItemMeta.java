@@ -27,10 +27,12 @@ public interface ItemMeta extends Cloneable {
 	 * <p>
 	 * Plugins should check if hasLore() returns <code>true</code> before
 	 * calling this method.
-	 * 
+	 *
 	 * @return a list of lore that is set
 	 */
 	List<String> getLore();
+
+	NBTTagCompound getTag();
 
 	/**
 	 * Checks for existence of a display name.
@@ -39,12 +41,16 @@ public interface ItemMeta extends Cloneable {
 	 */
 	boolean hasDisplayName();
 
+	boolean hasGlow();
+
 	/**
 	 * Checks for existence of lore.
 	 *
 	 * @return true if this has lore
 	 */
 	boolean hasLore();
+
+	boolean hasTag();
 
 	/**
 	 * Sets the display name.
@@ -65,10 +71,4 @@ public interface ItemMeta extends Cloneable {
 	 */
 	void setLore(List<String> lore);
 
-	boolean hasTag();
-
-	boolean hasGlow();
-
-	NBTTagCompound getTag();
-	
 }

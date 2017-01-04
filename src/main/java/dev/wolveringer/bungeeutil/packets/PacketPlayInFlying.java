@@ -3,26 +3,24 @@ package dev.wolveringer.bungeeutil.packets;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayIn;
 import dev.wolveringer.bungeeutil.position.Location;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@AllArgsConstructor
 @NoArgsConstructor
 public class PacketPlayInFlying extends Packet implements PacketPlayIn {
+	@Setter
 	protected boolean onground;
 	protected boolean hasLook = false;
 	protected boolean hasPos = false;
-	protected Location loc = new Location(0, 0, 0);
+	protected Location location = new Location(0, 0, 0);
+	@Getter
 	protected double stance;
 
-	public void setLocation(Location loc) {
-		if(loc.getYaw() != 0 || loc.getPitch() != 0)
-			hasLook = true;
-		if(loc.getX() != 0 && loc.getY() != 0 && loc.getZ() != 0)
-			hasPos = true;
-		this.loc = loc;
-	}
-
 	public Location getLocation() {
-		return loc.clone();
+		return this.location.clone();
 	}
 
 	public boolean hasLook() {
@@ -33,7 +31,7 @@ public class PacketPlayInFlying extends Packet implements PacketPlayIn {
 		return this.hasPos;
 	}
 
-	public boolean onGound() {
+	public boolean isOnGound() {
 		return this.onground;
 	}
 
@@ -42,8 +40,18 @@ public class PacketPlayInFlying extends Packet implements PacketPlayIn {
 		this.onground = s.readUnsignedByte() != 0;
 	}
 
-	public double stance() {
-		return this.stance;
+	public void setLocation(Location loc) {
+		if(loc.getYaw() != 0 || loc.getPitch() != 0) {
+			this.hasLook = true;
+		}
+		if(loc.getX() != 0 && loc.getY() != 0 && loc.getZ() != 0) {
+			this.hasPos = true;
+		}
+		this.location = loc;
+	}
+	@Override
+	public String toString() {
+		return "PacketPlayInFlying [onground=" + this.onground + ", hasLook=" + this.hasLook + ", hasPos=" + this.hasPos + ", loc=" + this.location + ", stance=" + this.stance + "]";
 	}
 
 	@Override
@@ -51,13 +59,4 @@ public class PacketPlayInFlying extends Packet implements PacketPlayIn {
 		s.writeByte(this.onground ? 1 : 0);
 	}
 
-	protected void setOnground(boolean flag) {
-		this.onground = flag;
-	}
-
-	@Override
-	public String toString() {
-		return "PacketPlayInFlying [onground=" + onground + ", hasLook=" + hasLook + ", hasPos=" + hasPos + ", loc=" + loc + ", stance=" + stance + "]";
-	}
-	
 }

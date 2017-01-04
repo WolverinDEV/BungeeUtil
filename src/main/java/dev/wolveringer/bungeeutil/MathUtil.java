@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class MathUtil {
 	private static final BigDecimal PERCENT_MULTIPLYER = new BigDecimal(100);
-	
+
 	public static float calculatePercent(int count, int max) {
 		BigDecimal bc = new BigDecimal(count);
 		BigDecimal bmax = new BigDecimal(max);
@@ -12,7 +12,7 @@ public class MathUtil {
 		temp = temp.multiply(PERCENT_MULTIPLYER);
 		return temp.floatValue();
 	}
-	
+
 	public static float pitchNormalizer(float pitch) {
 		pitch %= 360.0F;
 		if (pitch >= 180.0F) {

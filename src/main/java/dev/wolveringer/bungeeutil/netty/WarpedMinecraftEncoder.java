@@ -34,7 +34,7 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 		HANDLE_EXTERN = Messages.getString("network.timings.encoder.handle.extern");
 		WRITE_BUFF = Messages.getString("network.timings.encoder.write.writeNewByteBuff");
 	}
-	
+
 	@Getter
 	@Setter
 	private IInitialHandler initHandler;
@@ -53,28 +53,28 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 		this.server = server;
 		this.clientVersion = ClientVersion.fromProtocoll(protocolVersion);
 	}
-	
+
 	@Override
 	protected void encode(ChannelHandlerContext ctx, DefinedPacket msg, ByteBuf out) throws Exception {
-		if(initHandler == null){
+		if(this.initHandler == null){
 			System.err.println("Try to send a DefinedPacket ("+msg.getClass().getName()+") over a WarpedMinecraftEncoder without a valid InitialHandler! Skipping packet handling.");
 			super.encode(ctx, msg, out);
 			return;
 		}
-		if(clientVersion == null){
-			BungeeUtil.debug("Sending a DefinedPacket ("+msg.getClass().getName()+") to a client with an unknown version. ProtocolVersion is "+version);
+		if(this.clientVersion == null){
+			BungeeUtil.debug("Sending a DefinedPacket ("+msg.getClass().getName()+") to a client with an unknown version. ProtocolVersion is "+this.version);
 			super.encode(ctx, msg, out);
 			return;
 		}
-		
+
 		Profiler.encoder_timings.start(HANDLE_GENERAL);
-		
+
 		ByteBuf encodedBuffer;
 		super.encode(ctx, msg, encodedBuffer = Unpooled.buffer());
 
 		Profiler.encoder_timings.start(PACKET_CREATION);
-		Packet packet = Packet.getPacket(clientVersion.getProtocollVersion(),protocoll, Direction.TO_CLIENT, encodedBuffer, initHandler.getPlayer());
-		
+		Packet packet = Packet.getPacket(this.clientVersion.getProtocollVersion(),this.protocoll, Direction.TO_CLIENT, encodedBuffer, this.initHandler.getPlayer());
+
 		Profiler.encoder_timings.stop(PACKET_CREATION);
 		if(packet == null){
 			ByteBuffCreator.copy(encodedBuffer, out);
@@ -82,13 +82,13 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 			Profiler.encoder_timings.stop(HANDLE_GENERAL);
 			return;
 		}
-		
+
 		packet.use();
 		encodedBuffer.release();
-		
-		
+
+
 		@SuppressWarnings({ "rawtypes", "unchecked" })
-		PacketHandleEvent<?> e = new PacketHandleEvent(packet, initHandler.getPlayer());
+		PacketHandleEvent<?> e = new PacketHandleEvent(packet, this.initHandler.getPlayer());
 		Profiler.encoder_timings.start(HANDLE_INTERN);
 		boolean cancelFromIntern = MainPacketHandler.handlePacket(e);
 		Profiler.encoder_timings.stop(HANDLE_INTERN);
@@ -98,24 +98,28 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 			Profiler.encoder_timings.stop(HANDLE_EXTERN);
 			if(!e.isCancelled()){
 				Profiler.encoder_timings.start(WRITE_BUFF);
-				e.getPacket().writeToByteBuff(out, ClientVersion.fromProtocoll(initHandler.getVersion()));
+				e.getPacket().writeToByteBuff(out, ClientVersion.fromProtocoll(this.initHandler.getVersion()));
 				Profiler.encoder_timings.stop(WRITE_BUFF);
 			}
 		}
 		packet.unuse();
 		Profiler.encoder_timings.stop(HANDLE_GENERAL);
 	}
-	
+
+	@Override
 	public void setProtocol(Protocol protocol) {
 		super.setProtocol(protocol);
 		this.protocoll = protocol;
 	}
 
+	@Override
 	public void setProtocolVersion(int protocol) {
 		super.setProtocolVersion(protocol);
 		this.version = protocol;
 		this.clientVersion = ClientVersion.fromProtocoll(protocol);
 		if(this.clientVersion == null || !this.clientVersion.getProtocollVersion().isSupported())
+		 {
 			this.clientVersion = null; //Dont try to handle packies from a client with an unsupported protocol.
+		}
 	}
 }

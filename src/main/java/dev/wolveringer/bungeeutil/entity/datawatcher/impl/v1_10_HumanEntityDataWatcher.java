@@ -4,52 +4,65 @@ import dev.wolveringer.bungeeutil.entity.datawatcher.DataWatcher;
 import dev.wolveringer.bungeeutil.entity.datawatcher.HumanDataWatcher;
 
 public class v1_10_HumanEntityDataWatcher extends v1_10_LivingEntityDataWatcher implements HumanDataWatcher {
-	
+
 	public v1_10_HumanEntityDataWatcher(DataWatcher watcher) {
 		super(watcher);
 	}
-	
-	public void setSkinFlags(byte flag) {
-		watcher.setValue(13, flag);
+
+	@Override
+	public float getAbsorptionHearts() {
+		return this.watcher.getFloat(11);
 	}
-	
+
+	@Override
+	public int getScore() {
+		return this.watcher.getInt(12);
+	}
+
+	@Override
 	public byte getSkinFlag() {
-		return watcher.getByte(13);
+		return this.watcher.getByte(13);
 	}
-	
-	public void setCapeActive(boolean b) {
+
+	@Override
+	public v1_10_HumanEntityDataWatcher injektDefault() {
+		super.injektDefault();
+		if (this.watcher.get(11) == null) {
+			this.watcher.setValue(11, 0F);
+		}
+		if (this.watcher.get(12) == null) {
+			this.watcher.setValue(12, 0);
+		}
+		if (this.watcher.get(13) == null) {
+			this.watcher.setValue(13, (byte) 0);
+		}
+		if (this.watcher.get(14) == null) {
+			this.watcher.setValue(14, (byte) 0);
+		}
+		return this;
 	}
-	
+
+	@Override
 	public boolean isCapeActive() {
 		return false;
 	}
-	
+
+	@Override
 	public void setAbsorptionHearts(float f) {
-		watcher.setValue(11, f);
+		this.watcher.setValue(11, f);
 	}
-	
-	public float getAbsorptionHearts() {
-		return watcher.getFloat(11);
+
+	@Override
+	public void setCapeActive(boolean b) {
 	}
-	
+
+	@Override
 	public void setScore(int score) {
-		watcher.setValue(12, score);
+		this.watcher.setValue(12, score);
 	}
-	
-	public int getScore() {
-		return watcher.getInt(12);
-	}
-	
-	public v1_10_HumanEntityDataWatcher injektDefault() {
-		super.injektDefault();
-		if (watcher.get(11) == null)
-			watcher.setValue(11, (float) 0F);
-		if (watcher.get(12) == null)
-			watcher.setValue(12, (int) 0);
-		if (watcher.get(13) == null)
-			watcher.setValue(13, (byte) 0);
-		if (watcher.get(14) == null)
-			watcher.setValue(14, (byte) 0);
-		return this;
+
+	@Override
+	public void setSkinFlags(byte flag) {
+		this.watcher.setValue(13, flag);
 	}
 }

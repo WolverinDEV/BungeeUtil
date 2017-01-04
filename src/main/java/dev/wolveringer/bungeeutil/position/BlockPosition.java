@@ -5,6 +5,6 @@ public class BlockPosition extends Potision<Integer> {
 		super(x, y, z);
 	}
 	public long toLong(){
-		return (x & 67108863L) << 38L | (y & 4095L) << 26L | (z & 67108863L) << 0;
+		return (this.x & 67108863L) << 38L | (this.y & 4095L) << 26L | (this.z & 67108863L) << 0;
 	}
 }

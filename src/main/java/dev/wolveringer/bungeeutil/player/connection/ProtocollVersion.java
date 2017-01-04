@@ -14,25 +14,26 @@ public enum ProtocollVersion {
 	v1_9_4(3, 110, true),
 	v1_10(4, 210, true),
 	v1_11(5, 315, true);
-	
+
 	private int basedVersionInt;
 	private BigClientVersion basedVersion;
 	private boolean supported;
 	private int protocollVersion;
-	
+
 	private ProtocollVersion(int basedVersion,int protocoll, boolean supported) {
 		this.basedVersionInt = basedVersion;
 		this.supported = supported;
 		this.protocollVersion = protocoll;
 	}
-	
+
 	public BigClientVersion getBasedVersion(){
-		if(basedVersion == null)
-			basedVersion = BigClientVersion.values()[basedVersionInt];
-		return basedVersion;
+		if(this.basedVersion == null) {
+			this.basedVersion = BigClientVersion.values()[this.basedVersionInt];
+		}
+		return this.basedVersion;
 	}
-	
+
 	public int getProtocollVersion(){
-		return protocollVersion;
+		return this.protocollVersion;
 	}
 }

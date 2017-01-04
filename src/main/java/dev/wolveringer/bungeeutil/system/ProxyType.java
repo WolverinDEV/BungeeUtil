@@ -3,9 +3,9 @@ package dev.wolveringer.bungeeutil.system;
 public enum ProxyType {
 	BUNGEECORD,
 	WATERFALL;
-	
+
 	private static ProxyType type;
-	
+
 	public static ProxyType getType(){
 		resolveType:
 		if(type == null){

@@ -12,28 +12,29 @@ public class MultiClickItemStack extends ItemStack{
 		super(stack);
 	}
 
-	public MultiClickItemStack(Material type, int amount, short damage) {
-		super(type, amount, damage);
+	public MultiClickItemStack(Material type) {
+		super(type);
 	}
 
 	public MultiClickItemStack(Material type, int amount) {
 		super(type, amount);
 	}
 
-	public MultiClickItemStack(Material type) {
-		super(type);
+	public MultiClickItemStack(Material type, int amount, short damage) {
+		super(type, amount, damage);
 	}
-	
+
 	public void addClickListener(ClickListener listener){
 		this.listener.add(listener);
 	}
-	public void removeListener(ClickListener listener){
-		this.listener.remove(listener);
-	}
-	
 	@Override
 	public void click(Click p) {
-		for(ClickListener c : listener)
+		for(ClickListener c : this.listener) {
 			c.click(p);
+		}
+	}
+
+	public void removeListener(ClickListener listener){
+		this.listener.remove(listener);
 	}
 }

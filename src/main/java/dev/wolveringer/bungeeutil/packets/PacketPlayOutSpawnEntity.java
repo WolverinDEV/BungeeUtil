@@ -6,71 +6,46 @@ import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.position.Location;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @Getter
+@Setter
 public class PacketPlayOutSpawnEntity extends Packet implements PacketPlayOut{
 	private Location location;
 	private int eid;
 	private int type;
 	private DataWatcher data;
-	
+
 	public PacketPlayOutSpawnEntity(Location location, int eid, int type, DataWatcher data) {
-		this();
 		this.location = location.multiply(32D);
 		this.eid = eid;
 		this.type = type;
 		this.data = data;
 	}
 
-
-
+	public Location getLocation() {
+		return this.location.clone().dividide(32D);
+	}
 	@Override
 	public void read(PacketDataSerializer s) {
-		eid = s.readVarInt();
-		type = s.readByte();
-		location = new Location(s.readInt(), s.readInt(), s.readInt());
-		data = DataWatcher.createDataWatcher(getBigVersion(),s);
-	}
-	@Override
-	public void write(PacketDataSerializer s) {
-		s.writeVarInt(eid);
-		s.writeByte(type);
-		s.writeInt(location.getBlockX());
-		s.writeInt(location.getBlockY());
-		s.writeInt(location.getBlockZ());
-		data.write(s);
-	}
-
-	public Location getLocation() {
-		return location.clone().dividide(32D);
+		this.eid = s.readVarInt();
+		this.type = s.readByte();
+		this.location = new Location(s.readInt(), s.readInt(), s.readInt());
+		this.data = DataWatcher.createDataWatcher(this.getBigVersion(),s);
 	}
 
 	public void setLocation(Location location) {
 		this.location = location.multiply(32D);
 	}
 
-	public int getEid() {
-		return eid;
-	}
-
-	public void setEid(int eid) {
-		this.eid = eid;
-	}
-
-	public int getType() {
-		return type;
-	}
-
-	public void setType(int type) {
-		this.type = type;
-	}
-
-	public DataWatcher getData() {
-		return data;
-	}
-
-	public void setData(DataWatcher data) {
-		this.data = data;
+	@Override
+	public void write(PacketDataSerializer s) {
+		s.writeVarInt(this.eid);
+		s.writeByte(this.type);
+		s.writeInt(this.location.getBlockX());
+		s.writeInt(this.location.getBlockY());
+		s.writeInt(this.location.getBlockZ());
+		this.data.write(s);
 	}
 }

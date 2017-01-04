@@ -36,76 +36,86 @@ public class Updater {
 	@Getter
 	public static class Version implements Comparable<Version>{
 		private final String version;
-		
-		public boolean isSnapshot(){
-			return version.toLowerCase().endsWith("SNAPSHOT".toLowerCase());
-		}
-		
-		public String getPlainVersion(){
-			int index = 0;
-			while (version.length() > index) {
-				if(StringUtils.isNumeric(Character.toString(version.charAt(index))) || version.charAt(index) == '.')
-					index++;
-				else
-					break;
-			}
-			return version.substring(0, index);
-		}
 
 		@Override
 		public int compareTo(Version o) {
-			String[] ownSegments = getPlainVersion().split("\\.");
+			String[] ownSegments = this.getPlainVersion().split("\\.");
 			String[] otherSegments = o.getPlainVersion().split("\\.");
-			
+
 			for(int i = 0;i<Math.max(ownSegments.length, otherSegments.length);i++){
 				if(ownSegments.length <= i){
-					if(otherSegments.length <= i)
-						return Boolean.compare(isSnapshot(), o.isSnapshot());
-					for(int j = i; j < otherSegments.length; j++)
-						if(Integer.parseInt(otherSegments[j]) > 0)
+					if(otherSegments.length <= i) {
+						return Boolean.compare(this.isSnapshot(), o.isSnapshot());
+					}
+					for(int j = i; j < otherSegments.length; j++) {
+						if(Integer.parseInt(otherSegments[j]) > 0) {
 							return -1;
+						}
+					}
 				} else if(otherSegments.length <= i){
-					if(ownSegments.length <= i)
-						return Boolean.compare(isSnapshot(), o.isSnapshot());
-					for(int j = i; j < ownSegments.length; j++)
-						if(Integer.parseInt(ownSegments[j]) > 0)
+					if(ownSegments.length <= i) {
+						return Boolean.compare(this.isSnapshot(), o.isSnapshot());
+					}
+					for(int j = i; j < ownSegments.length; j++) {
+						if(Integer.parseInt(ownSegments[j]) > 0) {
 							return 1;
+						}
+					}
 				} else {
 					Integer a = Integer.parseInt(ownSegments[i]);
 					Integer b = Integer.parseInt(otherSegments[i]);
-					if(a > b)
+					if(a > b) {
 						return 1;
-					else if(a == b)
+					} else if(a == b) {
 						continue;
-					else if(b > a)
+					} else if(b > a) {
 						return -1;
-					else
+					} else {
 						throw new RuntimeException("LOL this is impossible.");
+					}
 				}
 			}
 			return 0;
 		}
-		
+
+		public String getPlainVersion(){
+			int index = 0;
+			while (this.version.length() > index) {
+				if(StringUtils.isNumeric(Character.toString(this.version.charAt(index))) || this.version.charAt(index) == '.') {
+					index++;
+				} else {
+					break;
+				}
+			}
+			return this.version.substring(0, index);
+		}
+
+		public boolean isSnapshot(){
+			return this.version.toLowerCase().endsWith("SNAPSHOT".toLowerCase());
+		}
+
 	}
-	
+
 	private String url;
 	private JSONObject data;
 	private long last;
-	
+
 	public Updater(String url) {
 		this.url = url;
 	}
-	
+
 	public boolean checkUpdate() {
-		updateData();
-		if (data == null) throw new NullPointerException("HTTP Data is null. Invpoke getData() first");
-		if (!isNewstVersion()) {
-			installUpdate();
+		this.updateData();
+		if (this.data == null) {
+			throw new NullPointerException("HTTP Data is null. Invpoke getData() first");
+		}
+		if (!this.isNewstVersion()) {
+			this.installUpdate();
 			BungeeCord.getInstance().stop();
 			return true;
 		}
 		else {
-			if(getCurrentVersion().isSnapshot()){
+			if(this.getCurrentVersion().isSnapshot()){
 				BungeeUtil.getInstance().sendMessage(ChatColor.LIGHT_PURPLE + "Attention: This build is a snapshot. This may containing bugs.");
 			} else {
 				BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "The current version is already the newest version. That's for keeping BungeeUtil up to date.");
@@ -113,34 +123,37 @@ public class Updater {
 		}
 		return false;
 	}
-	
-	public void installUpdate(){
-		File ownFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getFile());
-		downloadUpdate(data.getString("Download"), ownFile);
-		Configuration.setLastVersion(getCurrentVersion().getVersion());
+
+	public HashMap<Version, List<String>> createChanges(@NonNull Version lastVersion){
+		HashMap<Version, List<String>> out = new HashMap<>();
+		if(this.data != null){
+			JSONArray changelogArray = this.data.getJSONArray("Changelog");
+			Iterator<Object> objects = changelogArray.iterator();
+			while (objects.hasNext()) {
+				JSONObject object = (JSONObject) objects.next();
+				String sversion = object.getString("Verion");
+				if(object.has("snapshot") && sversion.endsWith("-SNAPSHOT")) {
+					sversion += "-SNAPSHOT";
+				}
+
+				Version version = new Version(sversion);
+				if(lastVersion.compareTo(version) < 0){
+					ArrayList<String> changes = new ArrayList<>();
+					Iterator<Object> message = object.getJSONArray("Changed").iterator();
+					while (message.hasNext()) {
+						changes.add((String) message.next());
+					}
+					out.put(version, changes);
+				}
+			}
+		} else {
+			out.put(new Version("ERROR"), Arrays.asList(ChatColor.RED+"Cant featch versions data.","Make shure you have an valid internet connection."));
+		}
+		return out;
 	}
-	
-	public Version getCurrentVersion(){
-		if(Main.getMain() == null)
-			return new Version("2.0-SNAPSHOT");
-		return new Version(Main.getMain().getDescription().getVersion());
-	}
-	
-	public Version getNewestVersion() {
-		updateData();
-		return new Version(data.getString("CurrentVersion"));
-	}
-	
-	public boolean isNewstVersion() {
-		return getNewestVersion().compareTo(getCurrentVersion()) <= 0;
-	}
-	
-	public boolean isDevBuild(){
-		return false;
-	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param url
 	 * @param targetFile
 	 * @return errormask
@@ -154,7 +167,7 @@ public class Updater {
 	private int downloadUpdate(String url, File targetFile) {
 		BigInteger errorMask = new BigInteger("0");
 		errorMask.setBit(8);
-		BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Updating from "+getCurrentVersion()+" to "+getNewestVersion());
+		BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Updating from "+this.getCurrentVersion()+" to "+this.getNewestVersion());
 		BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Starting to download the update ("+url+") to "+targetFile.getAbsolutePath());
 		programm:
 		try {
@@ -169,14 +182,17 @@ public class Updater {
 				if (targetFile.exists()) {
 					BungeeUtil.getInstance().setInformation(ChatColor.GREEN + "Using .download file ("+targetFile.getPath() + "BungeeUtil.download)!");
 					fout = new FileOutputStream(df = new File(targetFile.getPath() + "BungeeUtil.download"));
+				} else {
+					fout = new FileOutputStream(df = targetFile);
 				}
-				else fout = new FileOutputStream(df = targetFile);
 				final byte data[] = new byte[1024];
 				int count;
 				int readed = 0;
 				while (true) {
 					count = in.read(data, 0, 1024);
-					if (count == -1) break;
+					if (count == -1) {
+						break;
+					}
 					fout.write(data, 0, count);
 					readed += count;
 					String p = "000" + MathUtil.calculatePercent(readed, fileLength);
@@ -226,7 +242,9 @@ public class Updater {
 				}
 				fis.close();
 				fos.close();
-				if (deleteOld && !df.delete()) BungeeUtil.getInstance().sendMessage(ChatColor.GOLD + "Cant delte cache file!");
+				if (deleteOld && !df.delete()) {
+					BungeeUtil.getInstance().sendMessage(ChatColor.GOLD + "Cant delte cache file!");
+				}
 				BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Restarting bungeecord!");
 				BungeeUtil.getInstance().setInformation(ChatColor.GREEN + "Update installed!");
 			}
@@ -251,18 +269,45 @@ public class Updater {
 		}
 		return errorMask.intValue();
 	}
-	
-	public JSONObject getData() {
-		updateData();
-		return data;
+
+	public Version getCurrentVersion(){
+		if(Main.getMain() == null) {
+			return new Version("2.0-SNAPSHOT");
+		}
+		return new Version(Main.getMain().getDescription().getVersion());
 	}
-	
+
+	public JSONObject getData() {
+		this.updateData();
+		return this.data;
+	}
+
+	public Version getNewestVersion() {
+		this.updateData();
+		return new Version(this.data.getString("CurrentVersion"));
+	}
+
+	public void installUpdate(){
+		File ownFile = new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile());
+		this.downloadUpdate(this.data.getString("Download"), ownFile);
+		Configuration.setLastVersion(this.getCurrentVersion().getVersion());
+	}
+
+	public boolean isDevBuild(){
+		return false;
+	}
+
+	public boolean isNewstVersion() {
+		return this.getNewestVersion().compareTo(this.getCurrentVersion()) <= 0;
+	}
+
 	public Updater loadData() {
-		last = System.currentTimeMillis();
-		if(BungeeUtil.getInstance() != null)
+		this.last = System.currentTimeMillis();
+		if(BungeeUtil.getInstance() != null) {
 			BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Fetching update data.");
+		}
 		try {
-			URL i = new URL(url);
+			URL i = new URL(this.url);
 			HttpURLConnection c = (HttpURLConnection) i.openConnection();
 			c.setRequestMethod("GET");
 			BufferedReader in = new BufferedReader(new InputStreamReader(c.getInputStream()));
@@ -279,35 +324,10 @@ public class Updater {
 		}
 		return this;
 	}
-	
-	public HashMap<Version, List<String>> createChanges(@NonNull Version lastVersion){
-		HashMap<Version, List<String>> out = new HashMap<>();
-		if(data != null){
-			JSONArray changelogArray = data.getJSONArray("Changelog");
-			Iterator<Object> objects = changelogArray.iterator();
-			while (objects.hasNext()) {
-				JSONObject object = (JSONObject) objects.next();
-				String sversion = object.getString("Verion");
-				if(object.has("snapshot") && sversion.endsWith("-SNAPSHOT")) //Dont break the old updater
-					sversion += "-SNAPSHOT";
-				
-				Version version = new Version(sversion);
-				if(lastVersion.compareTo(version) < 0){
-					ArrayList<String> changes = new ArrayList<>();
-					Iterator<Object> message = object.getJSONArray("Changed").iterator();
-					while (message.hasNext()) {
-						changes.add((String) message.next());
-					}
-					out.put(version, changes);
-				}
-			}
-		}
-		else
-			out.put(new Version("ERROR"), Arrays.asList(ChatColor.RED+"Cant featch versions data.","Make shure you have an valid internet connection."));
-		return out;
-	}
-	
+
 	public void updateData() {
-		if (System.currentTimeMillis() - last > TimeUnit.MINUTES.toMillis(10)) loadData();
+		if (System.currentTimeMillis() - this.last > TimeUnit.MINUTES.toMillis(10)) {
+			this.loadData();
+		}
 	}
 }

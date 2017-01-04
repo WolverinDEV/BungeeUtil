@@ -15,9 +15,10 @@ public class PacketPlayOutKeepAlive extends Packet implements PacketPlayOut{
 	private int id;
 	@Override
 	public void read(PacketDataSerializer s) {
-		id = s.readVarInt();
+		this.id = s.readVarInt();
 	}
+	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeVarInt(id);
+		s.writeVarInt(this.id);
 	}
 }

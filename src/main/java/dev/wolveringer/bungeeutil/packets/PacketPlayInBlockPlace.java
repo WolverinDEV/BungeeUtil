@@ -6,130 +6,105 @@ import dev.wolveringer.bungeeutil.packets.types.PacketPlayIn;
 import dev.wolveringer.bungeeutil.player.HandType;
 import dev.wolveringer.bungeeutil.position.BlockPosition;
 import dev.wolveringer.bungeeutil.position.Vector3f;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class PacketPlayInBlockPlace extends Packet implements PacketPlayIn {
-	private BlockPosition loc;
+	private BlockPosition location;
 	private int face;
 	private int hand = 0;
 	private Item item;
 	private Vector3f cursorPosition;
 
-	public PacketPlayInBlockPlace() {}
+	public HandType getHand() {
+		return HandType.values()[this.hand];
+	}
 
 	@Override
 	public void read(PacketDataSerializer s) {
-		loc = s.readBlockPosition();
-		
-		switch (getBigVersion()) {
+		this.location = s.readBlockPosition();
+
+		switch (this.getBigVersion()) {
 		case v1_11:
 		case v1_10:
 		case v1_9:
-			face = s.readVarInt();
-			hand = s.readVarInt();
+			this.face = s.readVarInt();
+			this.hand = s.readVarInt();
 			break;
 		case v1_8:
-			face = s.readUnsignedByte();
-			item = s.readItem();
+			this.face = s.readUnsignedByte();
+			this.item = s.readItem();
 			break;
 		default:
 			break;
 		}
-		
-		if(face == 255)
-			loc.setY(255);
-		switch (getBigVersion()) {
+
+		if(this.face == 255) {
+			this.location.setY(255);
+		}
+		switch (this.getBigVersion()) {
 		case v1_11:
-			cursorPosition = new Vector3f(s.readFloat(), s.readFloat(), s.readFloat());
+			this.cursorPosition = new Vector3f(s.readFloat(), s.readFloat(), s.readFloat());
 			break;
 		case v1_10:
 		case v1_9:
 		case v1_8:
-			cursorPosition = new Vector3f((float) s.readUnsignedByte() / 16.0F, (float) s.readUnsignedByte() / 16.0F, (float) s.readUnsignedByte() / 16.0F);
+			this.cursorPosition = new Vector3f(s.readUnsignedByte() / 16.0F, s.readUnsignedByte() / 16.0F, s.readUnsignedByte() / 16.0F);
 			break;
 		default:
 			break;
 		}
+	}
+
+	public void setHand(HandType hand) {
+		this.hand = hand.ordinal();
+	}
+
+	@Override
+	public String toString() {
+		return "PacketPlayInBlockPlace [loc=" + this.location + ", face=" + this.face + ", item=" + this.item + ", cursorPosition=" + this.cursorPosition + "]";
 	}
 
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeBlockPosition(loc);
+		s.writeBlockPosition(this.location);
 
-		switch (getBigVersion()) {
+		switch (this.getBigVersion()) {
 		case v1_11:
 		case v1_10:
 		case v1_9:
-			s.writeVarInt(face);
-			s.writeVarInt(hand);
+			s.writeVarInt(this.face);
+			s.writeVarInt(this.hand);
 			break;
 		case v1_8:
-			s.writeByte(face);
-			s.writeItem(item);
+			s.writeByte(this.face);
+			s.writeItem(this.item);
 			break;
 		default:
 			break;
 		}
-		
-		switch (getBigVersion()) {
+
+		switch (this.getBigVersion()) {
 		case v1_11:
-			s.writeFloat(cursorPosition.getX());
-			s.writeFloat(cursorPosition.getY());
-			s.writeFloat(cursorPosition.getZ());
+			s.writeFloat(this.cursorPosition.getX());
+			s.writeFloat(this.cursorPosition.getY());
+			s.writeFloat(this.cursorPosition.getZ());
 			break;
 		case v1_10:
 		case v1_9:
 		case v1_8:
-			s.writeByte((int) (cursorPosition.getX() * 16.0F));
-			s.writeByte((int) (cursorPosition.getY() * 16.0F));
-			s.writeByte((int) (cursorPosition.getZ() * 16.0F));
+			s.writeByte((int) (this.cursorPosition.getX() * 16.0F));
+			s.writeByte((int) (this.cursorPosition.getY() * 16.0F));
+			s.writeByte((int) (this.cursorPosition.getZ() * 16.0F));
 			break;
 		default:
 			break;
 		}
-	}
-
-	public HandType getHand() {
-		return HandType.values()[hand];
-	}
-	
-	public void setHand(HandType hand) {
-		this.hand = hand.ordinal();
-	}
-	
-	@Override
-	public String toString() {
-		return "PacketPlayInBlockPlace [loc=" + loc + ", face=" + face + ", item=" + item + ", cursorPosition=" + cursorPosition + "]";
-	}
-
-	public BlockPosition getLoc() {
-		return loc;
-	}
-
-	public void setLoc(BlockPosition loc) {
-		this.loc = loc;
-	}
-
-	public int getFace() {
-		return face;
-	}
-
-	public void setFace(int face) {
-		this.face = face;
-	}
-
-	public Item getItem() {
-		return item;
-	}
-
-	public void setItem(Item item) {
-		this.item = item;
-	}
-
-	public Vector3f getCursorPosition() {
-		return cursorPosition;
-	}
-
-	public void setCursorPosition(Vector3f cursorPosition) {
-		this.cursorPosition = cursorPosition;
 	}
 }

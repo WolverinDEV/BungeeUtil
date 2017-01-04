@@ -10,29 +10,29 @@ public class PacketLoginDisconnect extends Packet {
 	@Getter
 	private ByteString rawReason;
 
-	public PacketLoginDisconnect(String reson) {
-		this.rawReason = new ByteString(reson);
-	}
-
 	public PacketLoginDisconnect() {
 		super(-1);
 	}
 
-	@Override
-	public void read(PacketDataSerializer s) {
-		rawReason = s.readStringBytes();
-	}
-
-	@Override
-	public void write(PacketDataSerializer s) {
-		s.write(rawReason);
+	public PacketLoginDisconnect(String reson) {
+		this.rawReason = new ByteString(reson);
 	}
 
 	public BaseComponent getReson() {
-		return ComponentSerializer.parse(rawReason.toString())[0];
+		return ComponentSerializer.parse(this.rawReason.toString())[0];
+	}
+
+	@Override
+	public void read(PacketDataSerializer s) {
+		this.rawReason = s.readStringBytes();
 	}
 
 	public void setReson(BaseComponent reson) {
 		this.rawReason = new ByteString(ComponentSerializer.toString(reson));
+	}
+
+	@Override
+	public void write(PacketDataSerializer s) {
+		s.write(this.rawReason);
 	}
 }

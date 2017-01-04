@@ -15,7 +15,7 @@ public enum InventoryType {
 	Anvil("8","minecraft:anvil",0,3),
 	Hopper("9","minecraft:hopper",5,5),
 	Dropper("10","minecraft:dropper",9,9);
-	
+
 	private String type_v1_7;
 	private String type_v1_8;
 	private int aslots;
@@ -26,14 +26,14 @@ public enum InventoryType {
 		this.aslots=s;
 		this.islots=i;
 	}
-	
-	public String getType(ClientVersion v){
-		return v.getBigVersion() == BigClientVersion.v1_7?type_v1_7:type_v1_8;
-	}
+
 	public int getDefaultSlots(){
-		return aslots;
+		return this.aslots;
 	}
 	public int getSlots(){
-		return islots;
+		return this.islots;
+	}
+	public String getType(ClientVersion v){
+		return v.getBigVersion() == BigClientVersion.v1_7?this.type_v1_7:this.type_v1_8;
 	}
 }

@@ -15,50 +15,57 @@ public class HastebinPost {
 	private boolean changed = false;
 	private String currunturl = "";
 	public HastebinPost(String... text) {
-		if(text.length>0)
-			changed = true;
-		for(String s : text)
+		if(text.length>0) {
+			this.changed = true;
+		}
+		for(String s : text) {
 			this.text.append(s + "\n");
+		}
 	}
 
 	public void addLine(String line){
 		this.text.append(line+"\n");
-		changed = true;
+		this.changed = true;
+	}
+	private HttpURLConnection createUrlConnection(URL url) throws IOException {
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		connection.setConnectTimeout(15000);
+		connection.setReadTimeout(15000);
+		connection.setDoOutput(true);
+		connection.setUseCaches(false);
+		connection.setRequestMethod("POST");
+		return connection;
 	}
 	public String getText() {
-		return text.toString();
+		return this.text.toString();
 	}
-	public void setText(String text){
-		changed = true;
-		this.text = new StringBuilder(text);
-	}
-	
+
 	public String getTextUrl(){
-		if(changed){
+		if(this.changed){
 			try{
-				String out = performPostRequest(new URL("http://hastebin.com/documents"));
+				String out = this.performPostRequest(new URL("http://hastebin.com/documents"));
 				JSONObject o = new JSONObject(out);
 				if(!o.has("key")){
 					System.err.println("Cant paste Document (Response: "+out+")");
 					return "";
 				}
-				changed = false;
-				return currunturl = "http://hastebin.com/"+o.getString("key");
+				this.changed = false;
+				return this.currunturl = "http://hastebin.com/"+o.getString("key");
 			}catch(Exception e){
 				e.printStackTrace();
 			}
 		}
-		return currunturl;
+		return this.currunturl;
 	}
-	
+
 	private String performPostRequest(URL url) throws IOException {
-		HttpURLConnection connection = createUrlConnection(url);
+		HttpURLConnection connection = this.createUrlConnection(url);
 
 		connection.setRequestProperty("Content-Type", "text/plain");
-		connection.setRequestProperty("Content-Length", String.valueOf(text.length()));
+		connection.setRequestProperty("Content-Length", String.valueOf(this.text.length()));
 
 		OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-		writer.write(text.toString());
+		writer.write(this.text.toString());
 		writer.flush();
 
 		InputStream inputStream = null;
@@ -79,13 +86,8 @@ public class HastebinPost {
 		}
 	}
 
-	private HttpURLConnection createUrlConnection(URL url) throws IOException {
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		connection.setConnectTimeout(15000);
-		connection.setReadTimeout(15000);
-		connection.setDoOutput(true);
-		connection.setUseCaches(false);
-		connection.setRequestMethod("POST");
-		return connection;
+	public void setText(String text){
+		this.changed = true;
+		this.text = new StringBuilder(text);
 	}
 }

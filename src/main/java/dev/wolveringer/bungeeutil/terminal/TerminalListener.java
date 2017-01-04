@@ -25,16 +25,6 @@ import net.md_5.bungee.log.BungeeLogger;
 import net.md_5.bungee.log.ColouredWriter;
 
 public class TerminalListener {
-	@Getter
-	@Setter
-	private static TerminalListener instance;
-
-	public static interface Listener {
-		void onResize(int oldWidth, int oldHeight, int newWidth, int newHeight);
-
-		void onLinesPrinted();
-	}
-
 	static class ColouredWriterAdapter extends Handler {
 		private static final ChatColor[] colors = ChatColor.values();
 		private final Map<ChatColor, String> replacements = new EnumMap<>(ChatColor.class);
@@ -43,71 +33,82 @@ public class TerminalListener {
 		protected boolean writed = false;
 
 		public ColouredWriterAdapter(TerminalListener listener, ConsoleReader console) {
-			replacements.put(ChatColor.BLACK, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.BLACK).boldOff().toString());
-			replacements.put(ChatColor.DARK_BLUE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.BLUE).boldOff().toString());
-			replacements.put(ChatColor.DARK_GREEN, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.GREEN).boldOff().toString());
-			replacements.put(ChatColor.DARK_AQUA, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.CYAN).boldOff().toString());
-			replacements.put(ChatColor.DARK_RED, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.RED).boldOff().toString());
-			replacements.put(ChatColor.DARK_PURPLE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.MAGENTA).boldOff().toString());
-			replacements.put(ChatColor.GOLD, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.YELLOW).boldOff().toString());
-			replacements.put(ChatColor.GRAY, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.WHITE).boldOff().toString());
-			replacements.put(ChatColor.DARK_GRAY, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.BLACK).bold().toString());
-			replacements.put(ChatColor.BLUE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.BLUE).bold().toString());
-			replacements.put(ChatColor.GREEN, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.GREEN).bold().toString());
-			replacements.put(ChatColor.AQUA, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.CYAN).bold().toString());
-			replacements.put(ChatColor.RED, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.RED).bold().toString());
-			replacements.put(ChatColor.LIGHT_PURPLE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.MAGENTA).bold().toString());
-			replacements.put(ChatColor.YELLOW, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.YELLOW).bold().toString());
-			replacements.put(ChatColor.WHITE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.WHITE).bold().toString());
-			replacements.put(ChatColor.MAGIC, Ansi.ansi().a(Ansi.Attribute.BLINK_SLOW).toString());
-			replacements.put(ChatColor.BOLD, Ansi.ansi().a(Ansi.Attribute.UNDERLINE_DOUBLE).toString());
-			replacements.put(ChatColor.STRIKETHROUGH, Ansi.ansi().a(Ansi.Attribute.STRIKETHROUGH_ON).toString());
-			replacements.put(ChatColor.UNDERLINE, Ansi.ansi().a(Ansi.Attribute.UNDERLINE).toString());
-			replacements.put(ChatColor.ITALIC, Ansi.ansi().a(Ansi.Attribute.ITALIC).toString());
-			replacements.put(ChatColor.RESET, Ansi.ansi().a(Ansi.Attribute.RESET).toString());
+			this.replacements.put(ChatColor.BLACK, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.BLACK).boldOff().toString());
+			this.replacements.put(ChatColor.DARK_BLUE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.BLUE).boldOff().toString());
+			this.replacements.put(ChatColor.DARK_GREEN, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.GREEN).boldOff().toString());
+			this.replacements.put(ChatColor.DARK_AQUA, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.CYAN).boldOff().toString());
+			this.replacements.put(ChatColor.DARK_RED, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.RED).boldOff().toString());
+			this.replacements.put(ChatColor.DARK_PURPLE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.MAGENTA).boldOff().toString());
+			this.replacements.put(ChatColor.GOLD, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.YELLOW).boldOff().toString());
+			this.replacements.put(ChatColor.GRAY, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.WHITE).boldOff().toString());
+			this.replacements.put(ChatColor.DARK_GRAY, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.BLACK).bold().toString());
+			this.replacements.put(ChatColor.BLUE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.BLUE).bold().toString());
+			this.replacements.put(ChatColor.GREEN, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.GREEN).bold().toString());
+			this.replacements.put(ChatColor.AQUA, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.CYAN).bold().toString());
+			this.replacements.put(ChatColor.RED, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.RED).bold().toString());
+			this.replacements.put(ChatColor.LIGHT_PURPLE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.MAGENTA).bold().toString());
+			this.replacements.put(ChatColor.YELLOW, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.YELLOW).bold().toString());
+			this.replacements.put(ChatColor.WHITE, Ansi.ansi().a(Ansi.Attribute.RESET).fg(Ansi.Color.WHITE).bold().toString());
+			this.replacements.put(ChatColor.MAGIC, Ansi.ansi().a(Ansi.Attribute.BLINK_SLOW).toString());
+			this.replacements.put(ChatColor.BOLD, Ansi.ansi().a(Ansi.Attribute.UNDERLINE_DOUBLE).toString());
+			this.replacements.put(ChatColor.STRIKETHROUGH, Ansi.ansi().a(Ansi.Attribute.STRIKETHROUGH_ON).toString());
+			this.replacements.put(ChatColor.UNDERLINE, Ansi.ansi().a(Ansi.Attribute.UNDERLINE).toString());
+			this.replacements.put(ChatColor.ITALIC, Ansi.ansi().a(Ansi.Attribute.ITALIC).toString());
+			this.replacements.put(ChatColor.RESET, Ansi.ansi().a(Ansi.Attribute.RESET).toString());
 
 			this.console = console;
 			this.listener = listener;
 		}
 
-		public void print(String s) {
-			for (ChatColor color : colors) {
-				s = s.replaceAll("(?i)" + color.toString(), replacements.get(color));
-			}
-			s = Ansi.ansi().eraseLine(Erase.ALL).toString() + ConsoleReader.RESET_LINE + s + Ansi.ansi().reset().toString();
-			listener.addMessage(s);
-			if (listener.terminalEnabled || true) {
-				writed = true;
-				try {
-					console.print(s);
-					console.drawLine();
-					console.flush();
-				}catch(Exception e){
-					e.printStackTrace();
-				}
-			} else {
-				listener.lineBffer.add(s);
-			}
-		}
-
 		@Override
-		public void publish(LogRecord record) {
-			if (isLoggable(record)) {
-				if(getFormatter()!= null)
-					print(getFormatter().format(record));
-				else
-					print(record.getMessage());
-			}
+		public void close() throws SecurityException {
 		}
 
 		@Override
 		public void flush() {
 		}
 
+		public void print(String s) {
+			for (ChatColor color : colors) {
+				s = s.replaceAll("(?i)" + color.toString(), this.replacements.get(color));
+			}
+			s = Ansi.ansi().eraseLine(Erase.ALL).toString() + ConsoleReader.RESET_LINE + s + Ansi.ansi().reset().toString();
+			this.listener.addMessage(s);
+			if (this.listener.terminalEnabled || true) {
+				this.writed = true;
+				try {
+					this.console.print(s);
+					this.console.drawLine();
+					this.console.flush();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			} else {
+				this.listener.lineBffer.add(s);
+			}
+		}
+
 		@Override
-		public void close() throws SecurityException {
+		public void publish(LogRecord record) {
+			if (this.isLoggable(record)) {
+				if(this.getFormatter()!= null) {
+					this.print(this.getFormatter().format(record));
+				} else {
+					this.print(record.getMessage());
+				}
+			}
 		}
 	}
+
+	public static interface Listener {
+		void onLinesPrinted();
+
+		void onResize(int oldWidth, int oldHeight, int newWidth, int newHeight);
+	}
+
+	@Getter
+	@Setter
+	private static TerminalListener instance;
 
 	private ArrayList<String> lineBffer = new ArrayList<>();
 	@Getter
@@ -121,18 +122,20 @@ public class TerminalListener {
 	public TerminalListener() {
 		BungeeLogger logger = (BungeeLogger) BungeeCord.getInstance().getLogger();
 		ColouredWriter org = null;
-		for (Handler h : logger.getHandlers())
+		for (Handler h : logger.getHandlers()) {
 			if (h instanceof ColouredWriter) {
 				logger.removeHandler(h);
 				org = (ColouredWriter) h;
 			}
-		logger.addHandler(writer = new ColouredWriterAdapter(this, BungeeCord.getInstance().getConsoleReader()));
-		writer.setLevel( Level.INFO );
-		if(org != null)
-			writer.setFormatter(org.getFormatter());
-		else
-			addMessage("§cCant find BungeeCord Terminal handler!");
-		task = BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), new Runnable() {
+		}
+		logger.addHandler(this.writer = new ColouredWriterAdapter(this, BungeeCord.getInstance().getConsoleReader()));
+		this.writer.setLevel( Level.INFO );
+		if(org != null) {
+			this.writer.setFormatter(org.getFormatter());
+		} else {
+			this.addMessage("§cCant find BungeeCord Terminal handler!");
+		}
+		this.task = BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), new Runnable() {
 			int oldWidth = -1, oldHeight = -1;
 
 			@Override
@@ -142,39 +145,29 @@ public class TerminalListener {
 						Thread.sleep(5);
 					} catch (InterruptedException e) {
 					}
-					if (TerminalFactory.get().getHeight() != oldHeight || TerminalFactory.get().getWidth() != oldWidth) {
-						for (Listener l : listener)
-							l.onResize(oldWidth, oldHeight, TerminalFactory.get().getWidth(), TerminalFactory.get().getHeight());
-						oldHeight = TerminalFactory.get().getHeight();
-						oldWidth = TerminalFactory.get().getWidth();
+					if (TerminalFactory.get().getHeight() != this.oldHeight || TerminalFactory.get().getWidth() != this.oldWidth) {
+						for (Listener l : TerminalListener.this.listener) {
+							l.onResize(this.oldWidth, this.oldHeight, TerminalFactory.get().getWidth(), TerminalFactory.get().getHeight());
+						}
+						this.oldHeight = TerminalFactory.get().getHeight();
+						this.oldWidth = TerminalFactory.get().getWidth();
 					}
-					if (writer.writed) {
-						writer.writed = false;
-						for (Listener l : listener)
+					if (TerminalListener.this.writer.writed) {
+						TerminalListener.this.writer.writed = false;
+						for (Listener l : TerminalListener.this.listener) {
 							l.onLinesPrinted();
+						}
 					}
 				}
 			}
 		});
 	}
 
-	public void setTerminalEnabled(boolean terminalEnabled) {
-		this.terminalEnabled = terminalEnabled;
-		if (terminalEnabled) {
-			try {
-				for(String line : lineBffer)
-					AnsiConsole.out.println(line);
-				writer.writed = true;
-			} catch (Exception e) {
-			}
-			lineBffer.clear();
-		}
-	}
-
 	protected void addMessage(String message) {
-		lines.push(message);
-		while (lines.size() > 1000)
-			lines.removeLast();
+		this.lines.push(message);
+		while (this.lines.size() > 1000) {
+			this.lines.removeLast();
+		}
 	}
 
 	public void repaintTerminal() {
@@ -183,15 +176,15 @@ public class TerminalListener {
 			AnsiConsole.out.print("\033[0;0H");
 			int h = TerminalFactory.get().getHeight();
 			int w = TerminalFactory.get().getWidth();
-			int fs = Math.max(0, h-lines.size());
-			
+			int fs = Math.max(0, h-this.lines.size());
+
 			for (int i = 0; i < h; i++) {
-				if(h-i > -1 && lines.size() > (h-i)){
-					String message = lines.get(h-i);
+				if(h-i > -1 && this.lines.size() > h-i){
+					String message = this.lines.get(h-i);
 					//while(AnsiColorFormater.getFormater().stripAnsi(message).length() > w){
 					//	message = message.substring(0,message.length()-1); //TODO Ansi color chars not count
 					//}
-					AnsiConsole.out.print("\033["+(i)+";0H"+message);
+					AnsiConsole.out.print("\033["+i+";0H"+message);
 				}
 				//else
 				//	AnsiConsole.out.print("\033["+(i)+";0H"+Ansi.ansi().a(Ansi.Erase.ALL).toString());
@@ -203,6 +196,20 @@ public class TerminalListener {
 			AnsiConsole.out.flush();
 		}catch(Exception e){
 			e.printStackTrace();
+		}
+	}
+
+	public void setTerminalEnabled(boolean terminalEnabled) {
+		this.terminalEnabled = terminalEnabled;
+		if (terminalEnabled) {
+			try {
+				for(String line : this.lineBffer) {
+					AnsiConsole.out.println(line);
+				}
+				this.writer.writed = true;
+			} catch (Exception e) {
+			}
+			this.lineBffer.clear();
 		}
 	}
 }

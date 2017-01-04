@@ -5,20 +5,22 @@ import dev.wolveringer.bungeeutil.packets.types.PacketPlayIn;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 public class PacketPlayInChat extends Packet implements PacketPlayIn {
 	private String message;
 
 	@Override
 	public void read(PacketDataSerializer s) {
-		message = s.readString(-1);
+		this.message = s.readString(-1);
 	}
 
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeString(message);
+		s.writeString(this.message);
 	}
 }

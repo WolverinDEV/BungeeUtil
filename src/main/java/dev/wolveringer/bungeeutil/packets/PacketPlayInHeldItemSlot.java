@@ -8,15 +8,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PacketPlayInHeldItemSlot extends PacketPlayXXXHeldItemSlot implements PacketPlayIn{
 	public PacketPlayInHeldItemSlot(int slot) {
-		setSlot(slot);
+		this.setSlot(slot);
 	}
 
 	@Override
 	public void read(PacketDataSerializer s) {
-		setSlot(s.readShort());
+		this.setSlot(s.readShort());
 	}
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeShort(getSlot());
+		s.writeShort(this.getSlot());
 	}
 }

@@ -16,17 +16,19 @@ public class PacketHandleEvent<T extends Packet> extends Event implements Cancel
 	}
 
 	public T getPacket() {
-		return packet;
+		return this.packet;
 	}
 
 	public Player getPlayer() {
-		return player;
+		return this.player;
 	}
 
+	@Override
 	public boolean isCancelled() {
-		return cancelled;
+		return this.cancelled;
 	}
 
+	@Override
 	public void setCancelled(boolean c) {
 		this.cancelled = c;
 	}

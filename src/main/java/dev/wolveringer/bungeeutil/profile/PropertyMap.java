@@ -17,35 +17,26 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 public class PropertyMap extends ForwardingMultimap<String, Property> {
-	private final Multimap<String, Property> properties;
-
-	public PropertyMap() {
-		this.properties = LinkedHashMultimap.create();
-	}
-
-	protected Multimap<String, Property> delegate() {
-		return this.properties;
-	}
-
 	public static class Serializer implements JsonSerializer<PropertyMap>, JsonDeserializer<PropertyMap> {
+		@Override
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		public PropertyMap deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 			PropertyMap result = new PropertyMap();
 			Iterator i$;
 			Map.Entry<String, JsonElement> entry;
-			if((json instanceof JsonObject)){
+			if(json instanceof JsonObject){
 				JsonObject object = (JsonObject) json;
 				for(i$ = object.entrySet().iterator();i$.hasNext();){
 					entry = (Map.Entry) i$.next();
-					if((entry.getValue() instanceof JsonArray)){
+					if(entry.getValue() instanceof JsonArray){
 						for(JsonElement element : (JsonArray) entry.getValue()){
-							result.put(entry.getKey(), new Property((String) entry.getKey(), element.getAsString()));
+							result.put(entry.getKey(), new Property(entry.getKey(), element.getAsString()));
 						}
 					}
 				}
-			}else if((json instanceof JsonArray)){
+			}else if(json instanceof JsonArray){
 				for(JsonElement element : (JsonArray) json){
-					if((element instanceof JsonObject)){
+					if(element instanceof JsonObject){
 						JsonObject object = (JsonObject) element;
 						String name = object.getAsJsonPrimitive("name").getAsString();
 						String value = object.getAsJsonPrimitive("value").getAsString();
@@ -60,6 +51,7 @@ public class PropertyMap extends ForwardingMultimap<String, Property> {
 			return result;
 		}
 
+		@Override
 		public JsonElement serialize(PropertyMap src, Type typeOfSrc, JsonSerializationContext context) {
 			JsonArray result = new JsonArray();
 			for(Property property : src.values()){
@@ -74,6 +66,17 @@ public class PropertyMap extends ForwardingMultimap<String, Property> {
 			}
 			return result;
 		}
+	}
+
+	private final Multimap<String, Property> properties;
+
+	public PropertyMap() {
+		this.properties = LinkedHashMultimap.create();
+	}
+
+	@Override
+	protected Multimap<String, Property> delegate() {
+		return this.properties;
 	}
 
 	@Override

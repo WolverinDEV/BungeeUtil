@@ -9,7 +9,7 @@ public class BlockData {
 	}
 
 	public int getData() {
-		return data;
+		return this.data;
 	}
 
 	public void setData(int data) {

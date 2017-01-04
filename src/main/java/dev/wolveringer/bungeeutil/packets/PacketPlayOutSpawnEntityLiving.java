@@ -5,9 +5,15 @@ import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.position.Location;
 import dev.wolveringer.bungeeutil.position.Vector;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class PacketPlayOutSpawnEntityLiving extends BetaPacket implements PacketPlayOut{
 	private byte type;
 	private Location location;
@@ -17,6 +23,7 @@ public class PacketPlayOutSpawnEntityLiving extends BetaPacket implements Packet
 	private Vector vector = new Vector();
 	private int id;
 	private DataWatcher meta;
+
 	public PacketPlayOutSpawnEntityLiving(byte type, Location location, int yaw, int pitch, int headRotation, Vector vector) {
 		this.type = type;
 		this.location = location;
@@ -26,105 +33,55 @@ public class PacketPlayOutSpawnEntityLiving extends BetaPacket implements Packet
 		this.vector = vector;
 	}
 
-	
-	@Override
-	public void read(PacketDataSerializer s) {
-		id = s.readVarInt();
-		type = s.readByte();
-		location = new Location(s.readInt(), s.readInt(), s.readInt());
-		yaw = s.readByte();
-		pitch = s.readByte();
-		headRotation = s.readByte();
-		if(headRotation > 0)
-			vector = new Vector(s.readShort(), s.readShort(), s.readShort());
-		meta = DataWatcher.createDataWatcher(getBigVersion(),s);
-	}
 
-	@Override
-	public void write(PacketDataSerializer s) {
-		s.writeVarInt(id);
-		s.writeByte(type);
-		s.writeInt(location.getBlockX());
-		s.writeInt(location.getBlockY());
-		s.writeInt(location.getBlockZ());
-		s.writeByte(yaw);
-		s.writeByte(pitch);
-		s.writeByte(headRotation);
-		if(headRotation > 0){
-			s.writeShort(vector.getBlockX());
-			s.writeShort(vector.getBlockY());
-			s.writeShort(vector.getBlockZ());
-		}
-		if(meta == null)
-			meta = DataWatcher.createDataWatcher(getBigVersion());
-		meta.write(s);
-	}
-
-	public boolean isItemFrame() {
-		return type == 71;
+	public Location getLocation() {
+		return this.location.clone().dividide(32D);
 	}
 
 	public boolean isFalingBlock() {
-		return type == 70;
+		return this.type == 70;
 	}
 
-	public byte getType() {
-		return type;
+	public boolean isItemFrame() {
+		return this.type == 71;
 	}
 
-	public void setType(byte type) {
-		this.type = type;
-	}
-
-	public Location getLocation() {
-		return location;
+	@Override
+	public void read(PacketDataSerializer s) {
+		this.id = s.readVarInt();
+		this.type = s.readByte();
+		this.location = new Location(s.readInt(), s.readInt(), s.readInt());
+		this.yaw = s.readByte();
+		this.pitch = s.readByte();
+		this.headRotation = s.readByte();
+		if(this.headRotation > 0) {
+			this.vector = new Vector(s.readShort(), s.readShort(), s.readShort());
+		}
+		this.meta = DataWatcher.createDataWatcher(this.getBigVersion(),s);
 	}
 
 	public void setLocation(Location location) {
 		this.location = location.multiply(32.0D);
 	}
 
-	public int getYaw() {
-		return yaw;
-	}
-
-	public void setYaw(int yaw) {
-		this.yaw = yaw;
-	}
-
-	public int getPitch() {
-		return pitch;
-	}
-
-	public void setPitch(int pitch) {
-		this.pitch = pitch;
-	}
-
-	public int getHeadRotation() {
-		return headRotation;
-	}
-
-	public void setHeadRotation(int headRotation) {
-		this.headRotation = headRotation;
-	}
-
-	public Vector getVector() {
-		return vector;
-	}
-
-	public void setVector(Vector vector) {
-		this.vector = vector;
-	}
-	public void setEntityID(int id) {
-		this.id = id;
-	}
-	public int getEnityID() {
-		return id;
-	}
-	public void setMeta(DataWatcher meta) {
-		this.meta = meta;
-	}
-	public DataWatcher getMeta() {
-		return meta;
+	@Override
+	public void write(PacketDataSerializer s) {
+		s.writeVarInt(this.id);
+		s.writeByte(this.type);
+		s.writeInt(this.location.getBlockX());
+		s.writeInt(this.location.getBlockY());
+		s.writeInt(this.location.getBlockZ());
+		s.writeByte(this.yaw);
+		s.writeByte(this.pitch);
+		s.writeByte(this.headRotation);
+		if(this.headRotation > 0){
+			s.writeShort(this.vector.getBlockX());
+			s.writeShort(this.vector.getBlockY());
+			s.writeShort(this.vector.getBlockZ());
+		}
+		if(this.meta == null) {
+			this.meta = DataWatcher.createDataWatcher(this.getBigVersion());
+		}
+		this.meta.write(s);
 	}
 }

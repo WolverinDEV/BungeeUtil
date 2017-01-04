@@ -12,8 +12,9 @@ public class AnsiColorFormater {
 	public static AnsiColorFormater formater = new AnsiColorFormater();
 
 	public static AnsiColorFormater getFormater() {
-		if (formater == null)
+		if (formater == null) {
 			formater = new AnsiColorFormater();
+		}
 		return formater;
 	}
 
@@ -50,8 +51,8 @@ public class AnsiColorFormater {
 	}
 
 	public String format(String s) {
-		for (String color : replacements.keySet()) {
-			s = s.replaceAll("(?i)" + color, (String) this.replacements.get(color));
+		for (String color : this.replacements.keySet()) {
+			s = s.replaceAll("(?i)" + color, this.replacements.get(color));
 		}
 		return s + Ansi.ansi().a(Ansi.Attribute.RESET).toString();
 	}

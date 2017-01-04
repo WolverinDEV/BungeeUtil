@@ -44,13 +44,14 @@ import dev.wolveringer.bungeeutil.sound.SoundEffect;
 import dev.wolveringer.bungeeutil.statistics.profiler.ProfileMenue;
 import dev.wolveringer.bungeeutil.statistics.profiler.Profiler;
 import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class DebugMenue {
 	public static void open(Player player){
 		Profiler.packet_handle.start("buildDebugInventory");
 		final Inventory inv = new Inventory(27, ChatColorUtils.COLOR_CHAR + "b" + ChatColorUtils.COLOR_CHAR + "lDeveloper Menue");
-		
+
 		player.openInventory(inv);
 		ItemStack i = new ItemStack(Material.DIAMOND) {
 			@Override
@@ -62,7 +63,7 @@ public class DebugMenue {
 		i.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR + "bYEY");
 		i.getItemMeta().setLore(Arrays.asList(ChatColorUtils.COLOR_CHAR + "aDieser Server nutzt", ChatColorUtils.COLOR_CHAR + "adein Plugin: ", " " + ChatColorUtils.COLOR_CHAR + "7- " + ChatColorUtils.COLOR_CHAR + "eBungeeUntil", " " + ChatColorUtils.COLOR_CHAR + "7- " + ChatColorUtils.COLOR_CHAR + "eVerion " + ChatColorUtils.COLOR_CHAR + "b" + BungeeUtil.getPluginInstance().getDescription().getVersion()));
 		inv.setItem(1, i);
-		
+
 		i = new ItemStack(159, 1, (short) 14) {
 			@Override
 			public void click(final Click p) {
@@ -74,7 +75,7 @@ public class DebugMenue {
 						double steps = 0.125;
 						double max = 16.5;
 						for (double d = 0; d < max; d += steps) {
-							ParticleEffect.REDSTONE.display(new ParticleEffect.OrdinaryColor((int) (0xFF * (((d + count * 2 * steps) % max) / max)), 0x00, (int) (0xFF - 0xFF * (((d + count * 2 * steps) % max) / max))), target.clone().add(target.getDirection().multiply(d)).add(0D, 2 + 1.6D, 0D), p.getPlayer());
+							ParticleEffect.REDSTONE.display(new ParticleEffect.OrdinaryColor((int) (0xFF * ((d + count * 2 * steps) % max / max)), 0x00, (int) (0xFF - 0xFF * ((d + count * 2 * steps) % max / max))), target.clone().add(target.getDirection().multiply(d)).add(0D, 2 + 1.6D, 0D), p.getPlayer());
 						}
 					}
 				}.start();
@@ -85,13 +86,13 @@ public class DebugMenue {
 				c.setLocation(p.getPlayer().getLocation().add(0, 2, 0));
 				c.addListener(new InteractListener() {
 					@Override
-					public void rightClick(Player p) {
-						p.sendMessage("rightClick");
-					}
-					
-					@Override
 					public void leftClick(Player p) {
 						p.sendMessage("leftClick");
+					}
+
+					@Override
+					public void rightClick(Player p) {
+						p.sendMessage("rightClick");
 					}
 				});
 				c.setPing(2000);
@@ -100,22 +101,24 @@ public class DebugMenue {
 				c.getEquipment().setItemInHand(p.getPlayer().getHandItem());
 				if (p.getPlayer().getVersion().getBigVersion() == BigClientVersion.v1_9) {
 					Item i = p.getPlayer().getOffHandItem();
-					if (i != null) c.getEquipment().setItemInOffHand(i);
+					if (i != null) {
+						c.getEquipment().setItemInOffHand(i);
+					}
 				}
 				c.getEquipment().setHelmet(new dev.wolveringer.bungeeutil.item.Item(Material.LEATHER_HELMET));
 				Skin s = SkinFactory.getSkin("WolverinGER");
 				BungeeUtil.getInstance().sendMessage(s + "");
-				
+
 				GameProfile profile = s.applay(c.getProfile());
-				
+
 				BungeeUtil.getInstance().sendMessage(s + "");
 				BungeeUtil.getInstance().sendMessage(profile + "");
-				
+
 				c.setProfile(profile);
 				c.setVisiable(p.getPlayer(), true);
 				ParticleEffect.HEART.display(0F, 0F, 1F, 0F, 1, c.getLocation(), p.getPlayer());
 				p.getPlayer().sendMessage("NCP is visiable");
-				
+
 				PlayerNPC npc = new PlayerNPC();
 				npc.setPing(1);
 		        npc.setPlayerListName(TextComponent.fromLegacyText("§a-----NPC----")[0]);
@@ -135,13 +138,13 @@ public class DebugMenue {
 		        npc.addListener(new InteractListener() {
 
 		            @Override
-		            public void rightClick(Player p) {
-		                    p.sendMessage(new TextComponent("§c§l[NPC] §cHI! §c§l" + p.getDisplayName() + "  §c§l请先登录,再尝试打开"));
+		            public void leftClick(Player p) {
+		                p.sendMessage(new TextComponent("§c§l[NPC] §cHI! §c§l" + p.getDisplayName() + "  §a欢迎来到MFT服务器"));
 		            }
 
 		            @Override
-		            public void leftClick(Player p) {
-		                p.sendMessage(new TextComponent("§c§l[NPC] §cHI! §c§l" + p.getDisplayName() + "  §a欢迎来到MFT服务器"));
+		            public void rightClick(Player p) {
+		                    p.sendMessage(new TextComponent("§c§l[NPC] §cHI! §c§l" + p.getDisplayName() + "  §c§l请先登录,再尝试打开"));
 		            }
 		        });
 
@@ -151,7 +154,7 @@ public class DebugMenue {
 		};
 		i.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR + "aTesting");
 		inv.setItem(3, i);
-		
+
 		final ItemStack is = new ItemStack(Material.WATCH, 1, (short) 0) {
 			@Override
 			public void click(final Click p) {
@@ -168,50 +171,48 @@ public class DebugMenue {
 				}
 				if (p.getPlayer().getVersion().getBigVersion() != BigClientVersion.v1_8) {
 					BossBar var0 = null;
-					
+
 					var0 = p.getPlayer().getBossBarManager().createNewBossBar();
 					var0.setColor(BarColor.GREEN);
 					var0.setDivision(BarDivision.NO_DIVISION);
 					var0.setHealth(0F);
 					var0.setMessage(TextComponent.fromLegacyText("§aHello world")[0]);
 					var0.display();
-					
+
 					p.getPlayer().sendMessage("Your boss bars:");
-					for (BossBar bar : p.getPlayer().getBossBarManager().getActiveBossBars())
-						p.getPlayer().sendMessage("  §7- " + TextComponent.toLegacyText(bar.getMessage()));
+					for (BossBar bar : p.getPlayer().getBossBarManager().getActiveBossBars()) {
+						p.getPlayer().sendMessage("  §7- " + BaseComponent.toLegacyText(bar.getMessage()));
+					}
 					final BossBar bar = var0;
 					new LimetedScheduller(32, 250, TimeUnit.MILLISECONDS) {
 						int currunt = 0;
-						
-						@Override
-						public void run(int count) {
-							if (s.getObjektive("test") != null) {
-								s.getObjektive("test").removeScore(ChatColorUtils.COLOR_CHAR + Integer.toHexString((currunt) % 16) + "Testing score");
-								currunt += 1;
-								s.getObjektive("test").setScore(ChatColorUtils.COLOR_CHAR + Integer.toHexString(currunt % 16) + "Testing score", currunt % 16);
-							}
-							if (bar != null) {
-								bar.setMessage(TextComponent.fromLegacyText(ChatColorUtils.COLOR_CHAR + Integer.toHexString((currunt) % 16) + "Hello world")[0]);
-								bar.dynamicChangeHealth((float) ((float) count / (float) limit), 250, TimeUnit.MILLISECONDS);
-							}
-						}
-						
+
 						@Override
 						public void done() {
 							s.removeObjektive("test");
 							if (bar != null) {
 								bar.setColor(BarColor.RED);
-								BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), new Runnable() {
-									@Override
-									public void run() {
-										try {
-											Thread.sleep(500);
-										}
-										catch (InterruptedException e) {
-										}
-										p.getPlayer().getBossBarManager().deleteBossBar(bar);
+								BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), () -> {
+									try {
+										Thread.sleep(500);
 									}
+									catch (InterruptedException e) {
+									}
+									p.getPlayer().getBossBarManager().deleteBossBar(bar);
 								});
+							}
+						}
+
+						@Override
+						public void run(int count) {
+							if (s.getObjektive("test") != null) {
+								s.getObjektive("test").removeScore(ChatColorUtils.COLOR_CHAR + Integer.toHexString(this.currunt % 16) + "Testing score");
+								this.currunt += 1;
+								s.getObjektive("test").setScore(ChatColorUtils.COLOR_CHAR + Integer.toHexString(this.currunt % 16) + "Testing score", this.currunt % 16);
+							}
+							if (bar != null) {
+								bar.setMessage(TextComponent.fromLegacyText(ChatColorUtils.COLOR_CHAR + Integer.toHexString(this.currunt % 16) + "Hello world")[0]);
+								bar.dynamicChangeHealth((float) count / (float) this.limit, 250, TimeUnit.MILLISECONDS);
 							}
 						}
 					}.start();
@@ -220,7 +221,7 @@ public class DebugMenue {
 				System.gc();
 				p.getPlayer().sendMessage("Cleaning Space done!");
 				p.getPlayer().closeInventory();
-				
+
 				final Inventory base = new Inventory(45, "SEXY");
 				base.fill(new ItemStack(new Item(Material.NAME_TAG)) {
 					@Override
@@ -230,17 +231,17 @@ public class DebugMenue {
 				p.getPlayer().openInventory(base);
 				final ItemContainer container = new ItemContainer(27);
 				container.fill(new Item(Material.BARRIER));
-				BungeeCord.getInstance().getScheduler().schedule(BungeeUtil.getPluginInstance(), new Runnable() {
-					public void run() {
-						InventoryViewChangeAnimations.runAnimation(AnimationType.SCROLL_LEFT, base, container, "sexy", new Item(Material.BEDROCK), 500);
-					}
-				}, 500, TimeUnit.MILLISECONDS);
+				BungeeCord.getInstance().getScheduler().schedule(BungeeUtil.getPluginInstance(), () -> InventoryViewChangeAnimations.runAnimation(AnimationType.SCROLL_LEFT, base, container, "sexy", new Item(Material.BEDROCK), 500), 500, TimeUnit.MILLISECONDS);
 			}
 		};
-		
+
 		is.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR + "7##### " + ChatColorUtils.COLOR_CHAR + "eStatistics " + ChatColorUtils.COLOR_CHAR + "7[" + ChatColorUtils.COLOR_CHAR + "aMB" + ChatColorUtils.COLOR_CHAR + "7] #####");
-		
+
 		BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), new Runnable() {
+			private String format(long l) {
+				return l / (1014 * 1024) + "MB " + l / 1024 % 1024 + "KB " + l % 1024 + "B";
+			}
+
 			@Override
 			public void run() {
 				int mb = 1024 * 1024;
@@ -253,64 +254,74 @@ public class DebugMenue {
 					}
 					Runtime runtime = Runtime.getRuntime();
 					List<String> a = new ArrayList<String>();
-					a.add(ChatColorUtils.COLOR_CHAR + "6Used Memory: " + ChatColorUtils.COLOR_CHAR + "e" + format((runtime.totalMemory() - runtime.freeMemory())));
-					a.add(ChatColorUtils.COLOR_CHAR + "6Free Memory: " + ChatColorUtils.COLOR_CHAR + "e" + format(runtime.freeMemory()));
-					a.add(ChatColorUtils.COLOR_CHAR + "6Total Memory: " + ChatColorUtils.COLOR_CHAR + "e" + format(runtime.totalMemory()));
-					a.add(ChatColorUtils.COLOR_CHAR + "6Max Memory: " + ChatColorUtils.COLOR_CHAR + "e" + format(runtime.maxMemory()));
+					a.add(ChatColorUtils.COLOR_CHAR + "6Used Memory: " + ChatColorUtils.COLOR_CHAR + "e" + this.format(runtime.totalMemory() - runtime.freeMemory()));
+					a.add(ChatColorUtils.COLOR_CHAR + "6Free Memory: " + ChatColorUtils.COLOR_CHAR + "e" + this.format(runtime.freeMemory()));
+					a.add(ChatColorUtils.COLOR_CHAR + "6Total Memory: " + ChatColorUtils.COLOR_CHAR + "e" + this.format(runtime.totalMemory()));
+					a.add(ChatColorUtils.COLOR_CHAR + "6Max Memory: " + ChatColorUtils.COLOR_CHAR + "e" + this.format(runtime.maxMemory()));
 					a.add(ChatColorUtils.COLOR_CHAR + "6System: " + ChatColorUtils.COLOR_CHAR + "e" + System.getProperty("os.name"));
 					is.getItemMeta().setLore(a);
 					inv.setName(ChatColorUtils.COLOR_CHAR + "" + Integer.toHexString(new Random().nextInt(15) % 15) + ChatColorUtils.COLOR_CHAR + "lDeveloper Menue");
 					c++;
 				}
 			}
-			
-			private String format(long l) {
-				return (l / (1014 * 1024)) + "MB " + ((l / 1024) % 1024) + "KB " + (l % 1024) + "B";
-			}
 		});
 		inv.setItem(7, is);
-		
+
 		ItemStack is_ = new ItemStack(player.getVersion().getBigVersion() == BigClientVersion.v1_7 ? Material.FIRE : Material.BARRIER, 1) {
+			@Override
 			public void click(Click p) {
 				throw new RuntimeException("Demo Crash");
 			};
 		};
 		is_.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR + "cTest Crash Disconnect");
 		inv.setItem(22, is_);
-		
+
 		ItemStack is1 = new ItemStack(Material.COMPASS) {
 			@Override
 			public void click(Click p) {
 				p.getPlayer().sendMessage("Sound sended");
-				if(SoundEffect.BLOCK_ANVIL_FALL.isAvariable(p.getPlayer().getVersion().getBigVersion()))
+				if(SoundEffect.BLOCK_ANVIL_FALL.isAvariable(p.getPlayer().getVersion().getBigVersion())) {
 					p.getPlayer().playSound(SoundEffect.BLOCK_ANVIL_LAND, p.getPlayer().getLocation(), 1F, 0);
-				else
+				}
+				else {
 					p.getPlayer().sendMessage("Sound not avariable for "+p.getPlayer().getVersion().toString());
 				//p.getPlayer().playSound(SoundEffect.getEffect("block.anvil.land"), SoundCategory.MASTER, p.getPlayer().getLocation(), 1F, 0);
+				}
 			}
 		};
 		final ArrayList<String> out = new ArrayList<String>();
 		Packet.listPackets(new CostumPrintStream() {
 			@Override
-			public void println(String s) {
+			public void print(String s) {
 				out.add(s);
 			}
-			
+
 			@Override
-			public void print(String s) {
+			public void println(String s) {
 				out.add(s);
 			}
 		});
 		is1.getItemMeta().setDisplayName(out.get(0));
 		is1.getItemMeta().setLore(out.subList(1, out.size()));
 		inv.setItem(5, is1);
-		
+
 		i = new ItemStack(Material.EMERALD){
 			@Override
 			public void click(final Click click) {
 				click.getPlayer().sendMessage("Open anvil menue");
 				AnvilGui guy = new AnvilGui(click.getPlayer());
 				guy.addListener(new AnvilGuiListener() {
+					@Override
+					public void onClose(AnvilGui guy) {
+						click.getPlayer().sendMessage("Your last input wars: "+guy.getCurruntInput());
+					}
+
+					@Override
+					public void onConfirmInput(AnvilGui guy, String message) {
+						click.getPlayer().sendMessage("You confirmed you input. Your input: "+message);
+						click.getPlayer().closeInventory();
+					}
+
 					@Override
 					public void onMessageChange(AnvilGui guy, String newMessage) {
 				    	//Changing text color
@@ -326,22 +337,11 @@ public class DebugMenue {
 							guy.setColorPrefix("§c");
 							guy.setCenterItem(new Item(Material.getMaterial(351),1,(byte)1));
 						}
-				    	
+
 				    	//Update output item ;)
 						Item item = new Item(Material.ENCHANTED_BOOK);
 				    	item.getItemMeta().setDisplayName("§aYour message: §e" + (newMessage.length() == 0 ? "§cNo message" : newMessage));
 				    	guy.setOutputItem(item);
-					}
-					
-					@Override
-					public void onConfirmInput(AnvilGui guy, String message) {
-						click.getPlayer().sendMessage("You confirmed you input. Your input: "+message);
-						click.getPlayer().closeInventory();
-					}
-					
-					@Override
-					public void onClose(AnvilGui guy) {
-						click.getPlayer().sendMessage("Your last input wars: "+guy.getCurruntInput());
 					}
 				});
 				guy.open();
@@ -349,30 +349,28 @@ public class DebugMenue {
 		};
 		i.getItemMeta().setDisplayName("§aTesting anvil guy");
 		inv.setItem(10, i);
-		
+
 		i = new ItemStack(Material.STONE_AXE){
 			@Override
 			public void click(final Click click) {
 				click.getPlayer().sendMessage("Adding item");
 				final Item old = click.getPlayer().getPlayerInventory().getItem(0);
-				click.getPlayer().getPlayerInventory().setItem(11, ItemBuilder.create(Material.DIAMOND).name("§aClick me!").listener(new ClickListener() {
-					@Override
-					public void click(Click click) {
-						click.getPlayer().sendMessage("§bHey cou clicked me :)");
-						click.getPlayer().getPlayerInventory().setItem(11, old);
-					}
+				click.getPlayer().getPlayerInventory().setItem(11, ItemBuilder.create(Material.DIAMOND).name("§aClick me!").listener((ClickListener) click1 -> {
+					click1.getPlayer().sendMessage("§bHey cou clicked me :)");
+					click1.getPlayer().getPlayerInventory().setItem(11, old);
 				}).build());
 				click.getPlayer().updateInventory();
 			}
 		};
 		i.getItemMeta().setDisplayName("§aTesting player inv click");
 		inv.setItem(12, i);
-		
+
 		i = new ItemStack(Material.IRON_AXE){
 			@Override
 			public void click(final Click click) {
 				click.getPlayer().sendMessage("Adding item");
 				ItemStack is = new ItemStack(Material.DIAMOND_AXE){
+					@Override
 					public void click(Click click) {};
 					@Override
 					public void onInteract(Player player, InteractType type) {
@@ -384,7 +382,7 @@ public class DebugMenue {
 		};
 		i.getItemMeta().setDisplayName("§aTesting player item");
 		inv.setItem(14, i);
-		
+
 		Profiler.packet_handle.stop("buildDebugInventory");
 	}
 }

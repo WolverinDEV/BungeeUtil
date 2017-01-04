@@ -19,12 +19,12 @@ public class Property {
 		return this.name;
 	}
 
-	public String getValue() {
-		return this.value;
-	}
-
 	public String getSignature() {
 		return this.signature;
+	}
+
+	public String getValue() {
+		return this.value;
 	}
 
 	public boolean hasSignature() {

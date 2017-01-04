@@ -12,10 +12,11 @@ import dev.wolveringer.bungeeutil.player.Player;
 public class BossBarListener implements PacketHandler<PacketPlayOutBossBar>{
 	private static BossBarListener listener;
 	public static void init(){
-		if(listener == null && Configuration.isBossBarhandleEnabled())
-			PacketLib.addHandler(listener = new BossBarListener()); 
+		if(listener == null && Configuration.isBossBarhandleEnabled()) {
+			PacketLib.addHandler(listener = new BossBarListener());
+		}
 	}
-	
+
 	@Override
 	public void handle(PacketHandleEvent<PacketPlayOutBossBar> e) {
 		Player player = e.getPlayer();
@@ -23,17 +24,19 @@ public class BossBarListener implements PacketHandler<PacketPlayOutBossBar>{
 		BossBar bar = null;
 		if(e.getPacket().getAction() != Action.CREATE){
 			bar = manager.getBossBar(e.getPacket().getBarId());
-			if(bar == null || !bar.isVisiable()) //Bar hidden / removed. Client dont need to get them
+			if(bar == null || !bar.isVisiable()) {
 				e.setCancelled(true);
+			}
 		}
-		
+
 		switch (e.getPacket().getAction()) {
 			case CREATE:
 				manager.bars.add(new BossBar(manager, e.getPacket().getBarId(), e.getPacket().getColor(), e.getPacket().getDivision(), e.getPacket().getHealth(), e.getPacket().getTitle(), true));
 				break;
 			case DELETE:
-				if(bar != null)
+				if(bar != null) {
 					manager.bars.remove(bar);
+				}
 				break;
 			case UPDATE_HEALTH:
 				if(bar != null){

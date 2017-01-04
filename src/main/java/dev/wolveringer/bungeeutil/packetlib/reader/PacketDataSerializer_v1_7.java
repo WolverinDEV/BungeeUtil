@@ -19,35 +19,13 @@ public class PacketDataSerializer_v1_7 extends PacketDataSerializer {
 		this(pid,ByteBuffCreator.createByteBuff());
 	}
 
-	public PacketDataSerializer_v1_7(ByteBuf bytebuf) {
-		super(bytebuf);
-	}
-
 	public PacketDataSerializer_v1_7(byte b, ByteBuf buf) {
 		super(buf);
-		writeByte(b);
+		this.writeByte(b);
 	}
 
-	public int readVariableInteger() {
-		int returns = 0;
-		int byte_pos = 0;
-		byte readbyte;
-		do{
-			readbyte = this.readByte();
-			returns |= (readbyte & 127) << byte_pos++ * 7;
-			if(byte_pos > 5){
-				throw new RuntimeException("VarInt too big");
-			}
-		}while ((readbyte & 128) == 128);
-
-		return returns;
-	}
-	public void writeInteger(int i) {
-		while ((i & -128) != 0){
-			this.writeByte(i & 127 | 128);
-			i >>>= 7;
-		}
-		this.writeByte(i);
+	public PacketDataSerializer_v1_7(ByteBuf bytebuf) {
+		super(bytebuf);
 	}
 
 	public void ab(String s) {
@@ -60,37 +38,9 @@ public class PacketDataSerializer_v1_7 extends PacketDataSerializer {
 			this.writeBytes(abyte);
 		}
 	}
-
-	public String readString(int i) {
-		int j = this.readVariableInteger();
-		if(i == -1)
-			i = j * 4;
-		if(j > i * 4){
-			throw new RuntimeException("The received encoded string buffer length is longer than maximum allowed (" + j + " > " + i * 4 + ")");
-		}else if(j < 0){
-			throw new RuntimeException("The received encoded string buffer length is less than zero! Weird string!");
-		}else{
-			String s = new String(this.readBytes(j).array(), Charsets.UTF_8);
-
-			if(s.length() > i){
-				throw new RuntimeException("The received string length is longer than maximum allowed (" + j + " > " + i + ")");
-			}else{
-				return s;
-			}
-		}
-	}
-
-	@SuppressWarnings("deprecation")
 	@Override
-	public void writeItem(Item itemstack) {
-		if(itemstack == null){
-			this.writeShort(-1);
-		}else{
-			this.writeShort(itemstack.getTypeId());
-			this.writeByte(itemstack.getAmount());
-			this.writeShort(itemstack.getDurability());
-			this.writeNBT(itemstack.getTag());
-		}
+	public BlockPosition readBlockPosition() {
+		return new BlockPosition(this.readInt(), this.readUnsignedByte(), this.readInt());
 	}
 
 	@SuppressWarnings("deprecation")
@@ -111,56 +61,6 @@ public class PacketDataSerializer_v1_7 extends PacketDataSerializer {
 		}
 
 		return itemstack;
-	}
-
-	@Override
-	public void writeString(String s) {
-		byte[] abyte = s.getBytes(Charsets.UTF_8);
-
-		if(abyte.length > 32767){
-			throw new RuntimeException("String too big (was " + s.length() + " bytes encoded, max " + 32767 + ")");
-		}else{
-			this.writeInteger(abyte.length);
-			this.writeBytes(abyte);
-		}
-	}
-
-	@Override
-	public void writeRawString(BaseComponent s) {
-		writeString(ComponentSerializer.toString(s));
-	}
-
-	@Override
-	public BaseComponent readRawString() {
-		return ComponentSerializer.parse(readString(-1))[0];
-	}
-
-	@Override
-	public void writeUUID(UUID uuid) {
-		writeLong(uuid.getMostSignificantBits());
-		writeLong(uuid.getLeastSignificantBits());
-	}
-
-	@Override
-	public UUID readUUID() {
-		return new UUID(readLong(), readLong());
-	}
-
-	@Override
-	public void writeNBT(NBTTagCompound nbttagcompound) {
-		if(nbttagcompound == null){
-			this.writeShort(-1);
-		}else{
-			byte[] abyte = null;
-			try{
-				abyte = NBTCompressedStreamTools.toByte(nbttagcompound);
-			}catch (Exception e){
-				e.printStackTrace();
-			}
-
-			this.writeShort((short) abyte.length);
-			this.writeBytes(abyte);
-		}
 	}
 
 	@Override
@@ -185,14 +85,116 @@ public class PacketDataSerializer_v1_7 extends PacketDataSerializer {
 		}
 		return new NBTTagCompound();
 	}
+
+	@Override
+	public BaseComponent readRawString() {
+		return ComponentSerializer.parse(this.readString(-1))[0];
+	}
+
+	@Override
+	public String readString(int i) {
+		int j = this.readVariableInteger();
+		if(i == -1) {
+			i = j * 4;
+		}
+		if(j > i * 4){
+			throw new RuntimeException("The received encoded string buffer length is longer than maximum allowed (" + j + " > " + i * 4 + ")");
+		}else if(j < 0){
+			throw new RuntimeException("The received encoded string buffer length is less than zero! Weird string!");
+		}else{
+			String s = new String(this.readBytes(j).array(), Charsets.UTF_8);
+
+			if(s.length() > i){
+				throw new RuntimeException("The received string length is longer than maximum allowed (" + j + " > " + i + ")");
+			}else{
+				return s;
+			}
+		}
+	}
+
+	@Override
+	public UUID readUUID() {
+		return new UUID(this.readLong(), this.readLong());
+	}
+
+	public int readVariableInteger() {
+		int returns = 0;
+		int byte_pos = 0;
+		byte readbyte;
+		do{
+			readbyte = this.readByte();
+			returns |= (readbyte & 127) << byte_pos++ * 7;
+			if(byte_pos > 5){
+				throw new RuntimeException("VarInt too big");
+			}
+		}while ((readbyte & 128) == 128);
+
+		return returns;
+	}
+
 	@Override
 	public void writeBlockPosition(BlockPosition loc) {
-		writeInt(loc.getX());
-		writeShort(loc.getY());
-		writeInt(loc.getZ());
+		this.writeInt(loc.getX());
+		this.writeShort(loc.getY());
+		this.writeInt(loc.getZ());
+	}
+
+	public void writeInteger(int i) {
+		while ((i & -128) != 0){
+			this.writeByte(i & 127 | 128);
+			i >>>= 7;
+		}
+		this.writeByte(i);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void writeItem(Item itemstack) {
+		if(itemstack == null){
+			this.writeShort(-1);
+		}else{
+			this.writeShort(itemstack.getTypeId());
+			this.writeByte(itemstack.getAmount());
+			this.writeShort(itemstack.getDurability());
+			this.writeNBT(itemstack.getTag());
+		}
+	}
+
+	@Override
+	public void writeNBT(NBTTagCompound nbttagcompound) {
+		if(nbttagcompound == null){
+			this.writeShort(-1);
+		}else{
+			byte[] abyte = null;
+			try{
+				abyte = NBTCompressedStreamTools.toByte(nbttagcompound);
+			}catch (Exception e){
+				e.printStackTrace();
+			}
+
+			this.writeShort((short) abyte.length);
+			this.writeBytes(abyte);
+		}
+	}
+
+	@Override
+	public void writeRawString(BaseComponent s) {
+		this.writeString(ComponentSerializer.toString(s));
 	}
 	@Override
-	public BlockPosition readBlockPosition() {
-		return new BlockPosition(readInt(), readUnsignedByte(), readInt());
+	public void writeString(String s) {
+		byte[] abyte = s.getBytes(Charsets.UTF_8);
+
+		if(abyte.length > 32767){
+			throw new RuntimeException("String too big (was " + s.length() + " bytes encoded, max " + 32767 + ")");
+		}else{
+			this.writeInteger(abyte.length);
+			this.writeBytes(abyte);
+		}
+	}
+	@Override
+	public void writeUUID(UUID uuid) {
+		this.writeLong(uuid.getMostSignificantBits());
+		this.writeLong(uuid.getLeastSignificantBits());
 	}
 }

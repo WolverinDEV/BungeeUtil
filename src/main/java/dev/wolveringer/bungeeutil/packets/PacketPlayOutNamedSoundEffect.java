@@ -23,58 +23,59 @@ public class PacketPlayOutNamedSoundEffect extends Packet implements PacketPlayO
 	private Location loc;
 	private String sound;
 	private int soundCategory;
-	
+
 	@Override
 	public void read(PacketDataSerializer s) {
-		switch (getBigVersion()) {
+		switch (this.getBigVersion()) {
 		case v1_11:
 		case v1_10:
 		case v1_9:
-			sound = s.readString(-1);
-			soundCategory = s.readVarInt();
-			loc = new Location(s.readInt(), s.readInt(), s.readInt()).dividide(8D);
-			volume = s.readFloat();
-			pitch = getBigVersion() != BigClientVersion.v1_9 ? s.readFloat() : s.readUnsignedByte();
+			this.sound = s.readString(-1);
+			this.soundCategory = s.readVarInt();
+			this.loc = new Location(s.readInt(), s.readInt(), s.readInt()).dividide(8D);
+			this.volume = s.readFloat();
+			this.pitch = this.getBigVersion() != BigClientVersion.v1_9 ? s.readFloat() : s.readUnsignedByte();
 			break;
 		case v1_8:
-			sound = s.readString(-1);
-			loc = new Location(s.readInt(), s.readInt(), s.readInt()).dividide(8D);
-			volume = s.readFloat();
-			pitch = s.readUnsignedByte();
+			this.sound = s.readString(-1);
+			this.loc = new Location(s.readInt(), s.readInt(), s.readInt()).dividide(8D);
+			this.volume = s.readFloat();
+			this.pitch = s.readUnsignedByte();
 			break;
 		default:
 			break;
 		}
 	}
-	
+
 	@Override
 	public void write(PacketDataSerializer s) {
-		switch (getBigVersion()) {
+		switch (this.getBigVersion()) {
 		case v1_11:
 		case v1_10:
 		case v1_9:
-			s.writeString(sound);
-			s.writeVarInt(soundCategory);
-			loc.multiply(8D);
-			s.writeInt(loc.getBlockX());
-			s.writeInt(loc.getBlockY());
-			s.writeInt(loc.getBlockZ());
-			loc.dividide(8D);
-			s.writeFloat(volume);
-			if(getBigVersion() != BigClientVersion.v1_9)
-				s.writeFloat(pitch);
-			else
-				s.writeByte((int) pitch);
+			s.writeString(this.sound);
+			s.writeVarInt(this.soundCategory);
+			this.loc.multiply(8D);
+			s.writeInt(this.loc.getBlockX());
+			s.writeInt(this.loc.getBlockY());
+			s.writeInt(this.loc.getBlockZ());
+			this.loc.dividide(8D);
+			s.writeFloat(this.volume);
+			if(this.getBigVersion() != BigClientVersion.v1_9) {
+				s.writeFloat(this.pitch);
+			} else {
+				s.writeByte((int) this.pitch);
+			}
 			break;
 		case v1_8:
-			s.writeString(sound);
-			loc.multiply(8D);
-			s.writeInt(loc.getBlockX());
-			s.writeInt(loc.getBlockY());
-			s.writeInt(loc.getBlockZ());
-			loc.dividide(8D);
-			s.writeFloat(volume);
-			s.writeByte((int) pitch);
+			s.writeString(this.sound);
+			this.loc.multiply(8D);
+			s.writeInt(this.loc.getBlockX());
+			s.writeInt(this.loc.getBlockY());
+			s.writeInt(this.loc.getBlockZ());
+			this.loc.dividide(8D);
+			s.writeFloat(this.volume);
+			s.writeByte((int) this.pitch);
 			break;
 		default:
 			break;

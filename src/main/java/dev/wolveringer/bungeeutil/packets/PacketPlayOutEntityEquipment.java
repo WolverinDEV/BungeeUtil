@@ -6,10 +6,12 @@ import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 public class PacketPlayOutEntityEquipment extends Packet implements PacketPlayOut {
 	public static enum Slot {
 		MAIN_HAND, OFF_HAND, BOOTS, LEGGINS, CHESTPLATE, HEMELT;
@@ -23,61 +25,37 @@ public class PacketPlayOutEntityEquipment extends Packet implements PacketPlayOu
 
 	@Override
 	public void read(PacketDataSerializer s) {
-		eid = s.readVarInt();
-		switch (getBigVersion()) {
+		this.eid = s.readVarInt();
+		switch (this.getBigVersion()) {
 		case v1_11:
 		case v1_10:
 		case v1_9:
-			slot = Slot.values()[s.readVarInt()];
+			this.slot = Slot.values()[s.readVarInt()];
 			break;
 		case v1_8:
-			slot = Slot.values()[s.readShort()];
+			this.slot = Slot.values()[s.readShort()];
 			break;
 		default:
 			break;
 		}
-		item = s.readItem();
+		this.item = s.readItem();
 	}
 
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeVarInt(eid);
-		switch (getBigVersion()) {
+		s.writeVarInt(this.eid);
+		switch (this.getBigVersion()) {
 		case v1_11:
 		case v1_10:
 		case v1_9:
-			s.writeVarInt(slot.ordinal());
+			s.writeVarInt(this.slot.ordinal());
 			break;
 		case v1_8:
-			s.writeShort(slot.ordinal());
+			s.writeShort(this.slot.ordinal());
 			break;
 		default:
 			break;
 		}
-		s.writeItem(item);
-	}
-
-	public int getEntityId() {
-		return eid;
-	}
-
-	public Item getItem() {
-		return item;
-	}
-
-	public Slot getSlot() {
-		return slot;
-	}
-
-	public void setEntityId(int eid) {
-		this.eid = eid;
-	}
-
-	public void setItem(Item item) {
-		this.item = item;
-	}
-
-	public void setSlot(Slot slot) {
-		this.slot = slot;
+		s.writeItem(this.item);
 	}
 }

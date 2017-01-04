@@ -10,8 +10,21 @@ import org.apache.commons.io.IOUtils;
 import com.google.common.base.Charsets;
 
 public class SkinRequest {
+	protected HttpURLConnection createUrlConnection(URL url) throws IOException {
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		connection.setConnectTimeout(2000);
+		connection.setReadTimeout(2000);
+		connection.setUseCaches(false);
+		connection.setRequestMethod("GET");
+		connection.setDefaultUseCaches(false);
+		connection.addRequestProperty("User-Agent", "Mozilla/5.0");
+		connection.addRequestProperty("Cache-Control", "no-cache, no-store, must-revalidate");
+		connection.addRequestProperty("Pragma", "no-cache");
+		return connection;
+	}
+
 	public String performGetRequest(URL url) throws IOException {
-		HttpURLConnection connection = createUrlConnection(url);
+		HttpURLConnection connection = this.createUrlConnection(url);
 
 		InputStream inputStream = null;
 		try{
@@ -29,18 +42,5 @@ public class SkinRequest {
 		}finally{
 			IOUtils.closeQuietly(inputStream);
 		}
-	}
-
-	protected HttpURLConnection createUrlConnection(URL url) throws IOException {
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		connection.setConnectTimeout(2000);
-		connection.setReadTimeout(2000);
-		connection.setUseCaches(false);
-		connection.setRequestMethod("GET");
-		connection.setDefaultUseCaches(false);
-		connection.addRequestProperty("User-Agent", "Mozilla/5.0");
-		connection.addRequestProperty("Cache-Control", "no-cache, no-store, must-revalidate");
-		connection.addRequestProperty("Pragma", "no-cache");
-		return connection;
 	}
 }

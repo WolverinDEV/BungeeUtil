@@ -8,23 +8,23 @@ public class PacketPlayOutEntity extends PacketAbstract {
 
 	public PacketPlayOutEntity() {}
 
+	public int getEntityId() {
+		return this.entityId;
+	}
+
 	@Override
 	public void read(PacketDataSerializer s) {
-		entityId = s.readVarInt();
-		readUnusedBytes(s);
-	}
-
-	@Override
-	public void write(PacketDataSerializer s) {
-		s.writeVarInt(entityId);
-		writeUnusedBytes(s);
-	}
-
-	public int getEntityId() {
-		return entityId;
+		this.entityId = s.readVarInt();
+		this.readUnusedBytes(s);
 	}
 
 	public void setEntityId(int id) {
 		this.entityId = id;
+	}
+
+	@Override
+	public void write(PacketDataSerializer s) {
+		s.writeVarInt(this.entityId);
+		this.writeUnusedBytes(s);
 	}
 }

@@ -39,7 +39,7 @@ public class MaterialData implements Cloneable {
 		if(obj != null && obj instanceof MaterialData){
 			MaterialData md = (MaterialData) obj;
 
-			return md.getItemTypeId() == getItemTypeId() && md.getData() == getData();
+			return md.getItemTypeId() == this.getItemTypeId() && md.getData() == this.getData();
 		}else{
 			return false;
 		}
@@ -51,7 +51,7 @@ public class MaterialData implements Cloneable {
 	 * @return Raw data
 	 */
 	public byte getData() {
-		return data;
+		return this.data;
 	}
 
 	/**
@@ -61,7 +61,7 @@ public class MaterialData implements Cloneable {
 	 */
 	@SuppressWarnings("deprecation")
 	public Material getItemType() {
-		return Material.getMaterial(type);
+		return Material.getMaterial(this.type);
 	}
 
 	/**
@@ -70,12 +70,14 @@ public class MaterialData implements Cloneable {
 	 * @return Material Id represented by this MaterialData
 	 * @deprecated Magic value
 	 */
+	@Deprecated
 	public int getItemTypeId() {
-		return type;
+		return this.type;
 	}
 
+	@Override
 	public int hashCode() {
-		return getItemTypeId() << 8 ^ getData();
+		return this.getItemTypeId() << 8 ^ this.getData();
 	}
 
 	/**
@@ -85,6 +87,7 @@ public class MaterialData implements Cloneable {
 	 *            New raw data
 	 * @deprecated Magic value
 	 */
+	@Deprecated
 	public void setData(byte data) {
 		this.data = data;
 	}
@@ -96,7 +99,7 @@ public class MaterialData implements Cloneable {
 	 */
 	@SuppressWarnings("deprecation")
 	public Item toItemStack() {
-		return new Item(type, 1, data);
+		return new Item(this.type, 1, this.data);
 	}
 
 	/**
@@ -108,11 +111,11 @@ public class MaterialData implements Cloneable {
 	 */
 	@SuppressWarnings("deprecation")
 	public Item toItemStack(int amount) {
-		return new Item(type, amount, data);
+		return new Item(this.type, amount, this.data);
 	}
 
 	@Override
 	public String toString() {
-		return getItemType() + "(" + getData() + ")";
+		return this.getItemType() + "(" + this.getData() + ")";
 	}
 }

@@ -18,16 +18,17 @@ import dev.wolveringer.bungeeutil.scoreboard.Objektive.Score;
 
 public final class PacketListenerScoreboard implements PacketHandler<Packet> {
 	private static PacketListenerScoreboard listener;
-	
-	public static void init() {
-		if(Configuration.isScoreboardhandleEnabled())
-			PacketLib.addHandler(listener = new PacketListenerScoreboard());
-	}
-	
+
 	public static PacketListenerScoreboard getListener() {
 		return listener;
 	}
-	
+
+	public static void init() {
+		if(Configuration.isScoreboardhandleEnabled()) {
+			PacketLib.addHandler(listener = new PacketListenerScoreboard());
+		}
+	}
+
 	@Override
 	public void handle(PacketHandleEvent<Packet> e) {
 		if (e.getPacket() instanceof PacketPlayOutScoreboardDisplayObjective) {
@@ -51,7 +52,9 @@ public final class PacketListenerScoreboard implements PacketHandler<Packet> {
 			}
 			else if (out.getAction() == Action.UPDATE) {
 				Objektive obj = board.getObjektive(out.getScorebordName());
-				if (obj == null) return;
+				if (obj == null) {
+					return;
+				}
 				obj.displayName = out.getDisplayName();
 				obj.type = out.getType();
 			}
@@ -60,34 +63,44 @@ public final class PacketListenerScoreboard implements PacketHandler<Packet> {
 			Scoreboard board = e.getPlayer().getScoreboard();
 			PacketPlayOutScoreboardScore out = (PacketPlayOutScoreboardScore) e.getPacket();
 			if (out.getAction() == dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardScore.Action.CREATE || out.getAction() == dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardScore.Action.UPDATE) {
-				Objektive obj = board.getObjektive(out.getObjektiveName());
-				if (obj == null) board.server_objs.add(obj = new Objektive(board, out.getObjektiveName()));
+				Objektive obj = board.getObjektive(out.getObjectiveName());
 				if (obj == null) {
-					BungeeUtil.getInstance().debug("ScoreboardObjective " + out.getObjektiveName() + " for the player " + e.getPlayer().getName() + " not found!");
+					board.server_objs.add(obj = new Objektive(board, out.getObjectiveName()));
+				}
+				if (obj == null) {
+					BungeeUtil.getInstance();
+					BungeeUtil.debug("ScoreboardObjective " + out.getObjectiveName() + " for the player " + e.getPlayer().getName() + " not found!");
 					return;
 				}
 				Score x = null;
-				for (Score s : obj.scores)
+				for (Score s : obj.scores) {
 					if (s.getName().equals(out.getScoreName())) {
 						x = s;
 					}
-				if (x == null) return;
+				}
+				if (x == null) {
+					return;
+				}
 				obj.scores.remove(x);
-				
+
 				obj.scores.add(new Score(obj, out.getScoreName(), out.getValue()));
 			}
 			else if (out.getAction() == dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardScore.Action.REMOVE) {
-				Objektive obj = board.getObjektive(out.getObjektiveName());
+				Objektive obj = board.getObjektive(out.getObjectiveName());
 				if (obj == null) {
-					BungeeUtil.getInstance().debug("ScoreboardObjective " + out.getObjektiveName() + " for the player " + e.getPlayer().getName() + " not found");
+					BungeeUtil.getInstance();
+					BungeeUtil.debug("ScoreboardObjective " + out.getObjectiveName() + " for the player " + e.getPlayer().getName() + " not found");
 					return;
 				}
 				Score x = null;
-				for (Score s : obj.scores)
+				for (Score s : obj.scores) {
 					if (s.getName().equals(out.getScoreName())) {
 						x = s;
 					}
-				if (x == null) return;
+				}
+				if (x == null) {
+					return;
+				}
 				obj.scores.remove(x);
 			}
 		}
@@ -96,40 +109,44 @@ public final class PacketListenerScoreboard implements PacketHandler<Packet> {
 			PacketPlayOutScoreboardTeam out = (PacketPlayOutScoreboardTeam) e.getPacket();
 			if (out.getAction() == dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardTeam.Action.CREATE) {
 				Team t = new Team(board, out.getTeam());
-				if(t == null)
+				if(t == null) {
 					return;
+				}
 				t.color = out.getColor();
 				t.displayName = out.getDisplayName();
-				t.friendly_fire = out.isFriendlyFire();
+				t.friendly_fire = out.getFriendlyFire();
 				t.prefix = out.getPrefix();
 				t.suffix = out.getSuffix();
 				t.tag = out.getTag();
-				t.member = new ArrayList<>(Arrays.asList(out.getPlayers()));
+				t.member = new ArrayList<>(Arrays.asList(out.getPlayer()));
 				board.server_teams.add(t);
 			}
 			else if (out.getAction() == dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardTeam.Action.PLAYER_ADD) {
 				Team t = board.getTeam(out.getTeam());
-				if(t == null)
+				if(t == null) {
 					return;
-				t.member.addAll(new ArrayList<>(Arrays.asList(out.getPlayers())));
+				}
+				t.member.addAll(new ArrayList<>(Arrays.asList(out.getPlayer())));
 			}
 			else if (out.getAction() == dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardTeam.Action.PLAYER_REMOVE) {
 				Team t = board.getTeam(out.getTeam());
-				if(t == null)
+				if(t == null) {
 					return;
-				t.member.removeAll(new ArrayList<>(Arrays.asList(out.getPlayers())));
+				}
+				t.member.removeAll(new ArrayList<>(Arrays.asList(out.getPlayer())));
 			}
 			else if (out.getAction() == dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardTeam.Action.REMOVE) {
 				Team t = board.getTeam(out.getTeam());
-				if(t == null)
+				if(t == null) {
 					return;
+				}
 				board.server_teams.remove(t);
 			}
 			else if (out.getAction() == dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardTeam.Action.UPDATE) {
 				Team t = board.getTeam(out.getTeam());
 				t.color = out.getColor();
 				t.displayName = out.getDisplayName();
-				t.friendly_fire = out.isFriendlyFire();
+				t.friendly_fire = out.getFriendlyFire();
 				t.prefix = out.getPrefix();
 				t.suffix = out.getSuffix();
 				t.tag = out.getTag();

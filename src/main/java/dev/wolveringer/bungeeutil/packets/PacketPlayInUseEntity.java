@@ -5,110 +5,82 @@ import dev.wolveringer.bungeeutil.packets.types.PacketPlayIn;
 import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
 import dev.wolveringer.bungeeutil.position.Vector3f;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class PacketPlayInUseEntity extends Packet implements PacketPlayIn {
 	public static enum Action {
 		INTERACT,
 		ATTACK,
 		INTERACT_AT;
 	}
-	
+
 	private int target;
 	private Action action;
 	private Vector3f location;
 	private int hand = 0;
-	
+
 	@Override
 	public void read(PacketDataSerializer s) {
-		
-		switch (getBigVersion()) {
+
+		switch (this.getBigVersion()) {
 		case v1_11:
 		case v1_10:
 		case v1_9:
 		case v1_8:
-			
-			target = s.readVarInt();
-			action = Action.values()[s.readVarInt()];
-			if(action == Action.INTERACT_AT)
-				location = new Vector3f(s.readFloat(), s.readFloat(), s.readFloat());
-			if(action != Action.ATTACK && getBigVersion() != BigClientVersion.v1_8)
-				hand = s.readVarInt();
-			break;
-		case v1_7:
-			target = s.readInt();
-			action = Action.values()[s.readByte()];
-			break;
-		default:
-			break;
-		}
-	}
-	
-	@Override
-	public void write(PacketDataSerializer s) {
-		switch (getBigVersion()) {
-		case v1_11:
-		case v1_10:
-		case v1_9:
-		case v1_8:
-			s.writeVarInt(target);
-			s.writeVarInt(action.ordinal());
-			if (action == Action.INTERACT_AT) {
-				s.writeFloat(location.getX());
-				s.writeFloat(location.getY());
-				s.writeFloat(location.getZ());
+
+			this.target = s.readVarInt();
+			this.action = Action.values()[s.readVarInt()];
+			if(this.action == Action.INTERACT_AT) {
+				this.location = new Vector3f(s.readFloat(), s.readFloat(), s.readFloat());
 			}
-			if(action != Action.ATTACK && getBigVersion() != BigClientVersion.v1_8)
-				s.writeVarInt(hand);
+			if(this.action != Action.ATTACK && this.getBigVersion() != BigClientVersion.v1_8) {
+				this.hand = s.readVarInt();
+			}
 			break;
 		case v1_7:
-			s.writeInt(target);
-			s.writeByte(action.ordinal());
+			this.target = s.readInt();
+			this.action = Action.values()[s.readByte()];
 			break;
 		default:
 			break;
 		}
 	}
-	
-	public Action getAction() {
-		return action;
-	}
-	
-	public void setAction(Action action) {
-		this.action = action;
-	}
-	
-	public int getTarget() {
-		return target;
-	}
-	
-	public void setTarget(int target) {
-		this.target = target;
-	}
-	
-	public Vector3f getLocation() {
-		return location;
-	}
-	
-	public void setLocation(Vector3f location) {
-		this.location = location;
-	}
-	
-	public int getHand() {
-		return hand;
-	}
-	
-	public void setHand(int hand) {
-		this.hand = hand;
-	}
-	/**
-	 *  
-	 */
 
 	@Override
 	public String toString() {
-		return "PacketPlayInUseEntity [target=" + target + ", action=" + action + ", location=" + location + ", hand=" + hand + "]";
+		return "PacketPlayInUseEntity [target=" + this.target + ", action=" + this.action + ", location=" + this.location + ", hand=" + this.hand + "]";
+	}
+
+	@Override
+	public void write(PacketDataSerializer s) {
+		switch (this.getBigVersion()) {
+		case v1_11:
+		case v1_10:
+		case v1_9:
+		case v1_8:
+			s.writeVarInt(this.target);
+			s.writeVarInt(this.action.ordinal());
+			if (this.action == Action.INTERACT_AT) {
+				s.writeFloat(this.location.getX());
+				s.writeFloat(this.location.getY());
+				s.writeFloat(this.location.getZ());
+			}
+			if(this.action != Action.ATTACK && this.getBigVersion() != BigClientVersion.v1_8) {
+				s.writeVarInt(this.hand);
+			}
+			break;
+		case v1_7:
+			s.writeInt(this.target);
+			s.writeByte(this.action.ordinal());
+			break;
+		default:
+			break;
+		}
 	}
 }

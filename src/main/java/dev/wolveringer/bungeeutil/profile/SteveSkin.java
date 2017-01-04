@@ -9,17 +9,17 @@ public class SteveSkin extends Skin{
 	public SteveSkin() {
 		super(new JSONObject());
 	}
-	
+
 	@Override
 	public GameProfile applay(GameProfile g) {
 		return g;
 	}
-	
+
 	@Override
 	public String getCapeUrl() {
 		return "";
 	}
-	
+
 	@Override
 	public String getProfileName() {
 		return "Steve";
@@ -29,26 +29,22 @@ public class SteveSkin extends Skin{
 	public String getRawData() {
 		return "undefined";
 	}
-	
+
 	@Override
 	public String getSignature() {
 		return "undefined";
 	}
-	
+
 	@Override
 	public String getSkinUrl() {
 		return "";
 	}
-	
+
 	@Override
 	public UUID getUUID() {
 		return UUID.nameUUIDFromBytes("Steve".getBytes());
 	}
-	
-	@Override
-	public boolean hasSkin() {
-		return false;
-	}
+
 	@Override
 	public boolean hasCape() {
 		return false;
@@ -56,6 +52,10 @@ public class SteveSkin extends Skin{
 	@Override
 	public boolean hasProfileName() {
 		return true;
+	}
+	@Override
+	public boolean hasSkin() {
+		return false;
 	}
 	@Override
 	public boolean hasUUID() {
@@ -91,7 +91,7 @@ public class SteveSkin extends Skin{
 	public void setUUID(UUID id) {}
 	@Override
 	public GameProfile toGameProfile() {
-		return new GameProfile(getUUID(), getProfileName());
+		return new GameProfile(this.getUUID(), this.getProfileName());
 	}
 	@Override
 	public String toString() {

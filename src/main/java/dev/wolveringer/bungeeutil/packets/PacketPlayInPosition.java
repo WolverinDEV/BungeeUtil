@@ -12,20 +12,22 @@ public class PacketPlayInPosition extends PacketPlayInFlying {
 	public void read(PacketDataSerializer packetdataserializer) {
 		Double x = packetdataserializer.readDouble();
 		Double y = packetdataserializer.readDouble();
-		if(getVersion().getBigVersion() == BigClientVersion.v1_7)
+		if(this.getVersion().getBigVersion() == BigClientVersion.v1_7) {
 			this.stance = packetdataserializer.readDouble();
+		}
 		Double z = packetdataserializer.readDouble();
-		setLocation(new Location(x, y, z));
+		this.setLocation(new Location(x, y, z));
 		super.read(packetdataserializer);
 	}
 
 	@Override
 	public void write(PacketDataSerializer packetdataserializer) {
-		packetdataserializer.writeDouble(getLocation().getX());
-		packetdataserializer.writeDouble(getLocation().getY());
-		if(getVersion().getBigVersion() == BigClientVersion.v1_7)
+		packetdataserializer.writeDouble(this.getLocation().getX());
+		packetdataserializer.writeDouble(this.getLocation().getY());
+		if(this.getVersion().getBigVersion() == BigClientVersion.v1_7) {
 			packetdataserializer.writeDouble(this.stance);
-		packetdataserializer.writeDouble(getLocation().getZ());
+		}
+		packetdataserializer.writeDouble(this.getLocation().getZ());
 		super.write(packetdataserializer);
 	}
 }

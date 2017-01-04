@@ -3,35 +3,37 @@ package dev.wolveringer.bungeeutil.packets;
 import dev.wolveringer.bungeeutil.MathUtil;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
 @NoArgsConstructor
 public class PacketPlayOutEntityHeadRotation extends Packet implements PacketPlayOut{
-	@Getter
 	private int entityId;
 	private byte pitch;
-	
+
 	public PacketPlayOutEntityHeadRotation(int entityId, float pitch) {
 		this.entityId = entityId;
-		this.pitch = (byte)((int)(MathUtil.pitchNormalizer(pitch) * 256.0F / 360.0F));
+		this.pitch = (byte)(int)(MathUtil.pitchNormalizer(pitch) * 256.0F / 360.0F);
 	}
 
-
+	public float getPitch() {
+		return this.pitch / 256.0F * 360.0F;
+	}
 
 	@Override
 	public void read(PacketDataSerializer s) {
-		entityId = s.readVarInt();
-		pitch = s.readByte();
+		this.entityId = s.readVarInt();
+		this.pitch = s.readByte();
+	}
+
+	public void setPitch(float pitch) {
+		this.pitch = (byte)(int)(MathUtil.pitchNormalizer(pitch) * 256.0F / 360.0F);;
 	}
 
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeVarInt(entityId);
-		s.writeByte(pitch);
-	}
-	
-	public float getPitch() {
-		return pitch / 256.0F * 360.0F;
+		s.writeVarInt(this.entityId);
+		s.writeByte(this.pitch);
 	}
 }

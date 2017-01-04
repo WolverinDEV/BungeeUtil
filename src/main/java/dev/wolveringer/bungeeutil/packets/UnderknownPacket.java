@@ -1,20 +1,27 @@
 package dev.wolveringer.bungeeutil.packets;
 
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@SuppressWarnings("deprecation")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class UnderknownPacket extends Packet {
 
-	byte[] data;
+	private byte[] data;
 
 	@Override
 	public void read(PacketDataSerializer s) {
-		data = new byte[s.readableBytes()];
-		s.readBytes(data);
+		this.data = new byte[s.readableBytes()];
+		s.readBytes(this.data);
 	}
 
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeBytes(data);
+		s.writeBytes(this.data);
 	}
 }

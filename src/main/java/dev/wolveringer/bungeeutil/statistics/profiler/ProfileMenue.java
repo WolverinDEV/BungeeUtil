@@ -25,27 +25,10 @@ public class ProfileMenue {
 	private Inventory inv_disabled = new Inventory(9, ""+ChatColorUtils.COLOR_CHAR+"cTimings Disabled");
 
 	public ProfileMenue() {
-		BungeeCord.getInstance().getScheduler().schedule(BungeeUtil.getPluginInstance(), new Runnable() {
-			@Override
-			public void run() {
-				rebuild();
-			}
-		}, 1, 5, TimeUnit.SECONDS);
+		BungeeCord.getInstance().getScheduler().schedule(BungeeUtil.getPluginInstance(), () -> ProfileMenue.this.rebuild(), 1, 5, TimeUnit.SECONDS);
 		ItemStack is = new MultiClickItemStack(Material.BARRIER);
 		is.getItemMeta().setDisplayName(""+ChatColorUtils.COLOR_CHAR+"cTimings are "+ChatColorUtils.COLOR_CHAR+"c"+ChatColorUtils.COLOR_CHAR+"nDisabled");
-		inv_disabled.setItem(4, is);
-	}
-
-	protected void rebuild() {
-		if(!Profiler.isEnabled())
-			return;
-		inv.disableUpdate();
-		inv.clear();
-		for(Profiler p : Profiler.getProfilers()){
-			p.updateInventory();
-			inv.addItem(build(p));
-		}
-		inv.enableUpdate();
+		this.inv_disabled.setItem(4, is);
 	}
 
 	private ItemStack build(final Profiler profile) {
@@ -60,9 +43,23 @@ public class ProfileMenue {
 	}
 
 	public Inventory getMenue() {
-		if(Profiler.isEnabled())
-			return inv;
-		else
-			return inv_disabled;
+		if(Profiler.isEnabled()) {
+			return this.inv;
+		} else {
+			return this.inv_disabled;
+		}
+	}
+
+	protected void rebuild() {
+		if(!Profiler.isEnabled()) {
+			return;
+		}
+		this.inv.disableUpdate();
+		this.inv.clear();
+		for(Profiler p : Profiler.getProfilers()){
+			p.updateInventory();
+			this.inv.addItem(this.build(p));
+		}
+		this.inv.enableUpdate();
 	}
 }

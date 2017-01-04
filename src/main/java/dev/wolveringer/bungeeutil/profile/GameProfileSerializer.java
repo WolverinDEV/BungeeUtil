@@ -10,8 +10,9 @@ import dev.wolveringer.nbt.NBTTagList;
 public class GameProfileSerializer {
 	@SuppressWarnings("rawtypes")
 	public static GameProfile deserialize(NBTTagCompound nbttagcompound) {
-		if(nbttagcompound == null)
+		if(nbttagcompound == null) {
 			return null;
+		}
 		String s = null;
 		String s1 = null;
 
@@ -30,8 +31,9 @@ public class GameProfileSerializer {
 		}catch (Throwable throwable){
 			uuid = null;
 		}
-		if(uuid == null && s==null)
+		if(uuid == null && s==null) {
 			return null;
+		}
 		GameProfile gameprofile = new GameProfile(uuid, s);
 
 		if(nbttagcompound.hasKeyOfType("Properties", 10)){
@@ -60,12 +62,15 @@ public class GameProfileSerializer {
 
 	@SuppressWarnings("rawtypes")
 	public static NBTTagCompound serialize(NBTTagCompound nbttagcompound, GameProfile gameprofile) {
-		if(gameprofile == null)
+		if(gameprofile == null) {
 			return nbttagcompound;
-		if(gameprofile.getName() != null && !gameprofile.getName().isEmpty())
+		}
+		if(gameprofile.getName() != null && !gameprofile.getName().isEmpty()) {
 			nbttagcompound.setString("Name", gameprofile.getName());
-		if(gameprofile.getId() != null)
+		}
+		if(gameprofile.getId() != null) {
 			nbttagcompound.setString("Id", gameprofile.getId().toString());
+		}
 
 		if(!gameprofile.getProperties().isEmpty()){
 			NBTTagCompound nbttagcompound1 = new NBTTagCompound();

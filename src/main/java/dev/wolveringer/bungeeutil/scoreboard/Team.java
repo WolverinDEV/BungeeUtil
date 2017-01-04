@@ -17,56 +17,27 @@ public final class Team {
 	protected NameTag tag = NameTag.VISIABLE;
 	protected int friendly_fire = 0;
 	protected ArrayList<String> member = new ArrayList<>();
-	
+
 	public Team(Scoreboard owner,String name) {
 		this.owner = owner;
 		this.name = name;
 	}
-	
-	public void setColor(ChatColor color) {
-		this.color = color;
-		sendUpdate();
-	}
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
-		sendUpdate();
-	}
+
 	public void addMember(String name){
-		member.add(name);
+		this.member.add(name);
 		PacketPlayOutScoreboardTeam team = new PacketPlayOutScoreboardTeam(this);
 		team.setAction(Action.PLAYER_ADD);
-		team.setPlayers(new String[]{name});
-		owner.player.sendPacket(team);
+		team.setPlayer(new String[]{name});
+		this.owner.player.sendPacket(team);
 	}
-	public void removeMember(String name){
-		member.remove(name);
-		PacketPlayOutScoreboardTeam team = new PacketPlayOutScoreboardTeam(this);
-		team.setAction(Action.PLAYER_REMOVE);
-		team.setPlayers(new String[]{name});
-		owner.player.sendPacket(team);
-	}
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
-		sendUpdate();
-	}
-	public void setSuffix(String suffix) {
-		this.suffix = suffix;
-		sendUpdate();
-	}
-	public void setTagVisibility(NameTag tag) {
-		this.tag = tag;
-		sendUpdate();
-	}
-	public void setFriendlyFire(int friendly_fire) {
-		this.friendly_fire = friendly_fire;
-		sendUpdate();
-	}
-	
 	public ChatColor getColor() {
 		return this.color;
 	}
 	public String getDisplayName() {
 		return this.displayName;
+	}
+	public int getFriendlyFire() {
+		return this.friendly_fire;
 	}
 	public ArrayList<String> getMember() {
 		return this.member;
@@ -80,15 +51,44 @@ public final class Team {
 	public String getSuffix() {
 		return this.suffix;
 	}
+
 	public NameTag getTagVisibility() {
 		return this.tag;
 	}
-	public int getFriendlyFire() {
-		return this.friendly_fire;
+	public void removeMember(String name){
+		this.member.remove(name);
+		PacketPlayOutScoreboardTeam team = new PacketPlayOutScoreboardTeam(this);
+		team.setAction(Action.PLAYER_REMOVE);
+		team.setPlayer(new String[]{name});
+		this.owner.player.sendPacket(team);
 	}
 	private void sendUpdate(){
 		PacketPlayOutScoreboardTeam team = new PacketPlayOutScoreboardTeam(this);
 		team.setAction(Action.UPDATE);
-		owner.player.sendPacket(team);
+		this.owner.player.sendPacket(team);
+	}
+	public void setColor(ChatColor color) {
+		this.color = color;
+		this.sendUpdate();
+	}
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
+		this.sendUpdate();
+	}
+	public void setFriendlyFire(int friendly_fire) {
+		this.friendly_fire = friendly_fire;
+		this.sendUpdate();
+	}
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+		this.sendUpdate();
+	}
+	public void setSuffix(String suffix) {
+		this.suffix = suffix;
+		this.sendUpdate();
+	}
+	public void setTagVisibility(NameTag tag) {
+		this.tag = tag;
+		this.sendUpdate();
 	}
 }

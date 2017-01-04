@@ -93,9 +93,9 @@ public class Location extends Potision<Double> implements Cloneable {
 			throw new IllegalArgumentException("Cannot add Locations of differing worlds");
 		}
 
-		x += vec.x;
-		y += vec.y;
-		z += vec.z;
+		this.x += vec.x;
+		this.y += vec.y;
+		this.z += vec.z;
 		return this;
 	}
 
@@ -136,7 +136,7 @@ public class Location extends Potision<Double> implements Cloneable {
 	 * @return the distance
 	**/
 	public double distance(Location o) {
-		return Math.sqrt(distanceSquared(o));
+		return Math.sqrt(this.distanceSquared(o));
 	}
 
 	/**
@@ -154,7 +154,20 @@ public class Location extends Potision<Double> implements Cloneable {
 			throw new IllegalArgumentException("Cannot measure distance to a null location");
 		}
 
-		return NumberConversions.square(x - o.x) + NumberConversions.square(y - o.y) + NumberConversions.square(z - o.z);
+		return NumberConversions.square(this.x - o.x) + NumberConversions.square(this.y - o.y) + NumberConversions.square(this.z - o.z);
+	}
+
+	/**
+	 * @param m
+	 *            The factor
+	 * @see Vector
+	 * @return the same location
+	 */
+	public Location dividide(double m) {
+		this.x /= m;
+		this.y /= m;
+		this.z /= m;
+		return this;
 	}
 
 	@Override
@@ -162,7 +175,7 @@ public class Location extends Potision<Double> implements Cloneable {
 		if(obj == null){
 			return false;
 		}
-		if(getClass() != obj.getClass()){
+		if(this.getClass() != obj.getClass()){
 			return false;
 		}
 		final Location other = (Location) obj;
@@ -191,7 +204,7 @@ public class Location extends Potision<Double> implements Cloneable {
 	 * @return block X
 	 */
 	public int getBlockX() {
-		return locToBlock(x);
+		return locToBlock(this.x);
 	}
 
 	/**
@@ -201,7 +214,7 @@ public class Location extends Potision<Double> implements Cloneable {
 	 * @return block y
 	 */
 	public int getBlockY() {
-		return locToBlock(y);
+		return locToBlock(this.y);
 	}
 
 	/**
@@ -211,7 +224,7 @@ public class Location extends Potision<Double> implements Cloneable {
 	 * @return block z
 	 */
 	public int getBlockZ() {
-		return locToBlock(z);
+		return locToBlock(this.z);
 	}
 
 	/**
@@ -249,7 +262,7 @@ public class Location extends Potision<Double> implements Cloneable {
 	 * @return the incline's pitch
 	 */
 	public float getPitch() {
-		return pitch;
+		return this.pitch;
 	}
 
 	/**
@@ -267,7 +280,19 @@ public class Location extends Potision<Double> implements Cloneable {
 	 * @return the rotation's yaw
 	 */
 	public float getYaw() {
-		return yaw;
+		return this.yaw;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 3;
+
+		hash = 19 * hash + (int) (Double.doubleToLongBits(this.x) ^ Double.doubleToLongBits(this.x) >>> 32);
+		hash = 19 * hash + (int) (Double.doubleToLongBits(this.y) ^ Double.doubleToLongBits(this.y) >>> 32);
+		hash = 19 * hash + (int) (Double.doubleToLongBits(this.z) ^ Double.doubleToLongBits(this.z) >>> 32);
+		hash = 19 * hash + Float.floatToIntBits(this.pitch);
+		hash = 19 * hash + Float.floatToIntBits(this.yaw);
+		return hash;
 	}
 
 	/**
@@ -282,7 +307,7 @@ public class Location extends Potision<Double> implements Cloneable {
 	 * @return the magnitude
 	 */
 	public double length() {
-		return Math.sqrt(NumberConversions.square(x) + NumberConversions.square(y) + NumberConversions.square(z));
+		return Math.sqrt(NumberConversions.square(this.x) + NumberConversions.square(this.y) + NumberConversions.square(this.z));
 	}
 
 	/**
@@ -293,7 +318,7 @@ public class Location extends Potision<Double> implements Cloneable {
 	 * @return the magnitude
 	 */
 	public double lengthSquared() {
-		return NumberConversions.square(x) + NumberConversions.square(y) + NumberConversions.square(z);
+		return NumberConversions.square(this.x) + NumberConversions.square(this.y) + NumberConversions.square(this.z);
 	}
 
 	/**
@@ -306,25 +331,12 @@ public class Location extends Potision<Double> implements Cloneable {
 	 * @return the same location
 	 */
 	public Location multiply(double m) {
-		x *= m;
-		y *= m;
-		z *= m;
+		this.x *= m;
+		this.y *= m;
+		this.z *= m;
 		return this;
 	}
 
-	/**
-	 * @param m
-	 *            The factor
-	 * @see Vector
-	 * @return the same location
-	 */
-	public Location dividide(double m) {
-		x /= m;
-		y /= m;
-		z /= m;
-		return this;
-	}
-	
 	/**
 	 * Sets the {@link #getYaw() yaw} and {@link #getPitch() pitch} to point
 	 * in the direction of the vector.
@@ -342,17 +354,17 @@ public class Location extends Potision<Double> implements Cloneable {
 		final double z = vector.getZ();
 
 		if(x == 0 && z == 0){
-			pitch = vector.getY() > 0 ? -90 : 90;
+			this.pitch = vector.getY() > 0 ? -90 : 90;
 			return this;
 		}
 
 		double theta = Math.atan2(-x, z);
-		yaw = (float) Math.toDegrees((theta + _2PI) % _2PI);
+		this.yaw = (float) Math.toDegrees((theta + _2PI) % _2PI);
 
 		double x2 = NumberConversions.square(x);
 		double z2 = NumberConversions.square(z);
 		double xz = Math.sqrt(x2 + z2);
-		pitch = (float) Math.toDegrees(Math.atan(-vector.getY() / xz));
+		this.pitch = (float) Math.toDegrees(Math.atan(-vector.getY() / xz));
 
 		return this;
 	}
@@ -429,9 +441,9 @@ public class Location extends Potision<Double> implements Cloneable {
 			throw new IllegalArgumentException("Cannot add Locations of differing worlds");
 		}
 
-		x -= vec.x;
-		y -= vec.y;
-		z -= vec.z;
+		this.x -= vec.x;
+		this.y -= vec.y;
+		this.z -= vec.z;
 		return this;
 	}
 
@@ -452,7 +464,7 @@ public class Location extends Potision<Double> implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "Location{x=" + x + ",y=" + y + ",z=" + z + ",pitch=" + pitch + ",yaw=" + yaw + '}';
+		return "Location{x=" + this.x + ",y=" + this.y + ",z=" + this.z + ",pitch=" + this.pitch + ",yaw=" + this.yaw + '}';
 	}
 
 	/**
@@ -462,7 +474,7 @@ public class Location extends Potision<Double> implements Cloneable {
 	 *         Location
 	 */
 	public Vector toVector() {
-		return new Vector(x, y, z);
+		return new Vector(this.x, this.y, this.z);
 	}
 
 	/**
@@ -472,21 +484,9 @@ public class Location extends Potision<Double> implements Cloneable {
 	 * @return the same location
 	 */
 	public Location zero() {
-		x = 0D;
-		y = 0D;
-		z = 0D;
+		this.x = 0D;
+		this.y = 0D;
+		this.z = 0D;
 		return this;
-	}
-	
-	@Override
-	public int hashCode() {
-		int hash = 3;
-
-		hash = 19 * hash + (int) (Double.doubleToLongBits(this.x) ^ Double.doubleToLongBits(this.x) >>> 32);
-		hash = 19 * hash + (int) (Double.doubleToLongBits(this.y) ^ Double.doubleToLongBits(this.y) >>> 32);
-		hash = 19 * hash + (int) (Double.doubleToLongBits(this.z) ^ Double.doubleToLongBits(this.z) >>> 32);
-		hash = 19 * hash + Float.floatToIntBits(this.pitch);
-		hash = 19 * hash + Float.floatToIntBits(this.yaw);
-		return hash;
 	}
 }

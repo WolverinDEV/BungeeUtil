@@ -50,29 +50,27 @@ public class BungeeTimings extends Command {
 			}else if(args[0].equalsIgnoreCase("paste")){
 				if(Profiler.isEnabled()){
 					cs.sendMessage("Pasting Timings....");
-					BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), new Runnable() {
-						@Override
-						public void run() {
-							String url = Profiler.pushToHastebin();
-							cs.sendMessage("Timings uploaded: " + url);
-						}
+					BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), () -> {
+						String url = Profiler.pushToHastebin();
+						cs.sendMessage("Timings uploaded: " + url);
 					});
 					return;
 				}
 				cs.sendMessage(""+ChatColorUtils.COLOR_CHAR+"cError: Timings are disabled");
 				return;
 			}else if(args[0].equalsIgnoreCase("status")){
-				if(Profiler.isEnabled())
+				if(Profiler.isEnabled()) {
 					cs.sendMessage("Timings are "+ChatColorUtils.COLOR_CHAR+"aenabled");
-				else
+				} else {
 					cs.sendMessage("Timings are "+ChatColorUtils.COLOR_CHAR+"cdisabled");
+				}
 				return;
 			}else if(args[0].equalsIgnoreCase("view")){
 				if(cs instanceof Player){
 				((Player)cs).openInventory(ProfileMenue.getProfilerMenue().getMenue());
-				}
-				else
+				} else {
 					cs.sendMessage("�cYou must be a player to open an inventory.");
+				}
 				return;
 			}
 		}

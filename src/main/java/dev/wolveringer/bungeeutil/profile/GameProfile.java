@@ -9,8 +9,9 @@ public class GameProfile {
 	private boolean legacy;
 
 	public GameProfile(UUID id, String name) {
-		if((id == null) && ("".equalsIgnoreCase(name)||name==null))
+		if(id == null && ("".equalsIgnoreCase(name)||name==null)) {
 			throw new IllegalArgumentException("Name and ID cannot both be blank");
+		}
 		this.id = id;
 		this.name = name;
 	}
@@ -28,24 +29,24 @@ public class GameProfile {
 	}
 
 	public boolean isComplete() {
-		return (this.id != null) && getName().isEmpty();
-	}
-
-	@Override
-	public String toString() {
-		return "GameProfile [id=" + id + ", name=" + name + ", properties=" + properties + ", legacy=" + legacy + "]";
+		return this.id != null && this.getName().isEmpty();
 	}
 
 	public boolean isLegacy() {
 		return this.legacy;
 	}
-	public void setName(String name) {
-		this.name = name;
-	}
+
 	public void setId(UUID id) {
 		this.id = id;
 	}
+	public void setName(String name) {
+		this.name = name;
+	}
 	public void setProperties(PropertyMap properties) {
 		this.properties = properties;
+	}
+	@Override
+	public String toString() {
+		return "GameProfile [id=" + this.id + ", name=" + this.name + ", properties=" + this.properties + ", legacy=" + this.legacy + "]";
 	}
 }

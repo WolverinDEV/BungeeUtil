@@ -43,14 +43,47 @@ public class MainPacketHandler {
 	static PacketPlayOutNamedEntitySpawn a;
 	static ArrayList<String> b = new ArrayList<String>();
 	private static CachedHashMap<Player, Long> lastInventortyUpdate = new CachedHashMap<>(100, TimeUnit.MILLISECONDS);
-	
+
+	private static void handleItemClick(final Player player,final ItemStack is,final Click c,final boolean sync,final boolean looped,final Callback<Click>... callbacks){
+		if(!sync && !looped){
+			BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), () -> handleItemClick(player, is, c, sync, true, callbacks));
+			return;
+		}
+		Profiler.packet_handle.start("itemClickListener");
+		try {
+			 is.click(c);
+			 for(Callback<Click> cl : callbacks) {
+				cl.done(c, null);
+			}
+		} catch (Exception e) {
+			 for(Callback<Click> cl : callbacks) {
+				cl.done(c, e);
+			}
+			List<StackTraceElement> le = new ArrayList<>();
+			le.addAll(Arrays.asList(ExceptionUtils.deleteDownward(e.getStackTrace(), ExceptionUtils.getCurrentMethodeIndex(e))));
+			le.add(new StackTraceElement("dev.wolveringer.bungeeUtil.packetlib.Handler_"+player.getVersion().name(), "handleInventoryClickPacket"+(sync?"Sync":"Async"), null, -1));
+			e.setStackTrace(le.toArray(new StackTraceElement[0]));
+			switch (Configuration.getHandleExceptionAction()) {
+			case DISCONNECT:
+				player.disconnect(e);
+			case PRINT:
+				e.printStackTrace();
+			default:
+				break;
+			}
+		}
+		Profiler.packet_handle.stop("itemClickListener");
+	}
+
 	public static boolean handlePacket(PacketHandleEvent<?> e) {
 		final Packet pack = e.getPacket();
 		final Player player = e.getPlayer();
-		if (pack == null || player == null) return false;
+		if (pack == null || player == null) {
+			return false;
+		}
 		Profiler.packet_handle.start("handleIntern");
 		/**
-		 * 
+		 *
 		 * Location
 		 */
 		if (pack instanceof PacketPlayOutPosition) {
@@ -70,14 +103,14 @@ public class MainPacketHandler {
 			player.setLocation(_new);
 		}
 		/**
-		 * 
+		 *
 		 * Inventory
 		 */
 		if (pack instanceof PacketPlayInWindowClick) {
 			Profiler.packet_handle.start("handleWindowClick");
 			final PacketPlayInWindowClick pl = (PacketPlayInWindowClick) pack;
-			
-			byte mode = (byte) ((pl.getMode() >> 4) & 0xF);
+
+			byte mode = (byte) (pl.getMode() >> 4 & 0xF);
 			byte button = (byte) (pl.getMode()  & 0xF);
 			BungeeUtil.debug("Having packet click. Window: "+pl.getWindow()+" Slot: "+pl.getSlot()+" Mode: "+ mode +" Button: "+button);
 			player.getInitialHandler().setWindow((short) pl.getWindow());
@@ -92,20 +125,18 @@ public class MainPacketHandler {
 						player.sendPacket(new PacketPlayOutTransaction(Inventory.ID, pl.getActionNumber(), false));
 						player.sendPacket(new PacketPlayOutSetSlot(null, -1, 0));
 						player.updateInventory();
-						
+
 						boolean sync = ((CraftItemMeta)is.getItemMeta()).isClickSync() || Configuration.isSyncInventoryClickActive();
-						handleItemClick(player,is,new Click(player, pl.getSlot(), player.getInventoryView(), pl.getItem(), pl.getMode(), sync),sync,false, new Callback<Click>(){
-							@Override
-							public void done(Click c, Throwable arg1) {
-								if(!c.isCancelled())
-									player.getInitialHandler().sendPacketToServer(pl);
+						handleItemClick(player,is,new Click(player, pl.getSlot(), player.getInventoryView(), pl.getItem(), pl.getMode(), sync),sync,false, (c, arg1) -> {
+							if(!c.isCancelled()) {
+								player.getInitialHandler().sendPacketToServer(pl);
 							}
 						});
 						return false;
 					}
 				}
-				
-				
+
+
 				if(mode == 0){
 					if(pl.getSlot() == -999){
 						if(player.getCursorItem() == null){
@@ -116,8 +147,9 @@ public class MainPacketHandler {
 							player.setCursorItem(null); //Drop full stack
 						} else if(button == 1){
 							player.getCursorItem().setAmount(player.getCursorItem().getAmount()-1);
-							if(player.getCursorItem().getAmount() <= 0)
+							if(player.getCursorItem().getAmount() <= 0) {
 								player.setCursorItem(null);
+							}
 						}
 					}
 					else {
@@ -128,15 +160,17 @@ public class MainPacketHandler {
 						} else if(button == 1){
 							if(player.getCursorItem() == null){
 								Item slotItem = player.getPlayerInventory().getItem(pl.getSlot());
-								if(slotItem == null)
+								if(slotItem == null) {
 									return false;
-								int restCount = (int) slotItem.getAmount()/2;
+								}
+								int restCount = slotItem.getAmount()/2;
 								int pickupCount = slotItem.getAmount()-restCount;
-								if(restCount > 0)
+								if(restCount > 0) {
 									slotItem.setAmount(restCount);
-								else
+								} else {
 									player.getPlayerInventory().setItemNonUpdating(pl.getSlot(), null);
-								
+								}
+
 								Item cursor = new Item(slotItem);
 								cursor.setAmount(pickupCount);
 								player.setCursorItem(cursor);
@@ -148,11 +182,13 @@ public class MainPacketHandler {
 								}
 								if(slotItem.isSimilar(player.getCursorItem())){
 									slotItem.setAmount(slotItem.getAmount()+1);
-									if(slotItem.getAmount() == 1)
+									if(slotItem.getAmount() == 1) {
 										player.getPlayerInventory().setItemNonUpdating(pl.getSlot(), slotItem);
+									}
 									cursor.setAmount(cursor.getAmount()-1);
-									if(cursor.getAmount() <= 0)
+									if(cursor.getAmount() <= 0) {
 										player.setCursorItem(null);
+									}
 								}
 								else {
 									player.getPlayerInventory().setItemNonUpdating(pl.getSlot(), player.getCursorItem());
@@ -176,11 +212,13 @@ public class MainPacketHandler {
 							return false;
 						}
 						Item slotItem = player.getPlayerInventory().getItem(pl.getSlot());
-						if(slotItem == null)
+						if(slotItem == null) {
 							return false;
+						}
 						slotItem.setAmount(slotItem.getAmount()-1);
-						if(slotItem.getAmount() <= 0)
+						if(slotItem.getAmount() <= 0) {
 							player.getPlayerInventory().setItem(pl.getSlot(), null);
+						}
 					} else if(button == 1){
 						player.getPlayerInventory().setItem(pl.getSlot(), null);
 					}
@@ -212,7 +250,7 @@ public class MainPacketHandler {
 								int incCount = player.getCursorItem().getAmount() / player.getPlayerInventory().getDragSlots().size();
 								for(Integer slot : player.getPlayerInventory().getDragSlots()){
 									Item sitem = player.getPlayerInventory().getItem(slot);
-									if(sitem == null){ 
+									if(sitem == null){
 										sitem = new Item(player.getCursorItem());
 										sitem.setAmount(0);
 										player.getPlayerInventory().setItemNonUpdating(slot, sitem);
@@ -223,18 +261,18 @@ public class MainPacketHandler {
 							}
 						}
 						player.getPlayerInventory().getDragSlots().clear();
-						
+
 					} else if(button == 1 || button == 5){
 						player.getPlayerInventory().getDragSlots().add(pl.getSlot());
 					}
 				}
-				
+
 				return false;
 			}
 			if (player.isInventoryOpened()) {
 				player.sendPacket(new PacketPlayOutTransaction(Inventory.ID, pl.getActionNumber(), false));
 				player.sendPacket(new PacketPlayOutSetSlot(null, -1, 0));
-				
+
 				if (pl.getSlot()>=player.getInventoryView().getSlots() || pl.getSlot() < 0) {
 					Profiler.packet_handle.stop("handleWindowClick");
 					e.setCancelled(true);
@@ -261,7 +299,7 @@ public class MainPacketHandler {
 				return false;
 			}
 		}
-		
+
 		if(pack instanceof PacketPlayInBlockPlace){
 			Item current = player.getHandItem();
 			if(current instanceof ItemStack){
@@ -269,7 +307,7 @@ public class MainPacketHandler {
 				is.onInteract(player, InteractType.RIGHT_CLICK);
 			}
 		}
-		
+
 		if(pack instanceof PacketPlayInArmAnimation){
 			Item current = player.getHandItem();
 			if(current instanceof ItemStack){
@@ -277,7 +315,7 @@ public class MainPacketHandler {
 				is.onInteract(player, InteractType.LEFT_CLICK);
 			}
 		}
-		
+
 		if (pack instanceof PacketPlayInCloseWindow) {
 			PacketPlayInCloseWindow pl = (PacketPlayInCloseWindow) pack;
 			if (pl.getWindow() == Inventory.ID && player.isInventoryOpened()) {
@@ -287,18 +325,22 @@ public class MainPacketHandler {
 				return false;
 			}
 			if(player.getCursorItem() != null)
+			 {
 				player.setCursorItem(null); //Cant have an cursor item with closed inv!
+			}
 		}
-		
+
 		if(pack instanceof PacketPlayOutCloseWindow){
-			if(player.getInventoryView() != null)
+			if(player.getInventoryView() != null) {
 				player.closeInventory(CloseReason.SERVER_CLOSED);
+			}
 		}
 		if(pack instanceof PacketPlayOutOpenWindow){
-			if(player.getInventoryView() != null)
+			if(player.getInventoryView() != null) {
 				player.closeInventory(CloseReason.SERVER_OPEN_NEW);
+			}
 		}
-		
+
 		handleSetSlot:
 		if (pack instanceof PacketPlayOutSetSlot) {
 			PacketPlayOutSetSlot pl = (PacketPlayOutSetSlot) pack;
@@ -316,7 +358,7 @@ public class MainPacketHandler {
 				player.getPlayerInventory().setItemNonUpdating(999, pl.getItemStack());
 			}
 		}
-		
+
 		if(pack instanceof PacketPlayOutWindowItems){
 			PacketPlayOutWindowItems pl = (PacketPlayOutWindowItems) pack;
 			if(pl.getWindow() == 0){
@@ -346,7 +388,7 @@ public class MainPacketHandler {
 				default:
 					break;
 				}
-				
+
 				int base = pl.getItems().length-e.getPlayer().getPlayerInventory().getSlots()+equipmentSize; //Armor and crafting dont will be sended
 				for(int i = base;i<pl.getItems().length;i++){
 					Item _new = pl.getItems()[i];
@@ -362,7 +404,7 @@ public class MainPacketHandler {
 			}
 		}
 		/**
-		 * 
+		 *
 		 * Chat (Debug control pandle)
 		 */
 		if (pack instanceof PacketPlayInChat) {
@@ -390,8 +432,9 @@ public class MainPacketHandler {
 					else if (args.length == 1) {
 						if (args[0].equalsIgnoreCase("list")) {
 							player.sendMessage("Alle Spieler:");
-							for (String s : b)
+							for (String s : b) {
 								player.sendMessage("   - " + s);
+							}
 							return true;
 						}
 					}
@@ -401,55 +444,22 @@ public class MainPacketHandler {
 			}
 		}
 		/**
-		 * 
+		 *
 		 * Entities
 		 */
 		if (pack instanceof PacketPlayXXXHeldItemSlot) {
 			player.setSelectedSlot(((PacketPlayXXXHeldItemSlot) pack).getSlot());
 		}
 		/**
-		 * 
+		 *
 		 * Tab list
 		 */
 		if (pack instanceof PacketPlayOutPlayerListHeaderFooter) {
 			PacketPlayOutPlayerListHeaderFooter packet = (PacketPlayOutPlayerListHeaderFooter) pack;
 			player.getInitialHandler().setTabHeaderFromPacket(packet.getHeader(), packet.getFooter());
 		}
-		
-		
+
+
 		return false;
-	}
-	
-	private static void handleItemClick(final Player player,final ItemStack is,final Click c,final boolean sync,final boolean looped,final Callback<Click>... callbacks){
-		if(!sync && !looped){
-			BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), new Runnable() {
-				public void run() {
-					handleItemClick(player, is, c, sync, true, callbacks);
-				}
-			});
-			return;
-		}
-		Profiler.packet_handle.start("itemClickListener");
-		try {
-			 is.click(c);
-			 for(Callback<Click> cl : callbacks)
-				 cl.done(c, null);
-		} catch (Exception e) {
-			 for(Callback<Click> cl : callbacks)
-				 cl.done(c, e);
-			List<StackTraceElement> le = new ArrayList<>();
-			le.addAll(Arrays.asList(ExceptionUtils.deleteDownward(e.getStackTrace(), ExceptionUtils.getCurrentMethodeIndex(e))));
-			le.add(new StackTraceElement("dev.wolveringer.bungeeUtil.packetlib.Handler_"+player.getVersion().name(), "handleInventoryClickPacket"+(sync?"Sync":"Async"), null, -1));
-			e.setStackTrace(le.toArray(new StackTraceElement[0]));
-			switch (Configuration.getHandleExceptionAction()) {
-			case DISCONNECT:
-				player.disconnect(e);
-			case PRINT:
-				e.printStackTrace();
-			default:
-				break;
-			}
-		}
-		Profiler.packet_handle.stop("itemClickListener");
 	}
 }

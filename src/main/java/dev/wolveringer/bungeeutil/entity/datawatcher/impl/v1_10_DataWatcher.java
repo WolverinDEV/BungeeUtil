@@ -25,7 +25,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class v1_10_DataWatcher extends DataWatcher{
 	private static final TObjectIntMap v1_10_classToId = new TObjectIntHashMap(10, 0.5F, -1);
-	
+
 	static {
 		v1_10_classToId.put(Byte.class, 0);
 		v1_10_classToId.put(Integer.class, 1);
@@ -40,26 +40,48 @@ public class v1_10_DataWatcher extends DataWatcher{
 		v1_10_classToId.put(Direction.class, 10);
 		v1_10_classToId.put(OptionalUUID.class, 11);
 		v1_10_classToId.put(BlockData.class, 12);
-		
+
 		v1_10_classToId.put(Short.class, 13); //old
 	}
-	
+
+	private static Class<?> getTypeId(int type) {
+			for (Object o : v1_10_classToId.keys()) {
+				if (v1_10_classToId.get(o) == type) {
+					return (Class<?>) o;
+				}
+			}
+		return null;
+	}
+
 	@SuppressWarnings("serial")
 	private List<DataWatcherObjekt> objekts = new ArrayList<DataWatcherObjekt>() {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		@Override
 		public DataWatcherObjekt get(int index) {
-			return index >= size() ? null : super.get(index);
+			return index >= this.size() ? null : super.get(index);
 		};
-		
+
+		@Override
 		public DataWatcherObjekt set(int index, DataWatcherObjekt element) {
-			while (size() <= index) {
-				add(null);
+			while (this.size() <= index) {
+				this.add(null);
 			}
 			return super.set(index, element);
 		};
 	};
-	
+
 	@SuppressWarnings("serial")
 	private HashMap<Class, EntityDataWatcher> watchers = new HashMap<Class, EntityDataWatcher>() {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		@Override
 		public EntityDataWatcher put(Class key, EntityDataWatcher value) {
 			Class _super = key.getSuperclass();
 			while (EntityDataWatcher.class.isAssignableFrom(_super) && super.get(_super) == null) {
@@ -68,88 +90,82 @@ public class v1_10_DataWatcher extends DataWatcher{
 			return super.put(key, value);
 		};
 	};
-	
-	public v1_10_DataWatcher(PacketDataSerializer paramPacketDataSerializer) {
-		this();
-		if(paramPacketDataSerializer != null)
-		this.objekts = read(paramPacketDataSerializer);
-	}
-	
+
 	public v1_10_DataWatcher() {
 	}
-	
-	public void write(PacketDataSerializer packetdataserializer) {
-		Iterator iterator = objekts.iterator();
-		while (iterator.hasNext()) {
-			DataWatcherObjekt watchableobject = (DataWatcherObjekt) iterator.next();
-			if (watchableobject == null) continue;
-			write(packetdataserializer, watchableobject);
+
+	public v1_10_DataWatcher(PacketDataSerializer paramPacketDataSerializer) {
+		this();
+		if(paramPacketDataSerializer != null) {
+			this.objekts = this.read(paramPacketDataSerializer);
 		}
-		packetdataserializer.writeByte(255); // end
 	}
-	
-	private void write(PacketDataSerializer s, DataWatcherObjekt o) {
-			s.writeByte(o.getPostition());
-			int typeId = v1_10_classToId.get(o.getType());
-			if (typeId == 13) s.writeByte(v1_10_classToId.get(Integer.class));
-			else s.writeByte(typeId);
-			
-			switch (typeId) {
-				case 0:
-					s.writeByte((byte) o.getValue());
-					break;
-				case 1:
-					s.writeVarInt((int) o.getValue());
-					break;
-				case 2:
-					s.writeFloat((float) o.getValue());
-					break;
-				case 3:
-					s.writeString((String) o.getValue());
-					break;
-				case 4:
-					s.writeRawString((BaseComponent) o.getValue());
-					break;
-				case 5:
-					s.writeItem((Item) o.getValue());
-					break;
-				case 6:
-					s.writeBoolean((boolean) o.getValue());
-					break;
-				case 7:
-					Vector3f v = (Vector3f) o.getValue();
-					s.writeFloat(v.getX());
-					s.writeFloat(v.getY());
-					s.writeFloat(v.getZ());
-					break;
-				case 8:
-					s.writeBlockPosition((BlockPosition) o.getValue());
-					break;
-				case 9:
-					OptionalBlockPosition p = (OptionalBlockPosition) o.getValue(); // Optional
-					s.writeBoolean(p.getPosition() != null);
-					if (p != null) s.writeBlockPosition(p.getPosition());
-					break;
-				case 10:
-					s.writeVarInt(((Direction) o.getValue()).getDirection()); // Direction
-					break;
-				case 11:
-					OptionalUUID uuid = (OptionalUUID) o.getValue(); // Optional
-					s.writeBoolean(uuid.getUuid() != null);
-					if (uuid != null) s.writeUUID(uuid.getUuid());
-					break;
-				case 12:
-					s.writeVarInt(((BlockData) o.getValue()).getData()); // Block
-					break; // Data
-				case 13: // Short will write as an interger
-					s.writeVarInt((Short) o.getValue());
-					break;
-				default:
-					System.out.println("Type not found ("+typeId+") ("+o.getType()+")");
-					break;
+
+	@Override
+	public DataWatcher copy() {
+		v1_10_DataWatcher watcher = new v1_10_DataWatcher();
+		watcher.objekts = new ArrayList<DataWatcherObjekt>(this.objekts);
+		return watcher;
+	}
+
+	@Override
+	public Object get(int i) {
+		if (this.objekts.get(i) == null) {
+			return null;
+		}
+		return this.objekts.get(i).getValue();
+	}
+
+	@Override
+	public byte getByte(int i) {
+		return (byte) this.get(i);
+	}
+
+	@Override
+	public EntityDataWatcher getEntityDataWatcher() {
+		return this.getSpecialDataWatcher(EntityDataWatcher.class);
+	}
+
+	@Override
+	public float getFloat(int i) {
+		return (float) this.get(i);
+	}
+
+	@Override
+	public int getInt(int i) {
+		return (int) this.get(i);
+	}
+
+	@Override
+	public short getShort(int i) {
+		return (short) this.get(i);
+	}
+
+	@Override
+	public <T extends EntityDataWatcher> T getSpecialDataWatcher(Class<T> clazz) {
+		if(clazz.isAssignableFrom(EntityDataWatcher.class)) {
+			clazz = (Class<T>) v1_10_EntityDataWatcher.class;
+		} else if(clazz.isAssignableFrom(LivingEntityDataWatcher.class)) {
+			clazz = (Class<T>) v1_10_LivingEntityDataWatcher.class;
+		} else if(clazz.isAssignableFrom(HumanDataWatcher.class)) {
+			clazz = (Class<T>) v1_10_HumanEntityDataWatcher.class;
+		}
+		if (this.watchers.get(clazz) == null) {
+			try {
+				this.watchers.put(clazz, clazz.getConstructor(DataWatcher.class).newInstance(this));
 			}
+			catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+				e.printStackTrace();
+			}
+		}
+		return (T) this.watchers.get(clazz);
 	}
-	
+
+	@Override
+	public String getString(int i) {
+		return (String) this.get(i);
+	}
+
 	private List read(PacketDataSerializer packetdataserializer) {
 		ArrayList arraylist = new ArrayList();
 			for (int data = packetdataserializer.readUnsignedByte(); data != 255; data = packetdataserializer.readUnsignedByte()) {
@@ -185,15 +201,21 @@ public class v1_10_DataWatcher extends DataWatcher{
 						value = packetdataserializer.readBlockPosition();
 						break;
 					case 9:
-						if (packetdataserializer.readBoolean()) value = new OptionalBlockPosition(packetdataserializer.readBlockPosition());
-						else value = new OptionalBlockPosition(null);
+						if (packetdataserializer.readBoolean()) {
+							value = new OptionalBlockPosition(packetdataserializer.readBlockPosition());
+						} else {
+							value = new OptionalBlockPosition(null);
+						}
 						break;
 					case 10:
 						value = new Direction(packetdataserializer.readVarInt());
 						break;
 					case 11:
-						if (packetdataserializer.readBoolean()) value = new OptionalUUID(packetdataserializer.readUUID());
-						else value = new OptionalUUID(null);
+						if (packetdataserializer.readBoolean()) {
+							value = new OptionalUUID(packetdataserializer.readUUID());
+						} else {
+							value = new OptionalUUID(null);
+						}
 						break;
 					case 12:
 						value = new BlockData(packetdataserializer.readVarInt());
@@ -203,74 +225,100 @@ public class v1_10_DataWatcher extends DataWatcher{
 		}
 		return arraylist;
 	}
-	
+
+	@Override
 	public void setValue(int pos, Object object) {
 		if (pos > 254) { throw new IllegalArgumentException("Data value id is too big with " + pos + "! (Max is " + 254 + ")"); }
-		if (objekts.get(pos) == null) objekts.set(pos, new DataWatcherObjekt(object.getClass(), pos, null));
-		objekts.get(pos).setValue(object);
+		if (this.objekts.get(pos) == null) {
+			this.objekts.set(pos, new DataWatcherObjekt(object.getClass(), pos, null));
+		}
+		this.objekts.get(pos).setValue(object);
 	}
-	
-	private static Class<?> getTypeId(int type) {
-			for (Object o : v1_10_classToId.keys())
-				if (v1_10_classToId.get(o) == type) return (Class<?>) o;
-		return null;
-	}
-	
+
 	@Override
 	public String toString() {
-		return "DataWatcher [v1_10] [objekts=" + objekts + "]";
+		return "DataWatcher [v1_10] [objekts=" + this.objekts + "]";
 	}
-	
-	public DataWatcher copy() {
-		v1_10_DataWatcher watcher = new v1_10_DataWatcher();
-		watcher.objekts = new ArrayList<DataWatcherObjekt>(this.objekts);
-		return watcher;
-	}
-	
-	public EntityDataWatcher getEntityDataWatcher() {
-		return getSpecialDataWatcher(EntityDataWatcher.class);
-	}
-	
-	public <T extends EntityDataWatcher> T getSpecialDataWatcher(Class<T> clazz) {
-		if(clazz.isAssignableFrom(EntityDataWatcher.class))
-			clazz = (Class<T>) v1_10_EntityDataWatcher.class;
-		else if(clazz.isAssignableFrom(LivingEntityDataWatcher.class))
-			clazz = (Class<T>) v1_10_LivingEntityDataWatcher.class;
-		else if(clazz.isAssignableFrom(HumanDataWatcher.class))
-			clazz = (Class<T>) v1_10_HumanEntityDataWatcher.class;
-		if (watchers.get(clazz) == null) {
-			try {
-				watchers.put(clazz, clazz.getConstructor(DataWatcher.class).newInstance(this));
+
+	@Override
+	public void write(PacketDataSerializer packetdataserializer) {
+		Iterator iterator = this.objekts.iterator();
+		while (iterator.hasNext()) {
+			DataWatcherObjekt watchableobject = (DataWatcherObjekt) iterator.next();
+			if (watchableobject == null) {
+				continue;
 			}
-			catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-				e.printStackTrace();
-			}
+			this.write(packetdataserializer, watchableobject);
 		}
-		return (T) watchers.get(clazz);
+		packetdataserializer.writeByte(255); // end
 	}
-	
-	public Object get(int i) {
-		if (objekts.get(i) == null) return null;
-		return objekts.get(i).getValue();
-	}
-	
-	public byte getByte(int i) {
-		return (byte) get(i);
-	}
-	
-	public short getShort(int i) {
-		return (short) get(i);
-	}
-	
-	public int getInt(int i) {
-		return (int) get(i);
-	}
-	
-	public String getString(int i) {
-		return (String) get(i);
-	}
-	
-	public float getFloat(int i) {
-		return (float) get(i);
+
+	private void write(PacketDataSerializer s, DataWatcherObjekt o) {
+			s.writeByte(o.getPostition());
+			int typeId = v1_10_classToId.get(o.getType());
+			if (typeId == 13) {
+				s.writeByte(v1_10_classToId.get(Integer.class));
+			} else {
+				s.writeByte(typeId);
+			}
+
+			switch (typeId) {
+				case 0:
+					s.writeByte((byte) o.getValue());
+					break;
+				case 1:
+					s.writeVarInt((int) o.getValue());
+					break;
+				case 2:
+					s.writeFloat((float) o.getValue());
+					break;
+				case 3:
+					s.writeString((String) o.getValue());
+					break;
+				case 4:
+					s.writeRawString((BaseComponent) o.getValue());
+					break;
+				case 5:
+					s.writeItem((Item) o.getValue());
+					break;
+				case 6:
+					s.writeBoolean((boolean) o.getValue());
+					break;
+				case 7:
+					Vector3f v = (Vector3f) o.getValue();
+					s.writeFloat(v.getX());
+					s.writeFloat(v.getY());
+					s.writeFloat(v.getZ());
+					break;
+				case 8:
+					s.writeBlockPosition((BlockPosition) o.getValue());
+					break;
+				case 9:
+					OptionalBlockPosition p = (OptionalBlockPosition) o.getValue(); // Optional
+					s.writeBoolean(p.getPosition() != null);
+					if (p != null) {
+						s.writeBlockPosition(p.getPosition());
+					}
+					break;
+				case 10:
+					s.writeVarInt(((Direction) o.getValue()).getDirection()); // Direction
+					break;
+				case 11:
+					OptionalUUID uuid = (OptionalUUID) o.getValue(); // Optional
+					s.writeBoolean(uuid.getUuid() != null);
+					if (uuid != null) {
+						s.writeUUID(uuid.getUuid());
+					}
+					break;
+				case 12:
+					s.writeVarInt(((BlockData) o.getValue()).getData()); // Block
+					break; // Data
+				case 13: // Short will write as an interger
+					s.writeVarInt((Short) o.getValue());
+					break;
+				default:
+					System.out.println("Type not found ("+typeId+") ("+o.getType()+")");
+					break;
+			}
 	}
 }

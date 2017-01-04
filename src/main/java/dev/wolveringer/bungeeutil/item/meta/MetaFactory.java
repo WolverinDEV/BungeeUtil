@@ -11,11 +11,71 @@ import javassist.util.proxy.ProxyFactory;
 
 @SuppressWarnings({ "deprecation", "rawtypes" })
 public class MetaFactory {
+	protected static class ItemMetaProxy implements MethodHandler {
+		@SuppressWarnings("serial")
+		private static HashMap<Class, ArrayList<String>> whitelist = new HashMap<Class, ArrayList<String>>(){
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public java.util.ArrayList<String> get(Object key) {
+				if(super.get(key) == null) {
+					super.put((Class) key, new ArrayList<String>());
+				}
+				return super.get(key);
+			}
+		};
+		public static void addWhiteList(Class clazz,String methode){
+			whitelist.get(clazz).add(methode);
+		}
+		@Override
+		public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args) throws Throwable {
+			if(self instanceof CraftItemMeta){
+				if(thisMethod.getName().startsWith("set")){
+					for(Class c : whitelist.keySet()) {
+						if(this.isInstance(self, c)) {
+							if(whitelist.get(c).contains(thisMethod.getName())) {
+								return proceed.invoke(self, args);
+							}
+						}
+					}
+					Object resulut = proceed.invoke(self, args); //? null
+					self.getClass().getDeclaredMethod("build").invoke(self);
+					((CraftItemMeta)self).fireUpdate();
+					return resulut;
+				}
+			}
+			return proceed.invoke(self, args);
+		}
+		private boolean isInstance(Object base,Class of){
+			try{
+				of.cast(base);
+				return true;
+			}catch(Exception e){
+				return false;
+			}
+		}
+	}
 	private static ItemMetaProxy proxy = new ItemMetaProxy();
+
+	protected static ItemMeta createProxyInstance(Class c,Item item) {
+		ProxyFactory factor = new ProxyFactory();
+		factor.setSuperclass(c);
+		factor.setHandler(proxy);
+		try{
+			return (ItemMeta) factor.create(new Class[]{Item.class}, new Object[]{item});
+		}catch (NoSuchMethodException | IllegalArgumentException | InstantiationException | IllegalAccessException | InvocationTargetException e){
+			e.printStackTrace();
+		}
+		return new CraftItemMeta(item);
+	}
+
 	public static boolean equals(ItemMeta meta, Object object) {
-		if(object == null && meta == null)
+		if(object == null && meta == null) {
 			return true;
-		else if(object == null || meta == null){
+		} else if(object == null || meta == null){
 			return false;
 		}else if(!(object instanceof ItemMeta)){
 			return false;
@@ -44,56 +104,6 @@ public class MetaFactory {
 				return new SkullMeta(item);
 			default:
 				return new CraftItemMeta(item);
-		}
-	}
-
-	protected static ItemMeta createProxyInstance(Class c,Item item) {
-		ProxyFactory factor = new ProxyFactory();
-		factor.setSuperclass(c);
-		factor.setHandler(proxy);
-		try{
-			return (ItemMeta) factor.create(new Class[]{Item.class}, new Object[]{item});
-		}catch (NoSuchMethodException | IllegalArgumentException | InstantiationException | IllegalAccessException | InvocationTargetException e){
-			e.printStackTrace();
-		}
-		return new CraftItemMeta(item);
-	}
-
-	protected static class ItemMetaProxy implements MethodHandler {
-		@SuppressWarnings("serial")
-		private static HashMap<Class, ArrayList<String>> whitelist = new HashMap<Class, ArrayList<String>>(){
-			public java.util.ArrayList<String> get(Object key) {
-				if(super.get(key) == null)
-					super.put((Class) key, new ArrayList<String>());
-				return super.get(key);
-			}
-		};
-		public static void addWhiteList(Class clazz,String methode){
-			whitelist.get(clazz).add(methode);
-		}
-		@Override
-		public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args) throws Throwable {
-			if(self instanceof CraftItemMeta){
-				if(thisMethod.getName().startsWith("set")){
-					for(Class c : whitelist.keySet())
-						if(isInstance(self, c))
-							if(whitelist.get(c).contains(thisMethod.getName()))
-								return proceed.invoke(self, args);
-					Object resulut = proceed.invoke(self, args); //? null
-					self.getClass().getDeclaredMethod("build").invoke(self);
-					((CraftItemMeta)self).fireUpdate();
-					return resulut;
-				}
-			}
-			return proceed.invoke(self, args);
-		}
-		private boolean isInstance(Object base,Class of){
-			try{
-				of.cast(base);
-				return true;
-			}catch(Exception e){
-				return false;
-			}
 		}
 	}
 }

@@ -7,16 +7,16 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class PacketPlayOutHeldItemSlot extends PacketPlayXXXHeldItemSlot implements PacketPlayOut{
-	
 	public PacketPlayOutHeldItemSlot(byte slot) {
-		setSlot(slot);
+		this.setSlot(slot);
 	}
 
 	@Override
 	public void read(PacketDataSerializer s) {
-		setSlot(s.readByte());
+		this.setSlot(s.readByte());
 	}
+	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeByte(getSlot());
+		s.writeByte(this.getSlot());
 	}
 }

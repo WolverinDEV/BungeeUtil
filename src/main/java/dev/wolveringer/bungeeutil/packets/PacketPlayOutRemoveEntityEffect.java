@@ -12,19 +12,19 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PacketPlayOutRemoveEntityEffect extends Packet implements PacketPlayOut {
-	
-	int entity;
-	int effect;
-	
+
+	private int entity;
+	private int effect;
+
 	@Override
 	public void read(PacketDataSerializer s) {
-		entity = s.readVarInt();
-		effect = s.readUnsignedByte();
+		this.entity = s.readVarInt();
+		this.effect = s.readUnsignedByte();
 	}
-	
+
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeVarInt(entity);
-		s.writeByte(effect);
+		s.writeVarInt(this.entity);
+		s.writeByte(this.effect);
 	}
 }

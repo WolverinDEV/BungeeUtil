@@ -9,7 +9,7 @@ import net.md_5.bungee.event.EventHandler;
 public class InventoryResetListener implements Listener{
 	public InventoryResetListener() {
 	}
-	
+
 	@EventHandler
 	public void a(ServerSwitchEvent e){
 		BungeeUtil.debug("Player "+e.getPlayer().getName()+" [Displayname: "+e.getPlayer().getDisplayName()+"] switched the server.");

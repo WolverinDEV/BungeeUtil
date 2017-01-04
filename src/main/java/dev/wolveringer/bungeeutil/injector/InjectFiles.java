@@ -49,19 +49,22 @@ public class InjectFiles {
 		}
 		return 0;
 	}
-	
+
 	public static boolean isInjected(){
 		return !Modifier.isFinal(UserConnection.class.getModifiers()) && Modifier.isPublic(UserConnection.class.getModifiers());
 	}
 
 	private static void updateZipFile(File zipFile, String[] names, InputStream[] ins) throws IOException {
 		File tempFile = File.createTempFile(zipFile.getName(), null);
-		if(!tempFile.delete())
+		if(!tempFile.delete()) {
 			BungeeUtil.getInstance().sendMessage("Warn: Cant delte temp file.");
-		if(tempFile.exists())
+		}
+		if(tempFile.exists()) {
 			BungeeUtil.getInstance().sendMessage("Warn: Temp target file alredy exist!");
-		if(!zipFile.exists())
+		}
+		if(!zipFile.exists()) {
 			throw new RuntimeException("Could not rename the file " + zipFile.getAbsolutePath() + " to " + tempFile.getAbsolutePath()+" (Src. not found!)");
+		}
 		int renameOk = zipFile.renameTo(tempFile)?1:0;
 		if(renameOk==0){
 			tempFile = new File(zipFile.toString()+".copy");
@@ -72,10 +75,12 @@ public class InjectFiles {
 				renameOk = -1;
 			}
 		}
-		if(renameOk == 0)
+		if(renameOk == 0) {
 			throw new RuntimeException("Could not rename the file " + zipFile.getAbsolutePath() + " to " + tempFile.getAbsolutePath()+" (Directory read only? (Temp:[R:"+(tempFile.canRead()?1:0)+";W:"+(tempFile.canWrite()?1:0)+",D:"+(tempFile.canExecute()?1:0)+"],Src:[R:"+(zipFile.canRead()?1:0)+";W:"+(zipFile.canWrite()?1:0)+",D:"+(zipFile.canExecute()?1:0)+"]))");
-		if(renameOk != 1)
+		}
+		if(renameOk != 1) {
 			BungeeUtil.getInstance().sendMessage("Warn: Cant create temp file. Use .copy file");
+		}
 		byte[] buf = new byte[Configuration.getLoadingBufferSize()];
 		BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR+"aBuffer size: "+ChatColorUtils.COLOR_CHAR+"e"+buf.length);
 		ZipInputStream zin = new ZipInputStream(new FileInputStream(tempFile));
@@ -85,16 +90,18 @@ public class InjectFiles {
 		while (entry != null){
 			String path_name = entry.getName().replaceAll("/", "\\.");
 			boolean notReplace = true;
-			for(String f : names)
+			for(String f : names) {
 				if(f.equals(path_name)){
 					notReplace = false;
 					break;
 				}
+			}
 			if(notReplace){
 				out.putNextEntry(new ZipEntry(entry.getName()));
 				int len;
-				while ((len = zin.read(buf)) > 0)
+				while ((len = zin.read(buf)) > 0) {
 					out.write(buf, 0, len);
+				}
 			}
 			entry = zin.getNextEntry();
 		}
@@ -104,8 +111,9 @@ public class InjectFiles {
 			int index = names[i].lastIndexOf('.');
 			out.putNextEntry(new ZipEntry(names[i].substring(0, index).replaceAll("\\.", "/") + names[i].substring(index)));
 			int len;
-			while ((len = in.read(buf)) > 0)
+			while ((len = in.read(buf)) > 0) {
 				out.write(buf, 0, len);
+			}
 			out.closeEntry();
 			in.close();
 		}

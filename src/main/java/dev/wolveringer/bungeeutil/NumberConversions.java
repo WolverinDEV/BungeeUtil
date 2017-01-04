@@ -1,16 +1,14 @@
 package dev.wolveringer.bungeeutil;
 
 public final class NumberConversions {
-    private NumberConversions() {}
+    public static int ceil(final double num) {
+        final int floor = (int) num;
+        return floor == num ? floor : floor + (int) (~Double.doubleToRawLongBits(num) >>> 63);
+    }
 
     public static int floor(double num) {
         final int floor = (int) num;
         return floor == num ? floor : floor - (int) (Double.doubleToRawLongBits(num) >>> 63);
-    }
-
-    public static int ceil(final double num) {
-        final int floor = (int) num;
-        return floor == num ? floor : floor + (int) (~Double.doubleToRawLongBits(num) >>> 63);
     }
 
     public static int round(double num) {
@@ -21,13 +19,26 @@ public final class NumberConversions {
         return num * num;
     }
 
-    public static int toInt(Object object) {
+    public static byte toByte(Object object) {
         if (object instanceof Number) {
-            return ((Number) object).intValue();
+            return ((Number) object).byteValue();
         }
 
         try {
-            return Integer.valueOf(object.toString());
+            return Byte.valueOf(object.toString());
+        } catch (NumberFormatException e) {
+        } catch (NullPointerException e) {
+        }
+        return 0;
+    }
+
+    public static double toDouble(Object object) {
+        if (object instanceof Number) {
+            return ((Number) object).doubleValue();
+        }
+
+        try {
+            return Double.valueOf(object.toString());
         } catch (NumberFormatException e) {
         } catch (NullPointerException e) {
         }
@@ -47,13 +58,13 @@ public final class NumberConversions {
         return 0;
     }
 
-    public static double toDouble(Object object) {
+    public static int toInt(Object object) {
         if (object instanceof Number) {
-            return ((Number) object).doubleValue();
+            return ((Number) object).intValue();
         }
 
         try {
-            return Double.valueOf(object.toString());
+            return Integer.valueOf(object.toString());
         } catch (NumberFormatException e) {
         } catch (NullPointerException e) {
         }
@@ -86,16 +97,5 @@ public final class NumberConversions {
         return 0;
     }
 
-    public static byte toByte(Object object) {
-        if (object instanceof Number) {
-            return ((Number) object).byteValue();
-        }
-
-        try {
-            return Byte.valueOf(object.toString());
-        } catch (NumberFormatException e) {
-        } catch (NullPointerException e) {
-        }
-        return 0;
-    }
+    private NumberConversions() {}
 }

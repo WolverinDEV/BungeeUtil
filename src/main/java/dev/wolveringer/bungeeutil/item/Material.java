@@ -517,7 +517,7 @@ public enum Material {
 	 */
 	@Deprecated
 	public int getId() {
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -526,7 +526,7 @@ public enum Material {
 	 * @return Maximum durability for this material
 	 */
 	public short getMaxDurability() {
-		return durability;
+		return this.durability;
 	}
 
 	/**
@@ -535,14 +535,14 @@ public enum Material {
 	 * @return Maximum stack size for this material
 	 */
 	public int getMaxStackSize() {
-		return maxStack;
+		return this.maxStack;
 	}
 
 	/**
 	 * @return True if this material is affected by gravity.
 	 */
 	public boolean hasGravity() {
-		if(!isBlock()){
+		if(!this.isBlock()){
 			return false;
 		}
 		switch (this) {
@@ -561,7 +561,7 @@ public enum Material {
 	 * @return true if this material is a block
 	 */
 	public boolean isBlock() {
-		return id < 256;
+		return this.id < 256;
 	}
 
 	/**
@@ -570,7 +570,7 @@ public enum Material {
 	 * @return True if this material is a block and can burn away
 	 */
 	public boolean isBurnable() {
-		if(!isBlock()){
+		if(!this.isBlock()){
 			return false;
 		}
 		switch (this) {
@@ -644,7 +644,7 @@ public enum Material {
 	 * @return True if this material is a block and can catch fire
 	 */
 	public boolean isFlammable() {
-		if(!isBlock()){
+		if(!this.isBlock()){
 			return false;
 		}
 		switch (this) {
@@ -696,7 +696,7 @@ public enum Material {
 	 * @return True if this material is a block and completely blocks vision
 	 */
 	public boolean isOccluding() {
-		if(!isBlock()){
+		if(!this.isBlock()){
 			return false;
 		}
 		switch (this) {
@@ -775,7 +775,7 @@ public enum Material {
 	 * @return True if this material represents a playable music disk.
 	 */
 	public boolean isRecord() {
-		return id >= GOLD_RECORD.id && id <= RECORD_12.id;
+		return this.id >= GOLD_RECORD.id && this.id <= RECORD_12.id;
 	}
 
 	/**
@@ -785,7 +785,7 @@ public enum Material {
 	 * @return True if this material is a block and solid
 	 */
 	public boolean isSolid() {
-		if(!isBlock() || id == 0){
+		if(!this.isBlock() || this.id == 0){
 			return false;
 		}
 		switch (this) {
@@ -924,7 +924,7 @@ public enum Material {
 	 * @return True if this material is a block and does not block any light
 	 */
 	public boolean isTransparent() {
-		if(!isBlock()){
+		if(!this.isBlock()){
 			return false;
 		}
 		switch (this) {

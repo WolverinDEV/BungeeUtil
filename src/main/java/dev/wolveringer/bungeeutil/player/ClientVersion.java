@@ -37,26 +37,10 @@ public enum ClientVersion {
 	v1_9_4(110, BigClientVersion.v1_9, ProtocollVersion.v1_9_4),
 	v1_9_5(110, BigClientVersion.v1_9, ProtocollVersion.v1_9_4),
 	v1_10_0(210, BigClientVersion.v1_10, ProtocollVersion.v1_10),
-	
+
 	v1_11_0(315, BigClientVersion.v1_11, ProtocollVersion.v1_11),
 	v1_11_2(316, BigClientVersion.v1_11, ProtocollVersion.v1_11);
-	
-	@Getter
-	private int version;
-	private BigClientVersion bigClientVersion;
-	@Getter
-	private ProtocollVersion protocollVersion;
-	
-	private ClientVersion(int v, BigClientVersion bv, ProtocollVersion protocol) {
-		this.version = v;
-		this.bigClientVersion = bv;
-		this.protocollVersion = protocol;
-	}
-	
-	public BigClientVersion getBigVersion() {
-		return bigClientVersion;
-	}
-	
+
 	public static enum BigClientVersion {
 		UnderknownVersion(0),
 		v1_7(1),
@@ -64,35 +48,58 @@ public enum ClientVersion {
 		v1_9(3),
 		v1_10(7),
 		v1_11(8);
-		
+
 		private ProtocollVersion protocollVersion;
 		private int protocollVersionInt;
 		private ProtocollVersion[] protocollVersions;
-		
+
 		private BigClientVersion(int basedVersion) {
 			this.protocollVersionInt = basedVersion;
 		}
 		public ProtocollVersion getProtocollVersion() {
-			if(protocollVersion == null)
-				protocollVersion = ProtocollVersion.values()[protocollVersionInt];
-			return protocollVersion;
+			if(this.protocollVersion == null) {
+				this.protocollVersion = ProtocollVersion.values()[this.protocollVersionInt];
+			}
+			return this.protocollVersion;
 		}
 
 		public ProtocollVersion[] getProtocollVersions(){
-			if(protocollVersions != null)
-				return protocollVersions;
+			if(this.protocollVersions != null) {
+				return this.protocollVersions;
+			}
 			ArrayList<ProtocollVersion> versions = new ArrayList<>();
-			for(ProtocollVersion v : ProtocollVersion.values())
-				if(v.getBasedVersion() == this)
+			for(ProtocollVersion v : ProtocollVersion.values()) {
+				if(v.getBasedVersion() == this) {
 					versions.add(v);
+				}
+			}
 			this.protocollVersions = versions.toArray(new ProtocollVersion[0]);
-			return protocollVersions;
+			return this.protocollVersions;
 		}
 	}
-	
 	public static ClientVersion fromProtocoll(int protocolVersion) {
-		for (ClientVersion v : ClientVersion.values())
-			if (v.getVersion() == protocolVersion) return v;
+		for (ClientVersion v : ClientVersion.values()) {
+			if (v.getVersion() == protocolVersion) {
+				return v;
+			}
+		}
 		return null;
+	}
+	@Getter
+	private int version;
+
+	private BigClientVersion bigClientVersion;
+
+	@Getter
+	private ProtocollVersion protocollVersion;
+
+	private ClientVersion(int v, BigClientVersion bv, ProtocollVersion protocol) {
+		this.version = v;
+		this.bigClientVersion = bv;
+		this.protocollVersion = protocol;
+	}
+
+	public BigClientVersion getBigVersion() {
+		return this.bigClientVersion;
 	}
 }

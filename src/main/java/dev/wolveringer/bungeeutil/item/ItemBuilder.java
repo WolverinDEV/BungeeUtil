@@ -2,15 +2,9 @@ package dev.wolveringer.bungeeutil.item;
 
 import java.util.ArrayList;
 
-import dev.wolveringer.bungeeutil.item.ItemStack.Click;
-
 public class ItemBuilder {
 	public static ItemBuilder create() {
 		return new ItemBuilder();
-	}
-
-	public static ItemBuilder create(Material m) {
-		return create(m.getId());
 	}
 
 	public static ItemBuilder create(int id) {
@@ -19,6 +13,10 @@ public class ItemBuilder {
 
 	public static ItemBuilder create(Item handle) {
 		return new ItemBuilder(handle);
+	}
+
+	public static ItemBuilder create(Material m) {
+		return create(m.getId());
 	}
 
 	private int id;
@@ -30,6 +28,9 @@ public class ItemBuilder {
 	private ClickListener listener;
 	private Item handle;
 
+	public ItemBuilder() {
+	}
+
 	public ItemBuilder(int id) {
 		this.id = id;
 	}
@@ -38,16 +39,54 @@ public class ItemBuilder {
 		this.handle = new Item(handle); //Copy
 	}
 
-	public ItemBuilder() {
-	}
-
-	public ItemBuilder name(String name) {
-		this.name = name;
+	public ItemBuilder amount(int n) {
+		this.amouth = n;
 		return this;
 	}
 
-	public ItemBuilder lore(String lore) {
-		this.lore.add(lore);
+	public Item build() {
+		Item i;
+		if (this.handle != null) {
+			if (this.id != 0) {
+				this.handle.setTypeId(this.id);
+			}
+			if (this.sid != -1) {
+				this.handle.setDurability((short) this.sid);
+			}
+			if(this.amouth != -1) {
+				this.handle.setAmount(this.amouth);
+			}
+			i = this.handle;
+		} else {
+			i = new Item(this.id, this.amouth == -1 ? 1 : this.amouth, (short) (this.sid == -1 ? 0 : this.sid));
+		}
+		if (this.listener != null) {
+			i = new ItemStack(i) {
+				@Override
+				public void click(Click c) {
+					ItemBuilder.this.listener.click(c);
+				}
+			};
+		}
+		if (this.name != null) {
+			i.getItemMeta().setDisplayName(this.name);
+		}
+		if (!this.lore.isEmpty()) {
+			i.getItemMeta().setLore(this.lore);
+		}
+		if (this.glow) {
+			i.getItemMeta().setGlow(true);
+		}
+		return i;
+	}
+
+	public ItemBuilder clearLore() {
+		this.lore.clear();
+		return this;
+	}
+
+	public ItemBuilder durbility(int short_) {
+		this.sid = short_;
 		return this;
 	}
 
@@ -61,13 +100,8 @@ public class ItemBuilder {
 		return this;
 	}
 
-	public ItemBuilder durbility(int short_) {
-		this.sid = short_;
-		return this;
-	}
-
-	public ItemBuilder amount(int n) {
-		this.amouth = n;
+	public ItemBuilder id(int id) {
+		this.id = id;
 		return this;
 	}
 
@@ -75,19 +109,14 @@ public class ItemBuilder {
 		this.listener = run;
 		return this;
 	}
-	
+
 	public ItemBuilder listener(final Runnable run) {
-		this.listener = new ClickListener() {
-			@Override
-			public void click(Click click) {
-				run.run();				
-			}
-		};
+		this.listener = click -> run.run();
 		return this;
 	}
 
-	public ItemBuilder id(int id) {
-		this.id = id;
+	public ItemBuilder lore(String lore) {
+		this.lore.add(lore);
 		return this;
 	}
 
@@ -96,37 +125,8 @@ public class ItemBuilder {
 		return this;
 	}
 
-	public Item build() {
-		Item i;
-		if (handle != null) {
-			if (id != 0)
-				handle.setTypeId(id);
-			if (sid != -1)
-				handle.setDurability((short) sid);
-			if(amouth != -1)
-				handle.setAmount(amouth);
-			i = handle;
-		} else
-			i = new Item(id, amouth == -1 ? 1 : amouth, (short) (sid == -1 ? 0 : sid));
-		if (listener != null) {
-			i = new ItemStack(i) {
-				@Override
-				public void click(Click c) {
-					listener.click(c);
-				}
-			};
-		}
-		if (name != null)
-			i.getItemMeta().setDisplayName(name);
-		if (!lore.isEmpty())
-			i.getItemMeta().setLore(lore);
-		if (glow)
-			i.getItemMeta().setGlow(true);
-		return i;
-	}
-
-	public ItemBuilder clearLore() {
-		lore.clear();
+	public ItemBuilder name(String name) {
+		this.name = name;
 		return this;
 	}
 }

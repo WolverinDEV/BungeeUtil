@@ -8,77 +8,73 @@ import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.protocol.packet.Team;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
+@Setter
 public class PacketPlayOutScoreboardTeam extends Packet implements PacketPlayOut {
 	public static enum Action {
 		CREATE(0), REMOVE(1), UPDATE(2), PLAYER_ADD(3), PLAYER_REMOVE(4);
-		
+
+		public static Action fromInt(int x) {
+			for (Action a : values()) {
+				if (a.getAction() == x) {
+					return a;
+				}
+			}
+			return null;
+		}
+
 		private int b;
-		
+
 		private Action(int b) {
 			this.b = b;
 		}
-		
+
 		public int getAction() {
-			return b;
-		}
-		
-		public static Action fromInt(int x) {
-			for (Action a : values())
-				if (a.getAction() == x) return a;
-			return null;
+			return this.b;
 		}
 	}
-	
+
 	public static enum NameTag {
 		VISIABLE("always"), INVISIABLE("never"), TEAM_VISIABLE("hideForOtherTeams"), OTHER_VISIABLE("hideForOwnTeam");
-		
+
+		public static NameTag fromString(String s) {
+			for (NameTag t : values()) {
+				if (t.s.equalsIgnoreCase(s)) {
+					return t;
+				}
+			}
+			return null;
+		}
+
 		private String s;
-		
+
 		private NameTag(String s) {
 			this.s = s;
 		}
-		
-		public static NameTag fromString(String s) {
-			for (NameTag t : values())
-				if (t.s.equalsIgnoreCase(s)) return t;
-			return null;
-		}
-		
+
 		public String getIdentifire() {
-			return s;
+			return this.s;
 		}
 	}
-	
+
 	private String team;
 	private Action action;
-	
+
 	private String collisionRule = "always";
 	private String displayName;
 	private String prefix;
 	private String suffix;
 	private NameTag tag = NameTag.VISIABLE;
 	private int color = -1;
-	private int friendly_fire = 0;
+	private int friendlyFire = 0;
 	private String[] player;
-	
-	public PacketPlayOutScoreboardTeam(Team t) {
-		action = Action.fromInt(t.getMode());
-		team = t.getName();
-		displayName = t.getDisplayName();
-		prefix = t.getPrefix();
-		suffix = t.getSuffix();
-		tag = NameTag.fromString(t.getNameTagVisibility());
-		color = t.getColor();
-		friendly_fire = t.getFriendlyFire();
-		player = t.getPlayers();
-	}
-	
+
 	public PacketPlayOutScoreboardTeam(dev.wolveringer.bungeeutil.scoreboard.Team team) {
 		this.team = team.getName();
 		this.displayName = team.getDisplayName();
@@ -86,134 +82,83 @@ public class PacketPlayOutScoreboardTeam extends Packet implements PacketPlayOut
 		this.suffix = team.getSuffix();
 		this.tag = team.getTagVisibility();
 		this.color = team.getColor().ordinal();
-		this.friendly_fire = team.getFriendlyFire();
+		this.friendlyFire = team.getFriendlyFire();
 		this.player = team.getMember().toArray(new String[0]);
 	}
-	
-	@Override
-	public void write(PacketDataSerializer s) {
-		s.writeString(team);
-		s.writeByte(action.getAction());
-		if (action.getAction() == 0 || action.getAction() == 2) {
-			s.writeString(displayName);
-			s.writeString(prefix);
-			s.writeString(suffix);
-			s.writeByte(friendly_fire);
-			if (tag == null) tag = NameTag.VISIABLE;
-			s.writeString(tag.getIdentifire());
-			if (getBigVersion() != BigClientVersion.v1_8) s.writeString(collisionRule);
-			s.writeByte(color);
-		}
-		if (action.getAction() == 0 || action.getAction() == 3 || action.getAction() == 4) {
-			s.writeVarInt(player.length);
-			for (String x : player)
-				s.writeString(x);
-		}
+
+	public PacketPlayOutScoreboardTeam(Team t) {
+		this.action = Action.fromInt(t.getMode());
+		this.team = t.getName();
+		this.displayName = t.getDisplayName();
+		this.prefix = t.getPrefix();
+		this.suffix = t.getSuffix();
+		this.tag = NameTag.fromString(t.getNameTagVisibility());
+		this.color = t.getColor();
+		this.friendlyFire = t.getFriendlyFire();
+		this.player = t.getPlayers();
 	}
-	
-	public void read(PacketDataSerializer s) {
-		team = s.readString(16);
-		action = Action.fromInt(s.readByte());
-		if (action.getAction() == 0 || action.getAction() == 2) {
-			displayName = s.readString(32);
-			prefix = s.readString(16);
-			suffix = s.readString(16);
-			friendly_fire = s.readByte();
-			tag = NameTag.fromString(s.readString(32));
-			if (getBigVersion() != BigClientVersion.v1_8) collisionRule = s.readString(-1);
-			color = s.readByte();
-		}
-		if (action.getAction() == 0 || action.getAction() == 3 || action.getAction() == 4) {
-			int i = PacketDataSerializer.readVarInt(s);
-			player = new String[i];
-			for (int x = 0; x < i; x++)
-				player[x] = s.readString(40);
-		}
-		
-	}
-	
-	@Override
-	public String toString() {
-		return "PacketPlayOutScoreboardTeam [team=" + team + ", action=" + action + ", displayName=" + displayName + ", prefix=" + prefix + ", suffix=" + suffix + ", tag=" + tag + ", color=" + color + ", friendly_fire=" + friendly_fire + ", player=" + Arrays.toString(player) + "]";
-	}
-	
-	public String getTeam() {
-		return team;
-	}
-	
-	public void setTeam(String team) {
-		this.team = team;
-	}
-	
-	public Action getAction() {
-		return action;
-	}
-	
-	public void setAction(Action action) {
-		this.action = action;
-	}
-	
-	public String getDisplayName() {
-		return displayName;
-	}
-	
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
-	}
-	
-	public String getPrefix() {
-		return prefix;
-	}
-	
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
-	}
-	
-	public String getSuffix() {
-		return suffix;
-	}
-	
-	public void setSuffix(String suffix) {
-		this.suffix = suffix;
-	}
-	
-	public NameTag getTag() {
-		return tag;
-	}
-	
-	public void setTag(NameTag tag) {
-		this.tag = tag;
-	}
-	
+
 	public ChatColor getColor() {
-		return ChatColor.values()[color == -1 ? 0 : color];
+		return ChatColor.values()[this.color == -1 ? 0 : this.color];
 	}
-	
+
+	@Override
+	public void read(PacketDataSerializer s) {
+		this.team = s.readString(16);
+		this.action = Action.fromInt(s.readByte());
+		if (this.action.getAction() == 0 || this.action.getAction() == 2) {
+			this.displayName = s.readString(32);
+			this.prefix = s.readString(16);
+			this.suffix = s.readString(16);
+			this.friendlyFire = s.readByte();
+			this.tag = NameTag.fromString(s.readString(32));
+			if (this.getBigVersion() != BigClientVersion.v1_8) {
+				this.collisionRule = s.readString(-1);
+			}
+			this.color = s.readByte();
+		}
+		if (this.action.getAction() == 0 || this.action.getAction() == 3 || this.action.getAction() == 4) {
+			int i = PacketDataSerializer.readVarInt(s);
+			this.player = new String[i];
+			for (int x = 0; x < i; x++) {
+				this.player[x] = s.readString(40);
+			}
+		}
+
+	}
+
 	public void setColor(ChatColor color) {
 		this.color = color.ordinal();
 	}
-	
-	public int isFriendlyFire() {
-		return friendly_fire;
+
+	@Override
+	public String toString() {
+		return "PacketPlayOutScoreboardTeam [team=" + this.team + ", action=" + this.action + ", displayName=" + this.displayName + ", prefix=" + this.prefix + ", suffix=" + this.suffix + ", tag=" + this.tag + ", color=" + this.color + ", friendly_fire=" + this.friendlyFire + ", player=" + Arrays.toString(this.player) + "]";
 	}
-	
-	public void setFriendlyFire(int friendly_fire) {
-		this.friendly_fire = friendly_fire;
-	}
-	
-	public String[] getPlayers() {
-		return player;
-	}
-	
-	public void setPlayers(String[] player) {
-		this.player = player;
-	}
-	
-	public String getCollisionRule() {
-		return collisionRule;
-	}
-	
-	public void setCollisionRule(String collisionRule) {
-		this.collisionRule = collisionRule;
+
+	@Override
+	public void write(PacketDataSerializer s) {
+		s.writeString(this.team);
+		s.writeByte(this.action.getAction());
+		if (this.action.getAction() == 0 || this.action.getAction() == 2) {
+			s.writeString(this.displayName);
+			s.writeString(this.prefix);
+			s.writeString(this.suffix);
+			s.writeByte(this.friendlyFire);
+			if (this.tag == null) {
+				this.tag = NameTag.VISIABLE;
+			}
+			s.writeString(this.tag.getIdentifire());
+			if (this.getBigVersion() != BigClientVersion.v1_8) {
+				s.writeString(this.collisionRule);
+			}
+			s.writeByte(this.color);
+		}
+		if (this.action.getAction() == 0 || this.action.getAction() == 3 || this.action.getAction() == 4) {
+			s.writeVarInt(this.player.length);
+			for (String x : this.player) {
+				s.writeString(x);
+			}
+		}
 	}
 }

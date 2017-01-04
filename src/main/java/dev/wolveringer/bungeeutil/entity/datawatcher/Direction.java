@@ -8,7 +8,7 @@ public class Direction {
 	}
 
 	public int getDirection() {
-		return direction;
+		return this.direction;
 	}
 
 	public void setDirection(int direction) {

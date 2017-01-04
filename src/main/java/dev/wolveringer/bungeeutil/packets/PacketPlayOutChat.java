@@ -6,42 +6,41 @@ import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
-@Getter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class PacketPlayOutChat extends Packet implements PacketPlayOut {
 
 	private byte modus = 0;
 	private ByteString rawMessage;
 
 	public PacketPlayOutChat(BaseComponent msg) {
-		rawMessage = new ByteString(ComponentSerializer.toString(msg));
+		this.rawMessage = new ByteString(ComponentSerializer.toString(msg));
 	}
 
 	public BaseComponent getMessage() {
-		return ComponentSerializer.parse(rawMessage.getString())[0];
+		return ComponentSerializer.parse(this.rawMessage.getString())[0];
 	}
 
-	public void setModus(byte modus) {
-		this.modus = modus;
-	}
 
-	public byte getModus() {
-		return modus;
+	public byte[] getRawMessage() {
+		return this.rawMessage.getBytes();
 	}
 
 	@Override
 	public void read(PacketDataSerializer s) {
-		rawMessage = s.readStringBytes();
-		switch (getBigVersion()) {
+		this.rawMessage = s.readStringBytes();
+		switch (this.getBigVersion()) {
 		case v1_11:
 		case v1_10:
 		case v1_9:
 		case v1_8:
-			modus = s.readByte();
+			this.modus = s.readByte();
 			break;
 		case v1_7:
 			break;
@@ -52,26 +51,22 @@ public class PacketPlayOutChat extends Packet implements PacketPlayOut {
 		this.rawMessage = new ByteString(ComponentSerializer.toString(c));
 	}
 
-	@Override
-	public void write(PacketDataSerializer s) {
-		s.writeStringBytes(rawMessage);
-		switch (getBigVersion()) {
-		case v1_11:
-		case v1_10:
-		case v1_9:
-		case v1_8:
-			s.writeByte(modus);
-			break;
-		case v1_7:
-			break;
-		}
-	}
-
 	public void setRawMessage(byte[] raw) {
 		this.rawMessage = new ByteString(raw);
 	}
 
-	public byte[] getRawMessage() {
-		return this.rawMessage.getBytes();
+	@Override
+	public void write(PacketDataSerializer s) {
+		s.writeStringBytes(this.rawMessage);
+		switch (this.getBigVersion()) {
+		case v1_11:
+		case v1_10:
+		case v1_9:
+		case v1_8:
+			s.writeByte(this.modus);
+			break;
+		case v1_7:
+			break;
+		}
 	}
 }

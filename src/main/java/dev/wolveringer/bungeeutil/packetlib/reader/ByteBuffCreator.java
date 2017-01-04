@@ -13,9 +13,20 @@ import io.netty.buffer.Unpooled;
 public class ByteBuffCreator {
 	@SuppressWarnings("serial")
 	private static final class ByteBuffTypeNotFoundException extends RuntimeException {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		ByteBuffTypeNotFoundException(String message) {
 			super(message);
 		}
+	}
+
+	public static void copy(ByteBuf from, ByteBuf to) {
+		byte[] buff = new byte[from.readableBytes()];
+		from.readBytes(buff);
+		to.writeBytes(buff);
 	}
 
 	public static ByteBuf createByteBuff() {
@@ -29,17 +40,11 @@ public class ByteBuffCreator {
 		}
 	}
 
-	public static void copy(ByteBuf from, ByteBuf to) {
-		byte[] buff = new byte[from.readableBytes()];
-		from.readBytes(buff);
-		to.writeBytes(buff);
-	}
-	
 	public static void main(String[] args) throws Exception{
 		UUID uuid = UUID.nameUUIDFromBytes("WolverinDEV".getBytes());
 		System.out.println("UUID: "+uuid+" ("+uuid.toString().equalsIgnoreCase("a323593b-db7e-34e9-b235-eba6187c9b7b")+")");
 		System.out.println("UUID: a323593b-db7e-34e9-f235-eba6187c9b7b");
-		
+
 		MessageDigest md;
         try {
             md = MessageDigest.getInstance("MD5");
@@ -51,9 +56,10 @@ public class ByteBuffCreator {
         md5Bytes[6]  |= 0x30;  /* set to version 3     */
         //md5Bytes[8]  &= 0x3f;  /* clear variant        */
         //md5Bytes[8]  |= 0x80;  /* set to IETF variant  */
-        
+
         int index = 0;
-        for(byte b : md5Bytes)
-        	System.out.println(index+++" -> "+Integer.toHexString(UnsignedBytes.toInt(b)));
+        for(byte b : md5Bytes) {
+			System.out.println(index+++" -> "+Integer.toHexString(UnsignedBytes.toInt(b)));
+		}
 	}
 }

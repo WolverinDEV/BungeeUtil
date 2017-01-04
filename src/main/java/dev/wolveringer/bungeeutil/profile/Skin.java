@@ -25,7 +25,7 @@ public class Skin {
 	private JSONObject value;
 
 	private Skin() {
-		empty = true;
+		this.empty = true;
 	}
 
 	protected Skin(JSONObject raw_profile) {
@@ -34,21 +34,22 @@ public class Skin {
 				JSONArray properties = (JSONArray) raw_profile.get("properties");
 				for (int i = 0; i < properties.length(); i++) { //TODO size == 1 ?????
 					JSONObject property = (JSONObject) properties.get(i);
-					name = (String) property.get("name");
-					raw_value = (String) property.get("value");
-					signature = (String) property.get("signature");
+					this.name = (String) property.get("name");
+					this.raw_value = (String) property.get("value");
+					this.signature = (String) property.get("signature");
 				}
 			}
-			if (raw_value != null)
-				value = new JSONObject(Base64Coder.decodeString(raw_value));
-			else
-				value = new JSONObject();
-			empty = false;
+			if (this.raw_value != null) {
+				this.value = new JSONObject(Base64Coder.decodeString(this.raw_value));
+			} else {
+				this.value = new JSONObject();
+			}
+			this.empty = false;
 		} catch (Exception e) {
 			e.printStackTrace();
-			empty = true;
+			this.empty = true;
 		}
-		
+
 	}
 
 	protected Skin(String rawValue, String signature) {
@@ -60,164 +61,176 @@ public class Skin {
 			rawValue = Base64Coder.encodeString("{}");
 		}
 		this.raw_value = rawValue;
-		this.value = new JSONObject(Base64Coder.decodeString(raw_value));
-		if (!signature.equalsIgnoreCase("undefined"))
+		this.value = new JSONObject(Base64Coder.decodeString(this.raw_value));
+		if (!signature.equalsIgnoreCase("undefined")) {
 			this.signature = signature;
+		}
 	}
 
 	public GameProfile applay(GameProfile g) {
-		if (g.getId() == null)
-			g.setId(getUUID());
-		if (g.getName() == null)
-			g.setName(getProfileName());
+		if (g.getId() == null) {
+			g.setId(this.getUUID());
+		}
+		if (g.getName() == null) {
+			g.setName(this.getProfileName());
+		}
 		g.getProperties().clear();
-		g.getProperties().put(name, new Property(name, raw_value, isSignatureRequired() ? signature : null));
+		g.getProperties().put(this.name, new Property(this.name, this.raw_value, this.isSignatureRequired() ? this.signature : null));
 		return g;
 	}
 
-	public String getSkinUrl() {
-		if (hasSkin())
-			return value.getJSONObject("textures").getJSONObject("SKIN").getString("url");
-		return null;
-	}
-
-	public void setSkin(String url) {
-		empty = false;
-		if (!value.has("textures"))
-			value.put("value", new JSONObject());
-		if (!value.getJSONObject("textures").has("SKIN"))
-			value.getJSONObject("textures").put("SKIN", new JSONObject());
-		value.getJSONObject("textures").getJSONObject("SKIN").put("url", url);
-		updateRaw();
-	}
-
-	public boolean hasSkin() {
-		return value.has("textures") && value.getJSONObject("textures").has("SKIN") && value.getJSONObject("textures").getJSONObject("SKIN").has("url");
-	}
-
-	public void setCape(String url) {
-		empty = false;
-		if (!value.has("textures"))
-			value.put("value", new JSONObject());
-		if (!value.getJSONObject("textures").has("CAPE"))
-			value.getJSONObject("textures").put("CAPE", new JSONObject());
-		value.getJSONObject("textures").getJSONObject("CAPE").put("url", url);
-		updateRaw();
+	@Override
+	public Skin clone() {
+		Skin _new = new Skin();
+		_new.empty = this.empty;
+		_new.name = this.name;
+		_new.raw_value = this.raw_value;
+		_new.signature = this.signature;
+		_new.value = this.value;
+		return _new;
 	}
 
 	public String getCapeUrl() {
-		if (hasCape())
-			return value.getJSONObject("textures").getJSONObject("CAPE").getString("url");
+		if (this.hasCape()) {
+			return this.value.getJSONObject("textures").getJSONObject("CAPE").getString("url");
+		}
 		return null;
 	}
 
-	public boolean hasCape() {
-		return value.has("textures") && value.getJSONObject("textures").has("CAPE") && value.getJSONObject("textures").getJSONObject("CAPE").has("url");
-	}
-
-	public UUID getUUID() {
-		return UUID.fromString(value.getString("profileId").replaceFirst("([0-9a-fA-F]{8})([0-9a-fA-F]{4})([0-9a-fA-F]{4})([0-9a-fA-F]{4})([0-9a-fA-F]+)", "$1-$2-$3-$4-$5"));
-	}
-
-	public void setUUID(UUID id) {
-		empty = false;
-		value.put("profileId", id.toString().replaceAll("-", ""));
-		updateRaw();
-	}
-
-	public boolean hasUUID() {
-		return value.has("profileId");
+	public String getName() {
+		return this.name;
 	}
 
 	public String getProfileName() {
-		if (!hasProfileName())
+		if (!this.hasProfileName()) {
 			return "undef";
-		return value.getString("profileName");
+		}
+		return this.value.getString("profileName");
+	}
+
+	public String getRawData() {
+		return this.raw_value;
+	}
+
+	public String getSignature() {
+		if (this.signature == null) {
+			return "undefined";
+		}
+		return this.signature;
+	}
+
+	public String getSkinUrl() {
+		if (this.hasSkin()) {
+			return this.value.getJSONObject("textures").getJSONObject("SKIN").getString("url");
+		}
+		return null;
+	}
+
+	public UUID getUUID() {
+		return UUID.fromString(this.value.getString("profileId").replaceFirst("([0-9a-fA-F]{8})([0-9a-fA-F]{4})([0-9a-fA-F]{4})([0-9a-fA-F]{4})([0-9a-fA-F]+)", "$1-$2-$3-$4-$5"));
+	}
+
+	public boolean hasCape() {
+		return this.value.has("textures") && this.value.getJSONObject("textures").has("CAPE") && this.value.getJSONObject("textures").getJSONObject("CAPE").has("url");
 	}
 
 	public boolean hasProfileName() {
-		return value.has("profileName");
+		return this.value.has("profileName");
 	}
 
-	public void setProfileName(String name) {
-		empty = false;
-		value.put("profileName", name);
-		updateRaw();
+	public boolean hasSkin() {
+		return this.value.has("textures") && this.value.getJSONObject("textures").has("SKIN") && this.value.getJSONObject("textures").getJSONObject("SKIN").has("url");
 	}
 
-	public boolean isPublic() {
-		return value.getBoolean("isPublic");
-	}
-
-	public void setPublic(boolean b) {
-		empty = false;
-		value.put("isPublic", b);
-		updateRaw();
+	public boolean hasUUID() {
+		return this.value.has("profileId");
 	}
 
 	public boolean isEmpty() {
-		return empty;
+		return this.empty;
 	}
 
-	private void updateRaw() {
-		raw_value = Base64Coder.encodeString(value.toString());
+	public boolean isPublic() {
+		return this.value.getBoolean("isPublic");
+	}
+
+	public boolean isSignatureRequired() {
+		return this.value.has("signatureRequired") && this.value.getBoolean("signatureRequired");
+	}
+
+	public void setCape(String url) {
+		this.empty = false;
+		if (!this.value.has("textures")) {
+			this.value.put("value", new JSONObject());
+		}
+		if (!this.value.getJSONObject("textures").has("CAPE")) {
+			this.value.getJSONObject("textures").put("CAPE", new JSONObject());
+		}
+		this.value.getJSONObject("textures").getJSONObject("CAPE").put("url", url);
+		this.updateRaw();
+	}
+
+	public void setProfileName(String name) {
+		this.empty = false;
+		this.value.put("profileName", name);
+		this.updateRaw();
+	}
+
+	public void setPublic(boolean b) {
+		this.empty = false;
+		this.value.put("isPublic", b);
+		this.updateRaw();
+	}
+
+	public void setRawData(String string) {
+		this.raw_value = string;
+		this.value = new JSONObject(Base64Coder.decodeString(this.raw_value));
+	}
+
+	public void setSignature(String signature) {
+		this.signature = signature;
+		this.empty = false;
+	}
+
+	public void setSignatureRequired(boolean flag) {
+		this.empty = false;
+		this.value.put("signatureRequired", flag);
+		this.updateRaw();
+
+	}
+
+	public void setSkin(String url) {
+		this.empty = false;
+		if (!this.value.has("textures")) {
+			this.value.put("value", new JSONObject());
+		}
+		if (!this.value.getJSONObject("textures").has("SKIN")) {
+			this.value.getJSONObject("textures").put("SKIN", new JSONObject());
+		}
+		this.value.getJSONObject("textures").getJSONObject("SKIN").put("url", url);
+		this.updateRaw();
+	}
+
+	public void setUUID(UUID id) {
+		this.empty = false;
+		this.value.put("profileId", id.toString().replaceAll("-", ""));
+		this.updateRaw();
 	}
 
 	public GameProfile toGameProfile() {
 		try {
-			return applay(new GameProfile(getUUID(), getProfileName()));
+			return this.applay(new GameProfile(this.getUUID(), this.getProfileName()));
 		} catch (Exception e) {
 			return null;
 		}
 	}
 
-	public void setSignatureRequired(boolean flag) {
-		empty = false;
-		value.put("signatureRequired", flag);
-		updateRaw();
-
-	}
-
-	public boolean isSignatureRequired() {
-		return value.has("signatureRequired") && value.getBoolean("signatureRequired");
-	}
-
-	public String getSignature() {
-		if (signature == null)
-			return "undefined";
-		return signature;
-	}
-
-	public void setSignature(String signature) {
-		this.signature = signature;
-		empty = false;
-	}
-
-	public void setRawData(String string) {
-		this.raw_value = string;
-		this.value = new JSONObject(Base64Coder.decodeString(raw_value));
-	}
-
-	public String getRawData() {
-		return raw_value;
-	}
-
-	public Skin clone() {
-		Skin _new = new Skin();
-		_new.empty = empty;
-		_new.name = name;
-		_new.raw_value = raw_value;
-		_new.signature = signature;
-		_new.value = value;
-		return _new;
-	}
-
-	public String getName() {
-		return name;
-	}
-
 	@Override
 	public String toString() {
-		return value.toString();
+		return this.value.toString();
+	}
+
+	private void updateRaw() {
+		this.raw_value = Base64Coder.encodeString(this.value.toString());
 	}
 }

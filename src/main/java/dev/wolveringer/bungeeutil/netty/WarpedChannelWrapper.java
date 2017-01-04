@@ -29,6 +29,216 @@ import net.md_5.bungee.protocol.MinecraftEncoder;
 import net.md_5.bungee.protocol.PacketWrapper;
 import net.md_5.bungee.protocol.Protocol;
 
+class EmptyChannelWrapper implements ChannelHandlerContext {
+	@Override
+	public ByteBufAllocator alloc() {
+		throw this.createException();
+	}
+
+	@Override
+	public <T> Attribute<T> attr(AttributeKey<T> paramAttributeKey) {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelFuture bind(SocketAddress paramSocketAddress) {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelFuture bind(SocketAddress paramSocketAddress, ChannelPromise paramChannelPromise) {
+		throw this.createException();
+	}
+
+	@Override
+	public Channel channel() {
+		return null;
+	}
+
+	@Override
+	public ChannelFuture close() {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelFuture close(ChannelPromise paramChannelPromise) {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelFuture connect(SocketAddress paramSocketAddress) {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelFuture connect(SocketAddress paramSocketAddress, ChannelPromise paramChannelPromise) {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelFuture connect(SocketAddress paramSocketAddress1, SocketAddress paramSocketAddress2) {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelFuture connect(SocketAddress paramSocketAddress1, SocketAddress paramSocketAddress2, ChannelPromise paramChannelPromise) {
+		throw this.createException();
+	}
+
+	private RuntimeException createException(){
+		return new UnsupportedOperationException("Methode should be overwritten");
+	}
+
+	@Override
+	public ChannelFuture deregister() {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelFuture deregister(ChannelPromise paramChannelPromise) {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelFuture disconnect() {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelFuture disconnect(ChannelPromise paramChannelPromise) {
+		throw this.createException();
+	}
+
+	@Override
+	public EventExecutor executor() {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelHandlerContext fireChannelActive() {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelHandlerContext fireChannelInactive() {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelHandlerContext fireChannelRead(Object paramObject) {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelHandlerContext fireChannelReadComplete() {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelHandlerContext fireChannelRegistered() {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelHandlerContext fireChannelUnregistered() {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelHandlerContext fireChannelWritabilityChanged() {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelHandlerContext fireExceptionCaught(Throwable paramThrowable) {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelHandlerContext fireUserEventTriggered(Object paramObject) {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelHandlerContext flush() {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelHandler handler() {
+		throw this.createException();
+	}
+
+	public <T> boolean hasAttr(AttributeKey<T> arg0) {
+		throw this.createException();
+	}
+
+	@Override
+	public boolean isRemoved() {
+		throw this.createException();
+	}
+
+	@Override
+	public String name() {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelFuture newFailedFuture(Throwable paramThrowable) {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelProgressivePromise newProgressivePromise() {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelPromise newPromise() {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelFuture newSucceededFuture() {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelPipeline pipeline() {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelHandlerContext read() {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelPromise voidPromise() {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelFuture write(Object paramObject) {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelFuture write(Object paramObject, ChannelPromise paramChannelPromise) {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelFuture writeAndFlush(Object paramObject) {
+		throw this.createException();
+	}
+
+	@Override
+	public ChannelFuture writeAndFlush(Object paramObject, ChannelPromise paramChannelPromise) {
+		throw this.createException();
+	}
+}
+
 public class WarpedChannelWrapper extends ChannelWrapper {
 
 	private Channel ch;
@@ -50,342 +260,142 @@ public class WarpedChannelWrapper extends ChannelWrapper {
 		}
 	}
 
-	public void setProtocol(Protocol protocol) {
-		if (ch.pipeline().get(WarpedMinecraftEncoder.class) != null)
-			ch.pipeline().get(WarpedMinecraftEncoder.class).setProtocol(protocol);
-		else if (ch.pipeline().get(MinecraftEncoder.class) != null)
-			ch.pipeline().get(MinecraftEncoder.class).setProtocol(protocol);
-		
-		if (ch.pipeline().get(WarpedMinecraftDecoder.class) != null)
-			ch.pipeline().get(WarpedMinecraftDecoder.class).setProtocol(protocol);
-		else if (ch.pipeline().get(MinecraftDecoder.class) != null)
-			ch.pipeline().get(MinecraftDecoder.class).setProtocol(protocol);
-	}
-
-	public void setVersion(int protocol) {
-		if (ch.pipeline().get(WarpedMinecraftEncoder.class) != null)
-			ch.pipeline().get(WarpedMinecraftEncoder.class).setProtocolVersion(protocol);
-		else if (ch.pipeline().get(MinecraftEncoder.class) != null)
-			ch.pipeline().get(MinecraftEncoder.class).setProtocolVersion(protocol);
-		
-		if (ch.pipeline().get(WarpedMinecraftDecoder.class) != null)
-			ch.pipeline().get(WarpedMinecraftDecoder.class).setProtocolVersion(protocol);
-		else if (ch.pipeline().get(MinecraftDecoder.class) != null)
-			ch.pipeline().get(MinecraftDecoder.class).setProtocolVersion(protocol);
-	}
-
-	public void write(Object packet) {
-		if (!closed && (handler.isConnected || (getProtocol() != Protocol.GAME))) {
-			if (packet instanceof PacketWrapper) {
-				((PacketWrapper) packet).setReleased(true);
-				ch.write(((PacketWrapper) packet).buf, ch.voidPromise());
-			} else {
-				ch.write(packet, ch.voidPromise());
-			}
-			ch.flush();
+	@Override
+	public void addBefore(String baseName, String name, ChannelHandler handler) {
+		try {
+			Preconditions.checkState(this.ch.eventLoop().inEventLoop(), "cannot add handler outside of event loop");
+			this.ch.pipeline().flush();
+			this.ch.pipeline().addBefore(baseName, name, handler);
+		} catch (Exception e) {
+			this.handler.disconnect(e);
 		}
 	}
 
-	public Protocol getProtocol() {
-		if (handler.getEncoder() != null) {
-			return NettyUtil.getProtocol(handler.getEncoder());
-		} else if (ch.pipeline().get(WarpedMinecraftDecoder.class) != null) {
-			return ch.pipeline().get(WarpedMinecraftDecoder.class).getProtocol();
-		} else if (ch.pipeline().get(WarpedMinecraftEncoder.class) != null) {
-			return NettyUtil.getProtocol(ch.pipeline().get(WarpedMinecraftEncoder.class));
-		} else if (ch.pipeline().get(MinecraftDecoder.class) != null) {
-			return NettyUtil.getProtocol(ch.pipeline().get(MinecraftDecoder.class));
-		} else if (ch.pipeline().get(MinecraftEncoder.class) != null) {
-			return NettyUtil.getProtocol(ch.pipeline().get(MinecraftEncoder.class));
+	@Override
+	public synchronized void close() {
+		if (!this.closed) {
+			this.closed = true;
+			this.ch.flush();
+			this.ch.close();
 		}
-		return Protocol.GAME;
 	}
 
 	@Override
 	public synchronized void delayedClose(final Runnable runnable) {
 		Preconditions.checkArgument(runnable != null, "runnable");
 
-		if (!closing) {
-			closing = true;
-			if(ch == null){
-				System.err.println("One Channel of "+handler.getName()+" is null.");
+		if (!this.closing) {
+			this.closing = true;
+			if(this.ch == null){
+				System.err.println("One Channel of "+this.handler.getName()+" is null.");
 				return;
 			}
-			if(ch.eventLoop() == null){
-				System.err.println("One ChannelEventLoop of "+handler.getName()+" is null. ChanneL "+ch);
+			if(this.ch.eventLoop() == null){
+				System.err.println("One ChannelEventLoop of "+this.handler.getName()+" is null. ChanneL "+this.ch);
 				return;
 			}
 			// Minecraft client can take some time to switch protocols.
 			// Sending the wrong disconnect packet whilst a protocol switch is in progress will crash it.
 			// Delay 500ms to ensure that the protocol switch (if any) has definitely taken place.
-			ch.eventLoop().schedule(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						runnable.run();
-					} finally {
-						WarpedChannelWrapper.this.close();
-					}
+			this.ch.eventLoop().schedule(() -> {
+				try {
+					runnable.run();
+				} finally {
+					WarpedChannelWrapper.this.close();
 				}
 			}, 500, TimeUnit.MILLISECONDS);
 		}
 	}
 
-	public synchronized void close() {
-		if (!closed) {
-			closed = true;
-			ch.flush();
-			ch.close();
-		}
-	}
-
-	public void addBefore(String baseName, String name, ChannelHandler handler) {
-		try {
-			Preconditions.checkState(ch.eventLoop().inEventLoop(), "cannot add handler outside of event loop");
-			ch.pipeline().flush();
-			ch.pipeline().addBefore(baseName, name, handler);
-		} catch (Exception e) {
-			this.handler.disconnect(e);
-		}
-	}
-
+	@Override
 	public Channel getHandle() {
-		return ch;
+		return this.ch;
 	}
 
+	public Protocol getProtocol() {
+		if (this.handler.getEncoder() != null) {
+			return NettyUtil.getProtocol(this.handler.getEncoder());
+		} else if (this.ch.pipeline().get(WarpedMinecraftDecoder.class) != null) {
+			return this.ch.pipeline().get(WarpedMinecraftDecoder.class).getProtocol();
+		} else if (this.ch.pipeline().get(WarpedMinecraftEncoder.class) != null) {
+			return NettyUtil.getProtocol(this.ch.pipeline().get(WarpedMinecraftEncoder.class));
+		} else if (this.ch.pipeline().get(MinecraftDecoder.class) != null) {
+			return NettyUtil.getProtocol(this.ch.pipeline().get(MinecraftDecoder.class));
+		} else if (this.ch.pipeline().get(MinecraftEncoder.class) != null) {
+			return NettyUtil.getProtocol(this.ch.pipeline().get(MinecraftEncoder.class));
+		}
+		return Protocol.GAME;
+	}
+
+	@Override
 	public void setCompressionThreshold(int compressionThreshold) {
 		if(compressionThreshold != -1){
-			if (ch.pipeline().get(PacketCompressor.class) == null) 
-				addBefore(PipelineUtils.PACKET_ENCODER, "compress", new PacketCompressor());
-			if (ch.pipeline().get(PacketDecompressor.class) == null) 
+			if (this.ch.pipeline().get(PacketCompressor.class) == null) {
+				this.addBefore(PipelineUtils.PACKET_ENCODER, "compress", new PacketCompressor());
+			}
+			if (this.ch.pipeline().get(PacketDecompressor.class) == null) {
 				switch (ProxyType.getType()) {
 				case BUNGEECORD:
-					addBefore(PipelineUtils.PACKET_DECODER, "decompress", new PacketDecompressor());
+					this.addBefore(PipelineUtils.PACKET_DECODER, "decompress", new PacketDecompressor());
 					break;
 				case WATERFALL:
-					addBefore(PipelineUtils.PACKET_DECODER, "decompress", new PacketDecompressor(compressionThreshold));
+					this.addBefore(PipelineUtils.PACKET_DECODER, "decompress", new PacketDecompressor(compressionThreshold));
 					break;
 				default:
 					break;
 				}
+			}
 		}
 
 		if (compressionThreshold != -1) {
-			ch.pipeline().get(PacketCompressor.class).setThreshold(compressionThreshold);
+			this.ch.pipeline().get(PacketCompressor.class).setThreshold(compressionThreshold);
 		} else {
-			ch.pipeline().remove("compress");
-			ch.pipeline().remove("decompress");
+			this.ch.pipeline().remove("compress");
+			this.ch.pipeline().remove("decompress");
 		}
 	}
 
-}
-
-class EmptyChannelWrapper implements ChannelHandlerContext {
-	private RuntimeException createException(){
-		return new UnsupportedOperationException("Methode should be overwritten");
-	}
-	
 	@Override
-	public <T> Attribute<T> attr(AttributeKey<T> paramAttributeKey) {
-		throw createException();
-	}
+	public void setProtocol(Protocol protocol) {
+		if (this.ch.pipeline().get(WarpedMinecraftEncoder.class) != null) {
+			this.ch.pipeline().get(WarpedMinecraftEncoder.class).setProtocol(protocol);
+		} else if (this.ch.pipeline().get(MinecraftEncoder.class) != null) {
+			this.ch.pipeline().get(MinecraftEncoder.class).setProtocol(protocol);
+		}
 
-	@Override
-	public Channel channel() {
-		return null;
+		if (this.ch.pipeline().get(WarpedMinecraftDecoder.class) != null) {
+			this.ch.pipeline().get(WarpedMinecraftDecoder.class).setProtocol(protocol);
+		} else if (this.ch.pipeline().get(MinecraftDecoder.class) != null) {
+			this.ch.pipeline().get(MinecraftDecoder.class).setProtocol(protocol);
+		}
 	}
 
 	@Override
-	public EventExecutor executor() {
-		throw createException();
+	public void setVersion(int protocol) {
+		if (this.ch.pipeline().get(WarpedMinecraftEncoder.class) != null) {
+			this.ch.pipeline().get(WarpedMinecraftEncoder.class).setProtocolVersion(protocol);
+		} else if (this.ch.pipeline().get(MinecraftEncoder.class) != null) {
+			this.ch.pipeline().get(MinecraftEncoder.class).setProtocolVersion(protocol);
+		}
+
+		if (this.ch.pipeline().get(WarpedMinecraftDecoder.class) != null) {
+			this.ch.pipeline().get(WarpedMinecraftDecoder.class).setProtocolVersion(protocol);
+		} else if (this.ch.pipeline().get(MinecraftDecoder.class) != null) {
+			this.ch.pipeline().get(MinecraftDecoder.class).setProtocolVersion(protocol);
+		}
 	}
 
 	@Override
-	public String name() {
-		throw createException();
+	public void write(Object packet) {
+		if (!this.closed && (this.handler.isConnected || this.getProtocol() != Protocol.GAME)) {
+			if (packet instanceof PacketWrapper) {
+				((PacketWrapper) packet).setReleased(true);
+				this.ch.write(((PacketWrapper) packet).buf, this.ch.voidPromise());
+			} else {
+				this.ch.write(packet, this.ch.voidPromise());
+			}
+			this.ch.flush();
+		}
 	}
 
-	@Override
-	public ChannelHandler handler() {
-		throw createException();
-	}
-
-	@Override
-	public boolean isRemoved() {
-		throw createException();
-	}
-
-	@Override
-	public ChannelHandlerContext fireChannelRegistered() {
-		throw createException();
-	}
-
-	@Override
-	public ChannelHandlerContext fireChannelUnregistered() {
-		throw createException();
-	}
-
-	@Override
-	public ChannelHandlerContext fireChannelActive() {
-		throw createException();
-	}
-
-	@Override
-	public ChannelHandlerContext fireChannelInactive() {
-		throw createException();
-	}
-
-	@Override
-	public ChannelHandlerContext fireExceptionCaught(Throwable paramThrowable) {
-		throw createException();
-	}
-
-	@Override
-	public ChannelHandlerContext fireUserEventTriggered(Object paramObject) {
-		throw createException();
-	}
-
-	@Override
-	public ChannelHandlerContext fireChannelRead(Object paramObject) {
-		throw createException();
-	}
-
-	@Override
-	public ChannelHandlerContext fireChannelReadComplete() {
-		throw createException();
-	}
-
-	@Override
-	public ChannelHandlerContext fireChannelWritabilityChanged() {
-		throw createException();
-	}
-
-	@Override
-	public ChannelFuture bind(SocketAddress paramSocketAddress) {
-		throw createException();
-	}
-
-	@Override
-	public ChannelFuture connect(SocketAddress paramSocketAddress) {
-		throw createException();
-	}
-
-	@Override
-	public ChannelFuture connect(SocketAddress paramSocketAddress1, SocketAddress paramSocketAddress2) {
-		throw createException();
-	}
-
-	@Override
-	public ChannelFuture disconnect() {
-		throw createException();
-	}
-
-	@Override
-	public ChannelFuture close() {
-		throw createException();
-	}
-
-	@Override
-	public ChannelFuture deregister() {
-		throw createException();
-	}
-
-	@Override
-	public ChannelFuture bind(SocketAddress paramSocketAddress, ChannelPromise paramChannelPromise) {
-		throw createException();
-	}
-
-	@Override
-	public ChannelFuture connect(SocketAddress paramSocketAddress, ChannelPromise paramChannelPromise) {
-		throw createException();
-	}
-
-	@Override
-	public ChannelFuture connect(SocketAddress paramSocketAddress1, SocketAddress paramSocketAddress2, ChannelPromise paramChannelPromise) {
-		throw createException();
-	}
-
-	@Override
-	public ChannelFuture disconnect(ChannelPromise paramChannelPromise) {
-		throw createException();
-	}
-
-	@Override
-	public ChannelFuture close(ChannelPromise paramChannelPromise) {
-		throw createException();
-	}
-
-	@Override
-	public ChannelFuture deregister(ChannelPromise paramChannelPromise) {
-		throw createException();
-	}
-
-	@Override
-	public ChannelHandlerContext read() {
-		throw createException();
-	}
-
-	@Override
-	public ChannelFuture write(Object paramObject) {
-		throw createException();
-	}
-
-	@Override
-	public ChannelFuture write(Object paramObject, ChannelPromise paramChannelPromise) {
-		throw createException();
-	}
-
-	@Override
-	public ChannelHandlerContext flush() {
-		throw createException();
-	}
-
-	@Override
-	public ChannelFuture writeAndFlush(Object paramObject, ChannelPromise paramChannelPromise) {
-		throw createException();
-	}
-
-	@Override
-	public ChannelFuture writeAndFlush(Object paramObject) {
-		throw createException();
-	}
-
-	@Override
-	public ChannelPipeline pipeline() {
-		throw createException();
-	}
-
-	@Override
-	public ByteBufAllocator alloc() {
-		throw createException();
-	}
-
-	@Override
-	public ChannelPromise newPromise() {
-		throw createException();
-	}
-
-	@Override
-	public ChannelProgressivePromise newProgressivePromise() {
-		throw createException();
-	}
-
-	@Override
-	public ChannelFuture newSucceededFuture() {
-		throw createException();
-	}
-
-	@Override
-	public ChannelFuture newFailedFuture(Throwable paramThrowable) {
-		throw createException();
-	}
-
-	@Override
-	public ChannelPromise voidPromise() {
-		throw createException();
-	}
-
-	public <T> boolean hasAttr(AttributeKey<T> arg0) {
-		throw createException();
-	}
 }

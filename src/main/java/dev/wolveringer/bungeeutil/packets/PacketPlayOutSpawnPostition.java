@@ -16,10 +16,10 @@ public class PacketPlayOutSpawnPostition extends Packet implements PacketPlayOut
 	private BlockPosition loc;
 	@Override
 	public void read(PacketDataSerializer s) {
-		loc = s.readBlockPosition();
+		this.loc = s.readBlockPosition();
 	}
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeBlockPosition(loc);
+		s.writeBlockPosition(this.loc);
 	}
 }

@@ -7,29 +7,29 @@ public class TickedTextFormater extends TextFormater{
 
 	public TickedTextFormater(String raw, int ticks) {
 		super(raw);
-		t = ft = ticks;
-		now = super.getNextString();
-	}
-
-	public TickedTextFormater runTick() {
-		t--;
-		if(t <= 0){
-			t = ft;
-			now = super.getNextString();
-		}
-		return this;
+		this.t = this.ft = ticks;
+		this.now = super.getNextString();
 	}
 
 	public String getMessage() {
-		return now;
-	}
-	
-	public int getTickRate(){
-		return ft;
+		return this.now;
 	}
 
 	@Override
 	public String getNextString() {
 		throw new OperationNotSupportedException();
+	}
+
+	public int getTickRate(){
+		return this.ft;
+	}
+
+	public TickedTextFormater runTick() {
+		this.t--;
+		if(this.t <= 0){
+			this.t = this.ft;
+			this.now = super.getNextString();
+		}
+		return this;
 	}
 }

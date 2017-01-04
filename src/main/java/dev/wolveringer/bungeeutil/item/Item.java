@@ -109,7 +109,7 @@ public class Item{
 		this.amount = amount;
 		this.durability = damage;
 		if(data != null){
-			createData(data);
+			this.createData(data);
 			this.durability = data;
 		}
 		this.meta = MetaFactory.getItemMeta(this);
@@ -130,7 +130,7 @@ public class Item{
 		this.durability = stack.getDurability();
 		this.data = stack.getData();
 		this.tag = stack.tag;
-		this.meta = getItemMeta();
+		this.meta = this.getItemMeta();
 	}
 
 	/**
@@ -181,9 +181,9 @@ public class Item{
 
 	@SuppressWarnings("deprecation")
 	private void createData(final byte data) {
-		Material mat = Material.getMaterial(type);
+		Material mat = Material.getMaterial(this.type);
 		if(mat == null){
-			this.data = new MaterialData(type, data);
+			this.data = new MaterialData(this.type, data);
 		}else{
 			this.data = new MaterialData(data);
 		}
@@ -199,7 +199,7 @@ public class Item{
 		}
 
 		Item stack = (Item) obj;
-		return getAmount() == stack.getAmount() && isSimilar(stack);
+		return this.getAmount() == stack.getAmount() && this.isSimilar(stack);
 	}
 
 	/**
@@ -208,7 +208,7 @@ public class Item{
 	 * @return Amount of items in this stick
 	 */
 	public int getAmount() {
-		return amount;
+		return this.amount;
 	}
 
 	/**
@@ -217,12 +217,12 @@ public class Item{
 	 * @return MaterialData for this item
 	 */
 	public MaterialData getData() {
-		Material mat = getType();
-		if(data == null && mat != null){
-			data = new MaterialData(this.getDurability());
+		Material mat = this.getType();
+		if(this.data == null && mat != null){
+			this.data = new MaterialData(this.getDurability());
 		}
 
-		return data;
+		return this.data;
 	}
 
 	/**
@@ -231,7 +231,7 @@ public class Item{
 	 * @return Durability of this item
 	 */
 	public short getDurability() {
-		return durability;
+		return this.durability;
 	}
 
 	/**
@@ -250,7 +250,7 @@ public class Item{
 	 * @return The maximum you can stack this material to.
 	 */
 	public int getMaxStackSize() {
-		Material material = getType();
+		Material material = this.getType();
 		if(material != null){
 			return material.getMaxStackSize();
 		}
@@ -258,7 +258,7 @@ public class Item{
 	}
 
 	public NBTTagCompound getTag() {
-		return tag;
+		return this.tag;
 	}
 
 	/**
@@ -267,7 +267,7 @@ public class Item{
 	 * @return Type of the items in this stack
 	 */
 	public Material getType() {
-		return getType0(getTypeId());
+		return getType0(this.getTypeId());
 	}
 
 	/**
@@ -278,17 +278,17 @@ public class Item{
 	 */
 	@Deprecated
 	public int getTypeId() {
-		return type;
+		return this.type;
 	}
 
 	@Override
 	public final int hashCode() {
 		int hash = 1;
 
-		hash = hash * 31 + getTypeId();
-		hash = hash * 31 + getAmount();
-		hash = hash * 31 + (getDurability() & 0xffff);
-		hash = hash * 31 + (hasItemMeta() ? meta == null ? getItemMeta().hashCode() : meta.hashCode() : 0);
+		hash = hash * 31 + this.getTypeId();
+		hash = hash * 31 + this.getAmount();
+		hash = hash * 31 + (this.getDurability() & 0xffff);
+		hash = hash * 31 + (this.hasItemMeta() ? this.meta == null ? this.getItemMeta().hashCode() : this.meta.hashCode() : 0);
 
 		return hash;
 	}
@@ -299,7 +299,11 @@ public class Item{
 	 * @return Returns true if some meta data has been set for this item
 	 */
 	public boolean hasItemMeta() {
-		return !MetaFactory.equals(meta, null);
+		return !MetaFactory.equals(this.meta, null);
+	}
+
+	public boolean hasTag() {
+		return this.meta==null||this.meta.hasTag();
 	}
 
 	/**
@@ -317,23 +321,23 @@ public class Item{
 		if(stack == this){
 			return true;
 		}
-		return getTypeId() == stack.getTypeId() && getDurability() == stack.getDurability() && MetaFactory.equals(getItemMeta(), stack.getItemMeta());
+		return this.getTypeId() == stack.getTypeId() && this.getDurability() == stack.getDurability() && MetaFactory.equals(this.getItemMeta(), stack.getItemMeta());
 	}
 
 	public Map<String, Object> serialize() {
 		Map<String, Object> result = new LinkedHashMap<String, Object>();
 
-		result.put("type", getType().name());
+		result.put("type", this.getType().name());
 
-		if(getDurability() != 0){
-			result.put("damage", getDurability());
+		if(this.getDurability() != 0){
+			result.put("damage", this.getDurability());
 		}
 
-		if(getAmount() != 1){
-			result.put("amount", getAmount());
+		if(this.getAmount() != 1){
+			result.put("amount", this.getAmount());
 		}
 
-		ItemMeta meta = getItemMeta();
+		ItemMeta meta = this.getItemMeta();
 		if(!MetaFactory.equals(meta, null)){
 			result.put("meta", meta);
 		}
@@ -357,7 +361,7 @@ public class Item{
 	 *            New MaterialData for this item
 	 */
 	public void setData(MaterialData data) {
-		getType();
+		this.getType();
 		this.data = data;
 	}
 
@@ -385,7 +389,7 @@ public class Item{
 	 */
 	@SuppressWarnings("deprecation")
 	public void setType(Material type) {
-		setTypeId(type.getId());
+		this.setTypeId(type.getId());
 	}
 
 	/**
@@ -400,15 +404,11 @@ public class Item{
 	@Deprecated
 	public void setTypeId(int type) {
 		this.type = type;
-		createData((byte) 0);
+		this.createData((byte) 0);
 	}
 
 	@Override
 	public String toString() {
-		return "Item@" + System.identityHashCode(this) + "[amount=" + amount + ", data=" + data + ", durability=" + durability + ", meta=" + meta + ", tag=" + tag + ", type=" + type + "]";
-	}
-
-	public boolean hasTag() {
-		return meta==null||meta.hasTag();
+		return "Item@" + System.identityHashCode(this) + "[amount=" + this.amount + ", data=" + this.data + ", durability=" + this.durability + ", meta=" + this.meta + ", tag=" + this.tag + ", type=" + this.type + "]";
 	}
 }

@@ -21,20 +21,29 @@ public enum BlockFace {
     WEST_SOUTH_WEST(WEST, SOUTH_WEST),
     SELF(0, 0, 0);
 
+    public static BlockFace getBlockFace(int modx,int mody,int modz){
+    	for(BlockFace f : values()) {
+			if(f.getModX() == modx && f.getModY() == mody && f.getModZ() == modz) {
+				return f;
+			}
+		}
+    	return null;
+    }
     private final int modX;
     private final int modY;
-    private final int modZ;
 
-    private BlockFace(final int modX, final int modY, final int modZ) {
-        this.modX = modX;
-        this.modY = modY;
-        this.modZ = modZ;
-    }
+    private final int modZ;
 
     private BlockFace(final BlockFace face1, final BlockFace face2) {
         this.modX = face1.getModX() + face2.getModX();
         this.modY = face1.getModY() + face2.getModY();
         this.modZ = face1.getModZ() + face2.getModZ();
+    }
+
+    private BlockFace(final int modX, final int modY, final int modZ) {
+        this.modX = modX;
+        this.modY = modY;
+        this.modZ = modZ;
     }
 
     /**
@@ -43,7 +52,7 @@ public enum BlockFace {
      * @return Amount of X-coordinates to modify
      */
     public int getModX() {
-        return modX;
+        return this.modX;
     }
 
     /**
@@ -52,7 +61,7 @@ public enum BlockFace {
      * @return Amount of Y-coordinates to modify
      */
     public int getModY() {
-        return modY;
+        return this.modY;
     }
 
     /**
@@ -61,7 +70,7 @@ public enum BlockFace {
      * @return Amount of Z-coordinates to modify
      */
     public int getModZ() {
-        return modZ;
+        return this.modZ;
     }
 
     public BlockFace getOppositeFace() {
@@ -125,12 +134,5 @@ public enum BlockFace {
         }
 
         return BlockFace.SELF;
-    }
-    
-    public static BlockFace getBlockFace(int modx,int mody,int modz){
-    	for(BlockFace f : values())
-    		if(f.getModX() == modx && f.getModY() == mody && f.getModZ() == modz)
-    			return f;
-    	return null;
     }
 }

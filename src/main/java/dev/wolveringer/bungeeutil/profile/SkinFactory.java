@@ -21,6 +21,7 @@ public class SkinFactory {
 	private static final String PROFILE_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";
 
 	private static LoadingCache<UUID, Skin> profileCache = CacheBuilder.newBuilder().maximumSize(500).expireAfterWrite(4, TimeUnit.HOURS).build(new CacheLoader<UUID, Skin>() {
+		@Override
 		public Skin load(UUID name) throws Exception {
 			Skin skin = new SteveSkin();
 			try{
@@ -32,10 +33,51 @@ public class SkinFactory {
 		};
 	});
 
+	public static Skin createEmptySkin(){
+		return Skin.createEmptySkin();
+	}
+
+	public static Skin createSkin(String rawValue,String signature){
+		JSONObject o = new JSONObject();
+		JSONArray props = new JSONArray();
+		JSONObject prop = new JSONObject();
+		prop.put("name", "textures");
+		prop.put("value", rawValue);
+		prop.put("signature", signature);
+		props.put(prop);
+		o.put("properties", props);
+		return new Skin(o);
+	}
+
+	@Deprecated
+	public static Skin getSkin(String name) {
+		try{
+			return getSkin(UUIDFetcher.getUUIDOf(name));
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		return Skin.createEmptySkin();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static void getSkin(final String name, final OperationCalback<Skin>... c) {
+		BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), new Runnable() {
+			@SuppressWarnings({ "rawtypes" })
+			@Override
+			public void run() {
+				Skin s = getSkin(name);
+				for(OperationCalback t : c) {
+					t.done(s);
+				}
+			}
+		});
+	}
+
 	@Deprecated
 	public static Skin getSkin(UUID uuid) {
-		if(uuid == null)
+		if(uuid == null) {
 			throw new IllegalArgumentException("UUID cant be null");
+		}
 		try{
 			Skin s = profileCache.get(uuid);
 			if(s instanceof SteveSkin){
@@ -56,47 +98,9 @@ public class SkinFactory {
 			@Override
 			public void run() {
 				Skin s = getSkin(uuid);
-				for(OperationCalback t : c)
+				for(OperationCalback t : c) {
 					t.done(s);
-			}
-		});
-	}
-	
-	public static Skin createEmptySkin(){
-		return Skin.createEmptySkin();
-	}
-	
-	public static Skin createSkin(String rawValue,String signature){
-		JSONObject o = new JSONObject();
-		JSONArray props = new JSONArray();
-		JSONObject prop = new JSONObject();
-		prop.put("name", "textures");
-		prop.put("value", rawValue);
-		prop.put("signature", signature);
-		props.put(prop);
-		o.put("properties", props);
-		return new Skin(o);
-	}
-	
-	@Deprecated
-	public static Skin getSkin(String name) {
-		try{
-			return getSkin(UUIDFetcher.getUUIDOf(name));
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		return Skin.createEmptySkin();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static void getSkin(final String name, final OperationCalback<Skin>... c) {
-		BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), new Runnable() {
-			@SuppressWarnings({ "rawtypes" })
-			@Override
-			public void run() {
-				Skin s = getSkin(name);
-				for(OperationCalback t : c)
-					t.done(s);
+				}
 			}
 		});
 	}
@@ -108,13 +112,13 @@ public class SkinFactory {
 		}
 		return new Skin(new JSONObject(s));
 	}
-	
+
 	public static void main(String[] args) {
 		Skin s = Skin.createEmptySkin();
 		s.setRawData("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjdiYmQwYjI5MTFjOTZiNWQ4N2IyZGY3NjY5MWE1MWI4YjEyYzZmZWZkNTIzMTQ2ZDhhYzVlZjFiOGVlIn19fQ==");
 		s.setSkin(SkinFactory.getSkin("WolverinEN").getSkinUrl());
 		s.setUUID(UUID.randomUUID());
-		
+
 		System.out.print(s.getRawData());
 	}
 }

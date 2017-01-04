@@ -22,15 +22,15 @@ public class PacketPlayOutTitle extends Packet{
 		RESET;
 	}
 	private static final Action[] oldValues = {Action.SET_TITLE, Action.SET_SUBTITLE, Action.UPDATE_TIMINGS, Action.HIDE, Action.RESET};
-	
+
 	private Action action;
 	private String title;
 	private int fadeIn;
 	private int stay;
 	private int fadeOut;
-	
+
 	private Action getAction(int index){
-		switch (getBigVersion()) {
+		switch (this.getBigVersion()) {
 		case v1_11:
 			return Action.values()[index];
 		case v1_10:
@@ -41,35 +41,37 @@ public class PacketPlayOutTitle extends Packet{
 			return null;
 		}
 	}
-	
+
 	private int getActionId(Action action){
-		switch (getBigVersion()) {
+		switch (this.getBigVersion()) {
 		case v1_11:
 			return action.ordinal();
 		case v1_10:
 		case v1_9:
 		case v1_8:
-			for(int i = 0;i<oldValues.length;i++)
-				if(oldValues[i] == action)
+			for(int i = 0;i<oldValues.length;i++) {
+				if(oldValues[i] == action) {
 					return i;
+				}
+			}
 		default:
 			throw new NullPointerException("Cant find action "+action);
 		}
 	}
-	
+
 	@Override
 	public void read(PacketDataSerializer s) {
-		action = getAction(s.readVarInt());
-		switch (action) {
+		this.action = this.getAction(s.readVarInt());
+		switch (this.action) {
 		case SET_TITLE:
 		case SET_SUBTITLE:
 		case ACTION_BAR:
-			title = s.readString(-1);
+			this.title = s.readString(-1);
 			break;
 		case UPDATE_TIMINGS:
-			fadeIn = s.readInt();
-			stay = s.readInt();
-			fadeOut = s.readInt();
+			this.fadeIn = s.readInt();
+			this.stay = s.readInt();
+			this.fadeOut = s.readInt();
 		case HIDE:
 		case RESET:
 			break;
@@ -80,17 +82,17 @@ public class PacketPlayOutTitle extends Packet{
 
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeVarInt(getActionId(action));
-		switch (action) {
+		s.writeVarInt(this.getActionId(this.action));
+		switch (this.action) {
 		case SET_SUBTITLE:
 		case SET_TITLE:
 		case ACTION_BAR:
-			s.writeString(title);
+			s.writeString(this.title);
 			break;
 		case UPDATE_TIMINGS:
-			s.writeInt(fadeIn);
-			s.writeInt(stay);
-			s.writeInt(fadeOut);
+			s.writeInt(this.fadeIn);
+			s.writeInt(this.stay);
+			s.writeInt(this.fadeOut);
 			break;
 		default:
 			break;

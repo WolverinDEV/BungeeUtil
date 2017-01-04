@@ -19,31 +19,50 @@ public class HastebinDocument {
 	private ArrayList<String> lines = new ArrayList<>();
 
 	public HastebinDocument(String identifier) {
-		if(identifier.contains("/"))
+		if(identifier.contains("/")) {
 			this.identifier = identifier.substring(identifier.lastIndexOf("/")+1);
-		else
+		} else {
 			this.identifier = identifier;
+		}
 	}
-	 public void load() {
+	 private HttpURLConnection createUrlConnection(URL url) throws IOException {
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		connection.setConnectTimeout(15000);
+		connection.setReadTimeout(15000);
+		connection.setDoOutput(true);
+		connection.setUseCaches(false);
+		connection.setRequestMethod("GET");
+		return connection;
+	}
+
+	public String getIdentifier() {
+		return this.identifier;
+	}
+
+	public ArrayList<String> getLines() {
+		return this.lines;
+	}
+	public void load() {
 		try{
-			lines = new ArrayList<>(Arrays.asList(performGetRequest(new URL(BASE_URL + identifier)).split("\n")));
-			if(lines.size() == 1)
-				if(lines.get(0).startsWith("{")){
+			this.lines = new ArrayList<>(Arrays.asList(this.performGetRequest(new URL(BASE_URL + this.identifier)).split("\n")));
+			if(this.lines.size() == 1) {
+				if(this.lines.get(0).startsWith("{")){
 					try{
-						JSONObject obj = new JSONObject(lines.get(0));
-						if(obj.has("message"))
+						JSONObject obj = new JSONObject(this.lines.get(0));
+						if(obj.has("message")) {
 							throw new DocumentNotFoundException(obj.getString("message"));
+						}
 					}catch (JSONException e){
 						e.printStackTrace();
 					}
 				}
+			}
 		}catch (IOException ex){
 			ex.printStackTrace();
 		}
 	}
-
 	private String performGetRequest(URL url) throws IOException {
-		HttpURLConnection connection = createUrlConnection(url);
+		HttpURLConnection connection = this.createUrlConnection(url);
 		InputStream inputStream = null;
 		try{
 			inputStream = connection.getInputStream();
@@ -60,21 +79,5 @@ public class HastebinDocument {
 		}finally{
 			IOUtils.closeQuietly(inputStream);
 		}
-	}
-
-	private HttpURLConnection createUrlConnection(URL url) throws IOException {
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		connection.setConnectTimeout(15000);
-		connection.setReadTimeout(15000);
-		connection.setDoOutput(true);
-		connection.setUseCaches(false);
-		connection.setRequestMethod("GET");
-		return connection;
-	}
-	public ArrayList<String> getLines() {
-		return this.lines;
-	}
-	public String getIdentifier() {
-		return this.identifier;
 	}
 }
