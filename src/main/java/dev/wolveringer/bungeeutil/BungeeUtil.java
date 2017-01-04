@@ -155,6 +155,7 @@ public final class BungeeUtil {
 					}
 					catch (InterruptedException e) { }
 					if (!active) return;
+					System.runFinalization();
 					System.gc();
 				}
 			});

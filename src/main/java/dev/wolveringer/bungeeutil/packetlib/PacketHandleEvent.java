@@ -31,10 +31,6 @@ public class PacketHandleEvent<T extends Packet> extends Event implements Cancel
 		this.cancelled = c;
 	}
 
-	public void setPacket(T p) {
-		this.packet = p;
-	}
-
 	/**
 	 * {@code The player change dont will change the destination of the packet!!!}
 	 */

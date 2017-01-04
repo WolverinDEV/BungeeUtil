@@ -32,7 +32,7 @@ public abstract class AbstractPacketCreator {
 		int x = ((version.ordinal() & 0xFF) << 16) | ((p.ordinal() & 0x0F) << 12) | ((d.ordinal() & 0x0F) << 8) | (id & 0xFF);
 		return x;
 	}
-
+	
 	public ProtocollVersion getPacketVersion(int base) {
 		return ProtocollVersion.values()[((int) (base >> 16)) & 0xFF];
 	}
@@ -191,4 +191,6 @@ public abstract class AbstractPacketCreator {
 	public abstract int getPacketId(ProtocollVersion version, Class<? extends Packet> clazz);
 
 	public abstract List<Class<? extends Packet>> getRegisteredPackets();
+	
+	public abstract <T extends Packet> void releasePacket(T obj);
 }

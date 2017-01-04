@@ -4,7 +4,10 @@ import io.netty.buffer.ByteBuf;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+
+import org.junit.internal.ExactComparisonCriteria;
 
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
@@ -12,6 +15,7 @@ import dev.wolveringer.bungeeutil.CostumPrintStream;
 import dev.wolveringer.bungeeutil.packetlib.reader.ByteBuffCreator;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.creator.AbstractPacketCreator;
+import dev.wolveringer.bungeeutil.packets.creator.CachedPacketCreator;
 import dev.wolveringer.bungeeutil.packets.creator.NormalPacketCreator;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.player.ClientVersion;
@@ -51,7 +55,7 @@ public abstract class Packet {
 	
 	public static AbstractPacketCreator getCreator() {
 		if (creator == null) {
-			creator = new NormalPacketCreator();
+			creator = new CachedPacketCreator(new NormalPacketCreator(), 12);
 		}
 		return creator;
 	}
@@ -203,10 +207,29 @@ public abstract class Packet {
 	private transient ClientVersion version = ClientVersion.UnderknownVersion;
 	private ClientVersion readedVersion = ClientVersion.UnderknownVersion;
 	private ClientVersion writtenVersion = ClientVersion.UnderknownVersion;
+	private AtomicInteger usecount = new AtomicInteger();
+	
+	public void use(){
+		usecount.addAndGet(1);
+	}
+	
+	public boolean isUsed(){
+		return usecount.get() > 0;
+	}
+	
+	public void unuse(){
+		if(usecount.addAndGet(-1) == 0){
+			Packet.getCreator().releasePacket(this);
+		}
+	}
 	
 	@Deprecated
-	public Packet setCompressedId(int id) {
+	public Packet initClass(int id) {
 		this.compressedId = id;
+		this.version = ClientVersion.UnderknownVersion;
+		this.readedVersion = ClientVersion.UnderknownVersion;
+		this.writtenVersion = ClientVersion.UnderknownVersion;
+		this.usecount = new AtomicInteger(0);
 		return this;
 	}
 	
@@ -220,6 +243,16 @@ public abstract class Packet {
 	
 	public Packet(byte id) {
 		this();
+	}
+	
+	public int getPacketId(){
+		if (compressedId == -1) compressedId = getPacketId(version.getProtocollVersion(), this.getClass());
+		return getPacketId(compressedId);	
+	}
+	
+	public Direction getDirection(){
+		if (compressedId == -1) compressedId = getPacketId(version.getProtocollVersion(), this.getClass());
+		return getDirection(compressedId);
 	}
 	
 	public Protocol getProtocol() {

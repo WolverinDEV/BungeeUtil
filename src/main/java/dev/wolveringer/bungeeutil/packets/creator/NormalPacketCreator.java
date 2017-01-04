@@ -75,10 +75,27 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		return registerPackets;
 	}
 	
+	protected Packet getPacket0(int compressed,Player p, ByteBuf b){
+		PacketHolder<?> cons = packetsId[compressed];
+		if(cons == null)
+			return null;
+		try {
+			Packet packet = cons.newInstance();
+			if (p == null || p.getVersion() == null){
+				BungeeUtil.debug("Version of '"+(p == null ? "<Null client>" : p.getName())+"' is undefined");
+				return packet.initClass(compressed).load(b, ClientVersion.UnderknownVersion);
+			}
+			else return packet.initClass(compressed).load(b, p.getVersion());
+		}
+		catch (Exception e) {
+			throw ExceptionUtils.createRuntimeException(ExceptionUtils.setExceptionMessage(e, "Packet error (Version: " + (p == null ? "unknown" : p.getVersion()) + ", Class: " + (cons == null || cons.getConstuctor() == null ? "null" : cons.getConstuctor().getDeclaringClass().getName()) + ", Id: 0x"+Integer.toHexString(getPacketId(compressed)).toUpperCase()+") -> "+e.getMessage()));
+		}
+	}
+	
 	public Packet getPacket0(ProtocollVersion version,Protocol protocol, Direction d, Integer id, ByteBuf b, Player p) {
 		int compressed = calculate(version, protocol, d, id);
-		PacketHolder<?> cons = null;
-		if ((cons = packetsId[compressed]) == null) {
+		Packet packet = null;
+		if ((packet = getPacket0(compressed, p, b)) == null) {
 			if(version.getBasedVersion().getProtocollVersion() == version){ //Fallback (based version) (1.8-1.9)
 				return null;
 			}
@@ -86,19 +103,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 				return getPacket0(version.getBasedVersion().getProtocollVersion(), protocol, d, id, b, p);
 			}
 		}
-		if(cons.getConstuctor() == null)
-			return null;
-		try {
-			Packet packet = cons.newInstance();
-			if (p == null || p.getVersion() == null){
-				BungeeUtil.debug("Version of '"+(p == null ? "<Null client>" : p.getName())+"' is undefined");
-				return packet.setCompressedId(compressed).load(b, ClientVersion.UnderknownVersion);
-			}
-			else return packet.setCompressedId(compressed).load(b, p.getVersion());
-		}
-		catch (Exception e) {
-			throw ExceptionUtils.createRuntimeException(ExceptionUtils.setExceptionMessage(e, "Packet error (Version: " + (p == null ? "unknown" : p.getVersion()) + ", Readed version: "+version+", Class: " + (cons == null || cons.getConstuctor() == null ? "null" : cons.getConstuctor().getDeclaringClass().getName()) + ", Id: 0x"+Integer.toHexString(id).toUpperCase()+") -> "+e.getMessage()));
-		}
+		return packet;
 	}
 	
 	public Packet getPacket1(ProtocollVersion version,ProtocollVersion orginalVersion,Protocol protocol, Direction d, Integer id, ByteBuf b, Player p) {
@@ -134,4 +139,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 	public int countPackets() {
 		return getRegisteredPackets().size();
 	}
+	
+	@Override
+	public <T extends Packet> void releasePacket(T obj) {}
 }

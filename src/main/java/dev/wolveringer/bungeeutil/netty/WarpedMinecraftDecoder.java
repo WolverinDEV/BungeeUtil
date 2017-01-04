@@ -115,10 +115,13 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 			try{
 				Profiler.decoder_timings.start(PACKET_CREATION);
 				packet = Packet.getPacket(clientVersion.getProtocollVersion(), getProtocol(), direction, in, initHandler.getPlayer());
+				
 				Profiler.decoder_timings.stop(PACKET_CREATION);
 				if(packet == null){
 					Profiler.decoder_timings.stop(PACKET_CREATION);
 				}else{
+					System.out.println("Decode");
+					packet.use();
 					Profiler.decoder_timings.start(HANDLE_GENERAL);
 					Profiler.decoder_timings.start(HANDLE_INTERN);
 					PacketHandleEvent<? extends Packet> e = new PacketHandleEvent(packet, initHandler.getPlayer());
@@ -132,11 +135,13 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 						}else{
 							Profiler.decoder_timings.stop(HANDLE_INTERN);
 							Profiler.decoder_timings.stop(HANDLE_GENERAL);
+							packet.unuse();
 							return;
 						}
 					}else{
 						Profiler.decoder_timings.stop(HANDLE_INTERN);
 						Profiler.decoder_timings.stop(HANDLE_GENERAL);
+						packet.unuse();
 						return;
 					}
 				}
@@ -172,6 +177,9 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 	
 			Protocol.DirectionData prot = isServer() ? this.getProtocol().TO_SERVER : this.getProtocol().TO_CLIENT;
 			ByteBuf copy = packet == null ? in.copy() : packet.writeToByteBuff(ByteBuffCreator.createByteBuff(),clientVersion);
+			if(packet != null)
+				packet.unuse();
+			
 			try{
 				int packetId = DefinedPacket.readVarInt(in);
 				DefinedPacket bungeePacket = null;
@@ -205,8 +213,7 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 			}
 			packet = null;
 		}catch(Exception e){
-			if(initHandler.isConnected)
-				e.printStackTrace();
+			BungeeUtil.debug(e, "An error occurent while decoding a packet");
 		}
 		Profiler.decoder_timings.stop(DECODING);
 	}

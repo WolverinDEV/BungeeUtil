@@ -75,6 +75,7 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 
 		Profiler.encoder_timings.start(PACKET_CREATION);
 		Packet packet = Packet.getPacket(clientVersion.getProtocollVersion(),protocoll, Direction.TO_CLIENT, encodedBuffer, initHandler.getPlayer());
+		
 		Profiler.encoder_timings.stop(PACKET_CREATION);
 		if(packet == null){
 			ByteBuffCreator.copy(encodedBuffer, out);
@@ -82,6 +83,8 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 			Profiler.encoder_timings.stop(HANDLE_GENERAL);
 			return;
 		}
+		
+		packet.use();
 		encodedBuffer.release();
 		
 		
@@ -100,6 +103,7 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 				Profiler.encoder_timings.stop(WRITE_BUFF);
 			}
 		}
+		packet.unuse();
 		Profiler.encoder_timings.stop(HANDLE_GENERAL);
 	}
 	
