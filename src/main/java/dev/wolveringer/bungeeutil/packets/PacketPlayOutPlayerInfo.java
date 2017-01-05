@@ -32,8 +32,6 @@ public class PacketPlayOutPlayerInfo extends Packet implements PacketPlayOut {
 	private EnumPlayerInfoAction action;
 	private final List<PlayerInfoData> data = Lists.newArrayList();
 
-	public boolean profile = true;
-
 	public PacketPlayOutPlayerInfo(EnumPlayerInfoAction paramEnumPlayerInfoAction, PlayerInfoData... player) {
 		this.action = paramEnumPlayerInfoAction;
 		for (PlayerInfoData localEntityPlayer : player) {

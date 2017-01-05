@@ -64,6 +64,12 @@ public class FieldProcessing<T> {
 				return true;
 			});
 		}
+		if(field.getType().isAssignableFrom(Boolean.class) || field.getType().isAssignableFrom(boolean.class)) {
+			return new CallableFieldProcessing(clazz, field, (obj)->{
+				field.setBoolean(obj, false);
+				return true;
+			});
+		}
 		return new CallableFieldProcessing(clazz, field, (obj)->{
 			field.set(obj, null);
 			return true;
