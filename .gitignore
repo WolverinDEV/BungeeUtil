@@ -2,6 +2,6 @@
 /target/
 /bin/
 .settings/
-.classpath
-.project
+#.classpath
+#.project
 dependecy-reduced-pom.xml
