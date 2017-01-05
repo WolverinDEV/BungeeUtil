@@ -84,12 +84,22 @@ public class CachedPacketCreator extends AbstractPacketCreator {
 
 		}
 	};
+	
+	private Runnable cleanupWorker = () -> {
+		while (true) {
+			try { Thread.sleep(2*60*1000); } catch(Exception e){}
+			synchronized (newPackets) {
+				newPackets.clear(); //Cleanup
+			}
+		}
+	};
 
 	public CachedPacketCreator(AbstractPacketCreator handle, int threads) {
 		this.handle = handle;
 		for(int i = 0;i<threads;i++) {
 			this.threads.add(new Thread(this.processingWorker));
 		}
+		this.threads.add(new Thread(this.cleanupWorker));
 
 		for(Thread t : this.threads) {
 			t.start();
