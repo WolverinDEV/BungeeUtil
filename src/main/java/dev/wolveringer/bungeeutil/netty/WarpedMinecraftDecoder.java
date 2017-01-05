@@ -4,6 +4,7 @@ import java.util.List;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
+import static dev.wolveringer.bungeeutil.i18n.tr;
 import dev.wolveringer.bungeeutil.packetlib.PacketHandleEvent;
 import dev.wolveringer.bungeeutil.packetlib.PacketLib;
 import dev.wolveringer.bungeeutil.packetlib.handler.MainPacketHandler;
@@ -13,8 +14,8 @@ import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
 import dev.wolveringer.bungeeutil.statistics.profiler.Profiler;
 import dev.wolveringer.bungeeutil.system.ProxyType;
-import dev.wolveringer.bungeeutil.translation.Messages;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,13 +39,13 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 
 	static {
 		BungeeUtil.debug("Loading WarpedMinecraftDecoder timings translations");
-		DECODING = Messages.getString("network.timings.decoder.decoding");
-		BUNGEE_WRITE = Messages.getString("network.timings.decoder.create.bungeepacket");
-		PACKET_CREATION = Messages.getString("network.timings.decoder.create.packet");
-		HANDLE_GENERAL = Messages.getString("network.timings.decoder.handle");
-		HANDLE_INTERN = Messages.getString("network.timings.decoder.handle.intern");
-		HANDLE_EXTERN = Messages.getString("network.timings.decoder.handle.extern");
-		WRITE_BUFF = Messages.getString("network.timings.decoder.write.writeNewByteBuff");
+		DECODING = tr("network.timings.decoder.decoding");
+		BUNGEE_WRITE = tr("network.timings.decoder.create.bungeepacket");
+		PACKET_CREATION = tr("network.timings.decoder.create.packet");
+		HANDLE_GENERAL = tr("network.timings.decoder.handle");
+		HANDLE_INTERN = tr("network.timings.decoder.handle.intern");
+		HANDLE_EXTERN = tr("network.timings.decoder.handle.extern");
+		WRITE_BUFF = tr("network.timings.decoder.write.writeNewByteBuff");
 	}
 
 	@Getter
@@ -130,7 +131,15 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 						System.err.println("-----------------------------------------------------------------------------------------------");
 					}
 				}
+				
+				BungeeUtil.debug("");
+				BungeeUtil.debug("Having an exception while decoding a packet!");
 				BungeeUtil.debug(e);
+				BungeeUtil.debug("Buffer contains:");
+				BungeeUtil.debug(ByteBufUtil.prettyHexDump(in.resetReaderIndex()));
+				BungeeUtil.debug("");
+				in.skipBytes(in.readableBytes());
+				
 				if(!this.initHandler.isConnected) {
 					return;
 				}

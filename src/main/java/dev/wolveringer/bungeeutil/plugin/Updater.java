@@ -167,7 +167,7 @@ public class Updater {
 	private int downloadUpdate(String url, File targetFile) {
 		BigInteger errorMask = new BigInteger("0");
 		errorMask.setBit(8);
-		BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Updating from "+this.getCurrentVersion()+" to "+this.getNewestVersion());
+		BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Updating from "+this.getCurrentVersion().version+" to "+this.getNewestVersion().version);
 		BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Starting to download the update ("+url+") to "+targetFile.getAbsolutePath());
 		programm:
 		try {
@@ -185,11 +185,11 @@ public class Updater {
 				} else {
 					fout = new FileOutputStream(df = targetFile);
 				}
-				final byte data[] = new byte[1024];
+				final byte data[] = new byte[Configuration.getLoadingBufferSize()];
 				int count;
 				int readed = 0;
 				while (true) {
-					count = in.read(data, 0, 1024);
+					count = in.read(data, 0, data.length);
 					if (count == -1) {
 						break;
 					}
@@ -237,13 +237,13 @@ public class Updater {
 				}
 				FileInputStream fis = new FileInputStream(df);
 				FileOutputStream fos = new FileOutputStream(targetFile);
-				while ((count = fis.read(data, 0, 1024)) != -1) {
+				while ((count = fis.read(data, 0, data.length)) != -1) {
 					fos.write(data, 0, count);
 				}
 				fis.close();
 				fos.close();
 				if (deleteOld && !df.delete()) {
-					BungeeUtil.getInstance().sendMessage(ChatColor.GOLD + "Cant delte cache file!");
+					BungeeUtil.getInstance().sendMessage(ChatColor.GOLD + "Cant delete the cache file!");
 				}
 				BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Restarting bungeecord!");
 				BungeeUtil.getInstance().setInformation(ChatColor.GREEN + "Update installed!");
@@ -271,9 +271,6 @@ public class Updater {
 	}
 
 	public Version getCurrentVersion(){
-		if(Main.getMain() == null) {
-			return new Version("2.0-SNAPSHOT");
-		}
 		return new Version(Main.getMain().getDescription().getVersion());
 	}
 

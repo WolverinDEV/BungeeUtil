@@ -1,6 +1,7 @@
 package dev.wolveringer.bungeeutil.netty;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
+import dev.wolveringer.bungeeutil.i18n;
 import dev.wolveringer.bungeeutil.packetlib.PacketHandleEvent;
 import dev.wolveringer.bungeeutil.packetlib.PacketLib;
 import dev.wolveringer.bungeeutil.packetlib.handler.MainPacketHandler;
@@ -9,7 +10,6 @@ import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
 import dev.wolveringer.bungeeutil.statistics.profiler.Profiler;
-import dev.wolveringer.bungeeutil.translation.Messages;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -28,11 +28,11 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 	private final static String WRITE_BUFF;
 	static {
 		BungeeUtil.debug("Loading WarpedMinecraftEncoder timings translations");
-		PACKET_CREATION = Messages.getString("network.timings.encoder.create.packet");
-		HANDLE_GENERAL = Messages.getString("network.timings.encoder.handle");
-		HANDLE_INTERN = Messages.getString("network.timings.encoder.handle.intern");
-		HANDLE_EXTERN = Messages.getString("network.timings.encoder.handle.extern");
-		WRITE_BUFF = Messages.getString("network.timings.encoder.write.writeNewByteBuff");
+		PACKET_CREATION = i18n.getString("network.timings.encoder.create.packet");
+		HANDLE_GENERAL = i18n.getString("network.timings.encoder.handle");
+		HANDLE_INTERN = i18n.getString("network.timings.encoder.handle.intern");
+		HANDLE_EXTERN = i18n.getString("network.timings.encoder.handle.extern");
+		WRITE_BUFF = i18n.getString("network.timings.encoder.write.writeNewByteBuff");
 	}
 
 	@Getter

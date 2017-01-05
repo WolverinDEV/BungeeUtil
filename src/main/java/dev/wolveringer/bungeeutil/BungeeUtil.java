@@ -6,6 +6,7 @@ import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static dev.wolveringer.bungeeutil.i18n.tr;
 import dev.wolveringer.bungeeutil.chat.AnsiColorFormater;
 import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.commands.BungeeTimings;

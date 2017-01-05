@@ -47,7 +47,7 @@ public class Main extends Plugin {
 		}
 
 		Configuration.init();
-		BungeeUtil.getInstance().sendMessage(ChatColor.GRAY+"Minecraft proxy type: "+ProxyType.getType().toString());
+		BungeeUtil.getInstance().sendMessage(ChatColor.GRAY+"Detected Minecraft proxy type: "+ProxyType.getType().toString());
 		BungeeUtil.getInstance().setInformation("Loading update data");
 		try {
 			this.updater = new Updater("https://raw.githubusercontent.com/WolverinDEV/BungeeUtil/jars/versions.json");

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.List;
 
 import dev.wolveringer.bungeeutil.AsyncCatcher.AsyncCatcherMode;
-import dev.wolveringer.bungeeutil.translation.Messages;
 import dev.wolveringer.configuration.file.YamlConfiguration;
 
 public class Configuration {
@@ -43,12 +42,12 @@ public class Configuration {
 
 	@SuppressWarnings("deprecation")
 	public static void init(){
-		conf = YamlConfiguration.loadConfiguration(new File(BungeeUtil.getPluginInstance().getDataFolder().getParentFile().getAbsolutePath()+"/BungeeUtil/"+Messages.getString("configuration.name")));
-		conf.setDefaults(YamlConfiguration.loadConfiguration(Configuration.class.getResourceAsStream("/"+Messages.getString("configuration.name"))));
+		conf = YamlConfiguration.loadConfiguration(new File(BungeeUtil.getPluginInstance().getDataFolder().getParentFile().getAbsolutePath()+"/BungeeUtil/"+i18n.getString("configuration.name")));
+		conf.setDefaults(YamlConfiguration.loadConfiguration(Configuration.class.getResourceAsStream("/"+i18n.getString("configuration.name"))));
 		conf.options().copyHeader(true);
 		conf.options().copyDefaults(true);
 		try{
-			conf.save(new File(BungeeUtil.getPluginInstance().getDataFolder().getParentFile().getAbsolutePath()+"/BungeeUtil/"+Messages.getString("configuration.name")));
+			conf.save(new File(BungeeUtil.getPluginInstance().getDataFolder().getParentFile().getAbsolutePath()+"/BungeeUtil/"+i18n.getString("configuration.name")));
 		}catch (IOException ex){
 			ex.printStackTrace();
 		}
@@ -81,10 +80,10 @@ public class Configuration {
 		return conf.getBoolean("terminal.colored");
 	}
 	public static boolean isTimingsActive(){
-		return conf.getBoolean(Messages.getString("configuration.timings"));
+		return conf.getBoolean(i18n.getString("configuration.timings"));
 	}
 	public static boolean isUpdaterActive(){
-		return conf.getBoolean(Messages.getString("configuration.updater"));
+		return conf.getBoolean(i18n.getString("configuration.updater"));
 	}
 	public static boolean ramStatistics() {
 		return conf.getBoolean("debug.ram-statistics");
@@ -96,14 +95,14 @@ public class Configuration {
 			conf.set("lastVersion", oldVerstion);
 		}
 		try {
-			conf.save(new File(BungeeUtil.getPluginInstance().getDataFolder().getParentFile().getAbsolutePath()+"/BungeeUtil/"+Messages.getString("configuration.name")));
+			conf.save(new File(BungeeUtil.getPluginInstance().getDataFolder().getParentFile().getAbsolutePath()+"/BungeeUtil/"+i18n.getString("configuration.name")));
 		} catch (IOException e) {
 		}
 	}
 	public static void setTimingsActive(boolean enabled) {
-		conf.set(Messages.getString("configuration.timings"), enabled);
+		conf.set(i18n.getString("configuration.timings"), enabled);
 		try{
-			conf.save(new File(BungeeUtil.getPluginInstance().getDataFolder().getParentFile().getAbsolutePath()+"/BungeeUtil/"+Messages.getString("configuration.name")));
+			conf.save(new File(BungeeUtil.getPluginInstance().getDataFolder().getParentFile().getAbsolutePath()+"/BungeeUtil/"+i18n.getString("configuration.name")));
 		}catch (IOException ex){
 			ex.printStackTrace();
 		}

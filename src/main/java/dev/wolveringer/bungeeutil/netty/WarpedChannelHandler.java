@@ -6,10 +6,10 @@ import java.util.logging.Level;
 import com.google.common.base.Preconditions;
 
 import dev.wolveringer.bungeeutil.Configuration;
+import dev.wolveringer.bungeeutil.i18n;
 import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
-import dev.wolveringer.bungeeutil.translation.Messages;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.ReadTimeoutException;
 import net.md_5.bungee.api.ProxyServer;
@@ -37,7 +37,7 @@ public class WarpedChannelHandler extends HandlerBoss {
 			this.channel = new ChannelWrapper(ctx);
 			this.handler.connected(this.channel);
 			if(!(this.handler instanceof InitialHandler) && !(this.handler instanceof PingHandler)){
-				ProxyServer.getInstance().getLogger().log(Level.INFO, this.formatColor(Messages.getString("ChannelHandler.connection.connect")), this.handler); //$NON-NLS-1$
+				ProxyServer.getInstance().getLogger().log(Level.INFO, this.formatColor(i18n.getString("ChannelHandler.connection.connect")), this.handler); //$NON-NLS-1$
 			}
 		}
 	}
@@ -47,7 +47,7 @@ public class WarpedChannelHandler extends HandlerBoss {
 		if(this.handler != null){
 			this.handler.disconnected(this.channel);
 			if(!(this.handler instanceof InitialHandler) && !(this.handler instanceof PingHandler)){
-				ProxyServer.getInstance().getLogger().log(Level.INFO, this.formatColor(Messages.getString("ChannelHandler.connection.disconnect")), this.handler); //$NON-NLS-1$
+				ProxyServer.getInstance().getLogger().log(Level.INFO, this.formatColor(i18n.getString("ChannelHandler.connection.disconnect")), this.handler); //$NON-NLS-1$
 			}
 		}
 	}
@@ -101,20 +101,20 @@ public class WarpedChannelHandler extends HandlerBoss {
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 		if(ctx.channel().isActive()){
 			if(cause instanceof ReadTimeoutException){
-				ProxyServer.getInstance().getLogger().log(Level.WARNING, this.formatColor(Messages.getString("ChannelHandler.connection.timeout")), this.handler); //$NON-NLS-1$
+				ProxyServer.getInstance().getLogger().log(Level.WARNING, this.formatColor(i18n.getString("ChannelHandler.connection.timeout")), this.handler); //$NON-NLS-1$
 			}else if(cause instanceof BadPacketException){
-				ProxyServer.getInstance().getLogger().log(Level.WARNING, this.formatColor(Messages.getString("ChannelHandler.connection.bad-packet")), this.handler); //$NON-NLS-1$
+				ProxyServer.getInstance().getLogger().log(Level.WARNING, this.formatColor(i18n.getString("ChannelHandler.connection.bad-packet")), this.handler); //$NON-NLS-1$
 			}else if(cause instanceof IOException){
-				ProxyServer.getInstance().getLogger().log(Level.WARNING, this.formatColor(Messages.getString("ChannelHandler.connection.IOException")), new Object[] { this.handler, cause.getMessage() }); //$NON-NLS-1$
+				ProxyServer.getInstance().getLogger().log(Level.WARNING, this.formatColor(i18n.getString("ChannelHandler.connection.IOException")), new Object[] { this.handler, cause.getMessage() }); //$NON-NLS-1$
 			}else{
-				ProxyServer.getInstance().getLogger().log(Level.SEVERE, this.handler + this.formatColor(Messages.getString("ChannelHandler.connection.encounteredException")), cause); //$NON-NLS-1$
+				ProxyServer.getInstance().getLogger().log(Level.SEVERE, this.handler + this.formatColor(i18n.getString("ChannelHandler.connection.encounteredException")), cause); //$NON-NLS-1$
 			}
 
 			if(this.handler != null){
 				try{
 					this.handler.exception(cause);
 				}catch (Exception ex){
-					ProxyServer.getInstance().getLogger().log(Level.SEVERE, this.handler + this.formatColor(Messages.getString("ChannelHandler.connection.progressingException")), ex); //$NON-NLS-1$
+					ProxyServer.getInstance().getLogger().log(Level.SEVERE, this.handler + this.formatColor(i18n.getString("ChannelHandler.connection.progressingException")), ex); //$NON-NLS-1$
 				}
 			}
 			ctx.close();
