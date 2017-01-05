@@ -1,6 +1,6 @@
 {
-    "CurrentVersion": "2.0.3",
-    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.0.3.jar",
+    "CurrentVersion": "2.1.0",
+    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.1.0.jar",
     "VersionsHistory": [
         {
             "Version": "1.6.7.6",
@@ -82,6 +82,10 @@
         {
             "Version": "2.0.3",
             "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.0.3.jar"
+        },
+        {
+            "Version": "2.1.0",
+            "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.1.0.jar"
         }
     ],
     "Changelog": [
@@ -231,6 +235,14 @@
             "Changed": [
                 "Implemented support for Minecraft 1.11.1/2",
                 "Fixed a unknown versions bug."
+            ]
+        },
+        {
+            "Verion": "2.1.0",
+            "Changed": [
+                "Reusing packet class instances to reduce the heap usage",
+                "Fixed PacketPlayOutTitle in Minecraft version 1.11",
+                "Implement packet data dump if packet failed to decode (Only if debugmessages enabled!)"
             ]
         }
     ]
