@@ -164,7 +164,7 @@ public class TerminalListener {
 		});
 	}
 
-	protected void addMessage(String message) {
+	protected synchronized void addMessage(String message) {
 		this.lines.push(message);
 		while (this.lines.size() > 1000) {
 			this.lines.removeLast();
@@ -172,7 +172,7 @@ public class TerminalListener {
 	}
 
 	@SuppressWarnings("unused")
-	public void repaintTerminal() {
+	public synchronized void repaintTerminal() {
 		try {
 			AnsiConsole.out.print("\033[H\033[2J");
 			AnsiConsole.out.print("\033[0;0H");
@@ -201,7 +201,7 @@ public class TerminalListener {
 		}
 	}
 
-	public void setTerminalEnabled(boolean terminalEnabled) {
+	public synchronized void setTerminalEnabled(boolean terminalEnabled) {
 		this.terminalEnabled = terminalEnabled;
 		if (terminalEnabled) {
 			try {

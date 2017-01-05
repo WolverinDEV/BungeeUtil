@@ -1,8 +1,7 @@
 package dev.wolveringer.bungeeutil.packets;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import com.google.common.collect.Lists;
 
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
@@ -30,10 +29,11 @@ public class PacketPlayOutPlayerInfo extends Packet implements PacketPlayOut {
 	}
 
 	private EnumPlayerInfoAction action;
-	private final List<PlayerInfoData> data = Lists.newArrayList();
+	private List<PlayerInfoData> data;
 
 	public PacketPlayOutPlayerInfo(EnumPlayerInfoAction paramEnumPlayerInfoAction, PlayerInfoData... player) {
 		this.action = paramEnumPlayerInfoAction;
+		this.data = new ArrayList<>();
 		for (PlayerInfoData localEntityPlayer : player) {
 			this.data.add(localEntityPlayer);
 		}
@@ -42,6 +42,7 @@ public class PacketPlayOutPlayerInfo extends Packet implements PacketPlayOut {
 	@Override
 	public void read(PacketDataSerializer s) {
 		this.action = EnumPlayerInfoAction.values()[s.readVarInt()];
+		this.data = new ArrayList<>();
 		int profiles = s.readVarInt();
 		for (int x = 0; x < profiles; x++) {
 			GameProfile gameporfile = null;

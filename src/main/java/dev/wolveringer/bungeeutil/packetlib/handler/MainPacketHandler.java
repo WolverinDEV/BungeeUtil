@@ -231,6 +231,8 @@ public class MainPacketHandler {
 						player.getPlayerInventory().getDragSlots().clear();
 					} else if(button == 2 || button == 6){
 						player.getPlayerInventory().setDragMode(-1);
+						if(player.getCursorItem() == null)
+							return false;
 						if(button == 6){
 							if(player.getCursorItem().getAmount()-player.getPlayerInventory().getDragSlots().size() == 0){ //Server will update inv if cursor item != 0
 								for(Integer slot : player.getPlayerInventory().getDragSlots()){

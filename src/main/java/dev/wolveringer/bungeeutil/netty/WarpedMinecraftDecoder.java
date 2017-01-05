@@ -90,7 +90,6 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 				if(packet == null){
 					Profiler.decoder_timings.stop(PACKET_CREATION);
 				}else{
-					System.out.println("Decode");
 					packet.use();
 					Profiler.decoder_timings.start(HANDLE_GENERAL);
 					Profiler.decoder_timings.start(HANDLE_INTERN);
