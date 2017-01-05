@@ -9,7 +9,6 @@ import java.util.Map.Entry;
 
 import dev.wolveringer.bungeeutil.item.Material;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutWorldParticles;
-import dev.wolveringer.bungeeutil.particel.ParticleEffect.ParticleData;
 import dev.wolveringer.bungeeutil.player.Player;
 import dev.wolveringer.bungeeutil.position.Location;
 import dev.wolveringer.bungeeutil.position.Vector;
@@ -669,7 +668,6 @@ public enum ParticleEffect {
 		 * @param material Material of the item/block
 		 * @param data Data value of the item/block
 		 */
-		@SuppressWarnings("deprecation")
 		public ParticleData(Material material, byte data) {
 			this.material = material;
 			this.data = data;

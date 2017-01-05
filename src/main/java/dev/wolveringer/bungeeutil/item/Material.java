@@ -513,9 +513,8 @@ public enum Material {
 	 * Gets the item ID or block ID of this Material
 	 *
 	 * @return ID of this material
-	 * @deprecated Magic value
+	 * 
 	 */
-	@Deprecated
 	public int getId() {
 		return this.id;
 	}

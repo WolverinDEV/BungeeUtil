@@ -28,7 +28,7 @@ public class UtilReflection {
 	}
 	*/
 
-	public static Field getField(Class obj, String name) {
+	public static Field getField(Class<?> obj, String name) {
 		Field f = null;
 		try {
 			f = obj.getDeclaredField(name);
@@ -50,7 +50,7 @@ public class UtilReflection {
 		return getField(obj.getClass(), name);
 	}
 
-	public static Method getMethod(Class obj, String name,Class...args) {
+	public static Method getMethod(Class<?> obj, String name,Class<?>...args) {
 		Method m = null;
 		try{
 			m = obj.getDeclaredMethod(name, args);
@@ -70,7 +70,7 @@ public class UtilReflection {
 		return m;
 	}
 
-	public static boolean setField(Class clazz,Object obj, String field, Object value) {
+	public static boolean setField(Class<?> clazz,Object obj, String field, Object value) {
 		Field f = getField(clazz, field);
 		if (!f.isAccessible()) {
 			f.setAccessible(true);

@@ -27,11 +27,13 @@ import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 
 public class WarpedMinecraftDecoder extends MinecraftDecoder {
 	private final static String DECODING;
+	@SuppressWarnings("unused")
 	private final static String BUNGEE_WRITE;
 	private final static String PACKET_CREATION;
 	private final static String HANDLE_GENERAL;
 	private final static String HANDLE_INTERN;
 	private final static String HANDLE_EXTERN;
+	@SuppressWarnings("unused")
 	private final static String WRITE_BUFF;
 
 	static {

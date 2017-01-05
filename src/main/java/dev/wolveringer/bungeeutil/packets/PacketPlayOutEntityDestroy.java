@@ -15,6 +15,7 @@ import lombok.Setter;
 public class PacketPlayOutEntityDestroy extends Packet implements PacketPlayOut{
 	private int[] entitys;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void read(PacketDataSerializer paramPacketDataSerializer) {
 		this.entitys = new int[this.getVersion().getBigVersion() == BigClientVersion.v1_7?paramPacketDataSerializer.readByte():paramPacketDataSerializer.readVarInt()];
@@ -27,6 +28,7 @@ public class PacketPlayOutEntityDestroy extends Packet implements PacketPlayOut{
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void write(PacketDataSerializer paramPacketDataSerializer) {
 		if(this.getVersion().getBigVersion() == BigClientVersion.v1_7) {

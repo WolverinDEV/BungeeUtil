@@ -168,6 +168,7 @@ public class ScrolingInventory extends Inventory {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private void update() {
 		super.disableUpdate();
 		super.clear();

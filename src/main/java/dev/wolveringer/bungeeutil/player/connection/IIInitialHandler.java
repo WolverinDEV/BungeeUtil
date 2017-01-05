@@ -71,6 +71,7 @@ public class IIInitialHandler extends IInitialHandler {
 	public static ClassLoader getClassLoader(){
 		return IIInitialHandler.class.getClassLoader();
 	}
+	@SuppressWarnings("deprecation")
 	public static void init(Class<?> base) {
 		if(base == ProxiedPlayerUserConnection.class){
 			try{

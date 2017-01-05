@@ -6,7 +6,6 @@ import java.lang.reflect.Modifier;
 import javax.naming.OperationNotSupportedException;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
-import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.player.connection.IIInitialHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -21,6 +20,7 @@ public abstract class ChannelInizializer extends ChannelInitializer<Channel> {
 		return init;
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void init() {
 		if(init == null) {
 			setChannelInitializer(new BungeeUtilChannelInizializer<IIInitialHandler>(IIInitialHandler.class));
@@ -35,9 +35,9 @@ public abstract class ChannelInizializer extends ChannelInitializer<Channel> {
 		}
 		catch (Exception e) {
 			BungeeUtil.debug(e);
-			BungeeCord.getInstance().getConsole().sendMessage(ChatColorUtils.COLOR_CHAR+"cAn error happend while loading the ChannelInizializer. Message: "+e.getMessage());
-			BungeeCord.getInstance().getConsole().sendMessage(ChatColorUtils.COLOR_CHAR+"cFor more details please enable the debug mode.");
-			BungeeCord.getInstance().getConsole().sendMessage(ChatColorUtils.COLOR_CHAR+"cDisabling ProtocolLIB");
+			BungeeCord.getInstance().getConsole().sendMessage(ChatColor.RED+"An error happend while loading the ChannelInizializer. Message: "+e.getMessage());
+			BungeeCord.getInstance().getConsole().sendMessage(ChatColor.RED+"For more details please enable the debug mode.");
+			BungeeCord.getInstance().getConsole().sendMessage(ChatColor.RED+"Disabling ProtocolLIB");
 		}
 	}
 

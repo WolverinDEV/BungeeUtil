@@ -16,9 +16,11 @@ public class Timings {
 	private LinkedList<Long> period_times = new LinkedList<Long>();
 	private Long start = -1L;
 
+	@SuppressWarnings("unused")
 	private Long last = 0L;
 
 	private String name;
+	@SuppressWarnings("unused")
 	private MethodProfiler profiler;
 	private ItemStack item;
 

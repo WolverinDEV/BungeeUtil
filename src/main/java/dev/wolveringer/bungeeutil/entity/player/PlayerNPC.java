@@ -150,15 +150,6 @@ public final class PlayerNPC {
 		}
 	}
 
-	/**
-	 * Contains spelling mistake
-	 * @deprecated Use {@link #broadcastPacket(Packet a)} instead.
-	 */
-	@Deprecated
-	private void brotcastPacket(Packet p) {
-		this.broadcastPacket(p);
-	}
-
 	public boolean canSee(Player p) {
 		return this.viewer.contains(p);
 	}

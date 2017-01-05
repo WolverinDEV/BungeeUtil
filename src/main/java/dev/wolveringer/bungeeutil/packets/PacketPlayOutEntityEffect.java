@@ -19,7 +19,7 @@ public class PacketPlayOutEntityEffect extends Packet implements PacketPlayOut {
 	private int duration;
 	private boolean hidden = false;
 
-
+	@SuppressWarnings("deprecation")
 	@Override
 	public void read(PacketDataSerializer s) {
 		switch (this.getBigVersion()) {
@@ -50,6 +50,7 @@ public class PacketPlayOutEntityEffect extends Packet implements PacketPlayOut {
 		return "PacketPlayOutEntityEffect [entity=" + this.entity + ", effect=" + this.effect + ", amplifier=" + this.amplifier + ", duration=" + this.duration + ", hidden=" + this.hidden + "]";
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void write(PacketDataSerializer s) {
 		switch (this.getBigVersion()) {

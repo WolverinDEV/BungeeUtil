@@ -64,7 +64,6 @@ public class PacketDataSerializer_v1_8 extends PacketDataSerializer {
 		this.writeVarInt(oenum.ordinal());
 	}
 
-	@SuppressWarnings("deprecation")
 	public void a(Item itemstack) {
 		if(itemstack == null){
 			this.writeShort(-1);

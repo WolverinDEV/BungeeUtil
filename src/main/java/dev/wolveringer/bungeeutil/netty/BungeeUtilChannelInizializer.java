@@ -67,6 +67,7 @@ public class BungeeUtilChannelInizializer <T extends InitialHandler> extends Cha
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public T createInitialHandler(Channel ch, WarpedMinecraftEncoder e, WarpedMinecraftDecoder d) throws Exception {
 		return (T) this.cons.newInstance(new Object[] { ProxyServer.getInstance(), ch.attr(PipelineUtils.LISTENER).get(), d, e });
 	}

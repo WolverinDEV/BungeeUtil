@@ -58,7 +58,6 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 	private PlayerInventory p_inv;
 	private int slot;
 	private Scoreboard board;
-	private String[] tab = new String[2];
 	private BossBarManager bossBarManager;
 
 	public ProxiedPlayerUserConnection(ProxyServer bungee, ChannelWrapper ch, String name, InitialHandler pendingConnection) {
@@ -152,6 +151,7 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	private <T> T get(String a, Class<T> ref) {
 		return (T) this.get(a);
 	}
@@ -338,8 +338,8 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 
 	@Override
 	public void updateInventory() {
-		int window = 0;
-		int dslot = 0;
+		//int window = 0;
+		//int dslot = 0;
 		Item[] items = this.p_inv.getContains();
 		BungeeUtil.debug("Updating "+items.length+" slots of the player inventory.");
 		/*

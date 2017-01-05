@@ -47,6 +47,7 @@ import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 
+@SuppressWarnings("deprecation")
 public class DebugMenue {
 	public static void open(Player player){
 		Profiler.packet_handle.start("buildDebugInventory");
@@ -65,6 +66,7 @@ public class DebugMenue {
 		inv.setItem(1, i);
 
 		i = new ItemStack(159, 1, (short) 14) {
+			
 			@Override
 			public void click(final Click p) {
 				p.getPlayer().closeInventory();
@@ -244,8 +246,6 @@ public class DebugMenue {
 
 			@Override
 			public void run() {
-				int mb = 1024 * 1024;
-				int c = 0;
 				while (inv.getViewer().size() > 0) {
 					try {
 						Thread.sleep(500);
@@ -261,7 +261,6 @@ public class DebugMenue {
 					a.add(ChatColorUtils.COLOR_CHAR + "6System: " + ChatColorUtils.COLOR_CHAR + "e" + System.getProperty("os.name"));
 					is.getItemMeta().setLore(a);
 					inv.setName(ChatColorUtils.COLOR_CHAR + "" + Integer.toHexString(new Random().nextInt(15) % 15) + ChatColorUtils.COLOR_CHAR + "lDeveloper Menue");
-					c++;
 				}
 			}
 		});

@@ -133,15 +133,6 @@ public class Inventory {
 		}
 	}
 
-	/**
-	 * Contains spelling mistake
-	 * @deprecated Use {@link #broadcast(Packet a)} instead.
-	 */
-	@Deprecated
-	private void brotcast(Packet a) {
-		this.broadcast(a);
-	}
-
 	public void clear() {
 		for(Item i : this.container.getContains()) {
 			if(i != null) {

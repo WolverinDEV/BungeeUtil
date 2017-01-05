@@ -166,7 +166,6 @@ public class Profiler {
 	public static void setEnabled(boolean enabled) {
 		Configuration.setTimingsActive(enabled);
 	}
-	@SuppressWarnings("serial")
 	private HashMap<String, MethodProfiler> profiles = new HashMap<String, MethodProfiler>() {
 		/**
 		 * 

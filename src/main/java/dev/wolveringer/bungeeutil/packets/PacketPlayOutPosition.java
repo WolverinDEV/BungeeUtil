@@ -19,6 +19,7 @@ public class PacketPlayOutPosition extends Packet implements PacketPlayOut{
 	private byte flag;
 	private int teleportId;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void read(PacketDataSerializer s) {
 		this.location = new Location(s.readDouble(), s.readDouble(), s.readDouble(), s.readFloat(), s.readFloat());
@@ -33,6 +34,7 @@ public class PacketPlayOutPosition extends Packet implements PacketPlayOut{
 		return "PacketPlayOutPosition [ground=" + this.ground + ", loc=" + this.location + ", flag=" + this.flag + ", teleportId=" + this.teleportId + "]";
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void write(PacketDataSerializer s) {
 		s.writeDouble(this.location.getX());

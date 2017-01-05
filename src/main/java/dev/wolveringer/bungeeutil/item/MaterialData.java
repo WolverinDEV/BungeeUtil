@@ -20,7 +20,6 @@ public class MaterialData implements Cloneable {
 		this(type, (byte) 0);
 	}
 
-	@SuppressWarnings("deprecation")
 	public MaterialData(final Material type, final byte data) {
 		this(type.getId(), data);
 	}

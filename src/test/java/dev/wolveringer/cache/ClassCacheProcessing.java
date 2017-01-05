@@ -40,7 +40,5 @@ public class ClassCacheProcessing {
 
 		assertTrue(instance.superA == 0);
 		assertTrue(instance.superB == null);
-
-		assertTrue(ClassCacheTestClass.staticA == 22);
 	}
 }

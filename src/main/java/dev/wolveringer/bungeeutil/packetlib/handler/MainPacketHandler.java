@@ -3,12 +3,10 @@ package dev.wolveringer.bungeeutil.packetlib.handler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.ExceptionUtils;
-import dev.wolveringer.bungeeutil.cache.CachedHashMap;
 import dev.wolveringer.bungeeutil.inventory.CloseReason;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
 import dev.wolveringer.bungeeutil.item.Item;
@@ -42,8 +40,9 @@ import net.md_5.bungee.api.Callback;
 public class MainPacketHandler {
 	static PacketPlayOutNamedEntitySpawn a;
 	static ArrayList<String> b = new ArrayList<String>();
-	private static CachedHashMap<Player, Long> lastInventortyUpdate = new CachedHashMap<>(100, TimeUnit.MILLISECONDS);
+	//private static CachedHashMap<Player, Long> lastInventortyUpdate = new CachedHashMap<>(100, TimeUnit.MILLISECONDS);
 
+	@SuppressWarnings("unchecked")
 	private static void handleItemClick(final Player player,final ItemStack is,final Click c,final boolean sync,final boolean looped,final Callback<Click>... callbacks){
 		if(!sync && !looped){
 			BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), () -> handleItemClick(player, is, c, sync, true, callbacks));
@@ -75,6 +74,7 @@ public class MainPacketHandler {
 		Profiler.packet_handle.stop("itemClickListener");
 	}
 
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	public static boolean handlePacket(PacketHandleEvent<?> e) {
 		final Packet pack = e.getPacket();
 		final Player player = e.getPlayer();

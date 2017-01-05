@@ -22,6 +22,7 @@ public class WarpedChannelFutureListener implements ChannelFutureListener {
 		this.retry = retry;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void operationComplete(ChannelFuture future) throws Exception {
 		if(this.callback != null){

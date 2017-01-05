@@ -20,6 +20,7 @@ import net.md_5.bungee.protocol.DefinedPacket;
 
 public class AnvilGui {
 
+	@SuppressWarnings("unused")
 	private static class AnvilWindowSizeStringCalculator {
 		private static HashMap<Character, Double> charLength = new HashMap<>(); //Length = 1 = X
 		private static final int BOX_SIZE = 18;
@@ -78,6 +79,7 @@ public class AnvilGui {
 
 	private boolean noBackground = false;
 
+	@SuppressWarnings("unused")
 	private String curruntDisplayString = "";
 
 	private ArrayList<AnvilGuiListener> listener = new ArrayList<>();
@@ -119,9 +121,9 @@ public class AnvilGui {
 				if (packet.getChannel().equalsIgnoreCase("MC|ItemName")) {
 					if (e.getPlayer().equals(AnvilGui.this.owner) && AnvilGui.this.inv != null) {
 						String message = DefinedPacket.readString(packet.getCopiedbyteBuff());
-						if(AnvilGui.this.curruntItemDisplayName.equalsIgnoreCase(message) && false) {
-							return;
-						}
+						//if(AnvilGui.this.curruntItemDisplayName.equalsIgnoreCase(message)) {
+						//	return;
+						//}
 						AnvilGui.this.curruntItemDisplayName = message;
 						if(AnvilGui.this.colorPrefix.length() > message.length()) {
 							message = AnvilGui.this.colorPrefix;
@@ -132,6 +134,7 @@ public class AnvilGui {
 						String handleMessage = message;
 						if (message.length() == 0 && AnvilGui.this.noBackground) {
 							ItemStack item = new ItemStack(AnvilGui.this.backgroundMaterial) {
+								@SuppressWarnings("deprecation")
 								@Override
 								public void click(Click click) {
 									click.setCancelled(true);
@@ -163,6 +166,7 @@ public class AnvilGui {
 									}
 								}
 								ItemStack item = new ItemStack(AnvilGui.this.backgroundMaterial) {
+									@SuppressWarnings("deprecation")
 									@Override
 									public void click(Click click) {
 										click.setCancelled(true);
@@ -272,6 +276,7 @@ public class AnvilGui {
 		this.inv = new Inventory(InventoryType.Anvil, "This is an AnvilGuy by WolverinDEV");
 
 		ItemStack item = new ItemStack(this.backgroundMaterial) {
+			@SuppressWarnings("deprecation")
 			@Override
 			public void click(Click click) {
 				click.setCancelled(true);
@@ -282,6 +287,7 @@ public class AnvilGui {
 		this.inv.setItem(0, item);
 
 		this.inv.setItem(1, new ItemStack(this.centerItem) {
+			@SuppressWarnings("deprecation")
 			@Override
 			public void click(Click click) {
 				click.setCancelled(true);
@@ -289,6 +295,7 @@ public class AnvilGui {
 		});
 
 		this.inv.setItem(2, new ItemStack(this.outputItem){
+			@SuppressWarnings("deprecation")
 			@Override
 			public void click(Click click) {
 				click.setCancelled(true);
@@ -306,6 +313,7 @@ public class AnvilGui {
 	public void setBackgroundMaterial(Material backgroundMaterial) {
 		this.backgroundMaterial = backgroundMaterial;
 		ItemStack item = new ItemStack(backgroundMaterial) {
+			@SuppressWarnings("deprecation")
 			@Override
 			public void click(Click click) {
 				click.setCancelled(true);
@@ -319,6 +327,7 @@ public class AnvilGui {
 		this.backgroundString = backgroundString;
 		if(!this.noBackground){
 			ItemStack item = new ItemStack(this.backgroundMaterial) {
+				@SuppressWarnings("deprecation")
 				@Override
 				public void click(Click click) {
 					click.setCancelled(true);
@@ -341,6 +350,7 @@ public class AnvilGui {
 		String rawMeta = this.curruntItemDisplayName.substring(Math.min(this.colorPrefix.length(), this.curruntItemDisplayName.length())); //Backspace a color prefix code... fix
 		this.colorPrefix = prefix;
 		ItemStack item = new ItemStack(this.backgroundMaterial) {
+			@SuppressWarnings("deprecation")
 			@Override
 			public void click(Click click) {
 				click.setCancelled(true);
@@ -353,6 +363,7 @@ public class AnvilGui {
 	public void setCurruntInput(String curruntName) {
 		this.curruntMessage = curruntName;
 		ItemStack item = new ItemStack(this.backgroundMaterial) {
+			@SuppressWarnings("deprecation")
 			@Override
 			public void click(Click click) {
 				click.setCancelled(true);
@@ -363,6 +374,7 @@ public class AnvilGui {
 	}
 	public void setOutputItem(Item item){
 		this.inv.setItem(2, new ItemStack(this.outputItem = item){
+			@SuppressWarnings("deprecation")
 			@Override
 			public void click(Click click) {
 				click.setCancelled(true);

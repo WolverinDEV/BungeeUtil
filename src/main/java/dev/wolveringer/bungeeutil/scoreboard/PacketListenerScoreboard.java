@@ -67,11 +67,6 @@ public final class PacketListenerScoreboard implements PacketHandler<Packet> {
 				if (obj == null) {
 					board.server_objs.add(obj = new Objektive(board, out.getObjectiveName()));
 				}
-				if (obj == null) {
-					BungeeUtil.getInstance();
-					BungeeUtil.debug("ScoreboardObjective " + out.getObjectiveName() + " for the player " + e.getPlayer().getName() + " not found!");
-					return;
-				}
 				Score x = null;
 				for (Score s : obj.scores) {
 					if (s.getName().equals(out.getScoreName())) {
@@ -109,9 +104,6 @@ public final class PacketListenerScoreboard implements PacketHandler<Packet> {
 			PacketPlayOutScoreboardTeam out = (PacketPlayOutScoreboardTeam) e.getPacket();
 			if (out.getAction() == dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardTeam.Action.CREATE) {
 				Team t = new Team(board, out.getTeam());
-				if(t == null) {
-					return;
-				}
 				t.color = out.getColor();
 				t.displayName = out.getDisplayName();
 				t.friendly_fire = out.getFriendlyFire();

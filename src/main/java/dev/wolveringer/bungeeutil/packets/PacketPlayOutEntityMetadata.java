@@ -16,6 +16,7 @@ public class PacketPlayOutEntityMetadata extends Packet implements PacketPlayOut
 	private int id;
 	private DataWatcher meta;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void read(PacketDataSerializer packetdataserializer) {
 		this.id = packetdataserializer.readInt();
@@ -27,6 +28,7 @@ public class PacketPlayOutEntityMetadata extends Packet implements PacketPlayOut
 		return "PacketPlayOutEntityMetadata@" + System.identityHashCode(this) + "[id=" + this.id + ", meta=" + this.meta + "]";
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void write(PacketDataSerializer packetdataserializer) {
 		if(this.getVersion().getVersion() < 16){

@@ -93,7 +93,6 @@ public class PacketLib {
 		}
 	};
 
-	@SuppressWarnings("serial")
 	private static HashMap<Class<? extends Packet>, ArrayList<Class<? extends Packet>>> superclazzes = new HashMap<Class<? extends Packet>, ArrayList<Class<? extends Packet>>>() {
 		/**
 		 * 

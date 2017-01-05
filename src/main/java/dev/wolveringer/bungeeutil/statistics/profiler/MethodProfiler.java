@@ -10,7 +10,6 @@ public class MethodProfiler {
 	private String name;
 	private Profiler profile;
 	private ScrolingInventory inv;
-	@SuppressWarnings("serial")
 	HashMap<String, Timings> timings = new HashMap<String, Timings>(){
 		/**
 		 * 

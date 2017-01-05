@@ -27,6 +27,8 @@ public class PacketPlayOutSpawnEntity extends Packet implements PacketPlayOut{
 	public Location getLocation() {
 		return this.location.clone().dividide(32D);
 	}
+	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void read(PacketDataSerializer s) {
 		this.eid = s.readVarInt();

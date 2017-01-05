@@ -44,6 +44,7 @@ public class ItemBuilder {
 		return this;
 	}
 
+	@SuppressWarnings("deprecation")
 	public Item build() {
 		Item i;
 		if (this.handle != null) {

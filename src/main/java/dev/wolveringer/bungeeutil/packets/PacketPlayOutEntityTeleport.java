@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -17,6 +19,7 @@ public class PacketPlayOutEntityTeleport extends Packet implements PacketPlayOut
 	private int id;
 	private boolean onGround;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void read(PacketDataSerializer s) {
 		if(this.getVersion().getVersion() < 16) {
@@ -42,7 +45,8 @@ public class PacketPlayOutEntityTeleport extends Packet implements PacketPlayOut
 			this.onGround = s.readBoolean();
 		}
 	}
-
+	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void write(PacketDataSerializer s) {
 		if(this.getVersion().getVersion() < 16){

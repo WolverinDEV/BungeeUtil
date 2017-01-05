@@ -26,6 +26,7 @@ public class PacketPlayInBlockPlace extends Packet implements PacketPlayIn {
 		return HandType.values()[this.hand];
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void read(PacketDataSerializer s) {
 		this.location = s.readBlockPosition();
@@ -71,6 +72,7 @@ public class PacketPlayInBlockPlace extends Packet implements PacketPlayIn {
 		return "PacketPlayInBlockPlace [loc=" + this.location + ", face=" + this.face + ", item=" + this.item + ", cursorPosition=" + this.cursorPosition + "]";
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void write(PacketDataSerializer s) {
 		s.writeBlockPosition(this.location);

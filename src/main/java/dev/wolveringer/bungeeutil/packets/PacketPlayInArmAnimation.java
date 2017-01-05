@@ -20,6 +20,7 @@ public class PacketPlayInArmAnimation extends Packet implements PacketPlayIn {
 		return HandType.values()[this.type];
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void read(PacketDataSerializer s) {
 		switch (this.getBigVersion()) {
@@ -45,6 +46,7 @@ public class PacketPlayInArmAnimation extends Packet implements PacketPlayIn {
 		return "PacketPlayInArmAnimation [id=" + this.id + ", type=" + this.type + "]";
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void write(PacketDataSerializer s) {
 		switch (this.getBigVersion()) {

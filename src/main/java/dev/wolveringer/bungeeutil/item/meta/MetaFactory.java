@@ -12,7 +12,6 @@ import javassist.util.proxy.ProxyFactory;
 @SuppressWarnings({ "deprecation", "rawtypes" })
 public class MetaFactory {
 	protected static class ItemMetaProxy implements MethodHandler {
-		@SuppressWarnings("serial")
 		private static HashMap<Class, ArrayList<String>> whitelist = new HashMap<Class, ArrayList<String>>(){
 			/**
 			 * 

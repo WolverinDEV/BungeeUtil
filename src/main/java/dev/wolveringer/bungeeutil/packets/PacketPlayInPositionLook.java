@@ -8,11 +8,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PacketPlayInPositionLook extends PacketPlayInPosition {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void read(PacketDataSerializer s) {
 		Double x = s.readDouble();
 		Double y = s.readDouble();
-		if(this.getVersion().getBigVersion() == BigClientVersion.v1_7) {
+		if(this.getBigVersion() == BigClientVersion.v1_7) {
 			this.stance = s.readDouble();
 		}
 		Double z = s.readDouble();
@@ -25,11 +26,12 @@ public class PacketPlayInPositionLook extends PacketPlayInPosition {
 		return "PacketPlayInPositionLook [onground=" + this.onground + ", hasLook=" + this.hasLook + ", hasPos=" + this.hasPos + ", loc=" + this.location + ", stance=" + this.stance + "]";
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void write(PacketDataSerializer packetdataserializer) {
 		packetdataserializer.writeDouble(this.getLocation().getX());
 		packetdataserializer.writeDouble(this.getLocation().getY());
-		if(this.getVersion().getBigVersion() == BigClientVersion.v1_7) {
+		if(this.getBigVersion() == BigClientVersion.v1_7) {
 			packetdataserializer.writeDouble(this.stance);
 		}
 		packetdataserializer.writeDouble(this.getLocation().getZ());

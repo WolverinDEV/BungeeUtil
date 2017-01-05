@@ -22,6 +22,7 @@ public class Potision<T> {
 		if (this.getClass() != obj.getClass()) {
 			return false;
 		}
+		@SuppressWarnings("rawtypes")
 		Potision other = (Potision) obj;
 		if (this.x == null) {
 			if (other.x != null) {

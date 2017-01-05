@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
-@SuppressWarnings("serial")
 class OperationNotSupportedException extends RuntimeException {
 	/**
 	 * 

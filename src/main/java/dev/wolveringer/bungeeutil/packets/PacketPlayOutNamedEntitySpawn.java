@@ -64,6 +64,7 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutEntity implement
 		this.p = new GameProfile(uuid, ""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"cError:-202");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void read(PacketDataSerializer paramPacketDataSerializer) {
 		this.setEntityId(paramPacketDataSerializer.readVarInt());
@@ -88,8 +89,8 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutEntity implement
 		this.data = DataWatcher.createDataWatcher(this.getBigVersion(),paramPacketDataSerializer);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	@SuppressWarnings("rawtypes")
 	public void write(PacketDataSerializer paramPacketDataSerializer) {
 		paramPacketDataSerializer.writeVarInt(this.getEntityId());
 		paramPacketDataSerializer.writeUUID(this.uuid);

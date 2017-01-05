@@ -74,7 +74,7 @@ public class TerminalListener {
 			}
 			s = Ansi.ansi().eraseLine(Erase.ALL).toString() + ConsoleReader.RESET_LINE + s + Ansi.ansi().reset().toString();
 			this.listener.addMessage(s);
-			if (this.listener.terminalEnabled || true) {
+			if (this.listener.terminalEnabled) {
 				this.writed = true;
 				try {
 					this.console.print(s);
@@ -113,6 +113,7 @@ public class TerminalListener {
 	private ArrayList<String> lineBffer = new ArrayList<>();
 	@Getter
 	private boolean terminalEnabled = true;
+	@SuppressWarnings("unused")
 	private ScheduledTask task;
 	private ColouredWriterAdapter writer;
 	private LinkedList<String> lines = new LinkedList<>();
@@ -170,6 +171,7 @@ public class TerminalListener {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	public void repaintTerminal() {
 		try {
 			AnsiConsole.out.print("\033[H\033[2J");

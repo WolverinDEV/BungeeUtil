@@ -32,6 +32,7 @@ public class PacketPlayOutChat extends Packet implements PacketPlayOut {
 		return this.rawMessage.getBytes();
 	}
 
+	@SuppressWarnings({ "deprecation", "incomplete-switch" })
 	@Override
 	public void read(PacketDataSerializer s) {
 		this.rawMessage = s.readStringBytes();
@@ -55,6 +56,7 @@ public class PacketPlayOutChat extends Packet implements PacketPlayOut {
 		this.rawMessage = new ByteString(raw);
 	}
 
+	@SuppressWarnings({ "deprecation", "incomplete-switch" })
 	@Override
 	public void write(PacketDataSerializer s) {
 		s.writeStringBytes(this.rawMessage);

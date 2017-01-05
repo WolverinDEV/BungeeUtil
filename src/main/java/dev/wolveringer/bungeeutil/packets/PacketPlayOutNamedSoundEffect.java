@@ -24,6 +24,7 @@ public class PacketPlayOutNamedSoundEffect extends Packet implements PacketPlayO
 	private String sound;
 	private int soundCategory;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void read(PacketDataSerializer s) {
 		switch (this.getBigVersion()) {
@@ -47,6 +48,7 @@ public class PacketPlayOutNamedSoundEffect extends Packet implements PacketPlayO
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void write(PacketDataSerializer s) {
 		switch (this.getBigVersion()) {

@@ -15,7 +15,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 public final class PlayerInventory {
-	@SuppressWarnings("serial")
 	private ArrayList<Item> items = new ArrayList<Item>() {
 		/**
 		 * 

@@ -23,6 +23,7 @@ public class PacketPlayOutEntityEquipment extends Packet implements PacketPlayOu
 	private Item item;
 	private Slot slot;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void read(PacketDataSerializer s) {
 		this.eid = s.readVarInt();
@@ -41,6 +42,7 @@ public class PacketPlayOutEntityEquipment extends Packet implements PacketPlayOu
 		this.item = s.readItem();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void write(PacketDataSerializer s) {
 		s.writeVarInt(this.eid);

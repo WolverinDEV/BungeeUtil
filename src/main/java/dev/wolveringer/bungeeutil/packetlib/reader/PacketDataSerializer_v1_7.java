@@ -147,7 +147,6 @@ public class PacketDataSerializer_v1_7 extends PacketDataSerializer {
 		this.writeByte(i);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void writeItem(Item itemstack) {
 		if(itemstack == null){

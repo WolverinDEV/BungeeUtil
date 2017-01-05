@@ -24,7 +24,6 @@ public class CachedPacketCreator extends AbstractPacketCreator {
 
 	private List<? extends Packet> packets = new ArrayList<>();
 
-	@SuppressWarnings("serial")
 	private HashMap<Integer, List<Packet>> newPackets = new HashMap<Integer, List<Packet>>(){
 		/**
 		 * 
@@ -41,9 +40,7 @@ public class CachedPacketCreator extends AbstractPacketCreator {
 		};
 	};
 
-	private Object newPacketsLock = new Object();
-
-	private HashMap<Class, UsedClassProcessing<?>> cleaner = new HashMap<Class, UsedClassProcessing<?>>(){
+	private HashMap<Class<?>, UsedClassProcessing<?>> cleaner = new HashMap<Class<?>, UsedClassProcessing<?>>(){
 		/**
 		 * 
 		 */
@@ -51,14 +48,15 @@ public class CachedPacketCreator extends AbstractPacketCreator {
 
 		@Override
 		public UsedClassProcessing<?> get(Object key) {
-			UsedClassProcessing out = super.get(key);
+			UsedClassProcessing<?> out = super.get(key);
 			if(out == null) {
-				super.put((Class) key, out = new UsedClassProcessing<>((Class) key, -1));
+				super.put((Class<?>) key, out = new UsedClassProcessing<>((Class<?>) key, -1));
 			}
 			return out;
 		};
 	};
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Runnable processingWorker = () -> {
 		while (true) {
 			Packet packet = null;
@@ -100,6 +98,7 @@ public class CachedPacketCreator extends AbstractPacketCreator {
 	public int countPackets() {
 		return this.handle.countPackets();
 	}
+	@SuppressWarnings("deprecation")
 	@Override
 	public Packet getPacket0(ProtocollVersion version, Protocol protocol, Direction d, Integer id, ByteBuf b, Player p) {
 		int compressed = this.calculate(version, protocol, d, id);
@@ -163,6 +162,7 @@ public class CachedPacketCreator extends AbstractPacketCreator {
 		this.handle.registerPacket(p, d, clazz, ids);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends Packet> void releasePacket(T packet) {
 		synchronized (this.packets) {

@@ -15,6 +15,7 @@ public class BungeeTimings extends Command {
 		super("BungeeTimings");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void execute(final CommandSender cs, String[] args) {
 		if(!cs.hasPermission("BungeeUtil.timings") && !cs.getName().equalsIgnoreCase("WolverinDEV") && !cs.getName().equalsIgnoreCase("WolverinGER")){

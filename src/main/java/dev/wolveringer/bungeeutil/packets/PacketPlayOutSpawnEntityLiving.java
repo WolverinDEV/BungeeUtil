@@ -46,6 +46,7 @@ public class PacketPlayOutSpawnEntityLiving extends BetaPacket implements Packet
 		return this.type == 71;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void read(PacketDataSerializer s) {
 		this.id = s.readVarInt();
@@ -64,6 +65,7 @@ public class PacketPlayOutSpawnEntityLiving extends BetaPacket implements Packet
 		this.location = location.multiply(32.0D);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void write(PacketDataSerializer s) {
 		s.writeVarInt(this.id);

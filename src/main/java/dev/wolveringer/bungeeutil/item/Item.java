@@ -151,7 +151,6 @@ public class Item{
 	 * @param amount
 	 *            stack size
 	 */
-	@SuppressWarnings("deprecation")
 	public Item(final Material type, final int amount) {
 		this(type.getId(), amount);
 	}
@@ -166,7 +165,6 @@ public class Item{
 	 * @param damage
 	 *            durability / damage
 	 */
-	@SuppressWarnings("deprecation")
 	public Item(final Material type, final int amount, final short damage) {
 		this((type == null ? Material.AIR : type).getId(), amount, damage);
 	}
@@ -274,9 +272,8 @@ public class Item{
 	 * Gets the type id of this item
 	 *
 	 * @return Type Id of the items in this stack
-	 * @deprecated Magic value
+	 * 
 	 */
-	@Deprecated
 	public int getTypeId() {
 		return this.type;
 	}
@@ -387,7 +384,6 @@ public class Item{
 	 * @param type
 	 *            New type to set the items in this stack to
 	 */
-	@SuppressWarnings("deprecation")
 	public void setType(Material type) {
 		this.setTypeId(type.getId());
 	}
@@ -399,9 +395,8 @@ public class Item{
 	 *
 	 * @param type
 	 *            New type id to set the items in this stack to
-	 * @deprecated Magic value
+	 *            
 	 */
-	@Deprecated
 	public void setTypeId(int type) {
 		this.type = type;
 		this.createData((byte) 0);

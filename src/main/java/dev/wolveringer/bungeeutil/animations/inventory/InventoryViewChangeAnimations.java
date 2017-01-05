@@ -118,6 +118,7 @@ public class InventoryViewChangeAnimations {
 					callback.done(null, null);
 				}
 			}
+			@SuppressWarnings("deprecation")
 			@Override
 			public void run(int c) {
 				base.disableUpdate();
@@ -162,6 +163,8 @@ public class InventoryViewChangeAnimations {
 		scheduller.start();
 	}
 
+	@SuppressWarnings("unused")
+	//TODO
 	private static void runScroolLeftAnimation(final Inventory base, final ItemContainer new_contains, final String new_name, final Item space,int delay,final Callback<Void> callback) {
 
 	}
@@ -193,6 +196,7 @@ public class InventoryViewChangeAnimations {
 					callback.done(null, null);
 				}
 			}
+			@SuppressWarnings("deprecation")
 			@Override
 			public void run(int count) {
 				base.disableUpdate();

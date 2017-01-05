@@ -1,6 +1,5 @@
 package dev.wolveringer.bungeeutil.hastebin;
 
-@SuppressWarnings("serial")
 public class DocumentNotFoundException extends RuntimeException{
 	/**
 	 * 

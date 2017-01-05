@@ -49,6 +49,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		return this.getRegisteredPackets().size();
 	}
 
+	@SuppressWarnings("deprecation")
 	protected Packet getPacket0(int compressed,Player p, ByteBuf b){
 		PacketHolder<?> cons = this.packetsId[compressed];
 		if(cons == null) {
@@ -137,6 +138,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		return compressedId;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void registerPacket(Protocol p, Direction d, Class<? extends Packet> clazz, ProtocollId... ids) {
 		try {

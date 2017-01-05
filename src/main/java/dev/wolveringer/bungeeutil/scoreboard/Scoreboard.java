@@ -12,7 +12,7 @@ import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardTeam;
 import dev.wolveringer.bungeeutil.player.Player;
 
 public final class Scoreboard {
-	@SuppressWarnings({ "serial", "unused" })
+	@SuppressWarnings({"unused" })
 	private static class ScoreboardAlredyExistException extends RuntimeException {
 		/**
 		 *

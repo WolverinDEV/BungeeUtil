@@ -11,7 +11,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 public class ByteBuffCreator {
-	@SuppressWarnings("serial")
 	private static final class ByteBuffTypeNotFoundException extends RuntimeException {
 		/**
 		 * 

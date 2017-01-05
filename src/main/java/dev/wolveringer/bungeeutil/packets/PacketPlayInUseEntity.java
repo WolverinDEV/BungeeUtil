@@ -25,9 +25,9 @@ public class PacketPlayInUseEntity extends Packet implements PacketPlayIn {
 	private Vector3f location;
 	private int hand = 0;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void read(PacketDataSerializer s) {
-
 		switch (this.getBigVersion()) {
 		case v1_11:
 		case v1_10:
@@ -57,6 +57,7 @@ public class PacketPlayInUseEntity extends Packet implements PacketPlayIn {
 		return "PacketPlayInUseEntity [target=" + this.target + ", action=" + this.action + ", location=" + this.location + ", hand=" + this.hand + "]";
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void write(PacketDataSerializer s) {
 		switch (this.getBigVersion()) {

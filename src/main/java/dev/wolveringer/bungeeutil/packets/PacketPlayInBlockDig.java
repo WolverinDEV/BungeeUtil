@@ -27,6 +27,7 @@ public class PacketPlayInBlockDig extends Packet implements PacketPlayIn {
 	private BlockPosition location;
 	private int face;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void read(PacketDataSerializer s) {
 		if (this.getVersion().getVersion() <= ClientVersion.v1_8_0.getVersion()) {
@@ -43,6 +44,7 @@ public class PacketPlayInBlockDig extends Packet implements PacketPlayIn {
 		return "PacketPlayInBlockDig [state=" + this.state + ", location=" + this.location + ", face=" + this.face + "]";
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void write(PacketDataSerializer s) {
 		if (this.getVersion().getVersion() <= ClientVersion.v1_8_0.getVersion()) {

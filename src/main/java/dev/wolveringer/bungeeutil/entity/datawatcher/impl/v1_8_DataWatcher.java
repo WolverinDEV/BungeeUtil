@@ -41,7 +41,6 @@ public class v1_8_DataWatcher extends DataWatcher{
 		return null;
 	}
 
-	@SuppressWarnings("serial")
 	private List<DataWatcherObjekt> objekts = new ArrayList<DataWatcherObjekt>() {
 		/**
 		 * 
@@ -62,7 +61,6 @@ public class v1_8_DataWatcher extends DataWatcher{
 		};
 	};
 
-	@SuppressWarnings("serial")
 	private HashMap<Class, EntityDataWatcher> watchers = new HashMap<Class, EntityDataWatcher>() {
 		/**
 		 * 

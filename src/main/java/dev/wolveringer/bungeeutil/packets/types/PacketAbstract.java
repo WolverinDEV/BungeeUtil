@@ -3,7 +3,6 @@ package dev.wolveringer.bungeeutil.packets.types;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.Packet;
 
-@SuppressWarnings("deprecation")
 public abstract class PacketAbstract extends Packet{
 	private byte[] b;
 

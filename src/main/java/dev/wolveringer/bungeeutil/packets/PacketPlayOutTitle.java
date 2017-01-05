@@ -29,6 +29,7 @@ public class PacketPlayOutTitle extends Packet{
 	private int stay;
 	private int fadeOut;
 
+	@SuppressWarnings("deprecation")
 	private Action getAction(int index){
 		switch (this.getBigVersion()) {
 		case v1_11:
@@ -42,6 +43,7 @@ public class PacketPlayOutTitle extends Packet{
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	private int getActionId(Action action){
 		switch (this.getBigVersion()) {
 		case v1_11:

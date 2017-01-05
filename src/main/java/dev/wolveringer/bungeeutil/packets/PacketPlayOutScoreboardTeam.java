@@ -102,6 +102,7 @@ public class PacketPlayOutScoreboardTeam extends Packet implements PacketPlayOut
 		return ChatColor.values()[this.color == -1 ? 0 : this.color];
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void read(PacketDataSerializer s) {
 		this.team = s.readString(16);
@@ -136,6 +137,7 @@ public class PacketPlayOutScoreboardTeam extends Packet implements PacketPlayOut
 		return "PacketPlayOutScoreboardTeam [team=" + this.team + ", action=" + this.action + ", displayName=" + this.displayName + ", prefix=" + this.prefix + ", suffix=" + this.suffix + ", tag=" + this.tag + ", color=" + this.color + ", friendly_fire=" + this.friendlyFire + ", player=" + Arrays.toString(this.player) + "]";
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void write(PacketDataSerializer s) {
 		s.writeString(this.team);
