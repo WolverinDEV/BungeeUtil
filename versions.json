@@ -1,4 +1,5 @@
 {
+	"configVersion": 1,
     "CurrentVersion": "2.1.2",
     "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.1.2.jar",
     "VersionsHistory": [
