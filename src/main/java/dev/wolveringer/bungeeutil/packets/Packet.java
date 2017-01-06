@@ -138,7 +138,7 @@ public abstract class Packet {
 
 	public static AbstractPacketCreator getCreator() {
 		if (creator == null) {
-			creator = new CachedPacketCreator(new NormalPacketCreator(), 12);
+			creator = new NormalPacketCreator(); //new CachedPacketCreator(new NormalPacketCreator(), 12);
 		}
 		return creator;
 	}

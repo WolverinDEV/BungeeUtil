@@ -271,6 +271,7 @@ public class MainPacketHandler {
 
 				return false;
 			}
+			System.out.println("Player "+player+" inv: "+player.isInventoryOpened());
 			if (player.isInventoryOpened()) {
 				player.sendPacket(new PacketPlayOutTransaction(Inventory.ID, pl.getActionNumber(), false));
 				player.sendPacket(new PacketPlayOutSetSlot(null, -1, 0));
@@ -282,6 +283,8 @@ public class MainPacketHandler {
 						int slot = pl.getSlot()-e.getPlayer().getInventoryView().getSlots()+9;
 						player.sendPacket(new PacketPlayOutSetSlot(e.getPlayer().getPlayerInventory().getItem(slot), Inventory.ID, pl.getSlot()));
 					}
+					if(PacketPlayInWindowClick.Mode.isShiftClick(pl.getMode()))
+						player.getInventoryView().updateInventory();
 					return false;
 				}
 				final ItemStack is = player.getInventoryView().getItem(pl.getSlot());

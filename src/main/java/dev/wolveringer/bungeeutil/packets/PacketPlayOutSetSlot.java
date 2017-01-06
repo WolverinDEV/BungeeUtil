@@ -14,8 +14,8 @@ import lombok.Setter;
 @Setter
 public class PacketPlayOutSetSlot extends Packet implements PacketPlayOut{
 	private Item ItemStack;
-	private int slot;
 	private int window;
+	private int slot;
 
 	@Override
 	public void read(PacketDataSerializer packetdataserializer) {
