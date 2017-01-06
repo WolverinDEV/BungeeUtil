@@ -1,6 +1,6 @@
 {
-    "CurrentVersion": "2.1.1",
-    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.1.1.jar",
+    "CurrentVersion": "2.1.2",
+    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.1.2.jar",
     "VersionsHistory": [
         {
             "Version": "1.6.7.6",
@@ -90,6 +90,10 @@
         {
             "Version": "2.1.1",
             "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.1.1.jar"
+        },
+        {
+            "Version": "2.1.2",
+            "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.1.2.jar"
         }
     ],
     "Changelog": [
@@ -248,12 +252,18 @@
                 "Fixed PacketPlayOutTitle in Minecraft version 1.11",
                 "Implement packet data dump if packet failed to decode (Only if debugmessages enabled!)"
             ]
-        }
-        ,
+        },
         {
             "Verion": "2.1.1",
             "Changed": [
                 "Fixed PacketPlayOutUpdateSign when its get reused"
+            ]
+        },
+        {
+            "Verion": "2.1.2",
+            "Changed": [
+                "Fixed inventory issue #19",
+                "Fixing some charset issues"
             ]
         }
     ]
