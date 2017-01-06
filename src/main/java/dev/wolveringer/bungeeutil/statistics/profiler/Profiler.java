@@ -187,7 +187,7 @@ public class Profiler {
 	public Profiler(String name) {
 		profilers.add(this);
 		this.name = name;
-		String n = ""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"aTimings "+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7("+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"5"+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"l" + this.getName() + ""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7)";
+		String n = dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"aTimings "+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7("+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"5"+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"l" + this.getName() + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7)";
 		this.inv = new ScrolingInventory(4, n);
 	}
 
@@ -198,7 +198,7 @@ public class Profiler {
 				p.getPlayer().openInventory(profile.getInventory());
 			}
 		};
-		is.getItemMeta().setDisplayName(""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"bMethode: "+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"b" + profile.getName());
+		is.getItemMeta().setDisplayName(dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"bMethode: "+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"b" + profile.getName());
 		return is;
 	}
 

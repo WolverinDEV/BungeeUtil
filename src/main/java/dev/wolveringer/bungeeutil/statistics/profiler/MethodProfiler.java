@@ -28,7 +28,7 @@ public class MethodProfiler {
 	public MethodProfiler(Profiler profile,String key) {
 		this.name = key;
 		this.profile = profile;
-		String name = ChatColorUtils.COLOR_CHAR+"aTimings "+ChatColorUtils.COLOR_CHAR+"7("+ChatColorUtils.COLOR_CHAR+"5"+ChatColorUtils.COLOR_CHAR+"l"+profile.getName()+" "+ChatColorUtils.COLOR_CHAR+"c"+ChatColorUtils.COLOR_CHAR+"l>> "+ChatColorUtils.COLOR_CHAR+"b"+ChatColorUtils.COLOR_CHAR+"l"+this.getName()+""+ChatColorUtils.COLOR_CHAR+"7)";
+		String name = ChatColorUtils.COLOR_CHAR+"aTimings "+ChatColorUtils.COLOR_CHAR+"7("+ChatColorUtils.COLOR_CHAR+"5"+ChatColorUtils.COLOR_CHAR+"l"+profile.getName()+" "+ChatColorUtils.COLOR_CHAR+"c"+ChatColorUtils.COLOR_CHAR+"l>> "+ChatColorUtils.COLOR_CHAR+"b"+ChatColorUtils.COLOR_CHAR+"l"+this.getName()+ChatColorUtils.COLOR_CHAR+"7)";
 		this.inv = new ScrolingInventory(4, name);
 		this.updateInventory();
 	}

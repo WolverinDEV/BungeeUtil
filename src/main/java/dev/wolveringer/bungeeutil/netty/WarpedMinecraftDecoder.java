@@ -1,10 +1,11 @@
 package dev.wolveringer.bungeeutil.netty;
 
+import static dev.wolveringer.bungeeutil.i18n.tr;
+
 import java.util.List;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
-import static dev.wolveringer.bungeeutil.i18n.tr;
 import dev.wolveringer.bungeeutil.packetlib.PacketHandleEvent;
 import dev.wolveringer.bungeeutil.packetlib.PacketLib;
 import dev.wolveringer.bungeeutil.packetlib.handler.MainPacketHandler;
@@ -19,6 +20,7 @@ import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Getter;
 import lombok.Setter;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.protocol.BadPacketException;
 import net.md_5.bungee.protocol.DefinedPacket;
 import net.md_5.bungee.protocol.MinecraftDecoder;
@@ -76,7 +78,7 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 		}
 		if(this.clientVersion == null){ //In the theorie impossible :)
 			System.err.println("Could not find the ClientVersion for the ProtocolVersion "+this.version+". Disconnecting the client.");
-			this.initHandler.disconnect("§cYour client version isnt supported!");
+			this.initHandler.disconnect(ChatColor.COLOR_CHAR+"cYour client version isnt supported!");
 			return;
 		}
 

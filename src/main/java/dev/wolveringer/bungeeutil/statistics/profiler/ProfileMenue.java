@@ -21,13 +21,13 @@ public class ProfileMenue {
 		return menue;
 	}
 
-	private ScrolingInventory inv = new ScrolingInventory(4, ""+ChatColorUtils.COLOR_CHAR+"aTimings");
-	private Inventory inv_disabled = new Inventory(9, ""+ChatColorUtils.COLOR_CHAR+"cTimings Disabled");
+	private ScrolingInventory inv = new ScrolingInventory(4, ChatColorUtils.COLOR_CHAR+"aTimings");
+	private Inventory inv_disabled = new Inventory(9, ChatColorUtils.COLOR_CHAR+"cTimings Disabled");
 
 	public ProfileMenue() {
 		BungeeCord.getInstance().getScheduler().schedule(BungeeUtil.getPluginInstance(), () -> ProfileMenue.this.rebuild(), 1, 5, TimeUnit.SECONDS);
 		ItemStack is = new MultiClickItemStack(Material.BARRIER);
-		is.getItemMeta().setDisplayName(""+ChatColorUtils.COLOR_CHAR+"cTimings are "+ChatColorUtils.COLOR_CHAR+"c"+ChatColorUtils.COLOR_CHAR+"nDisabled");
+		is.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR+"cTimings are "+ChatColorUtils.COLOR_CHAR+"c"+ChatColorUtils.COLOR_CHAR+"nDisabled");
 		this.inv_disabled.setItem(4, is);
 	}
 
@@ -38,7 +38,7 @@ public class ProfileMenue {
 				p.getPlayer().openInventory(profile.getInventory());
 			}
 		};
-		is.getItemMeta().setDisplayName(""+ChatColorUtils.COLOR_CHAR+"bProfiler: "+ChatColorUtils.COLOR_CHAR+"5" + profile.getName());
+		is.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR+"bProfiler: "+ChatColorUtils.COLOR_CHAR+"5" + profile.getName());
 		return is;
 	}
 

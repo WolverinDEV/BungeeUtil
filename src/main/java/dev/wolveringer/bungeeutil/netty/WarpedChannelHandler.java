@@ -12,6 +12,7 @@ import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.ReadTimeoutException;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.connection.CancelSendSignal;
 import net.md_5.bungee.connection.InitialHandler;
@@ -64,7 +65,7 @@ public class WarpedChannelHandler extends HandlerBoss {
 						if(ProtocolConstants.SUPPORTED_VERSION_IDS.contains(version)){ //Handle BungeeUtil versions incompatibility. If BungeeCord ist compatible with this version too than BungeeCord can kick the client :)
 							System.err.println("Could not find the ClientVersion for the ProtocolVersion "+version+". Disconnecting the client.");
 							if(this.handler instanceof InitialHandler) {
-								((InitialHandler)this.handler).disconnect("§cYour client version isnt supported!");
+								((InitialHandler)this.handler).disconnect(ChatColor.COLOR_CHAR+"cYour client version isnt supported!");
 							} else {
 								this.channel.getHandle().close();
 							}

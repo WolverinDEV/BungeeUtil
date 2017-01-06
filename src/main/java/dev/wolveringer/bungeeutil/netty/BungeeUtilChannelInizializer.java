@@ -16,6 +16,7 @@ import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ListenerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -143,23 +144,23 @@ public class BungeeUtilChannelInizializer <T extends InitialHandler> extends Cha
 
 	@SuppressWarnings("deprecation")
 	public void throwClassNotFoundError(ClassNotFoundException exception) {
-		BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"cBungeeUntil cant load some Classes!");
-		BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"cDisable BungeeUntil!");
+		BungeeCord.getInstance().getConsole().sendMessage(ChatColor.COLOR_CHAR+"7[BungeeUntil"+ChatColor.COLOR_CHAR+"7] "+ChatColor.COLOR_CHAR+"cBungeeUntil cant load some Classes!");
+		BungeeCord.getInstance().getConsole().sendMessage(ChatColor.COLOR_CHAR+"7[BungeeUntil"+ChatColor.COLOR_CHAR+"7] "+ChatColor.COLOR_CHAR+"cDisable BungeeUntil!");
 		try {
 			this.setStaticFinalValue(PipelineUtils.class.getDeclaredField("SERVER_CHILD"), dinti);
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
-			BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"cError while setting default ConnectionHandler.");
-			BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"cRestarting BungeeCord!");
+			BungeeCord.getInstance().getConsole().sendMessage(ChatColor.COLOR_CHAR+"7[BungeeUntil"+ChatColor.COLOR_CHAR+"7] "+ChatColor.COLOR_CHAR+"cError while setting default ConnectionHandler.");
+			BungeeCord.getInstance().getConsole().sendMessage(ChatColor.COLOR_CHAR+"7[BungeeUntil"+ChatColor.COLOR_CHAR+"7] "+ChatColor.COLOR_CHAR+"cRestarting BungeeCord!");
 			BungeeCord.getInstance().stop();
 			return;
 		}
 		BungeeCord.getInstance().getPluginManager().unregisterListeners(BungeeUtil.getPluginInstance());
 		BungeeUtil.getInstance().disable();
 		for (ProxiedPlayer p : BungeeCord.getInstance().getPlayers()) {
-			p.disconnect(""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"cBungeeUntil Class error");
+			p.disconnect(ChatColor.COLOR_CHAR+"cBungeeUntil Class error");
 		}
-		BungeeCord.getInstance().getConsole().sendMessage(""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7[BungeeUntil"+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7] "+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"cBungeeUntil is disabled!");
+		BungeeCord.getInstance().getConsole().sendMessage(ChatColor.COLOR_CHAR+"7[BungeeUntil"+ChatColor.COLOR_CHAR+"7] "+ChatColor.COLOR_CHAR+"cBungeeUntil is disabled!");
 	}
 }

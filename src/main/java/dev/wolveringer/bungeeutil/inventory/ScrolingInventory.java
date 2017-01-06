@@ -8,6 +8,7 @@ import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.item.ItemStack;
 import dev.wolveringer.bungeeutil.item.Material;
+import net.md_5.bungee.api.ChatColor;
 
 public class ScrolingInventory extends Inventory {
 
@@ -48,11 +49,11 @@ public class ScrolingInventory extends Inventory {
 	public ScrolingInventory(int rows, String name) {
 		super(rows * 9 + 18, name);
 		this.rows = rows;
-		this.nextitem.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR+"7next Side "+ChatColorUtils.COLOR_CHAR+"b-->");
-		this.backitem.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR+"b<-- "+ChatColorUtils.COLOR_CHAR+"7previous Side");
-		this.lineitem.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR+"a");
+		this.nextitem.getItemMeta().setDisplayName(ChatColor.COLOR_CHAR+"7next Side "+ChatColor.COLOR_CHAR+"b-->");
+		this.backitem.getItemMeta().setDisplayName(ChatColor.COLOR_CHAR+"b<-- "+ChatColor.COLOR_CHAR+"7previous Side");
+		this.lineitem.getItemMeta().setDisplayName(ChatColor.COLOR_CHAR+"a");
 		this.lineitem.getItemMeta().setGlow(true);
-		this.nothinkitem.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR+"cKein Item verf"+ChatColorUtils.COLOR_CHAR+"gbar");
+		this.nothinkitem.getItemMeta().setDisplayName(ChatColor.COLOR_CHAR+"cKein Item verf"+ChatColor.COLOR_CHAR+"gbar");
 		this.update();
 	}
 

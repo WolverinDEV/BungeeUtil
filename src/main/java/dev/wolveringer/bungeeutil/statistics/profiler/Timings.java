@@ -54,7 +54,7 @@ public class Timings {
 		for(int i = steps - 1;i >= 0;i--){
 			if(count_step * i <= var) {
 				if(count_step * i + count_step * 0.5D <= var) {
-					out[i] = ChatColorUtils.COLOR_CHAR+"aX";//""+ChatColorUtils.COLOR_CHAR+"a▅";
+					out[i] = ChatColorUtils.COLOR_CHAR+"aX";//ChatColorUtils.COLOR_CHAR+"a▅";
 				}
 				else {
 					out[i] = ChatColorUtils.COLOR_CHAR+"aX";//ChatColorUtils.COLOR_CHAR+"a█";

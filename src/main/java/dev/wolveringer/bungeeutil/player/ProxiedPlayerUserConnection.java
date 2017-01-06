@@ -9,6 +9,7 @@ import com.google.common.base.Preconditions;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.bossbar.BossBarManager;
+import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.inventory.CloseReason;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
 import dev.wolveringer.bungeeutil.inventory.InventoryListener;
@@ -333,7 +334,7 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 
 	@Override
 	public String toString() {
-		return "Player{name=\""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r" + this.getName() + ""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r\" DisplayName=\""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r" + this.getDisplayName() + ""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r\" ping=\"" + this.getPing() + "\"}";
+		return "Player{name=\""+ChatColorUtils.COLOR_CHAR+"r" + this.getName() + ChatColorUtils.COLOR_CHAR+"r\" DisplayName=\""+ChatColorUtils.COLOR_CHAR+"r" + this.getDisplayName() + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"r\" ping=\"" + this.getPing() + "\"}";
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package dev.wolveringer.bungeeutil.animations.text;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class StringUntils {
 	public static String subStringWithoutChatcolors(String s,int min,int max){
 		String out = "";
@@ -9,12 +11,12 @@ public class StringUntils {
 			if(s.length()<pos) {
 				break;
 			}
-			while (s.charAt(pos) == dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR){
+			while (s.charAt(pos) == ChatColor.COLOR_CHAR){
 				if(s.length()<pos) {
 					break;
 				}
 				pos++;
-				out += ""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+""+s.charAt(pos);
+				out += ChatColor.COLOR_CHAR+s.charAt(pos);
 				pos++;
 			}
 			out+=s.charAt(pos);

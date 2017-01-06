@@ -20,6 +20,7 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.UserConnection;
+import net.md_5.bungee.api.ChatColor;
 
 public class InjectFiles {
 	public static int inject() {
@@ -29,9 +30,9 @@ public class InjectFiles {
 			if(!Modifier.isFinal(modifier) && Modifier.isPublic(modifier)){
 				return -1;
 			}
-			BungeeUtil.getInstance().setInformation("§aInjection BungeeUtils. Please wait.");
-			BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR+"aStarting BungeeUtil injection.");
-			BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR+"aSet modifiers for class UserConnection.class to \"public\"");
+			BungeeUtil.getInstance().setInformation(ChatColor.COLOR_CHAR+"aInjection BungeeUtils. Please wait.");
+			BungeeUtil.getInstance().sendMessage(ChatColor.COLOR_CHAR+"aStarting BungeeUtil injection.");
+			BungeeUtil.getInstance().sendMessage(ChatColor.COLOR_CHAR+"aSet modifiers for class UserConnection.class to \"public\"");
 
 			String[] names = { "net.md_5.bungee.UserConnection.class" };
 			ClassPool cp = ClassPool.getDefault();
@@ -82,7 +83,7 @@ public class InjectFiles {
 			BungeeUtil.getInstance().sendMessage("Warn: Cant create temp file. Use .copy file");
 		}
 		byte[] buf = new byte[Configuration.getLoadingBufferSize()];
-		BungeeUtil.getInstance().sendMessage(ChatColorUtils.COLOR_CHAR+"aBuffer size: "+ChatColorUtils.COLOR_CHAR+"e"+buf.length);
+		BungeeUtil.getInstance().sendMessage(ChatColor.COLOR_CHAR+"aBuffer size: "+ChatColor.COLOR_CHAR+"e"+buf.length);
 		ZipInputStream zin = new ZipInputStream(new FileInputStream(tempFile));
 		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile));
 

@@ -26,7 +26,7 @@ public class Scroller {
 			spaceBetween = 0;
 		}
 
-		if(colourChar != dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR) {
+		if(colourChar != ChatColor.COLOR_CHAR) {
 			message = ChatColor.translateAlternateColorCodes(colourChar, message);
 		}
 
@@ -40,7 +40,7 @@ public class Scroller {
 		}
 		String color = "";
 		for(int i = 0;i < raw.length();i++){
-			while (i - 1 >= 0 && msg.charAt(i - 1) == dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR){
+			while (i - 1 >= 0 && msg.charAt(i - 1) == ChatColor.COLOR_CHAR){
 				ChatColor g = ChatColor.getByChar(msg.charAt(i));
 				if(ChatColorUtils.isColor(g)) {
 					color = g + "";
@@ -49,7 +49,7 @@ public class Scroller {
 				}
 				i++;
 			}
-			while (msg.charAt(i % msg.length()) == dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR){
+			while (msg.charAt(i % msg.length()) == ChatColor.COLOR_CHAR){
 				ChatColor g = ChatColor.getByChar(msg.charAt(i % msg.length() + 1));
 				if(ChatColorUtils.isColor(g)) {
 					color = g + "";

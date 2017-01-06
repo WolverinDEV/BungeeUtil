@@ -20,7 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutEntity implements PacketPlayOut{
-	private GameProfile p = new GameProfile(UUID.randomUUID(), ""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"cProfile error");
+	private GameProfile p = new GameProfile(UUID.randomUUID(), dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"cProfile error");
 	private UUID uuid;
 	private Location loc;
 	private byte yaw; // yaw / 256*360
@@ -61,7 +61,7 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutEntity implement
 		this.pitch = (byte) (int) (loc.getPitch() * 256.0F / 360.0F);
 		this.item_id = hand;
 		this.data = w;
-		this.p = new GameProfile(uuid, ""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"cError:-202");
+		this.p = new GameProfile(uuid, dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"cError:-202");
 	}
 
 	@SuppressWarnings("deprecation")

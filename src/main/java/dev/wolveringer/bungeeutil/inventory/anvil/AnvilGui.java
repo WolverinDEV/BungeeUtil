@@ -16,6 +16,7 @@ import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.packets.PacketPlayInCloseWindow;
 import dev.wolveringer.bungeeutil.packets.PacketPlayInPluginMessage;
 import dev.wolveringer.bungeeutil.player.Player;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.protocol.DefinedPacket;
 
 public class AnvilGui {
@@ -60,10 +61,10 @@ public class AnvilGui {
 
 	static {
 		DEFAULT_CENTER_ITEM = new Item(Material.BARRIER);
-		DEFAULT_CENTER_ITEM.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR+"r");
+		DEFAULT_CENTER_ITEM.getItemMeta().setDisplayName(ChatColor.COLOR_CHAR+"r");
 
 		DEFAULT_OUTPUT_ITEM = new Item(Material.NAME_TAG);
-		DEFAULT_OUTPUT_ITEM.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR+"aClick to finish");
+		DEFAULT_OUTPUT_ITEM.getItemMeta().setDisplayName(ChatColor.COLOR_CHAR+"aClick to finish");
 	}
 
 	private Player owner;
@@ -71,7 +72,7 @@ public class AnvilGui {
 	private String curruntMessage = "";
 	private String backgroundString = "Message here: ";
 	private Material backgroundMaterial = Material.STONE;
-	private String colorPrefix = "§a";
+	private String colorPrefix = ChatColor.COLOR_CHAR+"a";
 	private Item centerItem = DEFAULT_CENTER_ITEM;
 	private Item outputItem = DEFAULT_OUTPUT_ITEM;
 

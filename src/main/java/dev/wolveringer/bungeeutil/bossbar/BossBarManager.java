@@ -13,6 +13,7 @@ import dev.wolveringer.bungeeutil.packets.PacketPlayOutBossBar.BarColor;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutBossBar.BarDivision;
 import dev.wolveringer.bungeeutil.player.Player;
 import lombok.Getter;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -36,7 +37,7 @@ public class BossBarManager {
 			this.color = BarColor.PING;
 			this.division = BarDivision.TEN_DIVISIONS;
 			this.health = 0.5F;
-			this.message = TextComponent.fromLegacyText("§cundefined")[0];
+			this.message = TextComponent.fromLegacyText(ChatColor.COLOR_CHAR+"cundefined")[0];
 		}
 
 		protected BossBar(BossBarManager manager, UUID uuid, BarColor color, BarDivision division, float value, BaseComponent message, boolean visiable) {

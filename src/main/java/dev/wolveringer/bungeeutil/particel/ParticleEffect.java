@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 
 import dev.wolveringer.bungeeutil.item.Material;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutWorldParticles;
+import dev.wolveringer.bungeeutil.particel.ParticleEffect.ParticleData;
 import dev.wolveringer.bungeeutil.player.Player;
 import dev.wolveringer.bungeeutil.position.Location;
 import dev.wolveringer.bungeeutil.position.Vector;

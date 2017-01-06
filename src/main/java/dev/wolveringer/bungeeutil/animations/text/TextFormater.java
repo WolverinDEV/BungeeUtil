@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
+import net.md_5.bungee.api.ChatColor;
+
 class OperationNotSupportedException extends RuntimeException {
 	/**
 	 * 
@@ -38,7 +40,7 @@ class SpecScroll extends Scroller {
 	private String now;
 
 	public SpecScroll(String message, int width, int spaceBetween, int tics) {
-		super(message, width, spaceBetween, dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR);
+		super(message, width, spaceBetween, ChatColor.COLOR_CHAR);
 		this.t = this.ft = tics;
 		this.now = super.next();
 	}
@@ -69,7 +71,7 @@ class SpecScroll extends Scroller {
 
 /**
  * Usage:<br>
- * Base-Text: <br>{@code <scroller width=10  space=0 time=100>HELLO THIS IS A"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"a TEST"+dev.wolveringer.chat.ChatColor.ChatColorUtils.COLOR_CHAR+"a STRING!</scroller>XX<scroller width=10  space=0 time=150>HELLO THIS IS A TEST STRING!</scroller>XX<scroller width=10  space=0 time=200>HELLO THIS IS A TEST STRING!</scroller>}<br>
+ * Base-Text: <br>{@code <scroller width=10  space=0 time=100>HELLO THIS IS A"+dev.wolveringer.chat.ChatColor.ChatColor.COLOR_CHAR+"a TEST"+dev.wolveringer.chat.ChatColor.ChatColor.COLOR_CHAR+"a STRING!</scroller>XX<scroller width=10  space=0 time=150>HELLO THIS IS A TEST STRING!</scroller>XX<scroller width=10  space=0 time=200>HELLO THIS IS A TEST STRING!</scroller>}<br>
  * Start scroler with: {@code <scroller width=<Text With>  space=<Space between end and start> time=<time per step>>}<br>
  * @author wolverindev
  *
@@ -80,7 +82,7 @@ public class TextFormater {
 	private long kgn;
 
 	public TextFormater(String raw) {
-		this.raw = this.loadElement(Jsoup.parse(raw.replaceAll("&", ""+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"")));
+		this.raw = this.loadElement(Jsoup.parse(raw.replaceAll("&", ChatColor.COLOR_CHAR+"")));
 	}
 	public String getNextString() {
 		for(SpecScroll s : this.scroler) {
