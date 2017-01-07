@@ -6,7 +6,6 @@ import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.plugin.updater.Updater;
-import dev.wolveringer.bungeeutil.plugin.updater.UpdaterV1;
 import dev.wolveringer.bungeeutil.plugin.updater.UpdaterV2;
 import dev.wolveringer.bungeeutil.plugin.updater.Version;
 import dev.wolveringer.bungeeutil.system.ProxyType;
@@ -146,6 +145,5 @@ public class Main extends Plugin {
 	@Override
 	public void onLoad() {
 		main = this;
-
 	}
 }

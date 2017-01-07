@@ -2,7 +2,6 @@ package dev.wolveringer.bungeeutil.commands;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
-import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.player.Player;
 import dev.wolveringer.bungeeutil.statistics.profiler.ProfileMenue;
 import dev.wolveringer.bungeeutil.statistics.profiler.Profiler;
@@ -71,7 +70,7 @@ public class BungeeTimings extends Command {
 				if(cs instanceof Player){
 				((Player)cs).openInventory(ProfileMenue.getProfilerMenue().getMenue());
 				} else {
-					cs.sendMessage("�cYou must be a player to open an inventory.");
+					cs.sendMessage(ChatColor.COLOR_CHAR+"cYou must be a player to open an inventory.");
 				}
 				return;
 			}

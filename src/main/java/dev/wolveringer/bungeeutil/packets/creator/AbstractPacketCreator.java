@@ -106,8 +106,8 @@ public abstract class AbstractPacketCreator {
 
 		HashMap<ProtocollVersion, Integer> rowMapping = new HashMap<>();
 		List<TerminalColumn> columns = new ArrayList<>();
-		columns.add(new TerminalColumn("§eName", Align.RIGHT));
-		columns.add(new TerminalColumn("§eDirection", Align.CENTER));
+		columns.add(new TerminalColumn(ChatColor.COLOR_CHAR+"eName", Align.RIGHT));
+		columns.add(new TerminalColumn(ChatColor.COLOR_CHAR+"�eDirection", Align.CENTER));
 		List<ProtocollVersion> versions = Arrays.asList(ProtocollVersion.values());
 		Collections.sort(versions, (o1, o2) -> Integer.compare(o1.getProtocollVersion(), o2.getProtocollVersion()));
 		for (ProtocollVersion version : versions) {
@@ -126,16 +126,16 @@ public abstract class AbstractPacketCreator {
 				for (Entry<Integer, Class<? extends Packet>> packet : packetIds) {
 					if (!packetRow.containsKey(packet.getValue())) {
 						String[] ids = new String[columns.size()];
-						Arrays.fill(ids, 2, ids.length, "§6nan");
+						Arrays.fill(ids, 2, ids.length, ChatColor.COLOR_CHAR+"6nan");
 						packetRow.put(packet.getValue(), ids);
 					}
-					String packetIdHex = "§c0x" + (Integer.toHexString(packet.getKey()).length() == 1 ? "0" : "") + Integer.toHexString(packet.getKey()).toUpperCase();
+					String packetIdHex = ChatColor.COLOR_CHAR+"c0x" + (Integer.toHexString(packet.getKey()).length() == 1 ? "0" : "") + Integer.toHexString(packet.getKey()).toUpperCase();
 					packetRow.get(packet.getValue())[rowMapping.get(protocolls.getKey())] = packetIdHex;
 					if (packetRow.get(packet.getValue())[0] == null) {
-						packetRow.get(packet.getValue())[0] = "§6" + packet.getValue().getName().replaceAll(packet.getValue().getName().split("\\.")[packet.getValue().getName().split("\\.").length - 1], ChatColorUtils.COLOR_CHAR + "b" + packet.getValue().getName().split("\\.")[packet.getValue().getName().split("\\.").length - 1]);
+						packetRow.get(packet.getValue())[0] = ChatColor.COLOR_CHAR+"6" + packet.getValue().getName().replaceAll(packet.getValue().getName().split("\\.")[packet.getValue().getName().split("\\.").length - 1], ChatColorUtils.COLOR_CHAR + "b" + packet.getValue().getName().split("\\.")[packet.getValue().getName().split("\\.").length - 1]);
 					}
 					if (packetRow.get(packet.getValue())[1] == null) {
-						packetRow.get(packet.getValue())[1] = "§a" + directions.getKey().name();
+						packetRow.get(packet.getValue())[1] = ChatColor.COLOR_CHAR+"a" + directions.getKey().name();
 					}
 				}
 			}
@@ -149,7 +149,7 @@ public abstract class AbstractPacketCreator {
 		table.setRowSeperator(new TerminalTable.RowSeperator() {
 			@Override
 			public ColoredChar getDefaultSeperator() {
-				return new ColoredChar("§7|");
+				return new ColoredChar(ChatColor.COLOR_CHAR+"7|");
 			}
 			@Override
 			public ColoredChar getSeperator(TerminalRow row, int rowIndex, int columnFrom, int columnTo) {
@@ -158,25 +158,24 @@ public abstract class AbstractPacketCreator {
 				}
 				String oldPacketIds = row.getColumns()[columnFrom].get(rowIndex);
 				String newPacketIds = row.getColumns()[columnTo].get(rowIndex);
-				if(oldPacketIds.equalsIgnoreCase("§6nan")) {
+				if(oldPacketIds.equalsIgnoreCase(ChatColor.COLOR_CHAR+"6nan")) {
 					oldPacketIds = "0x-1";
 				}
-				if(newPacketIds.equalsIgnoreCase("§6nan")) {
+				if(newPacketIds.equalsIgnoreCase(ChatColor.COLOR_CHAR+"6nan")) {
 					newPacketIds = "0x-1";
 				}
 				BigInteger oldPacketId = new BigInteger(ChatColor.stripColor(oldPacketIds).substring(2),16);
 				BigInteger newPacketId = new BigInteger(ChatColor.stripColor(newPacketIds).substring(2),16);
 				switch (oldPacketId.compareTo(newPacketId)) {
 				case -1:
-					return new ColoredChar("§a≠");
-				case 0:
-					return new ColoredChar("§7|");
 				case 1:
-					return new ColoredChar("§a≠");
+					return new ColoredChar(ChatColor.COLOR_CHAR+"a~�");
+				case 0:
+					return new ColoredChar(ChatColor.COLOR_CHAR+"7|");
 				default:
 					break;
 				}
-				return new ColoredChar("§5X");
+				return new ColoredChar(ChatColor.COLOR_CHAR+"5X");
 			}
 		});
 
