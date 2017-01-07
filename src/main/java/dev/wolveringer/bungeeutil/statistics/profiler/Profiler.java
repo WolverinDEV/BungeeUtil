@@ -111,11 +111,20 @@ public class Profiler {
 		post.addLine("  Bungeecord version           : " + BungeeCord.getInstance().getVersion());
 		post.addLine("  Bungeecord protocol version  : " + BungeeCord.getInstance().getProtocolVersion());
 		post.addLine("  Bungeecord game version      : " + BungeeCord.getInstance().getGameVersion());
-		post.addLine("  BungeeUtil author            : " + Main.getMain().getDescription().getAuthor());
-		if(Main.getMain().updater.isNewstVersion()) {
-			post.addLine("  BungeeUtil version           : " + Main.getMain().getDescription().getVersion() + " (up to date)");
-		} else {
-			post.addLine("  BungeeUtil version      	 : " + Main.getMain().getDescription().getVersion() + " (new version avariable: " + Main.getMain().updater.getNewestVersion() + ")");
+		if(Main.getMain() != null){
+			post.addLine("  BungeeUtil author            : " + Main.getMain().getDescription().getAuthor());
+			if(Main.getMain().updater == null){
+				post.addLine("  BungeeUtil version           :"+ Main.getMain().getDescription().getVersion() );
+				post.addLine("  Updater is disabled. Cant check for update status.");
+			} else {
+				if(Main.getMain().updater.hasUpdate()) {
+					post.addLine("  BungeeUtil version           : " + Main.getMain().getDescription().getVersion() + " (up to date)");
+				} else {
+					post.addLine("  BungeeUtil version      	 : " + Main.getMain().getDescription().getVersion() + " (new version avariable: " + Main.getMain().updater.getNewestVersion() + ")");
+				}
+			}
+		}else {
+			post.addLine("  BungeeUtil is in a shaded version. Cant detect version.");
 		}
 		post.addLine("  BungeeUtil ByteBuffType      : " + Configuration.getByteBuffType().toUpperCase());
 		post.addLine("");

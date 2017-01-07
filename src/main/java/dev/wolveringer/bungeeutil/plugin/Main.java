@@ -1,15 +1,14 @@
 package dev.wolveringer.bungeeutil.plugin;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.packets.Packet;
-import dev.wolveringer.bungeeutil.plugin.Updater.Version;
+import dev.wolveringer.bungeeutil.plugin.updater.Updater;
+import dev.wolveringer.bungeeutil.plugin.updater.UpdaterV1;
+import dev.wolveringer.bungeeutil.plugin.updater.UpdaterV2;
+import dev.wolveringer.bungeeutil.plugin.updater.Version;
 import dev.wolveringer.bungeeutil.system.ProxyType;
 import dev.wolveringer.terminal.table.TerminalTable;
 import dev.wolveringer.terminal.table.TerminalTable.Align;
@@ -39,34 +38,55 @@ public class Main extends Plugin {
 		}
 
 		if(BungeeCord.getInstance().getPluginManager().getPlugin("ViaVersion") != null){
-			BungeeUtil.getInstance().sendMessage("§7------------------------------ §c§nAttantion:§r ------------------------------");
-			BungeeUtil.getInstance().sendMessage("           §5BungeeUtil detected ViaVersion (Bungee).");
-			BungeeUtil.getInstance().sendMessage("           §5BungeeUtil may have conflicts with ViaVersion.");
-			BungeeUtil.getInstance().sendMessage("           §5Any bugs/errors with ViaVersion installed will be ignored.");
-			BungeeUtil.getInstance().sendMessage("§7------------------------------------------------------------------------");
+			BungeeUtil.getInstance().sendMessage(ChatColor.COLOR_CHAR+"7------------------------------ "+ChatColor.COLOR_CHAR+"c"+ChatColor.COLOR_CHAR+"nAttantion:"+ChatColor.COLOR_CHAR+"r ------------------------------");
+			BungeeUtil.getInstance().sendMessage("           "+ChatColor.COLOR_CHAR+"5BungeeUtil detected ViaVersion (Bungee).");
+			BungeeUtil.getInstance().sendMessage("           "+ChatColor.COLOR_CHAR+"5BungeeUtil may have conflicts with ViaVersion.");
+			BungeeUtil.getInstance().sendMessage("           "+ChatColor.COLOR_CHAR+"5Any bugs/errors with ViaVersion installed will be ignored.");
+			BungeeUtil.getInstance().sendMessage(ChatColor.COLOR_CHAR+"7------------------------------------------------------------------------");
 		}
 
 		Configuration.init();
 		BungeeUtil.getInstance().sendMessage(ChatColor.GRAY+"Detected Minecraft proxy type: "+ProxyType.getType().toString());
 		BungeeUtil.getInstance().setInformation("Loading update data");
 		try {
-			this.updater = new Updater("https://raw.githubusercontent.com/WolverinDEV/BungeeUtil/jars/versions.json");
+			this.updater = new UpdaterV2("https://raw.githubusercontent.com/WolverinDEV/BungeeUtil/jars/BungeeUtil.json");
 			this.updater.loadData();
 			BungeeUtil.getInstance().displayedSleep(1000);
 
-			if(this.updater.getData() == null){
+			if(!this.updater.isValid()){
 				BungeeUtil.getInstance().sendMessage(ChatColor.RED+"Cant get versions informations.");
 				this.updater = null;
 			}
 			else
 			{
-				if (Configuration.isUpdaterActive() && this.updater.checkUpdate()) {
+				
+				update:
+				if (Configuration.isUpdaterActive() && this.updater.hasUpdate()) {
+					BungeeUtil.getInstance().setInformation(ChatColor.GREEN+"Update found. Updating.");
+					switch (this.updater.update()) {
+					case ALREDY_UP_TO_DATE:
+						break update;
+					case SUCCESSFULL:
+						BungeeUtil.getInstance().setInformation(ChatColor.GREEN+"Update was successful!");
+						break;
+					case FAILED_CHECKSUM:
+					case FAILED_DOWNLOAD:
+					case FAILED_NO_DATA:
+					case FAILED_UNKNOWN:
+					case FAILED_FILE:
+						BungeeUtil.getInstance().setInformation(ChatColor.RED+"Update failed.");
+					default:
+						break;
+					};
 					BungeeUtil.getInstance().setInformation(ChatColor.RED+"Restarting bungeecord");
 					BungeeUtil.getInstance().displayedSleep(1000);
 					BungeeUtil.getInstance().setInformation(null);
+					Configuration.setLastVersion(updater.getOwnVersion().getVersion());
 					System.exit(-1);
 					return;
 				}
+				if(Configuration.isUpdaterActive())
+					BungeeUtil.getInstance().setInformation(ChatColor.GREEN+"No update found. Version is up to date.");
 			}
 		}
 		catch (Exception e) {
@@ -74,29 +94,35 @@ public class Main extends Plugin {
 		}
 
 		if (Configuration.getLastVersion() != null && this.updater != null) {
-			HashMap<Updater.Version, List<String>> _changes = this.updater.createChanges(new Version(Configuration.getLastVersion()));
-			if(_changes.size() > 0){
+			List<Version> versions = this.updater.getVersionsBehind();
+			if(versions.size() > 0){
 				BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "BungeeUtil successful updated!");
 				BungeeUtil.getInstance().sendMessage(ChatColor.GRAY + "Updates:");
 				TerminalTable table = new TerminalTable(new TerminalTable.TerminalColumn[]{
 						new TerminalTable.TerminalColumn("Version", Align.LEFT),
 						new TerminalTable.TerminalColumn("Changes", Align.LEFT)
 				});
-
-				List<Entry<Updater.Version, List<String>>> changes = new ArrayList<>(_changes.entrySet());
-				Collections.sort(changes, (o1, o2) -> o1.getKey().compareTo(o2.getKey()));
-				for(Entry<Updater.Version, List<String>> e : changes){
+				for(Version version : versions){
 					TerminalRow row = new TerminalRow(2);
-					row.getColumns()[1].addAll(e.getValue());
-					row.setText(0, e.getKey().getVersion());
+					row.getColumns()[1].addAll(this.updater.getChangeNotes(version));
+					row.setText(0, version.getVersion());
 					table.addRow(row);
 				}
 				for(String message : table.buildLines()) {
 					BungeeUtil.getInstance().sendMessage(message);
 				}
 			}
+			Configuration.setLastVersion(this.updater.getOwnVersion().getPlainVersion());
 		}
-		Configuration.setLastVersion(this.updater.getCurrentVersion().getPlainVersion());
+		
+		if(this.updater != null){
+			List<String> motd = this.updater.getMOTD(this.updater.getOwnVersion());
+			if(motd.size() > 0){
+				BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "BungeeUtil information message:");
+				for(String line : motd)
+					BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + ChatColor.translateAlternateColorCodes('&', line));
+			}
+		}
 
 		if(!BungeeUtil.getInstance().isInjected()){
 			switch (BungeeUtil.getInstance().inject()) {

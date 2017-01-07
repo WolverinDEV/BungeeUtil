@@ -1,4 +1,4 @@
-package dev.wolveringer.bungeeutil.plugin;
+package dev.wolveringer.bungeeutil.plugin.updater;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -18,89 +18,24 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.jar.JarInputStream;
 
-import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.MathUtil;
-import lombok.Getter;
+import dev.wolveringer.bungeeutil.plugin.Main;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
 
-public class Updater {
-	@RequiredArgsConstructor
-	@Getter
-	public static class Version implements Comparable<Version>{
-		private final String version;
-
-		@Override
-		public int compareTo(Version o) {
-			String[] ownSegments = this.getPlainVersion().split("\\.");
-			String[] otherSegments = o.getPlainVersion().split("\\.");
-
-			for(int i = 0;i<Math.max(ownSegments.length, otherSegments.length);i++){
-				if(ownSegments.length <= i){
-					if(otherSegments.length <= i) {
-						return Boolean.compare(this.isSnapshot(), o.isSnapshot());
-					}
-					for(int j = i; j < otherSegments.length; j++) {
-						if(Integer.parseInt(otherSegments[j]) > 0) {
-							return -1;
-						}
-					}
-				} else if(otherSegments.length <= i){
-					if(ownSegments.length <= i) {
-						return Boolean.compare(this.isSnapshot(), o.isSnapshot());
-					}
-					for(int j = i; j < ownSegments.length; j++) {
-						if(Integer.parseInt(ownSegments[j]) > 0) {
-							return 1;
-						}
-					}
-				} else {
-					Integer a = Integer.parseInt(ownSegments[i]);
-					Integer b = Integer.parseInt(otherSegments[i]);
-					if(a > b) {
-						return 1;
-					} else if(a == b) {
-						continue;
-					} else if(b > a) {
-						return -1;
-					} else {
-						throw new RuntimeException("LOL this is impossible.");
-					}
-				}
-			}
-			return 0;
-		}
-
-		public String getPlainVersion(){
-			int index = 0;
-			while (this.version.length() > index) {
-				if(StringUtils.isNumeric(Character.toString(this.version.charAt(index))) || this.version.charAt(index) == '.') {
-					index++;
-				} else {
-					break;
-				}
-			}
-			return this.version.substring(0, index);
-		}
-
-		public boolean isSnapshot(){
-			return this.version.toLowerCase().endsWith("SNAPSHOT".toLowerCase());
-		}
-
-	}
+public class UpdaterV1 implements Updater{
 
 	private String url;
 	private JSONObject data;
 	private long last;
 
-	public Updater(String url) {
+	public UpdaterV1(String url) {
 		this.url = url;
 	}
 
@@ -167,7 +102,7 @@ public class Updater {
 	private int downloadUpdate(String url, File targetFile) {
 		BigInteger errorMask = new BigInteger("0");
 		errorMask.setBit(8);
-		BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Updating from "+this.getCurrentVersion().version+" to "+this.getNewestVersion().version);
+		BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Updating from "+this.getCurrentVersion().getVersion()+" to "+this.getNewestVersion().getVersion());
 		BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Starting to download the update ("+url+") to "+targetFile.getAbsolutePath());
 		programm:
 		try {
@@ -284,10 +219,9 @@ public class Updater {
 		return new Version(this.data.getString("CurrentVersion"));
 	}
 
-	public void installUpdate(){
+	public int installUpdate(){
 		File ownFile = new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile());
-		this.downloadUpdate(this.data.getString("Download"), ownFile);
-		Configuration.setLastVersion(this.getCurrentVersion().getVersion());
+		return this.downloadUpdate(this.data.getString("Download"), ownFile);
 	}
 
 	public boolean isDevBuild(){
@@ -298,7 +232,7 @@ public class Updater {
 		return this.getNewestVersion().compareTo(this.getCurrentVersion()) <= 0;
 	}
 
-	public Updater loadData() {
+	public boolean loadData() {
 		this.last = System.currentTimeMillis();
 		if(BungeeUtil.getInstance() != null) {
 			BungeeUtil.getInstance().sendMessage(ChatColor.GREEN + "Fetching update data.");
@@ -315,16 +249,96 @@ public class Updater {
 			}
 			in.close();
 			this.data = new JSONObject(response.toString());
+			return true;
 		}
 		catch (Exception e) {
 			BungeeUtil.debug(e);
 		}
-		return this;
+		return false;
 	}
 
 	public void updateData() {
 		if (System.currentTimeMillis() - this.last > TimeUnit.MINUTES.toMillis(10)) {
 			this.loadData();
 		}
+	}
+	
+	@Override
+	public List<String> getBugs(Version version) {
+		return new ArrayList<>();
+	}
+	
+	@Override
+	public List<String> getMOTD(Version version) {
+		return new ArrayList<>();
+	}
+	
+	@Override
+	public List<String> getChangeNotes(Version version) {
+		List<String> out = new ArrayList<>();
+		if(this.data != null){
+			JSONArray changelogArray = this.data.getJSONArray("Changelog");
+			Iterator<Object> objects = changelogArray.iterator();
+			while (objects.hasNext()) {
+				JSONObject object = (JSONObject) objects.next();
+				String sversion = object.getString("Verion");
+				if(object.has("snapshot") && sversion.endsWith("-SNAPSHOT")) {
+					sversion += "-SNAPSHOT";
+				}
+
+				Version uversion = new Version(sversion);
+				if(uversion.compareTo(version) == 0){
+					ArrayList<String> changes = new ArrayList<>();
+					Iterator<Object> message = object.getJSONArray("Changed").iterator();
+					while (message.hasNext()) {
+						changes.add((String) message.next());
+					}
+					return changes;
+				}
+			}
+		} else {
+			out.addAll(Arrays.asList(ChatColor.RED+"Cant featch versions data.","Make shure you have an valid internet connection."));
+		}		
+		return out;
+	}
+	
+	@Override
+	public Version getOwnVersion() {
+		return this.getCurrentVersion();
+	}
+	
+	@Override
+	public boolean isOfficialBuild() {
+		return true;
+	}
+	
+	@Override
+	public List<Version> getVersionsBehind() {
+		return new ArrayList<>(createChanges(getCurrentVersion()).keySet()); //its so bad code but its my v1 patches...
+	}
+	
+	@Override
+	public UpdateState updateTo(Version target) {
+		return update();
+	}
+	
+	@Override
+	public UpdateState update() {
+		switch (this.installUpdate()) {
+		case 0:
+			return UpdateState.SUCCESSFULL;
+		default:
+			return UpdateState.FAILED_DOWNLOAD;
+		}
+	}
+	
+	@Override
+	public boolean isValid() {
+		return getData() != null;
+	}
+	
+	@Override
+	public boolean hasUpdate() {
+		return isNewstVersion();
 	}
 }
