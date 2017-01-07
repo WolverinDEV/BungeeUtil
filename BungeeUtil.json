@@ -152,7 +152,8 @@
 				"sha1": "F4FB72842B88B4B2C57BB9D7FDAB114E9639F4DE",
 				"url": "${download.github}(version=1.6.8.2)",
 				"md5": "D95429A5097FE69EC13F045799EDB753"
-			}
+			},
+			"changelog": []
 		},
 		"1.6.8": {
 			"bugs": [],
