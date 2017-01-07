@@ -9,16 +9,19 @@
 		}
 	],
 	
-	"strings": [
-		{
+	"strings": {
+		"download.github": {
+			"value": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-%version%.jar",
 			"description": "The basic download url",
-			"download.github": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-%version%.jar"
+			"defaults": {
+				"version": "unknown"
+			}
 		}
-	],
+	},
 	  
 	"CurrentVersion": "2.1.2",
-	"history": [
-		{
+	"history": {
+		"2.1.2": {
 			"bugs": [],
 			"download": {
 				"sha1": "11C7162182DA184EDA4E71D4BEC86DA570DF0730",
@@ -28,20 +31,18 @@
 			"changelog": [
 				"Fixed inventory issue #19",
 				"Fixing some charset issues"
-			],
-			"version": "2.1.2"
+			]
 		},
-		{
+		"2.1.1": {
 			"bugs": [],
 			"download": {
 				"sha1": "A85D681EC3CB6C395D036CB660EA86FA4C1F5941",
 				"url": "${download.github}(version=2.1.1)",
 				"md5": "5CBB543612E7F1B5A09558E115BF499B"
 			},
-			"changelog": ["Fixed PacketPlayOutUpdateSign when its get reused"],
-			"version": "2.1.1"
+			"changelog": ["Fixed PacketPlayOutUpdateSign when its get reused"]
 		},
-		{
+		"2.1.0": {
 			"bugs": [],
 			"download": {
 				"sha1": "C3B5DC7F40AEF41666DEF053E814C28599646777",
@@ -52,10 +53,9 @@
 				"Reusing packet class instances to reduce the heap usage",
 				"Fixed PacketPlayOutTitle in Minecraft version 1.11",
 				"Implement packet data dump if packet failed to decode (Only if debugmessages enabled!)"
-			],
-			"version": "2.1.0"
+			]
 		},
-		{
+		"2.0.3": {
 			"bugs": [],
 			"download": {
 				"sha1": "FE057B6B438A678F0CA29B84B2AD370C00BDF3C5",
@@ -65,20 +65,18 @@
 			"changelog": [
 				"Implemented support for Minecraft 1.11.1/2",
 				"Fixed a unknown versions bug."
-			],
-			"version": "2.0.3"
+			]
 		},
-		{
+		"2.0.2": {
 			"bugs": [],
 			"download": {
 				"sha1": "E4D89B20BF89DC1479CA9274479CCDFA98B85FD9",
 				"url": "${download.github}(version=2.0.2)",
 				"md5": "333BFE08FE2245EDAFFF7559DB87D236"
 			},
-			"changelog": ["Fixed 'not existing player' but in PostLoginEvent"],
-			"version": "2.0.2"
+			"changelog": ["Fixed 'not existing player' but in PostLoginEvent"]
 		},
-		{
+		"2.0.1": {
 			"bugs": [],
 			"download": {
 				"sha1": "9B6470D7CE0C435A2F20369A8E4CFE44BFBEACCA",
@@ -88,10 +86,9 @@
 			"changelog": [
 				"Fixed datawatcher for the 1.11 version",
 				"Fixed issue with isConnected boolean"
-			],
-			"version": "2.0.1"
+			]
 		},
-		{
+		"2.0": {
 			"bugs": [],
 			"download": {
 				"sha1": "E9EDD043F5E43D1384153F136AD24149F50190A7",
@@ -105,10 +102,9 @@
 				"Fixed all know bugs",
 				"Implemented slient loading",
 				"Updated the updater"
-			],
-			"version": "2.0"
+			]
 		},
-		{
+		"2.0-SNAPSHOT": {
 			"bugs": [],
 			"download": {
 				"sha1": "E9EDD043F5E43D1384153F136AD24149F50190A7",
@@ -122,10 +118,9 @@
 				"Fixed all know bugs",
 				"Implemented slient loading",
 				"Updated the updater"
-			],
-			"version": "2.0"
+			]
 		},
-		{
+		"1.6.10": {
 			"bugs": [],
 			"download": {
 				"sha1": "EF53B317ED894FE50CE746D45A999ABE65D97170",
@@ -135,10 +130,9 @@
 			"changelog": [
 				"BungeeUtil is not compatible with Waterfall",
 				"Some minor error fixes"
-			],
-			"version": "1.6.10"
+			]
 		},
-		{
+		"1.6.9": {
 			"bugs": [],
 			"download": {
 				"sha1": "E93D744124AA1D4B4CFD6EB8F50FA7C7BE42DAB7",
@@ -150,59 +144,53 @@
 				"Updated Virtual Bungee Inventory updating",
 				"Created new function (onInteract)",
 				"Implemented ItemStacks in Player inventory (now click will be handled if a player clicks on the item in his own inventory)"
-			],
-			"version": "1.6.9"
+			]
 		},
-		{
+		"1.6.8.2": {
 			"bugs": [],
 			"download": {
 				"sha1": "F4FB72842B88B4B2C57BB9D7FDAB114E9639F4DE",
 				"url": "${download.github}(version=1.6.8.2)",
 				"md5": "D95429A5097FE69EC13F045799EDB753"
-			},
-			"version": "1.6.8.2"
+			}
 		},
-		{
+		"1.6.8": {
 			"bugs": [],
 			"download": {
 				"sha1": "4D980A942CF38B6129E70A2231EB59E28E62CA8A",
 				"url": "${download.github}(version=1.6.8)",
 				"md5": "E914C137D34EEA5C463A63B6356ADFD4"
 			},
-			"changelog": ["Fixed error with newest Bungeecord."],
-			"version": "1.6.8"
+			"changelog": ["Fixed error with newest Bungeecord."]
 		},
-		{
+		"1.6.7.14.3": {
 			"bugs": [],
 			"download": {
 				"sha1": "742E846E707F889E6C72756F1177F7A27E43FA9F",
 				"url": "${download.github}(version=1.6.7.14.3)",
 				"md5": "F2EA635B7F67F52397823E6F081EF153"
 			},
-			"changelog": ["Fixed anvil plugin message bug."],
-			"version": "1.6.7.14.3"
+			"changelog": ["Fixed anvil plugin message bug."]
 		},
-		{
+		"1.6.7.14.2": {
 			"bugs": [],
 			"download": {
 				"sha1": "B1BC359A781A11167D869FDA4F338A9C63EA94A6",
 				"url": "${download.github}(version=1.6.7.14.2)",
 				"md5": "B1807CF5C2DBC585EC3ED8AABA6F4F28"
 			},
-			"changelog": ["Copied PacketPlayOutPluginMessage to PacketPlayInPluginMessage"],
-			"version": "1.6.7.14.2"
+			"changelog": ["Copied PacketPlayOutPluginMessage to PacketPlayInPluginMessage"]
 		},
-		{
+		"1.6.7.14": {
 			"bugs": [],
 			"download": {
 				"sha1": "C3192E5C127AE04387879B0156A1CFA5194FBCFF",
 				"url": "${download.github}(version=1.6.7.14)",
 				"md5": "E77CADA27668899A2446FFB7926F9617"
 			},
-			"changelog": ["Fixed Plugin messages over 256 bytes!"],
-			"version": "1.6.7.14"
+			"changelog": ["Fixed Plugin messages over 256 bytes!"]
 		},
-		{
+		"1.6.7.13": {
 			"bugs": [],
 			"download": {
 				"sha1": "CF510556A5CF5FD5ABB6DD839A61E0B386EA1210",
@@ -213,10 +201,9 @@
 				"Fixed Name Sound Effect packet",
 				"Updated packet id table",
 				"Fixed ram statistics"
-			],
-			"version": "1.6.7.13"
+			]
 		},
-		{
+		"1.6.7.12": {
 			"bugs": [],
 			"download": {
 				"sha1": "3888DD346524BA669AFDB46250BD04664454FD71",
@@ -227,20 +214,18 @@
 				"Fixed packet error handeling",
 				"Reimplemented sound API (Working now)",
 				"Try to fix plugin message bug"
-			],
-			"version": "1.6.7.12"
+			]
 		},
-		{
+		"1.6.7.11": {
 			"bugs": [],
 			"download": {
 				"sha1": "BA77E1D6310C64FAF77543F1165A43F5EB5F206C",
 				"url": "${download.github}(version=1.6.7.11)",
 				"md5": "B15C560386FEF983D8877F67F2F440CD"
 			},
-			"changelog": ["Fixed PacketPlayOutNamedSound bug"],
-			"version": "1.6.7.11"
+			"changelog": ["Fixed PacketPlayOutNamedSound bug"]
 		},
-		{
+		"1.6.7.10": {
 			"bugs": [],
 			"download": {
 				"sha1": "0BE13CAF3462622358F8F88FB4EE2AB3DD323510",
@@ -250,10 +235,9 @@
 			"changelog": [
 				"Fixed shared inventory bug",
 				"Use original UserConnection class"
-			],
-			"version": "1.6.7.10"
+			]
 		},
-		{
+		"1.6.7.9": {
 			"bugs": [],
 			"download": {
 				"sha1": "1A9B9F2EC6389D4FCB40AD74DAA26C4F0479B7BF",
@@ -263,10 +247,9 @@
 			"changelog": [
 				"Fixed bytecode error",
 				"Made BungeeUtils maven shadeable"
-			],
-			"version": "1.6.7.9"
+			]
 		},
-		{
+		"1.6.7.8": {
 			"bugs": [],
 			"download": {
 				"sha1": "858A3585AC63720016DA36F2AEEAEE6E1930A906",
@@ -276,10 +259,9 @@
 			"changelog": [
 				"Fixed auto updater",
 				"Fixed packet list align"
-			],
-			"version": "1.6.7.8"
+			]
 		},
-		{
+		"1.6.7.7": {
 			"bugs": [],
 			"download": {
 				"sha1": "C4351229C5FD4A436A7416C0AA819C7257428879",
@@ -291,17 +273,15 @@
 				"Fixed PacketPlayOutPluginMessage bug",
 				"Removed java insturmental",
 				"Reimplemented sound API (Currently not working!)"
-			],
-			"version": "1.6.7.7"
+			]
 		},
-		{
+		"1.6.7.6": {
 			"bugs": [],
 			"download": {
 				"sha1": "DA39A3EE5E6B4B0D3255BFEF95601890AFD80709",
 				"url": "${download.github}(version=1.6.7.6)",
 				"md5": "D41D8CD98F00B204E9800998ECF8427E"
-			},
-			"version": "1.6.7.6"
+			}
 		}
-	]
+	}
 }
