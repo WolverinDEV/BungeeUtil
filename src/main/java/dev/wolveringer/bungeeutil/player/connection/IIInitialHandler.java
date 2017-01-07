@@ -31,6 +31,7 @@ import net.md_5.bungee.EncryptionUtil;
 import net.md_5.bungee.UserConnection;
 import net.md_5.bungee.Util;
 import net.md_5.bungee.api.Callback;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ListenerInfo;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -81,7 +82,7 @@ public class IIInitialHandler extends IInitialHandler {
 				clazz.setName("ProxiedPlayerUserConnectionRedefined" + (redifned_count == 0 ? "" : redifned_count));
 				clazz.setSuperclass(cp.get(UserConnection.class.getName()));
 				base_class_connection = class_connection = clazz.toClass(getClassLoader());
-				BungeeUtil.getInstance().sendMessage("§aInitialized base ProxiedPlayerUserConnection class");
+				BungeeUtil.getInstance().sendMessage(ChatColor.COLOR_CHAR+"aInitialized base ProxiedPlayerUserConnection class");
 				redifned_count++;
 			}catch (Exception e){
 				e.printStackTrace();
@@ -104,7 +105,7 @@ public class IIInitialHandler extends IInitialHandler {
 				clazz.setSuperclass(super_class);
 				clazz.setName("ProxiedPlayerUserConnectionRedefined_" + (redifned_count == 0 ? "" : redifned_count));
 				class_connection = clazz.toClass(getClassLoader()); //Create the class
-				BungeeUtil.getInstance().sendMessage("§aaInitialized extra ProxiedPlayerUserConnection class " + class_connection.getSuperclass());
+				BungeeUtil.getInstance().sendMessage(ChatColor.COLOR_CHAR+"aaInitialized extra ProxiedPlayerUserConnection class " + class_connection.getSuperclass());
 				redifned_count++;
 			}catch (Exception e){
 				e.printStackTrace();
@@ -273,18 +274,19 @@ public class IIInitialHandler extends IInitialHandler {
 	public void handle(EncryptionResponse encryptResponse) throws Exception {
 		SecretKey sharedKey = EncryptionUtil.getSecret(encryptResponse, (EncryptionRequest) this.get("request"));
 		BungeeCipher decrypt = EncryptionUtil.getCipher(false, sharedKey);
-		((ChannelWrapper) this.get("ch")).addBefore("frame-decoder", "decrypt", new CipherDecoder(decrypt));
+		this.getChannel().addBefore("frame-decoder", "decrypt", new CipherDecoder(decrypt));
+		
 		BungeeCipher encrypt = EncryptionUtil.getCipher(true, sharedKey);
-		((ChannelWrapper) this.get("ch")).addBefore("frame-prepender", "encrypt", new CipherEncoder(encrypt));
+		this.getChannel().addBefore("frame-prepender", "encrypt", new CipherEncoder(encrypt));
 
 		String encName = URLEncoder.encode(this.getName(), "UTF-8");
 
 		MessageDigest sha = MessageDigest.getInstance("SHA-1");
-		for(byte[] bit : new byte[][] { ((EncryptionRequest) this.get("request")).getServerId().getBytes("ISO_8859_1"), sharedKey.getEncoded(), EncryptionUtil.keys.getPublic().getEncoded() })
-
-		{
+		
+		for(byte[] bit : new byte[][] { ((EncryptionRequest) this.get("request")).getServerId().getBytes("ISO_8859_1"), sharedKey.getEncoded(), EncryptionUtil.keys.getPublic().getEncoded() }) {
 			sha.update(bit);
 		}
+		
 		String encodedHash = URLEncoder.encode(new BigInteger(sha.digest()).toString(16), "UTF-8");
 
 		String authURL = new StringBuilder().append("https://sessionserver.mojang.com/session/minecraft/hasJoined?username=").append(encName).append("&serverId=").append(encodedHash).toString();
@@ -319,7 +321,7 @@ public class IIInitialHandler extends IInitialHandler {
 		ClientVersion version = ClientVersion.fromProtocoll(this.getHandshake().getProtocolVersion());
 		if(version == null || !version.getProtocollVersion().isSupported()){
 			//disconnect(ProxyServer.getInstance().getTranslation("outdated_server", new Object[0]));
-			this.disconnect("§cBungeeUtil cant handle your client version.");
+			this.disconnect(ChatColor.COLOR_CHAR+"cBungeeUtil cant handle your client version.");
 			return;
 		}
 

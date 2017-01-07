@@ -18,6 +18,7 @@ import dev.wolveringer.bungeeutil.packets.PacketPlayOutUpdateHealth;
 import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.Player;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelFuture;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.ServerConnection;
 import net.md_5.bungee.UserConnection;
@@ -228,17 +229,16 @@ public abstract class IInitialHandler extends InitialHandler {
 		this.getPlayer().updateInventory();
 	}
 
-	public void sendPacket(Packet p) {
+	public ChannelFuture sendPacket(Packet p) {
 		AsyncCatcher.catchOp("Packet cant be sending async!");
 		ByteBuf b = p.getByteBuf(ClientVersion.fromProtocoll(this.getVersion()));
-		this.getChannel().getHandle().writeAndFlush(b);
-		p = null;
+		return this.getChannel().getHandle().writeAndFlush(b);
 	}
 
-	public void sendPacketToServer(Packet p) {
+	public ChannelFuture sendPacketToServer(Packet p) {
 		AsyncCatcher.catchOp("Packet cant be sending async!");
 		ByteBuf b = p.getByteBuf(ClientVersion.fromProtocoll(this.getVersion()));
-		((ServerConnection) this.getPlayer().getServer()).getCh().write(b);
+		return ((ServerConnection) this.getPlayer().getServer()).getCh().getHandle().writeAndFlush(b);
 	}
 
 	public void setProtocol(Protocol p) {
