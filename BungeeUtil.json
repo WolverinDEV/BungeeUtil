@@ -282,7 +282,8 @@
 				"sha1": "DA39A3EE5E6B4B0D3255BFEF95601890AFD80709",
 				"url": "${download.github}(version=1.6.7.6)",
 				"md5": "D41D8CD98F00B204E9800998ECF8427E"
-			}
+			},
+			"changelog": []
 		}
 	}
 }
