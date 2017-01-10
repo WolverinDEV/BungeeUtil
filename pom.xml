@@ -154,7 +154,7 @@
 		<dependency>
 			<groupId>dev.wolveringer</groupId>
 			<artifactId>TerminalUtils</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
