@@ -107,7 +107,7 @@ public abstract class AbstractPacketCreator {
 		HashMap<ProtocollVersion, Integer> rowMapping = new HashMap<>();
 		List<TerminalColumn> columns = new ArrayList<>();
 		columns.add(new TerminalColumn(ChatColor.COLOR_CHAR+"eName", Align.RIGHT));
-		columns.add(new TerminalColumn(ChatColor.COLOR_CHAR+"§eDirection", Align.CENTER));
+		columns.add(new TerminalColumn(ChatColor.COLOR_CHAR+"eDirection", Align.CENTER));
 		List<ProtocollVersion> versions = Arrays.asList(ProtocollVersion.values());
 		Collections.sort(versions, (o1, o2) -> Integer.compare(o1.getProtocollVersion(), o2.getProtocollVersion()));
 		for (ProtocollVersion version : versions) {
@@ -169,7 +169,7 @@ public abstract class AbstractPacketCreator {
 				switch (oldPacketId.compareTo(newPacketId)) {
 				case -1:
 				case 1:
-					return new ColoredChar(ChatColor.COLOR_CHAR+"a~ ");
+					return new ColoredChar(ChatColor.COLOR_CHAR+"a~");
 				case 0:
 					return new ColoredChar(ChatColor.COLOR_CHAR+"7|");
 				default:
