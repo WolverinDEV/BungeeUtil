@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>dev.wolveringer</groupId>
 	<artifactId>BungeeUtil</artifactId>
-	<version>2.2.0</version>
+	<version>2.2.1</version>
 	<packaging>jar</packaging>
 
 	<distributionManagement>
@@ -151,10 +151,11 @@
 			<artifactId>jsoup</artifactId>
 			<version>1.9.2</version>
 		</dependency>
+		<!-- https://github.com/WolverinDEV/TerminalUtils -->
 		<dependency>
 			<groupId>dev.wolveringer</groupId>
 			<artifactId>TerminalUtils</artifactId>
-			<version>1.0</version>
+			<version>1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
