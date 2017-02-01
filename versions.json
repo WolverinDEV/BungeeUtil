@@ -1,7 +1,7 @@
 {
-	"configVersion": 1,
-    "CurrentVersion": "2.1.2",
-    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.1.2.jar",
+    "configVersion": 1,
+    "CurrentVersion": "2.2.1",
+    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.2.1.jar",
     "VersionsHistory": [
         {
             "Version": "1.6.7.6",
@@ -95,7 +95,11 @@
         {
             "Version": "2.1.2",
             "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.1.2.jar"
-        }
+        },
+	{
+	    "Version": "2.2.1",
+	    "Download": "https://github.com/WolverinDEV/BungeeUtil/raw/jars/buildedJars/standalone/BungeeUtil-2.2.1.jar"
+	}
     ],
     "Changelog": [
         {
@@ -266,6 +270,14 @@
                 "Fixed inventory issue #19",
                 "Fixing some charset issues"
             ]
+        },
+        {
+            "Verion": "2.2.1",
+            "Changed": [
+                "Fixed charset error",
+                "Implemented new updater (V2)"
+            ]
         }
+
     ]
 }
