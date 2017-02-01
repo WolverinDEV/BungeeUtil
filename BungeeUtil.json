@@ -19,10 +19,23 @@
 		}
 	},
 	  
-	"CurrentVersion": "2.1.2",
+	"CurrentVersion": "2.2.1",
 	"history": {
-		"2.1.2": {
+		"2.2.1": {
 			"bugs": [],
+			"download": {
+				"sha1": "7D567AEDD13889FCC02CB056A736FFF9FE1DC6F4",
+				"url": "${download.github}(version=2.2.1)",
+				"md5": "BB80A61B19DBFFDF17A94025CD6E13B9"
+			},
+			"changelog": [
+				"Fixed a charset issue"
+			]
+		},
+		"2.1.2": {
+			"bugs": [
+				"A little charset error will thrown at the startup (But it isnt critical)"	
+			],
 			"download": {
 				"sha1": "11C7162182DA184EDA4E71D4BEC86DA570DF0730",
 				"url": "${download.github}(version=2.1.2)",
