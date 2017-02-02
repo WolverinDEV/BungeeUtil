@@ -12,6 +12,7 @@ import dev.wolveringer.bungeeutil.item.ItemStack;
 import dev.wolveringer.bungeeutil.item.ItemStack.Click;
 import dev.wolveringer.bungeeutil.item.SyncHandle;
 import dev.wolveringer.nbt.NBTTagCompound;
+import dev.wolveringer.nbt.NBTTagInt;
 import dev.wolveringer.nbt.NBTTagList;
 import dev.wolveringer.nbt.NBTTagString;
 
@@ -165,12 +166,16 @@ public class CraftItemMeta implements ItemMeta {
 	}
 
 	@Override
-	public void setGlow(boolean b) {
-		if (b) {
+	public void setGlow(boolean flag) {
+		if (flag) {
 			if (!this.getTag().hasKey("ench")) {
-				this.getTag().set("ench", new NBTTagList());
+				NBTTagList list;
+				this.getTag().set("ench", list = new NBTTagList());
+				list.add(new NBTTagCompound());
+				
+				this.getTag().set("HideFlags", new NBTTagInt(1));
 			}
-		} else if (!b) {
+		} else if (!flag) {
 			if (this.getTag().hasKey("ench")) {
 				this.getTag().remove("ench");
 			}
