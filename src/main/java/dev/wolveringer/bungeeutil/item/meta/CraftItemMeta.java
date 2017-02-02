@@ -135,6 +135,7 @@ public class CraftItemMeta implements ItemMeta {
 		if(this.sync == -1){
 			if(!(this.item instanceof ItemStack)) {
 				this.sync = 0;
+				return false;
 			}
 			ItemStack is = (ItemStack) this.item;
 			try{
