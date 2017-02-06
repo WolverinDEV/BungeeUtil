@@ -1,8 +1,12 @@
 package dev.wolveringer;
 
+import java.util.Arrays;
+
 import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.item.ItemBuilder;
+import dev.wolveringer.bungeeutil.item.ItemStack;
 import dev.wolveringer.bungeeutil.item.Material;
+import dev.wolveringer.bungeeutil.item.ItemStack.Click;
 import dev.wolveringer.bungeeutil.item.meta.SkullMeta;
 
 public class ItemBuilderExample {
@@ -26,9 +30,28 @@ public class ItemBuilderExample {
 		        	}
 		        	return item;
 		        }) //This methode will be called after the item has been created. 
-		          //You can now apply your own stuff before the create function returns this item.
+		           //You can now apply your own stuff before the create function returns this item.
 		        .build(); //Lets build the item.
 		                  //Return type is an Item, but if the listener has a click listener then
 		                  //its it returned an instance of an ItemStack
+	}
+	
+	public static Item createItemWithoutBuilder(){
+		ItemStack item = new ItemStack(1, 12,(byte) 0) { //Do the same stuff like with the item builder but in this time with the constructor
+			@Override
+			public void click(Click click) {
+				click.getPlayer().sendMessage("Hey, you clicked me!");
+			}
+		};
+		item.getItemMeta().setDisplayName("§aHello world");
+		item.getItemMeta().setLore(Arrays.asList("First", "Second"));
+		item.getItemMeta().setGlow(true);
+		
+		if(item.getType() == Material.SKULL_ITEM){
+    		SkullMeta meta = (SkullMeta) item.getItemMeta();
+    		meta.setSkullOwner("WolverinDEV");
+    		meta.setSkin("WolverinDEV");
+    	}
+		return item;
 	}
 }
