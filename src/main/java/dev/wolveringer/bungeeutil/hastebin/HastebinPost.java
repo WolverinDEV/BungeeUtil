@@ -45,7 +45,7 @@ public class HastebinPost {
 		if(this.changed){
 			String out = "unknwon";
 			try{
-				out = this.performPostRequest(new URL("http://hastebin.com/documents"));
+				out = this.performPostRequest(new URL("https://hastebin.com/documents"));
 				JSONObject o = new JSONObject(out);
 				if(!o.has("key")){
 					System.err.println("Cant paste Document (Response: "+out+")");
@@ -68,7 +68,8 @@ public class HastebinPost {
 
 		connection.setRequestProperty("Content-Type", "text/plain");
 		connection.setRequestProperty("Content-Length", String.valueOf(this.text.length()));
-
+		connection.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36 OPR/42.0.2393.517"); //Using some browner who is not java
+		
 		OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
 		writer.write(this.text.toString());
 		writer.flush();
