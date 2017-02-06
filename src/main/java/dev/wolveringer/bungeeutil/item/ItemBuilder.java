@@ -11,7 +11,7 @@ import lombok.Getter;
 public class ItemBuilder {
 	@FunctionalInterface
 	public static interface PostItemBuilder {
-		public Item applay(ItemBuilder builder, Item in);
+		public Item apply(ItemBuilder builder, Item in);
 	}
 	
 	public static ItemBuilder create() {
@@ -92,7 +92,7 @@ public class ItemBuilder {
 			i.getItemMeta().setGlow(true);
 		}
 		for(PostItemBuilder postBuilder : postListener)
-			postBuilder.applay(this, i);
+			postBuilder.apply(this, i);
 		return i;
 	}
 
