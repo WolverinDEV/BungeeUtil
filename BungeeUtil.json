@@ -29,7 +29,8 @@
 				"md5": "E97D14B8608629A37FEC97179FCCA4F6"
 			},
 			"changelog": [
-				"Fixed a charset issue"
+				"Added some more stuff",
+				"Fixed setGlow for Minecraft 1.11.2"
 			]
 		},
 		"2.2.1": {
