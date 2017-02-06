@@ -19,8 +19,19 @@
 		}
 	},
 	  
-	"CurrentVersion": "2.2.1",
+	"CurrentVersion": "2.3.0",
 	"history": {
+		"2.3.0": {
+			"bugs": [],
+			"download": {
+				"sha1": "3CBF6AD57E57D69819896D3BA549E38F8E7D715B",
+				"url": "${download.github}(version=2.3.0)",
+				"md5": "E97D14B8608629A37FEC97179FCCA4F6"
+			},
+			"changelog": [
+				"Fixed a charset issue"
+			]
+		},
 		"2.2.1": {
 			"bugs": [],
 			"download": {
