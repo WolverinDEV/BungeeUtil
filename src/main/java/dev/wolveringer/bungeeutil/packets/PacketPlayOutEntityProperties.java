@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutEntityProperties.EntityProperty.EntityPropertyModifier;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,56 +18,17 @@ import lombok.Setter;
 public class PacketPlayOutEntityProperties extends Packet implements PacketPlayOut {
 	@Getter
 	@Setter
+	@AllArgsConstructor
+	@EqualsAndHashCode
+	public static class EntityPropertyModifier {
+		private UUID uuid;
+		private double amount;
+		private byte operation;
+	}
+	
+	@Getter
+	@Setter
 	public static class EntityProperty {
-		@Getter
-		@Setter
-		@AllArgsConstructor
-		public static class EntityPropertyModifier {
-			private UUID uuid;
-			private double amount;
-			private byte operation;
-
-			@Override
-			public boolean equals(Object obj) {
-				if (this == obj) {
-					return true;
-				}
-				if (obj == null) {
-					return false;
-				}
-				if (this.getClass() != obj.getClass()) {
-					return false;
-				}
-				EntityPropertyModifier other = (EntityPropertyModifier) obj;
-				if (Double.doubleToLongBits(this.amount) != Double.doubleToLongBits(other.amount)) {
-					return false;
-				}
-				if (this.operation != other.operation) {
-					return false;
-				}
-				if (this.uuid == null) {
-					if (other.uuid != null) {
-						return false;
-					}
-				} else if (!this.uuid.equals(other.uuid)) {
-					return false;
-				}
-				return true;
-			}
-
-			@Override
-			public int hashCode() {
-				final int prime = 31;
-				int result = 1;
-				long temp;
-				temp = Double.doubleToLongBits(this.amount);
-				result = prime * result + (int) (temp ^ temp >>> 32);
-				result = prime * result + this.operation;
-				result = prime * result + (this.uuid == null ? 0 : this.uuid.hashCode());
-				return result;
-			}
-		}
-
 		private String name;
 		private double value;
 		private ArrayList<EntityPropertyModifier> modifiers = new ArrayList<>();

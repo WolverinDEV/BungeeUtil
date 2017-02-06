@@ -6,7 +6,6 @@ import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.item.ItemBuilder;
 import dev.wolveringer.bungeeutil.item.ItemStack;
 import dev.wolveringer.bungeeutil.item.Material;
-import dev.wolveringer.bungeeutil.item.ItemStack.Click;
 import dev.wolveringer.bungeeutil.item.meta.SkullMeta;
 
 public class ItemBuilderExample {
