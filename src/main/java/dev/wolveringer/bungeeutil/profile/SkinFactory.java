@@ -37,6 +37,11 @@ public class SkinFactory {
 		return Skin.createEmptySkin();
 	}
 
+	@Deprecated
+	public static Skin createSkin(String rawValue){
+		return createSkin(rawValue, null);
+	}
+	
 	public static Skin createSkin(String rawValue,String signature){
 		JSONObject o = new JSONObject();
 		JSONArray props = new JSONArray();
