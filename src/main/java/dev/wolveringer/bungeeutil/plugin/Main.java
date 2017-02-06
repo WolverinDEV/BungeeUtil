@@ -146,4 +146,12 @@ public class Main extends Plugin {
 	public void onLoad() {
 		main = this;
 	}
+	
+	public static void main(String[] args) {
+		Updater updater;
+		updater = new UpdaterV2("https://raw.githubusercontent.com/WolverinDEV/BungeeUtil/jars/BungeeUtil.json");
+		updater.loadData();
+		System.setProperty("updater.version", "2.2.1");
+		System.out.println(updater.hasUpdate()+" - "+updater.isValid());
+	}
 }

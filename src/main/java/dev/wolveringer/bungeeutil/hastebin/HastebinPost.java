@@ -8,6 +8,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 
 import org.apache.commons.io.IOUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class HastebinPost {
@@ -42,8 +43,9 @@ public class HastebinPost {
 
 	public String getTextUrl(){
 		if(this.changed){
+			String out = "unknwon";
 			try{
-				String out = this.performPostRequest(new URL("http://hastebin.com/documents"));
+				out = this.performPostRequest(new URL("http://hastebin.com/documents"));
 				JSONObject o = new JSONObject(out);
 				if(!o.has("key")){
 					System.err.println("Cant paste Document (Response: "+out+")");
@@ -51,7 +53,10 @@ public class HastebinPost {
 				}
 				this.changed = false;
 				return this.currunturl = "http://hastebin.com/"+o.getString("key");
-			}catch(Exception e){
+			} catch(JSONException e){
+				System.err.println("Cant parse json '"+out+"'");
+				e.printStackTrace();
+			} catch(Exception e){
 				e.printStackTrace();
 			}
 		}
