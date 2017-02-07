@@ -132,6 +132,11 @@ public class ItemBuilder {
 		return this;
 	}
 
+	public ItemBuilder resetListener(){
+		this.listener.clear();
+		return this;
+	}
+	
 	public ItemBuilder lore(String lore) {
 		this.lore.add(lore);
 		return this;
