@@ -320,14 +320,16 @@ public class AnvilGui {
 		updateBackgroundItem();
 	}
 	public void setOutputItem(Item item){
-		this.inv.setItem(2, new ItemStack(this.outputItem = item){
-			@SuppressWarnings("deprecation")
-			@Override
-			public void click(Click click) {
-				click.setCancelled(true);
-				AnvilGui.this.handleSuccessClick();
-			}
-		});
+		this.outputItem = item;
+		if(this.inv != null)
+			this.inv.setItem(2, new ItemStack(this.outputItem){
+				@SuppressWarnings("deprecation")
+				@Override
+				public void click(Click click) {
+					click.setCancelled(true);
+					AnvilGui.this.handleSuccessClick();
+				}
+			});
 	}
 	
 	private void updateBackgroundItem(){

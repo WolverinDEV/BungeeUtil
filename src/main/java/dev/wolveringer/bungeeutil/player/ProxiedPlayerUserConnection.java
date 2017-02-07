@@ -135,6 +135,12 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 	public void disconnect(Exception e) {
 		this.getInitialHandler().disconnect(e);
 	}
+	
+	@Override
+	public void disconnect0(BaseComponent... reason) {
+		// TODO Auto-generated method stub
+		super.disconnect0(reason);
+	}
 
 	private Object get(String a) {
 		Field f = null;
