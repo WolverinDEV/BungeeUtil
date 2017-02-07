@@ -7,6 +7,7 @@ import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
 import dev.wolveringer.bungeeutil.inventory.InventoryType;
 import dev.wolveringer.bungeeutil.item.Item;
+import dev.wolveringer.bungeeutil.item.ItemBuilder;
 import dev.wolveringer.bungeeutil.item.ItemStack;
 import dev.wolveringer.bungeeutil.item.Material;
 import dev.wolveringer.bungeeutil.packetlib.PacketHandleEvent;
@@ -69,10 +70,13 @@ public class AnvilGui {
 
 	private Player owner;
 	private Inventory inv;
+	
 	private String curruntMessage = "";
 	private String backgroundString = "Message here: ";
-	private Material backgroundMaterial = Material.STONE;
-	private String colorPrefix = ChatColor.COLOR_CHAR+"a";
+	
+	//private Material backgroundMaterial = Material.STONE;
+	private ItemBuilder backgroundBuilder = ItemBuilder.create().material(Material.ENCHANTED_BOOK);
+	private String colorPrefix = ChatColor.GREEN.toString();
 	private Item centerItem = DEFAULT_CENTER_ITEM;
 	private Item outputItem = DEFAULT_OUTPUT_ITEM;
 
@@ -134,15 +138,7 @@ public class AnvilGui {
 	                                                                                         // prefix
 						String handleMessage = message;
 						if (message.length() == 0 && AnvilGui.this.noBackground) {
-							ItemStack item = new ItemStack(AnvilGui.this.backgroundMaterial) {
-								@SuppressWarnings("deprecation")
-								@Override
-								public void click(Click click) {
-									click.setCancelled(true);
-								}
-							};
-							item.getItemMeta().setDisplayName(AnvilGui.this.curruntItemDisplayName = AnvilGui.this.colorPrefix + AnvilGui.this.backgroundString);
-							AnvilGui.this.inv.setItem(0, item);
+							AnvilGui.this.inv.setItem(0, backgroundBuilder.clone().name(AnvilGui.this.curruntItemDisplayName = AnvilGui.this.colorPrefix + AnvilGui.this.backgroundString).build());
 							AnvilGui.this.noBackground = false;
 							handleMessage = "";
 							return;
@@ -166,15 +162,7 @@ public class AnvilGui {
 										newMessage = message.substring(AnvilGui.this.backgroundString.length(), message.length());
 									}
 								}
-								ItemStack item = new ItemStack(AnvilGui.this.backgroundMaterial) {
-									@SuppressWarnings("deprecation")
-									@Override
-									public void click(Click click) {
-										click.setCancelled(true);
-									}
-								};
-								item.getItemMeta().setDisplayName(AnvilGui.this.curruntItemDisplayName = AnvilGui.this.colorPrefix + newMessage);
-								AnvilGui.this.inv.setItem(0, item);
+								AnvilGui.this.inv.setItem(0, backgroundBuilder.clone().name(AnvilGui.this.curruntItemDisplayName = AnvilGui.this.colorPrefix + AnvilGui.this.backgroundString).build());
 							}
 						}
 						else
@@ -222,7 +210,6 @@ public class AnvilGui {
 	public AnvilGui(Player owner) {
 		this.owner = owner;
 		PacketLib.addHandler(this.packet);
-		this.backgroundMaterial = Material.ENCHANTED_BOOK;
 	}
 
 	public void addListener(AnvilGuiListener listener){
@@ -274,19 +261,9 @@ public class AnvilGui {
 	}
 
 	public void open() {
-		this.inv = new Inventory(InventoryType.Anvil, "This is an AnvilGuy by WolverinDEV");
+		this.inv = new Inventory(InventoryType.Anvil, "This is an AnvilGui by WolverinDEV");
 
-		ItemStack item = new ItemStack(this.backgroundMaterial) {
-			@SuppressWarnings("deprecation")
-			@Override
-			public void click(Click click) {
-				click.setCancelled(true);
-				AnvilGui.this.handleSuccessClick();
-			}
-		};
-		item.getItemMeta().setDisplayName(this.curruntItemDisplayName = this.colorPrefix + this.backgroundString);
-		this.inv.setItem(0, item);
-
+		updateBackgroundItem();
 		this.inv.setItem(1, new ItemStack(this.centerItem) {
 			@SuppressWarnings("deprecation")
 			@Override
@@ -311,31 +288,15 @@ public class AnvilGui {
 		this.listener.remove(listener);
 	}
 
-	public void setBackgroundMaterial(Material backgroundMaterial) {
-		this.backgroundMaterial = backgroundMaterial;
-		ItemStack item = new ItemStack(backgroundMaterial) {
-			@SuppressWarnings("deprecation")
-			@Override
-			public void click(Click click) {
-				click.setCancelled(true);
-			}
-		};
-		item.getItemMeta().setDisplayName(this.colorPrefix+this.curruntMessage);
-		this.inv.setItem(0, item);
+	public void setBackgroundItem(ItemBuilder builder) {
+		this.backgroundBuilder = builder;
+		updateBackgroundItem();
 	}
 
 	public void setBackgroundMessage(String backgroundString) {
 		this.backgroundString = backgroundString;
 		if(!this.noBackground){
-			ItemStack item = new ItemStack(this.backgroundMaterial) {
-				@SuppressWarnings("deprecation")
-				@Override
-				public void click(Click click) {
-					click.setCancelled(true);
-				}
-			};
-			item.getItemMeta().setDisplayName(this.colorPrefix+backgroundString);
-			this.inv.setItem(0, item);
+			updateBackgroundItem();
 		}
 	}
 
@@ -349,29 +310,14 @@ public class AnvilGui {
 			return;
 		}
 		String rawMeta = this.curruntItemDisplayName.substring(Math.min(this.colorPrefix.length(), this.curruntItemDisplayName.length())); //Backspace a color prefix code... fix
+		this.curruntItemDisplayName = rawMeta;
 		this.colorPrefix = prefix;
-		ItemStack item = new ItemStack(this.backgroundMaterial) {
-			@SuppressWarnings("deprecation")
-			@Override
-			public void click(Click click) {
-				click.setCancelled(true);
-			}
-		};
-		item.getItemMeta().setDisplayName(this.curruntItemDisplayName = this.colorPrefix + rawMeta);
-		this.inv.setItem(0, item);
+		updateBackgroundItem();
 	}
 
 	public void setCurruntInput(String curruntName) {
 		this.curruntMessage = curruntName;
-		ItemStack item = new ItemStack(this.backgroundMaterial) {
-			@SuppressWarnings("deprecation")
-			@Override
-			public void click(Click click) {
-				click.setCancelled(true);
-			}
-		};
-		item.getItemMeta().setDisplayName(this.colorPrefix+curruntName);
-		this.inv.setItem(0, item);
+		updateBackgroundItem();
 	}
 	public void setOutputItem(Item item){
 		this.inv.setItem(2, new ItemStack(this.outputItem = item){
@@ -382,5 +328,11 @@ public class AnvilGui {
 				AnvilGui.this.handleSuccessClick();
 			}
 		});
+	}
+	
+	private void updateBackgroundItem(){
+		this.inv.setItem(0, backgroundBuilder.clone().name(AnvilGui.this.curruntItemDisplayName = AnvilGui.this.colorPrefix + AnvilGui.this.backgroundString).listener((click)->{
+			click.setCancelled(true);
+		}).build());
 	}
 }
