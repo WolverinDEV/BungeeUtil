@@ -185,6 +185,7 @@ public class AnvilGui {
 							handleMessage = handleMessage.substring(1);
 						}
 						AnvilGui.this.curruntMessage = handleMessage;
+						AnvilGui.this.updateBackgroundItem();
 						for(AnvilGuiListener listener : new ArrayList<>(AnvilGui.this.listener)) {
 							listener.onMessageChange(AnvilGui.this, handleMessage);
 						}
@@ -334,7 +335,7 @@ public class AnvilGui {
 	
 	private void updateBackgroundItem(){
 		if(this.inv != null)
-			this.inv.setItem(0, backgroundBuilder.clone().name(AnvilGui.this.curruntItemDisplayName = AnvilGui.this.colorPrefix + AnvilGui.this.backgroundString).listener((click)->{
+			this.inv.setItem(0, backgroundBuilder.clone().name(AnvilGui.this.curruntItemDisplayName = AnvilGui.this.colorPrefix + (this.curruntMessage == null || this.curruntMessage.isEmpty() ? AnvilGui.this.backgroundString : this.curruntMessage)).listener((click)->{
 				click.setCancelled(true);
 			}).build());
 	}
