@@ -331,8 +331,9 @@ public class AnvilGui {
 	}
 	
 	private void updateBackgroundItem(){
-		this.inv.setItem(0, backgroundBuilder.clone().name(AnvilGui.this.curruntItemDisplayName = AnvilGui.this.colorPrefix + AnvilGui.this.backgroundString).listener((click)->{
-			click.setCancelled(true);
-		}).build());
+		if(this.inv != null)
+			this.inv.setItem(0, backgroundBuilder.clone().name(AnvilGui.this.curruntItemDisplayName = AnvilGui.this.colorPrefix + AnvilGui.this.backgroundString).listener((click)->{
+				click.setCancelled(true);
+			}).build());
 	}
 }
