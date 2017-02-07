@@ -185,6 +185,7 @@ public class AnvilGui {
 							handleMessage = handleMessage.substring(1);
 						}
 						AnvilGui.this.curruntMessage = handleMessage;
+						AnvilGui.this.curruntItemDisplayName = AnvilGui.this.colorPrefix + (handleMessage.isEmpty() ? AnvilGui.this.backgroundString : AnvilGui.this.curruntMessage);
 						AnvilGui.this.updateBackgroundItem();
 						for(AnvilGuiListener listener : new ArrayList<>(AnvilGui.this.listener)) {
 							listener.onMessageChange(AnvilGui.this, handleMessage);
