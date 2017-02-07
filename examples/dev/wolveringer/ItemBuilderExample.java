@@ -9,6 +9,7 @@ import dev.wolveringer.bungeeutil.item.Material;
 import dev.wolveringer.bungeeutil.item.meta.SkullMeta;
 
 public class ItemBuilderExample {
+	@SuppressWarnings("deprecation")
 	public static Item createItemWithBuilder(){
 		return ItemBuilder.create()
 		        .id(1) //Change the item id
@@ -37,6 +38,7 @@ public class ItemBuilderExample {
 	
 	public static Item createItemWithoutBuilder(){
 		ItemStack item = new ItemStack(1, 12,(byte) 0) { //Do the same stuff like with the item builder but in this time with the constructor
+			@SuppressWarnings("deprecation")
 			@Override
 			public void click(Click click) {
 				click.getPlayer().sendMessage("Hey, you clicked me!");

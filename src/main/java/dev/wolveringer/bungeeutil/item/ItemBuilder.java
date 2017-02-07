@@ -36,7 +36,7 @@ public class ItemBuilder {
 	private String name;
 	private ArrayList<String> lore = new ArrayList<>();
 	private boolean glow;
-	private ArrayList<ClickListener> listener;
+	private ArrayList<ClickListener> listener = new ArrayList<>();
 	private Item handle;
 
 	private List<PostItemBuilder> postListener = new ArrayList<>();
