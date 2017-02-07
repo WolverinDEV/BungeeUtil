@@ -82,7 +82,7 @@ public class AnvilGui {
 
 	private String curruntItemDisplayName = "";
 
-	private boolean noBackground = false;
+	private boolean backgroundHidden = false;
 
 	@SuppressWarnings("unused")
 	private String curruntDisplayString = "";
@@ -137,19 +137,19 @@ public class AnvilGui {
 	                                                                                         // color
 	                                                                                         // prefix
 						String handleMessage = message;
-						if (message.length() == 0 && AnvilGui.this.noBackground) {
+						if (message.length() == 0 && AnvilGui.this.backgroundHidden) {
 							AnvilGui.this.inv.setItem(0, backgroundBuilder.clone().name(AnvilGui.this.curruntItemDisplayName = AnvilGui.this.colorPrefix + AnvilGui.this.backgroundString).build());
-							AnvilGui.this.noBackground = false;
+							AnvilGui.this.backgroundHidden = false;
 							handleMessage = "";
 							return;
 						}
 
-						if (this.buildOutString(message, AnvilGui.this.backgroundString).length() <= 1 && AnvilGui.this.noBackground == false) {// Checking
+						if (this.buildOutString(message, AnvilGui.this.backgroundString).length() <= 1 && AnvilGui.this.backgroundHidden == false) {// Checking
 	                                                                                                           // for
 	                                                                                                           // background
 							if (this.backgroundCount++ > 0) {
 								handleMessage = "";
-								AnvilGui.this.noBackground = true;
+								AnvilGui.this.backgroundHidden = true;
 								this.backgroundCount = 0;
 								String newMessage = this.buildOutString(AnvilGui.this.backgroundString, AnvilGui.this.backgroundString.substring(0, Math.min(AnvilGui.this.backgroundString.length(), message.length())));
 								if (newMessage.length() == 0) {// No extra chars
@@ -296,7 +296,7 @@ public class AnvilGui {
 
 	public void setBackgroundMessage(String backgroundString) {
 		this.backgroundString = backgroundString;
-		if(!this.noBackground){
+		if(!this.backgroundHidden){
 			updateBackgroundItem();
 		}
 	}
@@ -319,6 +319,10 @@ public class AnvilGui {
 
 	public void setCurruntInput(String curruntName) {
 		this.curruntMessage = curruntName;
+		if(backgroundHidden)
+			AnvilGui.this.curruntItemDisplayName = this.colorPrefix + this.curruntMessage;
+		else
+			AnvilGui.this.curruntItemDisplayName = this.colorPrefix + this.backgroundString;
 		updateBackgroundItem();
 	}
 	public void setOutputItem(Item item){
@@ -336,7 +340,7 @@ public class AnvilGui {
 	
 	private void updateBackgroundItem(){
 		if(this.inv != null)
-			this.inv.setItem(0, backgroundBuilder.clone().name(AnvilGui.this.curruntItemDisplayName = AnvilGui.this.colorPrefix + (this.curruntMessage == null || this.curruntMessage.isEmpty() ? AnvilGui.this.backgroundString : this.curruntMessage)).listener((click)->{
+			this.inv.setItem(0, backgroundBuilder.clone().name(AnvilGui.this.curruntItemDisplayName).listener((click)->{
 				click.setCancelled(true);
 			}).build());
 	}
