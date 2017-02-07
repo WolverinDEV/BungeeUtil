@@ -303,7 +303,8 @@ public class AnvilGui {
 
 	public void setCenterItem(Item centerItem) {
 		this.centerItem = centerItem;
-		this.inv.setItem(1, centerItem);
+		if(this.inv != null)
+			this.inv.setItem(1, centerItem);
 	}
 
 	public void setColorPrefix(String prefix) {
