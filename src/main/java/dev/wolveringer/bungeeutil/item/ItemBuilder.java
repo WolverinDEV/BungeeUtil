@@ -36,7 +36,7 @@ public class ItemBuilder {
 	private String name;
 	private ArrayList<String> lore = new ArrayList<>();
 	private boolean glow;
-	private ClickListener listener;
+	private ArrayList<ClickListener> listener;
 	private Item handle;
 
 	private List<PostItemBuilder> postListener = new ArrayList<>();
@@ -74,11 +74,12 @@ public class ItemBuilder {
 		} else {
 			i = new Item(this.id, this.amount == -1 ? 1 : this.amount, (short) (this.metaId == -1 ? 0 : this.metaId));
 		}
-		if (this.listener != null) {
+		if (!this.listener.isEmpty()) {
+			List<ClickListener> copiedList = new ArrayList<>(this.listener);
 			i = new ItemStack(i) {
 				@Override
 				public void click(Click c) {
-					ItemBuilder.this.listener.click(c);
+					copiedList.forEach(e -> e.click(c));
 				}
 			};
 		}
@@ -122,12 +123,12 @@ public class ItemBuilder {
 	}
 
 	public ItemBuilder listener(ClickListener run) {
-		this.listener = run;
+		this.listener.add(run);
 		return this;
 	}
 
 	public ItemBuilder listener(final Runnable run) {
-		this.listener = click -> run.run();
+		this.listener.add(click -> run.run());
 		return this;
 	}
 
