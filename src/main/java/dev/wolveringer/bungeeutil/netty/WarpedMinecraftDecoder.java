@@ -77,8 +77,15 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 			return;
 		}
 		if(this.clientVersion == null){ //In the theorie impossible :)
-			System.err.println("Could not find the ClientVersion for the ProtocolVersion "+this.version+". Disconnecting the client.");
-			this.initHandler.disconnect(ChatColor.COLOR_CHAR+"cYour client version isnt supported!");
+			if(initHandler.getHandshake() == null){
+				System.err.println("Invalid WarpedMinecraftDecoder parameters! Cant having an client without a handshake but with a version!");
+				initHandler.closeChannel();
+				return;
+			}
+			if(initHandler.getHandshake().getRequestedProtocol() == 2){
+				System.err.println("Could not find the ClientVersion for the ProtocolVersion "+this.version+". Disconnecting the client.");
+				this.initHandler.disconnect(ChatColor.RED+"Your client version isnt supported by BungeeUtils!");
+			} else super.decode(ctx, in, out); //Decoding stuff for outdated status requests
 			return;
 		}
 

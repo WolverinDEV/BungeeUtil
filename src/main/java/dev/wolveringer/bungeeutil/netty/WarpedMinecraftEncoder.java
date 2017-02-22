@@ -62,8 +62,13 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 			return;
 		}
 		if(this.clientVersion == null){
+			if(initHandler.getHandshake() == null){
+				System.err.println("Cant send packets to a client without a valid handshake!");
+				initHandler.closeChannel();
+				return;
+			}
 			BungeeUtil.debug("Sending a DefinedPacket ("+msg.getClass().getName()+") to a client with an unknown version. ProtocolVersion is "+this.version);
-			super.encode(ctx, msg, out);
+			super.encode(ctx, msg, out); //Encoding stuff for outdated status requests
 			return;
 		}
 
