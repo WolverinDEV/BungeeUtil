@@ -55,7 +55,7 @@ public final class BungeeUtil {
 	public static void debug(String string) {
 		if (pluginInstance == null || Configuration.isDebugEnabled())
 		 {
-			System.out.println(string); // Debug if this not a plugin
+			System.out.println("[BungeeUtil][DEBUG] "+string); // Debug if this not a plugin
 		}
 	}
 	private BigInteger state = new BigDecimal(0).toBigInteger();
