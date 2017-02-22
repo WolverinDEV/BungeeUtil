@@ -46,7 +46,3 @@
 	Thats mean that most (i think) all classes have moved and all plugin with
 	the dependency of BungeeUtil < 2.0 will not work on the 2.0 version.
 	I also will not updating futures on the 1.0 version. I only will do some hot fixes.
-
-##Donate:
-	Please [url=https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GLQVCUZDA8CB8]donate[/url]
-	for me so i can buy some pizza and coffè to create more cool stuff :D
