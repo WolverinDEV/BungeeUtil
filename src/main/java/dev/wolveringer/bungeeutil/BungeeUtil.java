@@ -34,7 +34,7 @@ public final class BungeeUtil {
 			if(System.getProperty("bungeetil.instance") == null){
 				System.setProperty("bungeetil.instance", "WolverinDEV");
 			} else {
-				throw new NullPointerException("BungeeUtil have alredy an instance!");
+				throw new RuntimeException("BungeeUtil have alredy an instance!");
 			}
 			pluginInstance = plugin;
 			instance = new BungeeUtil();
@@ -113,8 +113,8 @@ public final class BungeeUtil {
 			if(this.isInjected()) {
 				return -1;
 			}
-			this.setInformation(ChatColor.COLOR_CHAR+"aInjecting patches");
-			this.sendMessage(ChatColor.COLOR_CHAR+"aInjecting patches");
+			this.setInformation(ChatColor.GREEN+"Injecting patches");
+			this.sendMessage(ChatColor.GREEN+"Injecting patches");
 			switch (InjectFiles.inject()) {
 			case -1:
 				return -1;
@@ -154,15 +154,15 @@ public final class BungeeUtil {
 		try{
 			this.active =  true;
 			if(!Configuration.isQuietBoot()){
-				this.setInformation(ChatColor.COLOR_CHAR+"aLoading configuration.");
-				this.sendMessage(ChatColor.COLOR_CHAR+"aLoading configuration.");
+				this.setInformation(ChatColor.GREEN+"Loading configuration.");
+				this.sendMessage(ChatColor.GREEN+"Loading configuration.");
 			}
 			Configuration.init();
 
 			if(!Configuration.isQuietBoot()){
 				this.displayedSleep(500);
-				this.setInformation(ChatColor.COLOR_CHAR+"aValidate configuration.");
-				this.sendMessage(ChatColor.COLOR_CHAR+"aValidate configuration.");
+				this.setInformation(ChatColor.GREEN+"Validate configuration.");
+				this.sendMessage(ChatColor.GREEN+"Validate configuration.");
 			}
 
 			if(Configuration.getHandleExceptionAction() == null){
@@ -186,11 +186,11 @@ public final class BungeeUtil {
 
 			if(!Configuration.isQuietBoot()){
 				this.displayedSleep(500);
-				this.setInformation(ChatColor.COLOR_CHAR+"aAsyncCatcher successfull loaded");
-				this.sendMessage(ChatColor.COLOR_CHAR+"aAsyncCatcher successfull loaded");
+				this.setInformation(ChatColor.GREEN+"AsyncCatcher successfull loaded");
+				this.sendMessage(ChatColor.GREEN+"AsyncCatcher successfull loaded");
 				this.displayedSleep(500);
-				this.setInformation(ChatColor.COLOR_CHAR+"aLoading ChannelInizializer");
-				this.sendMessage(ChatColor.COLOR_CHAR+"aLoading ChannelInizializer");
+				this.setInformation(ChatColor.GREEN+"Loading ChannelInizializer");
+				this.sendMessage(ChatColor.GREEN+"Loading ChannelInizializer");
 			}
 
 			boolean flag = true;
@@ -218,30 +218,30 @@ public final class BungeeUtil {
 			}
 
 			if(!Configuration.isQuietBoot()){
-				this.setInformation(ChatColor.COLOR_CHAR+"aChannelInizializer successfull loaded.");
-				this.sendMessage(ChatColor.COLOR_CHAR+"aChannelInizializer successfull loaded.");
+				this.setInformation(ChatColor.GREEN+"ChannelInizializer successfull loaded.");
+				this.sendMessage(ChatColor.GREEN+"ChannelInizializer successfull loaded.");
 				this.displayedSleep(500);
-				this.setInformation(ChatColor.COLOR_CHAR+"aLoading player class");
-				this.sendMessage(ChatColor.COLOR_CHAR+"aLoading player class");
+				this.setInformation(ChatColor.GREEN+"Loading player class");
+				this.sendMessage(ChatColor.GREEN+"Loading player class");
 			}
 
 			IIInitialHandler.init(ProxiedPlayerUserConnection.class);
 
 			if(!Configuration.isQuietBoot()){
 				this.displayedSleep(500);
-				this.setInformation(ChatColor.COLOR_CHAR+"aPlayer class loaded");
-				this.sendMessage(ChatColor.COLOR_CHAR+"aPlayer class loaded");
+				this.setInformation(ChatColor.GREEN+"Player class loaded");
+				this.sendMessage(ChatColor.GREEN+"Player class loaded");
 
 				this.displayedSleep(500);
-				this.setInformation(ChatColor.COLOR_CHAR+"aRegister commands and scheduler");
-				this.sendMessage(ChatColor.COLOR_CHAR+"aRegister commands and scheduler");
+				this.setInformation(ChatColor.GREEN+"Register commands and scheduler");
+				this.sendMessage(ChatColor.GREEN+"Register commands and scheduler");
 			}
 
 			BungeeCord.getInstance().getPluginManager().registerListener(pluginInstance, new InventoryResetListener());
 			BungeeCord.getInstance().getPluginManager().registerCommand(pluginInstance, new BungeeTimings());
 			BungeeCord.getInstance().getScheduler().runAsync(pluginInstance, ()->{
 				if(!Configuration.isQuietBoot()) {
-					this.sendMessage(ChatColor.COLOR_CHAR+"eSystem.gc() -> Enabled: " + Configuration.isGCEnabled());
+					this.sendMessage(ChatColor.YELLOW+"System.gc() -> Enabled: " + Configuration.isGCEnabled());
 				}
 				while (Configuration.isGCEnabled()) {
 					try {
@@ -266,15 +266,15 @@ public final class BungeeUtil {
 
 			if(!Configuration.isQuietBoot()){
 				this.displayedSleep(500);
-				this.setInformation(ChatColor.COLOR_CHAR+"aRegister packets");
-				this.sendMessage(ChatColor.COLOR_CHAR+"aRegister packets");
+				this.setInformation(ChatColor.GREEN+"Register packets");
+				this.sendMessage(ChatColor.GREEN+"Register packets");
 			}
 			Packet.countPackets();
 
 			if(!Configuration.isQuietBoot()){
 				this.displayedSleep(500);
-				this.setInformation(ChatColor.COLOR_CHAR+"aPackets registered");
-				this.sendMessage(ChatColor.COLOR_CHAR+"aPackets registered ("+Packet.countPackets()+" packets are registered)");
+				this.setInformation(ChatColor.GREEN+"Packets registered");
+				this.sendMessage(ChatColor.GREEN+"Packets registered ("+Packet.countPackets()+" packets are registered)");
 			}
 			this.sendMessage(ChatColor.GREEN+"BungeeUtil successfully loaded!");
 			this.displayedSleep(500);
