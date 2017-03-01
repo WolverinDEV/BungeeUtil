@@ -339,6 +339,7 @@ public class AnvilGui {
 			});
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void updateBackgroundItem(){
 		if(this.inv != null)
 			this.inv.setItem(0, backgroundBuilder.clone().name(AnvilGui.this.curruntItemDisplayName).listener((click)->{
