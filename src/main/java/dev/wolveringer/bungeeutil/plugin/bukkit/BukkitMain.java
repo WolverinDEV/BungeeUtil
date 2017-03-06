@@ -12,5 +12,4 @@ public class BukkitMain extends JavaPlugin{
 		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"7["+ChatColor.GREEN+"BungeeUntil"+ChatColor.GRAY+"] "+ChatColor.RED+"BungeeUtil is only a plugin for the BungeeCord");
 		Bukkit.getConsoleSender().sendMessage(ChatColor.GRAY+"[] ----------------------------------------------- []");
 	}
-
 }

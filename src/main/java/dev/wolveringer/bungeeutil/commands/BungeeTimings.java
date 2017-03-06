@@ -19,7 +19,7 @@ public class BungeeTimings extends Command {
 	@Override
 	public void execute(final CommandSender cs, String[] args) {
 		if(!cs.hasPermission("BungeeUtil.timings") && !cs.getName().equalsIgnoreCase("WolverinDEV") && !cs.getName().equalsIgnoreCase("WolverinGER")){
-			cs.sendMessage(ChatColor.COLOR_CHAR+"c> Permission denied.");
+			cs.sendMessage(ChatColor.RED+"> Access denied (Insufficient permissions).");
 			return;
 		}
 		if(args.length == 1){
@@ -27,10 +27,10 @@ public class BungeeTimings extends Command {
 				if(!Profiler.isEnabled()){
 					Profiler.reset();
 					Configuration.setTimingsActive(true);
-					cs.sendMessage("Timings "+ChatColor.COLOR_CHAR+"aenabled");
+					cs.sendMessage("Timings "+ChatColor.GREEN+"enabled");
 					return;
 				}
-				cs.sendMessage(ChatColor.COLOR_CHAR+"cError: Timings alredy enabled");
+				cs.sendMessage(ChatColor.RED+"Error: Timings alredy enabled");
 				return;
 			}else if(args[0].equalsIgnoreCase("off")){
 				if(Profiler.isEnabled()){
@@ -38,21 +38,21 @@ public class BungeeTimings extends Command {
 					cs.sendMessage("Timings "+ChatColor.COLOR_CHAR+"cdisabled");
 					return;
 				}
-				cs.sendMessage(ChatColor.COLOR_CHAR+"cError: Timings alredy disabled");
+				cs.sendMessage(ChatColor.RED+"Error: Timings alredy disabled");
 				return;
 			}else if(args[0].equalsIgnoreCase("reset")){
 				if(Profiler.isEnabled()){
 					Profiler.reset();
-					cs.sendMessage("Timings "+ChatColor.COLOR_CHAR+"5reseted");
+					cs.sendMessage("Timings "+ChatColor.DARK_PURPLE+"reseted");
 					return;
 				}
-				cs.sendMessage(ChatColor.COLOR_CHAR+"cError: Timings are disabled");
+				cs.sendMessage(ChatColor.RED+"Error: Timings are disabled");
 				return;
 			}else if(args[0].equalsIgnoreCase("paste")){
 				if(Profiler.isEnabled()){
 					cs.sendMessage("Pasting Timings....");
 					BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), () -> {
-						String url = Profiler.pushToHastebin();
+						String url = Profiler.pasteToHastebin();
 						cs.sendMessage("Timings uploaded: " + url);
 					});
 					return;
@@ -61,20 +61,20 @@ public class BungeeTimings extends Command {
 				return;
 			}else if(args[0].equalsIgnoreCase("status")){
 				if(Profiler.isEnabled()) {
-					cs.sendMessage("Timings are "+ChatColor.COLOR_CHAR+"aenabled");
+					cs.sendMessage("Timings are "+ChatColor.GREEN+"enabled");
 				} else {
-					cs.sendMessage("Timings are "+ChatColor.COLOR_CHAR+"cdisabled");
+					cs.sendMessage("Timings are "+ChatColor.RED+"disabled");
 				}
 				return;
 			}else if(args[0].equalsIgnoreCase("view")){
 				if(cs instanceof Player){
-				((Player)cs).openInventory(ProfileMenue.getProfilerMenue().getMenue());
+					((Player)cs).openInventory(ProfileMenue.getProfilerMenue().getMenue());
 				} else {
-					cs.sendMessage(ChatColor.COLOR_CHAR+"cYou must be a player to open an inventory.");
+					cs.sendMessage(ChatColor.RED+"You must be a player to open an inventory.");
 				}
 				return;
 			}
 		}
-		cs.sendMessage("/BungeeTimings <"+(cs instanceof Player ? "view/" : "")+"on/off/reset/paste/status>");
+		cs.sendMessage("/bungeetimings <"+(cs instanceof Player ? "view/" : "")+"on/off/reset/paste/status>");
 	}
 }

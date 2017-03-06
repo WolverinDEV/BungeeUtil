@@ -37,7 +37,7 @@ public class BossBarManager {
 			this.color = BarColor.PING;
 			this.division = BarDivision.TEN_DIVISIONS;
 			this.health = 0.5F;
-			this.message = TextComponent.fromLegacyText(ChatColor.COLOR_CHAR+"cundefined")[0];
+			this.message = TextComponent.fromLegacyText(ChatColor.RED+"undefined")[0];
 		}
 
 		protected BossBar(BossBarManager manager, UUID uuid, BarColor color, BarDivision division, float value, BaseComponent message, boolean visiable) {

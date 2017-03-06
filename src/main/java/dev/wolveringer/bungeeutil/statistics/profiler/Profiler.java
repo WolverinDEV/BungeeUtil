@@ -10,6 +10,8 @@ import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.hastebin.HastebinPost;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
 import dev.wolveringer.bungeeutil.inventory.ScrolingInventory;
+import dev.wolveringer.bungeeutil.item.Item;
+import dev.wolveringer.bungeeutil.item.ItemBuilder;
 import dev.wolveringer.bungeeutil.item.ItemStack;
 import dev.wolveringer.bungeeutil.item.Material;
 import dev.wolveringer.bungeeutil.plugin.Main;
@@ -18,6 +20,7 @@ import dev.wolveringer.nbt.NBTTagCompound;
 import dev.wolveringer.nbt.NBTTagList;
 import dev.wolveringer.nbt.NBTTagLong;
 import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.ChatColor;
 
 public class Profiler {
 	protected static final DecimalFormat TIME_FORMAT = new DecimalFormat("#.000000000");
@@ -103,7 +106,7 @@ public class Profiler {
 		return cachedBoolean == 1;
 	}
 
-	public static String pushToHastebin() {
+	public static String pasteToHastebin() {
 		long start = System.nanoTime();
 		HastebinPost post = new HastebinPost();
 		post.addLine("Timings for Bungeecord-Server  : " + getHostAdress());
@@ -196,19 +199,15 @@ public class Profiler {
 	public Profiler(String name) {
 		profilers.add(this);
 		this.name = name;
-		String n = dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"aTimings "+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7("+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"5"+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"l" + this.getName() + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7)";
+		String n = ChatColor.GREEN+"Timings "+ChatColor.GRAY+"("+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"5"+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"l" + this.getName() + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7)";
 		this.inv = new ScrolingInventory(4, n);
 	}
 
-	private ItemStack buildMethodProfiler(final MethodProfiler profile) {
-		ItemStack is = new ItemStack(Material.COMPASS) {
-			@Override
-			public void click(Click p) {
-				p.getPlayer().openInventory(profile.getInventory());
-			}
-		};
-		is.getItemMeta().setDisplayName(dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"bMethode: "+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"b" + profile.getName());
-		return is;
+	private Item buildMethodProfiler(final MethodProfiler profile) {
+		return ItemBuilder.create().material(Material.COMPASS).name(ChatColor.BLUE+"Timings: "+ChatColor.GREEN+profile.getName())
+		.listener(c -> {
+			c.getPlayer().openInventory(profile.getInventory());
+		}).build();
 	}
 
 	protected Inventory getInventory() {
