@@ -42,6 +42,10 @@ public class ItemContainer {
 		this.items = new Item[size];
 	}
 
+	public ItemContainer(Item[] items) {
+		this.items = items;
+	}
+	
 	public ItemContainer(ItemStack[] items) {
 		this.items = convert(items);
 	}

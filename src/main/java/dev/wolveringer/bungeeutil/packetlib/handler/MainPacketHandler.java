@@ -287,7 +287,7 @@ public class MainPacketHandler {
 						player.getInventoryView().updateInventory();
 					return false;
 				}
-				final ItemStack is = player.getInventoryView().getItem(pl.getSlot());
+				final Item is = player.getInventoryView().getItem(pl.getSlot());
 				if (is == null) {
 					Profiler.packet_handle.stop("handleWindowClick");
 					e.setCancelled(true);
@@ -295,9 +295,9 @@ public class MainPacketHandler {
 				}
 				player.sendPacket(new PacketPlayOutSetSlot(player.getInventoryView().getContains()[pl.getSlot()], Inventory.ID, pl.getSlot()));
 				player.updateInventory();
-				if (player.getInventoryView().isClickable()){
+				if (player.getInventoryView().isClickable() && is instanceof ItemStack){
 					boolean sync = ((CraftItemMeta)is.getItemMeta()).isClickSync() || Configuration.isSyncInventoryClickActive();
-					handleItemClick(player,is,new Click(player, pl.getSlot(), player.getInventoryView(), pl.getItem(), pl.getMode(), sync),sync,false);
+					handleItemClick(player,(ItemStack) is,new Click(player, pl.getSlot(), player.getInventoryView(), pl.getItem(), pl.getMode(), sync),sync,false);
 				}
 				Profiler.packet_handle.stop("handleWindowClick");
 				e.setCancelled(true);

@@ -17,8 +17,7 @@ import dev.wolveringer.bungeeutil.player.Player;
 import net.md_5.bungee.api.ChatColor;
 
 /**
- * @author WolveinGER
- *
+ * @author WolverinDEV
  */
 public class Inventory {
 	public static interface Unsave {
@@ -87,7 +86,7 @@ public class Inventory {
 		};
 	}
 
-	private Inventory(ItemStack[] items, String name, ArrayList<Player> viewer, InventoryType type) {
+	private Inventory(Item[] items, String name, ArrayList<Player> viewer, InventoryType type) {
 		this.container = new ItemContainer(items);
 		this.name = name;
 		this.viewer = viewer;
@@ -106,7 +105,7 @@ public class Inventory {
 		this.listeners.add(listener);
 	}
 
-	public void addItem(ItemStack is) {
+	public void addItem(Item is) {
 		Item[] items = this.container.getContains();
 		for(int i = 0;i < items.length;i++) {
 			if(items[i] == null){
@@ -116,11 +115,11 @@ public class Inventory {
 				if(items[i].getAmount() + is.getAmount() > 64){
 					is.setAmount(64 - items[i].getAmount());
 					items[i].setAmount(64);
-					this.setItem(i, this.getItemStack(items[i]));
+					this.setItem(i, items[i]);
 					this.addItem(is);
 				}else{
 					items[i].setAmount(items[i].getAmount() + is.getAmount());
-					this.setItem(i, this.getItemStack(items[i]));
+					this.setItem(i, items[i]);
 					break;
 				}
 			}
@@ -158,7 +157,7 @@ public class Inventory {
 		this.updateInventory();
 	}
 
-	public void fill(ItemStack is) {
+	public void fill(Item is) {
 		for(int i = 0;i < this.getSlots();i++){
 			if(this.getItem(i) == null) {
 				this.setItem(i, is);
@@ -166,30 +165,16 @@ public class Inventory {
 		}
 	}
 
-	public ItemStack[] getContains() {
-		return this.container.getContainsAsItemStack();
+	public Item[] getContains() {
+		return this.container.getContains();
 	}
 
 	public List<InventoryListener> getInventoryListener(){
 		return Collections.unmodifiableList(this.listeners);
 	}
 
-	public ItemStack getItem(int slot) {
-		return this.getItemStack(this.container.getItem(slot));
-	}
-
-	private ItemStack getItemStack(Item is) {
-		if(is == null) {
-			return null;
-		} else if(is instanceof ItemStack) {
-			return (ItemStack) is;
-		} else {
-			return new ItemStack(is) {
-				@Override
-				public void click(Click click) {
-				};
-			};
-		}
+	public Item getItem(int slot) {
+		return this.container.getItem(slot);
 	}
 
 	public String getName() {
@@ -252,12 +237,14 @@ public class Inventory {
 		this.clickable = clickable;
 	}
 
-	public void setContains(ItemStack[] contains) {
+	public void setContains(Item[] contains) {
 		for(Item i : this.container.getContains()) {
+			if(i == null || i.getItemMeta() == null) continue;
 			((CraftItemMeta)i.getItemMeta()).removeMetaListener(this.imcil);
 		}
 		this.container.setContains(contains);
-		for(ItemStack is : contains) {
+		for(Item is : contains) {
+			if(is == null || is.getItemMeta() == null) continue;
 			((CraftItemMeta)is.getItemMeta()).addMetaListener(this.imcil);
 		}
 		if(this.autoUpdate) {
@@ -266,17 +253,18 @@ public class Inventory {
 	}
 
 	public void setItem(int i, Item item) {
-		this.setItem(i, this.getItemStack(item));
+		this.setItem(i, (ItemStack) item);
 	}
 
 	public synchronized void setItem(int slot, ItemStack is) {
-		if(this.getItem(slot) != null) {
-			if((CraftItemMeta) this.getItem(slot).getItemMeta() != null) {
-				((CraftItemMeta) this.getItem(slot).getItemMeta()).removeMetaListener(this.imcil);
-			}
+		Item old = this.getItem(slot);
+		if(old != null) {
+			if(old.getItemMeta() != null)
+				((CraftItemMeta) old.getItemMeta()).removeMetaListener(this.imcil);
 		}
+		
 		this.container.setItem(slot, is);
-		if(is != null) {
+		if(is != null && is.getItemMeta() != null) {
 			((CraftItemMeta) is.getItemMeta()).addMetaListener(this.imcil);
 		}
 		if(this.autoUpdate) {

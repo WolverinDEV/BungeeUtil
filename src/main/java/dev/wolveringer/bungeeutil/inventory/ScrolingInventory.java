@@ -11,13 +11,13 @@ import net.md_5.bungee.api.ChatColor;
 
 public class ScrolingInventory extends Inventory {
 
-	private List<ItemStack> items =Collections.synchronizedList(new ArrayList<ItemStack>());
+	private List<Item> items =Collections.synchronizedList(new ArrayList<Item>());
 
 	private ItemStack[] toolitem = new ItemStack[7];
 	private int side = 0;
 	private int rows = -1;
 	private boolean autoUpdate = true;
-	private ItemStack fill;
+	private Item fill;
 	private ItemStack nextitem = new ItemStack(Material.STICK) {
 		@Override
 		public void click(Click p) {
@@ -57,7 +57,7 @@ public class ScrolingInventory extends Inventory {
 	}
 
 	@Override
-	public void addItem(ItemStack is) {
+	public void addItem(Item is) {
 		this.items.add(is);
 		if(this.autoUpdate) {
 			this.update();
@@ -89,7 +89,7 @@ public class ScrolingInventory extends Inventory {
 	}
 
 	@Override
-	public void fill(ItemStack is) {
+	public void fill(Item is) {
 		this.fill = is;
 		if(this.fill != null) {
 			for(int i = 0;i<this.getSlots();i++){
@@ -172,7 +172,7 @@ public class ScrolingInventory extends Inventory {
 	private void update() {
 		super.disableUpdate();
 		super.clear();
-		List<ItemStack> i = this.side * this.rows * 9 < this.items.size() ? this.items.subList(this.side * this.rows * 9, (this.side + 1) * this.rows * 9 < this.items.size() ? (this.side + 1) * this.rows * 9 : this.items.size()) : new ArrayList<ItemStack>();
+		List<Item> i = this.side * this.rows * 9 < this.items.size() ? this.items.subList(this.side * this.rows * 9, (this.side + 1) * this.rows * 9 < this.items.size() ? (this.side + 1) * this.rows * 9 : this.items.size()) : new ArrayList<Item>();
 		for(int x = 0;x < i.size();x++) {
 			super.setItem(x, i.get(x));
 		}
