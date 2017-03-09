@@ -23,7 +23,16 @@ import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 public class NormalPacketCreator extends AbstractPacketCreator {
 	@Getter
 	private static class PacketHolder<T extends Packet> {
-		private static final boolean USE_UNSAVE = UnsafeAccess.SUPPORTS_GET_AND_SET && System.getProperty("bungeeutil.no_unsave") != null;
+		private static final boolean USE_UNSAVE = testUnsave();
+		private static boolean testUnsave(){
+			boolean unsave = UnsafeAccess.SUPPORTS_GET_AND_SET && System.getProperty("bungeeutil.no_unsave") == null;
+			if(unsave)
+				if(BungeeUtil.getInstance() != null)
+					BungeeUtil.getInstance().sendMessage("§aUsing java unsafe for new packet class instances!");
+				else
+					System.out.println("Using java unsafe for new packet class instances!");
+			return unsave;
+		}
 		private final Class<T> clazz;
 		private Constructor<T> constuctor;
 		
@@ -125,15 +134,9 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		if (this.packetListChanged) {
 			this.registerPackets.clear();
 			for (PacketHolder<?> element : this.packetsId) {
-				if(element == null) {
-					continue;
-				}
-				Constructor<? extends Packet> constructor = element.getConstuctor();
-				if (constructor == null) {
-					continue;
-				}
-				if(!this.registerPackets.contains(constructor.getDeclaringClass())) {
-					this.registerPackets.add(constructor.getDeclaringClass());
+				if(element == null) continue;
+				if(!this.registerPackets.contains(element.getClazz())) {
+					this.registerPackets.add(element.getClazz());
 				}
 			}
 			this.packetListChanged = false;
