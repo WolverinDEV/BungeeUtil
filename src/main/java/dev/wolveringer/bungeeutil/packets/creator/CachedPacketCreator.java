@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.cache.UsedClassProcessing;
 import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.packets.Packet.ProtocollId;
