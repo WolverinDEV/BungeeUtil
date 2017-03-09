@@ -3,7 +3,7 @@ package dev.wolveringer.bungeeutil.inventory.anvil;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
+import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
 import dev.wolveringer.bungeeutil.inventory.InventoryType;
 import dev.wolveringer.bungeeutil.item.Item;
@@ -17,6 +17,7 @@ import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.packets.PacketPlayInCloseWindow;
 import dev.wolveringer.bungeeutil.packets.PacketPlayInPluginMessage;
 import dev.wolveringer.bungeeutil.player.Player;
+import net.md_5.bungee.api.Callback;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.protocol.DefinedPacket;
 
@@ -62,148 +63,101 @@ public class AnvilGui {
 
 	static {
 		DEFAULT_CENTER_ITEM = new Item(Material.BARRIER);
-		DEFAULT_CENTER_ITEM.getItemMeta().setDisplayName(ChatColor.COLOR_CHAR+"r");
+		DEFAULT_CENTER_ITEM.getItemMeta().setDisplayName(ChatColor.RESET.toString());
 
 		DEFAULT_OUTPUT_ITEM = new Item(Material.NAME_TAG);
-		DEFAULT_OUTPUT_ITEM.getItemMeta().setDisplayName(ChatColor.COLOR_CHAR+"aClick to finish");
+		DEFAULT_OUTPUT_ITEM.getItemMeta().setDisplayName(ChatColor.GREEN+"Click to finish");
 	}
 
 	private Player owner;
-	private Inventory inv;
+	private Inventory anvilHandle;
 	
 	private String curruntMessage = "";
 	private String backgroundString = "Message here: ";
 	
-	//private Material backgroundMaterial = Material.STONE;
 	private ItemBuilder backgroundBuilder = ItemBuilder.create().material(Material.ENCHANTED_BOOK);
 	private String colorPrefix = ChatColor.GREEN.toString();
+	
 	private Item centerItem = DEFAULT_CENTER_ITEM;
 	private Item outputItem = DEFAULT_OUTPUT_ITEM;
 
+	
 	private String curruntItemDisplayName = "";
-
 	private boolean backgroundHidden = false;
 
+	
 	@SuppressWarnings("unused")
 	private String curruntDisplayString = "";
 
 	private ArrayList<AnvilGuiListener> listener = new ArrayList<>();
 
 	private PacketHandler<Packet> packet = new PacketHandler<Packet>() {
-		int backgroundCount = 0;
-
-		private String buildOutString(String in, String in2) {
-			char[] ca = in.toCharArray();
-			int cpa = 0;
-			char[] cb = in2.toCharArray();
-			int cpb = 0;
-			String out = "";
-			for (; Math.max(cpa, cpb) < Math.min(ca.length, cb.length);) {
-				if (ca[cpa] == cb[cpb]) {
-					cpa++;
-					cpb++;
-				}
-				else if (cpb + 1 < cb.length && ca[cpa] == cb[cpb + 1]) {
-					out = out += new String(new char[] { cb[cpb] });
-					cpb++;
-				}
-				else if (cpa + 1 < ca.length && ca[cpa + 1] == cb[cpb]) {
-					cpa++;
-				}
-				else {
-					// System.out.print("Non one char added!");
-					break;
+		private String getInsertedString(String org, String message){
+			for(int i = 0;i<org.length();i++){
+				if(org.charAt(i) != message.charAt(i)){
+					for(int j = i; j < message.length(); j++)
+						if(message.charAt(j) == org.charAt(i)){
+							if(message.replace(message.substring(i, j), "").equals(org))
+								return message.substring(i, j);
+						}
 				}
 			}
-			return out;
+			return message.substring(org.length());
 		}
-
-
+		
+		long last = System.currentTimeMillis();
 		@Override
-		public void handle(PacketHandleEvent<Packet> e) {
+		public synchronized void handle(PacketHandleEvent<Packet> e) {
 			if (e.getPacket() instanceof PacketPlayInPluginMessage) { //Message changed
 				PacketPlayInPluginMessage packet = (PacketPlayInPluginMessage) e.getPacket();
 				if (packet.getChannel().equalsIgnoreCase("MC|ItemName")) {
-					if (e.getPlayer().equals(AnvilGui.this.owner) && AnvilGui.this.inv != null) {
+					if (e.getPlayer().equals(AnvilGui.this.owner) && AnvilGui.this.anvilHandle != null) {
 						String message = DefinedPacket.readString(packet.getCopiedbyteBuff());
-						//if(AnvilGui.this.curruntItemDisplayName.equalsIgnoreCase(message)) {
-						//	return;
-						//}
-						AnvilGui.this.curruntItemDisplayName = message;
-						if(AnvilGui.this.colorPrefix.length() > message.length()) {
-							message = AnvilGui.this.colorPrefix;
-						}
-						message = message.substring(AnvilGui.this.colorPrefix.length(), message.length()); // replace
-	                                                                                         // color
-	                                                                                         // prefix
-						String handleMessage = message;
-						if (message.length() == 0 && AnvilGui.this.backgroundHidden) {
-							AnvilGui.this.inv.setItem(0, backgroundBuilder.clone().name(AnvilGui.this.curruntItemDisplayName = AnvilGui.this.colorPrefix + AnvilGui.this.backgroundString).build());
+						
+						if(AnvilGui.this.curruntItemDisplayName.equals(message)) return;
+						if(System.currentTimeMillis() - last < 100) return;
+						last = System.currentTimeMillis();
+						
+						if(AnvilGui.this.colorPrefix.length() > message.length()) message = AnvilGui.this.colorPrefix;
+						
+						String handleMessage = message.substring(AnvilGui.this.colorPrefix.length(), message.length()); // replace color prefix
+						
+						if (handleMessage.length() == 0 && AnvilGui.this.backgroundHidden) {
+							AnvilGui.this.curruntItemDisplayName = AnvilGui.this.colorPrefix + AnvilGui.this.backgroundString;
+							updateBackgroundItem();
 							AnvilGui.this.backgroundHidden = false;
-							handleMessage = "";
+							curruntMessage = "";
+							applayAction((l, ex)-> l.onMessageChange(AnvilGui.this, ""));
 							return;
 						}
-
-						if (this.buildOutString(message, AnvilGui.this.backgroundString).length() <= 1 && AnvilGui.this.backgroundHidden == false) {// Checking
-	                                                                                                           // for
-	                                                                                                           // background
-							if (this.backgroundCount++ > 0) {
+						if(!AnvilGui.this.backgroundHidden && !message.equalsIgnoreCase(colorPrefix + backgroundString)){
+							//Input typed!
+							String original = colorPrefix + backgroundString;
+							if(message.length() > original.length()){ //Char[s] added
+								handleMessage = getInsertedString(original, message);
+							} else { //Char[s] removed
 								handleMessage = "";
-								AnvilGui.this.backgroundHidden = true;
-								this.backgroundCount = 0;
-								String newMessage = this.buildOutString(AnvilGui.this.backgroundString, AnvilGui.this.backgroundString.substring(0, Math.min(AnvilGui.this.backgroundString.length(), message.length())));
-								if (newMessage.length() == 0) {// No extra chars
-	                                                           // found!
-									if (message.length() < AnvilGui.this.backgroundString.length()) {// Char
-	                                                                                   // removed!
-										newMessage = "";
-									}
-									else { // Char added at the end
-										newMessage = message.substring(AnvilGui.this.backgroundString.length(), message.length());
-									}
-								}
-								AnvilGui.this.inv.setItem(0, backgroundBuilder.clone().name(AnvilGui.this.curruntItemDisplayName = AnvilGui.this.colorPrefix + AnvilGui.this.backgroundString).build());
 							}
+							AnvilGui.this.backgroundHidden = true;
 						}
-						else
-						{
-							/*
-							ItemStack item = new ItemStack(backgroundMaterial) {
-								@Override
-								public void click(Click click) {
-									click.setCancelled(true);
-								}
-							};
-							item.getItemMeta().setDisplayName(curruntItemDisplayName);
-							inv.setItem(0, item);
-							*/
-						}
-
-						handleMessage = handleMessage.replaceFirst(AnvilGui.this.backgroundString, ""); // For safty
-						handleMessage = ChatColorUtils.stripColor(handleMessage);
-						if (handleMessage.startsWith(" ")) {
-							handleMessage = handleMessage.substring(1);
-						}
-						AnvilGui.this.curruntMessage = handleMessage;
-						AnvilGui.this.curruntItemDisplayName = AnvilGui.this.colorPrefix + (handleMessage.isEmpty() ? AnvilGui.this.backgroundString : AnvilGui.this.curruntMessage);
-						AnvilGui.this.updateBackgroundItem();
-						for(AnvilGuiListener listener : new ArrayList<>(AnvilGui.this.listener)) {
-							listener.onMessageChange(AnvilGui.this, handleMessage);
-						}
-						if(!AnvilGui.this.inv.equals(AnvilGui.this.owner.getInventoryView())){
-							PacketLib.removeHandler(this);
-						}
-					//	System.out.println("Boarderreach: "+new AnvilWindowSizeStringCalculator(handleMessage).reachBoarder(18));
+						BungeeUtil.debug("[AV-GUI] Having message: "+handleMessage);
+						curruntMessage = handleMessage;
+						curruntItemDisplayName = colorPrefix + handleMessage;
+						
+						final String newMessage = handleMessage;
+						applayAction((l, ex) -> l.onMessageChange(AnvilGui.this, newMessage));
+						
+						anvilHandle.disableUpdate();
+						updateBackgroundItem();
+						updateOutputItem();
+						anvilHandle.enableUpdate();
 					}
 				}
 			}
 			else if(e.getPacket() instanceof PacketPlayInCloseWindow){
 				PacketPlayInCloseWindow packet = (PacketPlayInCloseWindow) e.getPacket();
-				if(AnvilGui.this.owner.equals(e.getPlayer()) && (packet.getWindow() == Inventory.ID || AnvilGui.this.inv.getViewer().isEmpty())){
-					for(AnvilGuiListener listener : new ArrayList<>(AnvilGui.this.listener)) {
-						listener.onClose(AnvilGui.this);
-					}
-					PacketLib.removeHandler(this);
+				if(AnvilGui.this.owner.equals(e.getPlayer()) && (packet.getWindow() == Inventory.ID || AnvilGui.this.anvilHandle.getViewer().isEmpty())){
+					unload((l, ex)->l.onClose(AnvilGui.this));
 				}
 			}
 		}
@@ -211,27 +165,48 @@ public class AnvilGui {
 
 	public AnvilGui(Player owner) {
 		this.owner = owner;
+	}
+
+	public void open() {
+		//Validate.isTrue(this.anvilHandle == null, "Anvil inventory alredy opened!");
+		this.anvilHandle = new Inventory(InventoryType.Anvil, "This is an AnvilGui by WolverinDEV");
+
+		this.curruntItemDisplayName = colorPrefix + backgroundString;
+		this.backgroundHidden = false;
+		
+		updateBackgroundItem();
+		this.anvilHandle.setItem(1, this.centerItem);
+		updateOutputItem();
+		
 		PacketLib.addHandler(this.packet);
+		this.owner.openInventory(this.anvilHandle);
 	}
 
-	public void addListener(AnvilGuiListener listener){
-		this.listener.add(listener);
-	}
 	public void close(){
-		for(AnvilGuiListener listener : new ArrayList<>(AnvilGui.this.listener)) {
-			if(listener != null) {
-				listener.onClose(AnvilGui.this);
-			}
-		}
+		unload((e, ex)-> e.onClose(this));
+	}
 
+	protected void handleSuccessClick(){
+		unload((e, ex)-> e.onConfirmInput(this, this.curruntMessage));
+	}
+	
+	protected void unload(Callback<AnvilGuiListener> evHandler){
+		applayAction(evHandler);
 		if(this.owner.getInventoryView() != null) {
-			if(this.owner.getInventoryView().equals(this.inv)) {
+			if(this.owner.getInventoryView().equals(this.anvilHandle)) {
 				this.owner.closeInventory();
 			}
 		}
+		
 		PacketLib.removeHandler(this.packet);
 	}
-
+	
+	private void applayAction(Callback<AnvilGuiListener> evHandler){
+		for(AnvilGuiListener listener : new ArrayList<>(AnvilGui.this.listener)) {
+			if(listener != null) evHandler.done(listener, null);
+		}
+	}
+	
 	public String getBackgroundMessage() {
 		return this.backgroundString;
 	}
@@ -248,48 +223,14 @@ public class AnvilGui {
 		return this.outputItem;
 	}
 
-	protected void handleSuccessClick(){
-		for(AnvilGuiListener listener : new ArrayList<>(AnvilGui.this.listener)) {
-			if(listener != null) {
-				listener.onConfirmInput(AnvilGui.this, this.curruntMessage);
-			}
-		}
-		if(this.owner.getInventoryView() != null) {
-			if(this.owner.getInventoryView().equals(this.inv)) {
-				this.owner.closeInventory();
-			}
-		}
-		PacketLib.removeHandler(this.packet);
-	}
-
-	public void open() {
-		this.inv = new Inventory(InventoryType.Anvil, "This is an AnvilGui by WolverinDEV");
-
-		updateBackgroundItem();
-		this.inv.setItem(1, new ItemStack(this.centerItem) {
-			@SuppressWarnings("deprecation")
-			@Override
-			public void click(Click click) {
-				click.setCancelled(true);
-			}
-		});
-
-		this.inv.setItem(2, new ItemStack(this.outputItem){
-			@SuppressWarnings("deprecation")
-			@Override
-			public void click(Click click) {
-				click.setCancelled(true);
-				AnvilGui.this.handleSuccessClick();
-			}
-		});
-
-		this.owner.openInventory(this.inv);
-	}
-
 	public void removeListener(AnvilGuiListener listener){
 		this.listener.remove(listener);
 	}
 
+	public void addListener(AnvilGuiListener listener){
+		this.listener.add(listener);
+	}
+	
 	public void setBackgroundItem(ItemBuilder builder) {
 		this.backgroundBuilder = builder;
 		updateBackgroundItem();
@@ -304,32 +245,35 @@ public class AnvilGui {
 
 	public void setCenterItem(Item centerItem) {
 		this.centerItem = centerItem;
-		if(this.inv != null)
-			this.inv.setItem(1, centerItem);
+		if(this.anvilHandle != null)
+			this.anvilHandle.setItem(1, centerItem);
 	}
 
 	public void setColorPrefix(String prefix) {
 		if (this.colorPrefix.equalsIgnoreCase(prefix)) {
 			return;
 		}
-		String rawMeta = this.curruntItemDisplayName.substring(Math.min(this.colorPrefix.length(), this.curruntItemDisplayName.length())); //Backspace a color prefix code... fix
-		this.curruntItemDisplayName = rawMeta;
+		this.curruntItemDisplayName = prefix + (backgroundHidden ? curruntMessage : backgroundString);
 		this.colorPrefix = prefix;
 		updateBackgroundItem();
 	}
 
 	public void setCurruntInput(String curruntName) {
-		this.curruntMessage = curruntName;
-		if(backgroundHidden)
-			AnvilGui.this.curruntItemDisplayName = this.colorPrefix + this.curruntMessage;
-		else
-			AnvilGui.this.curruntItemDisplayName = this.colorPrefix + this.backgroundString;
+		if(curruntName != null){
+			this.curruntMessage = curruntName;
+			this.curruntItemDisplayName = this.colorPrefix + this.curruntMessage;
+			this.backgroundHidden = true;
+		} else {
+			this.curruntMessage = "";
+			this.curruntItemDisplayName = this.colorPrefix + this.backgroundString;
+			this.backgroundHidden = false;
+		}
 		updateBackgroundItem();
 	}
 	public void setOutputItem(Item item){
 		this.outputItem = item;
-		if(this.inv != null)
-			this.inv.setItem(2, new ItemStack(this.outputItem){
+		if(this.anvilHandle != null)
+			this.anvilHandle.setItem(2, new ItemStack(this.outputItem){
 				@SuppressWarnings("deprecation")
 				@Override
 				public void click(Click click) {
@@ -339,11 +283,12 @@ public class AnvilGui {
 			});
 	}
 	
-	@SuppressWarnings("deprecation")
 	private void updateBackgroundItem(){
-		if(this.inv != null)
-			this.inv.setItem(0, backgroundBuilder.clone().name(AnvilGui.this.curruntItemDisplayName).listener((click)->{
-				click.setCancelled(true);
-			}).build());
+		if(this.anvilHandle != null)
+			this.anvilHandle.setItem(0, backgroundBuilder.clone().name(AnvilGui.this.curruntItemDisplayName).build());
+	}
+	
+	private void updateOutputItem(){
+		if(this.anvilHandle != null) this.anvilHandle.setItem(2, ItemBuilder.create(this.outputItem).listener(()->AnvilGui.this.handleSuccessClick()).build());
 	}
 }

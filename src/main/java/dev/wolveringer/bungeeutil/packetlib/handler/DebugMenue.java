@@ -324,13 +324,12 @@ public class DebugMenue {
 					@Override
 					public void onMessageChange(AnvilGui guy, String newMessage) {
 				    	//Changing text color
-				    	if ("HelloWorld #Yolo".startsWith(newMessage)){
-				    		guy.setColorPrefix("§6");
-				    		guy.setCenterItem(new Item(Material.getMaterial(351),1,(byte)10));
-						}
-						else if(newMessage.equalsIgnoreCase("HelloWorld #Yolo")){
+						if(newMessage.equalsIgnoreCase("HelloWorld #Yolo")){
 							guy.setColorPrefix("§a");
 							guy.setCurruntInput("You did it!");
+						} else if ("HelloWorld #Yolo".startsWith(newMessage)){
+				    		guy.setColorPrefix("§6");
+				    		guy.setCenterItem(new Item(Material.getMaterial(351),1,(byte)10));
 						}
 						else{
 							guy.setColorPrefix("§c");
