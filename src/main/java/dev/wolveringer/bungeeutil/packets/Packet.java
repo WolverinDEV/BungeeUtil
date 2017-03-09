@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.CostumPrintStream;
 import dev.wolveringer.bungeeutil.packetlib.reader.ByteBuffCreator;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.creator.AbstractPacketCreator;
+import dev.wolveringer.bungeeutil.packets.creator.CachedPacketCreator;
 import dev.wolveringer.bungeeutil.packets.creator.NormalPacketCreator;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.player.ClientVersion;
@@ -137,7 +139,13 @@ public abstract class Packet {
 
 	public static AbstractPacketCreator getCreator() {
 		if (creator == null) {
-			creator = new NormalPacketCreator(); //new CachedPacketCreator(new NormalPacketCreator(), 12);
+			if(System.getProperty("bungeeutil.packet.no_cache") != null){
+				creator = new NormalPacketCreator();
+				BungeeUtil.getInstance().sendMessage("§6Dont use CachedPacketCreator!");
+			} else {
+				BungeeUtil.getInstance().sendMessage("§aUsing CachedPacketCreator!");
+				creator = new CachedPacketCreator(new NormalPacketCreator(), Integer.getInteger("bungeeutil.packet.cach_threads", Runtime.getRuntime().availableProcessors() * 2));
+			}
 		}
 		return creator;
 	}

@@ -123,7 +123,7 @@ public class CachedPacketCreator extends AbstractPacketCreator {
 				while (packet == null && avPackets.size() > 0) {
 					packet = avPackets.remove(0);
 				}
-				BungeeUtil.debug("Using cached packet (Packets left: "+avPackets.size()+") ("+packet+")");
+				//BungeeUtil.debug("Using cached packet (Packets left: "+avPackets.size()+") ("+packet+")");
 			}
 		}
 		if(packet != null){
