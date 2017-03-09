@@ -283,13 +283,13 @@ public class WarpedChannelWrapper extends ChannelWrapper {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void close(Object packet) {
 		if (!closed) {
 			closed = closing = true;
 
 			if (packet != null && ch.isActive()) {
-				ch.writeAndFlush(packet).addListeners(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE,
-						ChannelFutureListener.CLOSE);
+				ch.writeAndFlush(packet).addListeners(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE, ChannelFutureListener.CLOSE);
 				ch.eventLoop().schedule(new Runnable() {
 					@Override
 					public void run() {

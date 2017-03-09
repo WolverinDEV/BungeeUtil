@@ -356,6 +356,7 @@ public class IIInitialHandler extends IInitialHandler {
 				}
 			}
 
+			@SuppressWarnings("deprecation")
 			public void done(PreLoginEvent result, Throwable error) {
 
 				if(result.isCancelled()){

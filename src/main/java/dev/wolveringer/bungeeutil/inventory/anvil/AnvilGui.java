@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
-import dev.wolveringer.bungeeutil.inventory.CloseReason;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
-import dev.wolveringer.bungeeutil.inventory.InventoryListener;
 import dev.wolveringer.bungeeutil.inventory.InventoryType;
 import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.item.ItemBuilder;
@@ -108,6 +106,7 @@ public class AnvilGui {
 		}
 		
 		long last = System.currentTimeMillis();
+		@SuppressWarnings("deprecation")
 		@Override
 		public synchronized void handle(PacketHandleEvent<Packet> e) {
 			if (e.getPacket() instanceof PacketPlayInPluginMessage) { //Message changed

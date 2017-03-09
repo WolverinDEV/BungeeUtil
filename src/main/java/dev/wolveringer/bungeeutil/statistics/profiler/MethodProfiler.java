@@ -15,6 +15,7 @@ public class MethodProfiler {
 	@Getter
 	private ScrolingInventory inventory;
 	
+	@SuppressWarnings("serial")
 	HashMap<String, Timings> timings = new HashMap<String, Timings>(){
 		@Override
 		public Timings get(Object key) {
