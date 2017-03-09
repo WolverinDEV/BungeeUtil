@@ -169,6 +169,7 @@ public class AnvilGui {
 	}
 
 	public void open() {
+		unloaded = false;
 		//Validate.isTrue(this.anvilHandle == null, "Anvil inventory alredy opened!");
 		this.anvilHandle = new Inventory(InventoryType.Anvil, "This is an AnvilGui by WolverinDEV");
 		this.anvilHandle.addInventoryListener((inv, player, reason) ->  unload((e, ex)->e.onClose(AnvilGui.this)));
@@ -177,7 +178,7 @@ public class AnvilGui {
 		this.backgroundHidden = false;
 		
 		updateBackgroundItem();
-		this.anvilHandle.setItem(1, this.centerItem);
+		setCenterItem(this.centerItem);
 		updateOutputItem();
 		
 		PacketLib.addHandler(this.packet);
@@ -192,7 +193,10 @@ public class AnvilGui {
 		unload((e, ex)-> e.onConfirmInput(this, this.curruntMessage));
 	}
 	
-	protected void unload(Callback<AnvilGuiListener> evHandler){
+	private boolean unloaded = false;
+	protected synchronized void unload(Callback<AnvilGuiListener> evHandler){
+		if(unloaded) return;
+		unloaded = true;
 		applayAction(evHandler);
 		if(this.owner.getInventoryView() != null) {
 			if(this.owner.getInventoryView().equals(this.anvilHandle)) {
@@ -248,7 +252,7 @@ public class AnvilGui {
 	public void setCenterItem(Item centerItem) {
 		this.centerItem = centerItem;
 		if(this.anvilHandle != null)
-			this.anvilHandle.setItem(1, centerItem);
+			this.anvilHandle.setItem(1, ItemBuilder.create(centerItem).listener((c)->updateOutputItem()).build());
 	}
 
 	public void setColorPrefix(String prefix) {
@@ -287,7 +291,7 @@ public class AnvilGui {
 	
 	private void updateBackgroundItem(){
 		if(this.anvilHandle != null)
-			this.anvilHandle.setItem(0, backgroundBuilder.clone().name(AnvilGui.this.curruntItemDisplayName).build());
+			this.anvilHandle.setItem(0, backgroundBuilder.clone().name(AnvilGui.this.curruntItemDisplayName).listener((click)->updateOutputItem()).build());
 	}
 	
 	private void updateOutputItem(){
