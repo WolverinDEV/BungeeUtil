@@ -134,7 +134,8 @@ public class IIInitialHandler extends IInitialHandler {
 				}
 				String className = je.getName().substring(0, je.getName().length() - 6);
 				className = className.replace('/', '.');
-				if(!className.startsWith("com.ea")) {
+				if(!className.startsWith("com.ea") && 
+						!className.startsWith("dev.wolveringer.bungeeutil.plugin.bukkit")) {
 					pool.insertClassPath(new ClassClassPath(cl.loadClass(className)));
 				}
 			}
