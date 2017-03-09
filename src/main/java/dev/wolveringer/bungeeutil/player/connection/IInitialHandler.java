@@ -19,9 +19,11 @@ import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.Player;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
+import lombok.Getter;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.ServerConnection;
 import net.md_5.bungee.UserConnection;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -55,7 +57,9 @@ public abstract class IInitialHandler extends InitialHandler {
 	private boolean isDisconnecting = false;
 	private WarpedMinecraftEncoder b;
 	private WarpedMinecraftDecoder a;
+	@Getter
 	private short transaktionId;
+	@Getter
 	private short window;
 	private BaseComponent[] tab = new BaseComponent[2];
 	public IInitialHandler(ProxyServer instance, ListenerInfo listenerInfo, WarpedMinecraftDecoder a, WarpedMinecraftEncoder b) {
@@ -146,7 +150,7 @@ public abstract class IInitialHandler extends InitialHandler {
 	}
 
 	private String format(StackTraceElement e) {
-		return "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "eat " + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "5" + e.getClassName() + "." + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "b" + e.getMethodName() + (e.getFileName() != null ? "(" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "a" + e.getFileName() + ":"+e.getLineNumber() + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "b)" : e.getFileName() != null && e.getLineNumber() >= 0 ? "(" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "a" + e.getFileName() + "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "b:" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "c" + e.getLineNumber() + "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "b)" : e.isNativeMethod() ? "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "1(Native Method)" : "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "c(Unknown Source)");
+		return ChatColor.YELLOW + "at " + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "5" + e.getClassName() + "." + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "b" + e.getMethodName() + (e.getFileName() != null ? "(" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "a" + e.getFileName() + ":"+e.getLineNumber() + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "b)" : e.getFileName() != null && e.getLineNumber() >= 0 ? "(" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "a" + e.getFileName() + "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "b:" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "c" + e.getLineNumber() + "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "b)" : e.isNativeMethod() ? "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "1(Native Method)" : "" + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR + "c(Unknown Source)");
 	}
 
 	public WarpedChannelWrapper getChannel() {
@@ -188,14 +192,6 @@ public abstract class IInitialHandler extends InitialHandler {
 		return this.tab;
 	}
 
-	public short getTransaktionId() {
-		return this.transaktionId;
-	}
-
-	public short getWindow() {
-		return this.window;
-	}
-
 	@Override
 	public void handle(LoginSuccess loginSuccess) throws Exception {
 		super.handle(loginSuccess);
@@ -211,7 +207,7 @@ public abstract class IInitialHandler extends InitialHandler {
 	}
 
 	@Deprecated
-	public void resetClient() {
+	public void sendClientReset() {
 		for (int i = 1; i < 24; i++) {
 			this.sendPacket(new PacketPlayOutRemoveEntityEffect(this.getEntityId(), i));
 		}

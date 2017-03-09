@@ -44,13 +44,14 @@ import dev.wolveringer.bungeeutil.sound.SoundEffect;
 import dev.wolveringer.bungeeutil.statistics.profiler.ProfileMenue;
 import dev.wolveringer.bungeeutil.statistics.profiler.Profiler;
 import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 
 @SuppressWarnings("deprecation")
 public class DebugMenue {
 	public static void open(Player player){
-		Profiler.packet_handle.start("buildDebugInventory");
+		Profiler.PACKET_HANDLE.start("buildDebugInventory");
 		final Inventory inv = new Inventory(27, ChatColorUtils.COLOR_CHAR + "b" + ChatColorUtils.COLOR_CHAR + "lDeveloper Menue");
 
 		player.openInventory(inv);
@@ -61,7 +62,7 @@ public class DebugMenue {
 			}
 		};
 		i.getItemMeta().setGlow(true);
-		i.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR + "bYEY");
+		i.getItemMeta().setDisplayName(ChatColor.BLUE + "YEY");
 		i.getItemMeta().setLore(Arrays.asList(ChatColorUtils.COLOR_CHAR + "aDieser Server nutzt", ChatColorUtils.COLOR_CHAR + "adein Plugin: ", " " + ChatColorUtils.COLOR_CHAR + "7- " + ChatColorUtils.COLOR_CHAR + "eBungeeUntil", " " + ChatColorUtils.COLOR_CHAR + "7- " + ChatColorUtils.COLOR_CHAR + "eVerion " + ChatColorUtils.COLOR_CHAR + "b" + BungeeUtil.getPluginInstance().getDescription().getVersion()));
 		inv.setItem(1, i);
 
@@ -272,7 +273,7 @@ public class DebugMenue {
 				throw new RuntimeException("Demo Crash");
 			};
 		};
-		is_.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR + "cTest Crash Disconnect");
+		is_.getItemMeta().setDisplayName(ChatColor.RED + "Test Crash Disconnect");
 		inv.setItem(22, is_);
 
 		ItemStack is1 = new ItemStack(Material.COMPASS) {
@@ -284,7 +285,6 @@ public class DebugMenue {
 				}
 				else {
 					p.getPlayer().sendMessage("Sound not avariable for "+p.getPlayer().getVersion().toString());
-				//p.getPlayer().playSound(SoundEffect.getEffect("block.anvil.land"), SoundCategory.MASTER, p.getPlayer().getLocation(), 1F, 0);
 				}
 			}
 		};
@@ -328,7 +328,7 @@ public class DebugMenue {
 				    		guy.setColorPrefix("§6");
 				    		guy.setCenterItem(new Item(Material.getMaterial(351),1,(byte)10));
 						}
-						else if(newMessage.startsWith("HelloWorld #Yolo")){
+						else if(newMessage.equalsIgnoreCase("HelloWorld #Yolo")){
 							guy.setColorPrefix("§a");
 							guy.setCurruntInput("You did it!");
 						}
@@ -382,6 +382,6 @@ public class DebugMenue {
 		i.getItemMeta().setDisplayName("§aTesting player item");
 		inv.setItem(14, i);
 
-		Profiler.packet_handle.stop("buildDebugInventory");
+		Profiler.PACKET_HANDLE.stop("buildDebugInventory");
 	}
 }

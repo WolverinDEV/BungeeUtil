@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class MathUtil {
 	private static final BigDecimal PERCENT_MULTIPLYER = new BigDecimal(100);
 
-	public static float calculatePercent(int count, int max) {
+	public static float calculatePercentExact(int count, int max) {
 		BigDecimal bc = new BigDecimal(count);
 		BigDecimal bmax = new BigDecimal(max);
 		BigDecimal temp = bc.divide(bmax, 20, BigDecimal.ROUND_HALF_UP);

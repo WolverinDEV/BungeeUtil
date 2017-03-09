@@ -12,7 +12,6 @@ import dev.wolveringer.bungeeutil.inventory.Inventory;
 import dev.wolveringer.bungeeutil.inventory.ScrolingInventory;
 import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.item.ItemBuilder;
-import dev.wolveringer.bungeeutil.item.ItemStack;
 import dev.wolveringer.bungeeutil.item.Material;
 import dev.wolveringer.bungeeutil.plugin.Main;
 import dev.wolveringer.nbt.NBTCompressedStreamTools;
@@ -32,9 +31,9 @@ public class Profiler {
 
 	public static final Profiler encoder_timings = new Profiler("timings.encoder");
 
-	public static final Profiler profiler = new Profiler("timings.profiler");
+	public static final Profiler TIMINGS_PROFILER = new Profiler("timings.profiler");
 
-	public static final Profiler packet_handle = new Profiler("timings.handle");
+	public static final Profiler PACKET_HANDLE = new Profiler("timings.handle");
 
 	private static String details() {
 		NBTTagCompound nbt = new NBTTagCompound();
@@ -271,7 +270,7 @@ public class Profiler {
 		if(!isEnabled()) {
 			return;
 		}
-		profiler.start("update");
+		TIMINGS_PROFILER.start("update");
 		this.inv.disableUpdate();
 		this.inv.clear();
 		for(MethodProfiler p : this.getProfiles().values()){
@@ -279,6 +278,6 @@ public class Profiler {
 			this.inv.addItem(this.buildMethodProfiler(p));
 		}
 		this.inv.enableUpdate();
-		profiler.stop("update");
+		TIMINGS_PROFILER.stop("update");
 	}
 }
