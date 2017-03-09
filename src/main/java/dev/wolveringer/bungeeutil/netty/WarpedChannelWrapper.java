@@ -11,6 +11,7 @@ import dev.wolveringer.bungeeutil.system.ProxyType;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPipeline;
@@ -28,6 +29,7 @@ import net.md_5.bungee.protocol.MinecraftDecoder;
 import net.md_5.bungee.protocol.MinecraftEncoder;
 import net.md_5.bungee.protocol.PacketWrapper;
 import net.md_5.bungee.protocol.Protocol;
+import net.md_5.bungee.protocol.packet.Kick;
 
 class EmptyChannelWrapper implements ChannelHandlerContext {
 	@Override
@@ -81,11 +83,12 @@ class EmptyChannelWrapper implements ChannelHandlerContext {
 	}
 
 	@Override
-	public ChannelFuture connect(SocketAddress paramSocketAddress1, SocketAddress paramSocketAddress2, ChannelPromise paramChannelPromise) {
+	public ChannelFuture connect(SocketAddress paramSocketAddress1, SocketAddress paramSocketAddress2,
+			ChannelPromise paramChannelPromise) {
 		throw this.createException();
 	}
 
-	private RuntimeException createException(){
+	private RuntimeException createException() {
 		return new UnsupportedOperationException("Methode should be overwritten");
 	}
 
@@ -280,30 +283,43 @@ public class WarpedChannelWrapper extends ChannelWrapper {
 		}
 	}
 
-	@Override
-	public synchronized void delayedClose(final Runnable runnable) {
-		Preconditions.checkArgument(runnable != null, "runnable");
+	public void close(Object packet) {
+		if (!closed) {
+			closed = closing = true;
 
-		if (!this.closing) {
-			this.closing = true;
-			if(this.ch == null){
-				System.err.println("One Channel of "+this.handler.getName()+" is null.");
-				return;
+			if (packet != null && ch.isActive()) {
+				ch.writeAndFlush(packet).addListeners(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE,
+						ChannelFutureListener.CLOSE);
+				ch.eventLoop().schedule(new Runnable() {
+					@Override
+					public void run() {
+						ch.close();
+					}
+				}, 250, TimeUnit.MILLISECONDS);
+			} else {
+				ch.flush();
+				ch.close();
 			}
-			if(this.ch.eventLoop() == null){
-				System.err.println("One ChannelEventLoop of "+this.handler.getName()+" is null. ChanneL "+this.ch);
-				return;
-			}
+		}
+	}
+
+	@Override
+	public void delayedClose(final Kick kick) {
+		if (!closing) {
+			closing = true;
+
 			// Minecraft client can take some time to switch protocols.
-			// Sending the wrong disconnect packet whilst a protocol switch is in progress will crash it.
-			// Delay 500ms to ensure that the protocol switch (if any) has definitely taken place.
-			this.ch.eventLoop().schedule(() -> {
-				try {
-					runnable.run();
-				} finally {
-					WarpedChannelWrapper.this.close();
+			// Sending the wrong disconnect packet whilst a protocol switch is
+			// in progress will crash it.
+			// Delay 250ms to ensure that the protocol switch (if any) has
+			// definitely taken place.
+			ch.eventLoop().schedule(new Runnable() {
+
+				@Override
+				public void run() {
+					close(kick);
 				}
-			}, 500, TimeUnit.MILLISECONDS);
+			}, 250, TimeUnit.MILLISECONDS);
 		}
 	}
 
@@ -329,7 +345,7 @@ public class WarpedChannelWrapper extends ChannelWrapper {
 
 	@Override
 	public void setCompressionThreshold(int compressionThreshold) {
-		if(compressionThreshold != -1){
+		if (compressionThreshold != -1) {
 			if (this.ch.pipeline().get(PacketCompressor.class) == null) {
 				this.addBefore(PipelineUtils.PACKET_ENCODER, "compress", new PacketCompressor());
 			}
@@ -339,7 +355,8 @@ public class WarpedChannelWrapper extends ChannelWrapper {
 					this.addBefore(PipelineUtils.PACKET_DECODER, "decompress", new PacketDecompressor());
 					break;
 				case WATERFALL:
-					this.addBefore(PipelineUtils.PACKET_DECODER, "decompress", new PacketDecompressor(compressionThreshold));
+					this.addBefore(PipelineUtils.PACKET_DECODER, "decompress",
+							new PacketDecompressor(compressionThreshold));
 					break;
 				default:
 					break;

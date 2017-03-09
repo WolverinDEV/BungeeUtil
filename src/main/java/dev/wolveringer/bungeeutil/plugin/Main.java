@@ -50,14 +50,14 @@ public class Main extends Plugin {
 		try {
 			this.updater = new UpdaterV2("https://raw.githubusercontent.com/WolverinDEV/BungeeUtil/jars/BungeeUtil.json");
 			if(!Configuration.isUpdaterActive()){ //Check async if an update is avariable
-				BungeeCord.getInstance().getScheduler().runAsync(this, ()->{
+				//BungeeCord.getInstance().getScheduler().runAsync(this, ()->{
 					this.updater.loadData();
 					if(this.updater.isValid()){
 						if(this.updater.hasUpdate()){
 							BungeeUtil.getInstance().sendMessage(ChatColor.GOLD+"[UPDATER] A newer version is avariable (Version: "+updater.getNewestVersion().getVersion()+"). Enable the updater to update automaticly.");
 						}
 					}
-				});
+				//});
 			} else {
 				this.updater.loadData();
 				BungeeUtil.getInstance().displayedSleep(1000);
