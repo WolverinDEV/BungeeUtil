@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
+import dev.wolveringer.bungeeutil.inventory.CloseReason;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
+import dev.wolveringer.bungeeutil.inventory.InventoryListener;
 import dev.wolveringer.bungeeutil.inventory.InventoryType;
 import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.item.ItemBuilder;
@@ -153,8 +155,7 @@ public class AnvilGui {
 						anvilHandle.enableUpdate();
 					}
 				}
-			}
-			else if(e.getPacket() instanceof PacketPlayInCloseWindow){
+			} else if(e.getPacket() instanceof PacketPlayInCloseWindow){
 				PacketPlayInCloseWindow packet = (PacketPlayInCloseWindow) e.getPacket();
 				if(AnvilGui.this.owner.equals(e.getPlayer()) && (packet.getWindow() == Inventory.ID || AnvilGui.this.anvilHandle.getViewer().isEmpty())){
 					unload((l, ex)->l.onClose(AnvilGui.this));
@@ -170,7 +171,8 @@ public class AnvilGui {
 	public void open() {
 		//Validate.isTrue(this.anvilHandle == null, "Anvil inventory alredy opened!");
 		this.anvilHandle = new Inventory(InventoryType.Anvil, "This is an AnvilGui by WolverinDEV");
-
+		this.anvilHandle.addInventoryListener((inv, player, reason) ->  unload((e, ex)->e.onClose(AnvilGui.this)));
+		
 		this.curruntItemDisplayName = colorPrefix + backgroundString;
 		this.backgroundHidden = false;
 		
