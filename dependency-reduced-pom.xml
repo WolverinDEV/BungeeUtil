@@ -122,6 +122,10 @@
       <scope>provided</scope>
       <exclusions>
         <exclusion>
+          <artifactId>flow-nbt</artifactId>
+          <groupId>com.flowpowered</groupId>
+        </exclusion>
+        <exclusion>
           <artifactId>netty-codec-http</artifactId>
           <groupId>io.netty</groupId>
         </exclusion>

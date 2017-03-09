@@ -123,7 +123,7 @@ public class ScrolingInventory extends Inventory {
 	}
 
 	@Override
-	public void setItem(int slot, ItemStack is) {
+	public void setItem(int slot, Item is) {
 		throw new RuntimeException("This Inventory is not static!");
 	}
 

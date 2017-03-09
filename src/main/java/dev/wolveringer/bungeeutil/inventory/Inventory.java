@@ -252,11 +252,7 @@ public class Inventory {
 		}
 	}
 
-	public void setItem(int i, Item item) {
-		this.setItem(i, (ItemStack) item);
-	}
-
-	public synchronized void setItem(int slot, ItemStack is) {
+	public synchronized void setItem(int slot, Item is) {
 		Item old = this.getItem(slot);
 		if(old != null) {
 			if(old.getItemMeta() != null)
