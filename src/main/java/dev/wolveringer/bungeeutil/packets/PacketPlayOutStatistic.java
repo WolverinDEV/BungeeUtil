@@ -15,7 +15,7 @@ import lombok.Setter;
 @Setter
 public class PacketPlayOutStatistic extends Packet implements PacketPlayOut{
 
-	private HashMap<String, Integer> stats = new HashMap<String, Integer>();
+	private HashMap<String, Integer> stats;
 	private int x = -2;
 
 	@Deprecated
@@ -25,6 +25,7 @@ public class PacketPlayOutStatistic extends Packet implements PacketPlayOut{
 
 	@Override
 	public void read(PacketDataSerializer s) {
+		stats = new HashMap<String, Integer>();
 		int max = s.readVarInt();
 		while (max > 0){
 			this.stats.put(s.readString(-1), s.readVarInt());

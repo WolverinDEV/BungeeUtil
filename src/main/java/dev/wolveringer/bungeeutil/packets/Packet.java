@@ -144,7 +144,7 @@ public abstract class Packet {
 				BungeeUtil.getInstance().sendMessage("§6Dont use CachedPacketCreator!");
 			} else {
 				BungeeUtil.getInstance().sendMessage("§aUsing CachedPacketCreator!");
-				creator = new CachedPacketCreator(new NormalPacketCreator(), Integer.getInteger("bungeeutil.packet.cach_threads", Runtime.getRuntime().availableProcessors() * 2));
+				creator = new CachedPacketCreator(new NormalPacketCreator(), Integer.getInteger("bungeeutil.packet.cache_threads", Runtime.getRuntime().availableProcessors() * 2));
 			}
 		}
 		return creator;

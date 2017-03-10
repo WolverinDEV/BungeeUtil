@@ -48,15 +48,17 @@ public class PacketPlayOutEntityProperties extends Packet implements PacketPlayO
 	}
 
 	private int entityId;
-	private ArrayList<EntityProperty> properties = new ArrayList<>();
+	private ArrayList<EntityProperty> properties;
 
 	public PacketPlayOutEntityProperties addProperty(EntityProperty prop) {
+		this.properties = new ArrayList<>();
 		this.properties.add(prop);
 		return this;
 	}
 
 	@Override
 	public void read(PacketDataSerializer s) {
+		this.properties = new ArrayList<>();
 		this.entityId = s.readVarInt();
 		int pSize = s.readInt();
 		for (int i = 0; i < pSize; i++) {

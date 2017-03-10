@@ -14,10 +14,11 @@ import lombok.Setter;
 @Setter
 public class PacketPlayOutUpdateSign extends Packet implements PacketPlayOut{
 	private BlockPosition location;
-	private String[] lines = new String[4];
+	private String[] lines;
 
 	@Override
 	public void read(PacketDataSerializer s) {
+		this.lines = new String[4];
 		this.location = s.readBlockPosition();
 		this.lines = new String[4];
 		for(int i = 0;i<4;i++) {

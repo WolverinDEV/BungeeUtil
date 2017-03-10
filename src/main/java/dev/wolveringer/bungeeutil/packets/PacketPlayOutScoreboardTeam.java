@@ -105,6 +105,7 @@ public class PacketPlayOutScoreboardTeam extends Packet implements PacketPlayOut
 	@SuppressWarnings("deprecation")
 	@Override
 	public void read(PacketDataSerializer s) {
+		this.tag = NameTag.VISIABLE;
 		this.team = s.readString(16);
 		this.action = Action.fromInt(s.readByte());
 		if (this.action.getAction() == 0 || this.action.getAction() == 2) {
