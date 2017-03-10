@@ -107,7 +107,10 @@ public abstract class Packet {
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutTitle.class, new ProtocollId(BigClientVersion.v1_8, 0x45), new ProtocollId(BigClientVersion.v1_9, 0x45), new ProtocollId(BigClientVersion.v1_10, 0x45), new ProtocollId(BigClientVersion.v1_11, 0x45));
 		// registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x21, PacketPlayOutMapChunk.class, new ProtocollId(BigClientVersion.v1_8, 0x00), new ProtocollId(BigClientVersion.v1_9, 0x00), new ProtocollId(BigClientVersion.v1_10, 0x00); //Request packet src on spigotmc via pm!
 		// registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x26, PacketPlayOutMapChunkBulk.class, new ProtocollId(BigClientVersion.v1_8, 0x00), new ProtocollId(BigClientVersion.v1_9, 0x00), new ProtocollId(BigClientVersion.v1_10, 0x00); //TODO Chunk Serelizer (Premium bungee src)
-
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutBlockChange.class, new ProtocollId(BigClientVersion.v1_8, 0x23)/*, new ProtocollId(BigClientVersion.v1_9, 0x37), new ProtocollId(BigClientVersion.v1_10, 0x37), new ProtocollId(BigClientVersion.v1_11, 0x37)*/); //TODO
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutTileData.class, new ProtocollId(BigClientVersion.v1_8, 0x35)/*, new ProtocollId(BigClientVersion.v1_9, 0x37), new ProtocollId(BigClientVersion.v1_10, 0x37), new ProtocollId(BigClientVersion.v1_11, 0x37)*/); //TODO
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutOpenSign.class, new ProtocollId(BigClientVersion.v1_8, 0x36)/*, new ProtocollId(BigClientVersion.v1_9, 0x37), new ProtocollId(BigClientVersion.v1_10, 0x37), new ProtocollId(BigClientVersion.v1_11, 0x37)*/); //TODO
+		
 		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInClientState.class, new ProtocollId(BigClientVersion.v1_8, 0x16), new ProtocollId(BigClientVersion.v1_9, 0x03), new ProtocollId(BigClientVersion.v1_10, 0x03), new ProtocollId(BigClientVersion.v1_11, 0x03)); // Changed
 		//
 		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInPluginMessage.class,new ProtocollId(BigClientVersion.v1_8, 0x17),  new ProtocollId(BigClientVersion.v1_9, 0x09), new ProtocollId(BigClientVersion.v1_10, 0x09), new ProtocollId(BigClientVersion.v1_11, 0x09));
