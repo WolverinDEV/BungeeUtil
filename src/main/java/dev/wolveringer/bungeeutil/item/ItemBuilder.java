@@ -102,11 +102,18 @@ public class ItemBuilder {
 		return this;
 	}
 
+	/*Spelling mistake */ //TODO Remove this
+	@Deprecated
 	public ItemBuilder durbility(int short_) {
 		this.metaId = short_;
 		return this;
 	}
 
+	public ItemBuilder durability(int short_) {
+		this.metaId = short_;
+		return this;
+	}
+	
 	public ItemBuilder glow() {
 		this.glow = true;
 		return this;
