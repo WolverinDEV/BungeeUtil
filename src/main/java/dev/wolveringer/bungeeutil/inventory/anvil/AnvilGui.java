@@ -17,6 +17,7 @@ import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.packets.PacketPlayInCloseWindow;
 import dev.wolveringer.bungeeutil.packets.PacketPlayInPluginMessage;
 import dev.wolveringer.bungeeutil.player.Player;
+import lombok.NonNull;
 import net.md_5.bungee.api.Callback;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.protocol.DefinedPacket;
@@ -207,9 +208,7 @@ public class AnvilGui {
 	}
 	
 	private void applayAction(Callback<AnvilGuiListener> evHandler){
-		for(AnvilGuiListener listener : new ArrayList<>(AnvilGui.this.listener)) {
-			if(listener != null) evHandler.done(listener, null);
-		}
+		listener.forEach(e -> evHandler.done(e, null));
 	}
 	
 	public String getBackgroundMessage() {
@@ -228,11 +227,11 @@ public class AnvilGui {
 		return this.outputItem;
 	}
 
-	public void removeListener(AnvilGuiListener listener){
+	public void removeListener(@NonNull AnvilGuiListener listener){
 		this.listener.remove(listener);
 	}
 
-	public void addListener(AnvilGuiListener listener){
+	public void addListener(@NonNull AnvilGuiListener listener){
 		this.listener.add(listener);
 	}
 	
