@@ -51,7 +51,7 @@ public class PacketPlayOutEntityProperties extends Packet implements PacketPlayO
 	private ArrayList<EntityProperty> properties;
 
 	public PacketPlayOutEntityProperties addProperty(EntityProperty prop) {
-		this.properties = new ArrayList<>();
+		if(this.properties == null) this.properties = new ArrayList<>();
 		this.properties.add(prop);
 		return this;
 	}
