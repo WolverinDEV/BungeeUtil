@@ -43,7 +43,18 @@ public class PacketPlayOutEntityProperties extends Packet implements PacketPlayO
 		}
 
 		public void removeModifier(EntityPropertyModifier mod) {
-			this.modifiers.add(mod);
+			this.modifiers.remove(mod);
+		}
+		
+		protected void write(PacketDataSerializer s){
+			s.writeString(getName());
+			s.writeDouble(getValue());
+			s.writeVarInt(getModifiers().size());
+			for (EntityPropertyModifier mod : getModifiers()) {
+				s.writeUUID(mod.getUuid());
+				s.writeDouble(mod.getAmount());
+				s.writeByte(mod.getOperation());
+			}
 		}
 	}
 
@@ -77,16 +88,7 @@ public class PacketPlayOutEntityProperties extends Packet implements PacketPlayO
 	public void write(PacketDataSerializer s) {
 		s.writeVarInt(this.entityId);
 		s.writeInt(this.properties.size());
-		for (EntityProperty prop : this.properties) {
-			s.writeString(prop.getName());
-			s.writeDouble(prop.getValue());
-			s.writeVarInt(prop.getModifiers().size());
-			for (EntityPropertyModifier mod : prop.getModifiers()) {
-				s.writeUUID(mod.getUuid());
-				s.writeDouble(mod.getAmount());
-				s.writeByte(mod.getOperation());
-			}
-		}
+		this.properties.forEach(e -> e.write(s));
 	}
 
 }
