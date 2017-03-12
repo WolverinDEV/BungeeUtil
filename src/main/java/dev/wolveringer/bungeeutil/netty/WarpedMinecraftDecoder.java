@@ -95,14 +95,13 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 			try{
 				Profiler.decoder_timings.start(PACKET_CREATION);
 				packet = Packet.getPacket(this.clientVersion.getProtocollVersion(), this.getProtocol(), this.direction, in, this.initHandler.getPlayer());
-
 				Profiler.decoder_timings.stop(PACKET_CREATION);
-				if(packet == null){
-					Profiler.decoder_timings.stop(PACKET_CREATION);
-				}else{
+				
+				if(packet != null){
 					packet.use();
 					Profiler.decoder_timings.start(HANDLE_GENERAL);
 					Profiler.decoder_timings.start(HANDLE_INTERN);
+					
 					PacketHandleEvent<? extends Packet> e = new PacketHandleEvent(packet, this.initHandler.getPlayer());
 					if(!MainPacketHandler.handlePacket(e)){
 						Profiler.decoder_timings.stop(HANDLE_INTERN);
@@ -112,7 +111,6 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 						if(!e.isCancelled()){
 							packet = e.getPacket();
 						}else{
-							Profiler.decoder_timings.stop(HANDLE_INTERN);
 							Profiler.decoder_timings.stop(HANDLE_GENERAL);
 							packet.unuse();
 							return;

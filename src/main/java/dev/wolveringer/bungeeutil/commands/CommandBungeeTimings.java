@@ -1,5 +1,10 @@
 package dev.wolveringer.bungeeutil.commands;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.player.Player;
@@ -25,8 +30,7 @@ public class CommandBungeeTimings extends Command {
 		if(args.length == 1){
 			if(args[0].equalsIgnoreCase("on")){
 				if(!Profiler.isEnabled()){
-					Profiler.reset();
-					Configuration.setTimingsActive(true);
+					Profiler.setEnabled(true);
 					cs.sendMessage("Timings "+ChatColor.GREEN+"enabled");
 					return;
 				}
@@ -34,7 +38,7 @@ public class CommandBungeeTimings extends Command {
 				return;
 			}else if(args[0].equalsIgnoreCase("off")){
 				if(Profiler.isEnabled()){
-					Configuration.setTimingsActive(false);
+					Profiler.setEnabled(false);
 					cs.sendMessage("Timings "+ChatColor.COLOR_CHAR+"cdisabled");
 					return;
 				}
@@ -50,14 +54,23 @@ public class CommandBungeeTimings extends Command {
 				return;
 			}else if(args[0].equalsIgnoreCase("paste")){
 				if(Profiler.isEnabled()){
-					cs.sendMessage("Pasting Timings....");
+					cs.sendMessage(ChatColor.GOLD+"> Creating timings....");
+					FutureTask<String> task = Profiler.pasteToHastebin();
+					cs.sendMessage(ChatColor.GOLD+"> Uploading timings....");
 					BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), () -> {
-						String url = Profiler.pasteToHastebin();
-						cs.sendMessage("Timings uploaded: " + url);
+						try {
+							cs.sendMessage(ChatColor.GREEN+"> Timings uploaded. URL: "+task.get(15, TimeUnit.SECONDS));
+						}catch (TimeoutException e) {
+							cs.sendMessage(ChatColor.RED+"> Failed to upload timings. (Timeout)");
+						}catch(InterruptedException e){
+							cs.sendMessage(ChatColor.RED+"> Failed to upload timings. (Interrupt)");
+						}catch(ExecutionException e){
+							cs.sendMessage(ChatColor.RED+"> Failed to upload timings. (Exception: "+e.getMessage()+")");
+						}
 					});
 					return;
 				}
-				cs.sendMessage(ChatColor.COLOR_CHAR+"cError: Timings are disabled");
+				cs.sendMessage(ChatColor.RED+"> Error: Timings are disabled");
 				return;
 			}else if(args[0].equalsIgnoreCase("status")){
 				if(Profiler.isEnabled()) {

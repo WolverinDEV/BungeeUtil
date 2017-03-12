@@ -4,6 +4,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.stream.Collector;
+import java.util.stream.Stream;
+
+import javax.xml.ws.Holder;
 
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -58,48 +62,39 @@ public class Timings {
 		for(int i = steps - 1;i >= 0;i--){
 			if(count_step * i <= var) {
 				if(count_step * i + count_step * 0.5D <= var) {
-					out[i] = ChatColorUtils.COLOR_CHAR+"aX";
+					out[i] = ChatColor.GREEN+"X";
 				}
 				else {
-					out[i] = ChatColorUtils.COLOR_CHAR+"aX";
+					out[i] = ChatColor.GREEN+"X";
 				}
 			}
 			else {
-				out[i] = ChatColorUtils.COLOR_CHAR+"0X";
+				out[i] = ChatColor.BLACK+"X";
 			}
 		}
 		ArrayUtils.reverse(out);
 		return out;
 	}
 
-	private Long average(LinkedList<Long> zahlen) {
-		if(zahlen.size() == 0) {
-			return 0L;
-		}
+	private Long average(LinkedList<Long> zahlen, boolean countEmpty) {
+		if(zahlen.isEmpty()) return 0L;
 		
-		BigDecimal sum = new BigDecimal(0);
-		Iterator<Long> i = zahlen.iterator();
-		while (i.hasNext()){
-			sum.add(new BigDecimal(i.next()));
-		}
-		return sum.divide(new BigDecimal(zahlen.size()), BigDecimal.ROUND_HALF_UP).longValue();
+		Stream<Long> stream = zahlen.stream().filter(e -> (countEmpty || e != 0)).parallel();
+		long count = stream.count();
+		if(count == 0) return 0L;
+		
+		Holder<BigDecimal> sum = new Holder<>(new BigDecimal(0));
+		stream.forEach(e -> sum.value = sum.value.add(new BigDecimal(e)));
+		
+		return sum.value.divide(new BigDecimal(count), BigDecimal.ROUND_HALF_UP).longValue();
 	}
 
 	private String fromat(double d) {
-		String out = Profiler.TIME_FORMAT.format(d).replaceAll(",", ".");
-		if(out.indexOf(".") != -1) {
-			out = out.substring(0, out.indexOf(".")) + ChatColorUtils.COLOR_CHAR+"c" + out.substring(out.indexOf("."), out.length());
-		}
-		return out;
+		return Profiler.TIME_FORMAT.format(d);
 	}
 
 	public Long getAverageScore() {
-		Long all = 0L;
-		ArrayList<Long> t = new ArrayList<>(this.period_times);
-		for(Long s : t) {
-			all += s;
-		}
-		return all / t.size();
+		return average(this.period_times, false);
 	}
 
 	private Long getHighestValue(Long[] in) {
@@ -124,11 +119,11 @@ public class Timings {
 	}
 
 	public Long[] getSmalTimings() {
-		return this.times.toArray(new Long[0]);
+		return this.times.toArray(new Long[times.size()]);
 	}
 
 	public Long[] getTimings() {
-		return this.period_times.toArray(new Long[0]);
+		return this.period_times.toArray(new Long[period_times.size()]);
 	}
 
 	public void rebuild() {
@@ -149,7 +144,7 @@ public class Timings {
 		ArrayList<String> collums = new ArrayList<String>();
 		double count_step = difference / steps;
 		for(int i = 0;i < steps;i++) {
-			collums.add(ChatColor.RED + this.fromat(count_step * i) + " ms"+ChatColor.GRAY+": ");
+			collums.add(ChatColor.RED + this.fromat((count_step * i) / (double) 1000000) + " ms"+ChatColor.GRAY+": ");
 		}
 		String[] var1 = collums.toArray(new String[collums.size()]);
 		ArrayUtils.reverse(var1);
@@ -164,7 +159,7 @@ public class Timings {
 	private void recalculate() {
 		synchronized (times) {
 			if(this.times.size() >= 100){
-				this.period_times.add(this.average(this.times));
+				this.period_times.add(this.average(this.times, true));
 				while(this.period_times.size() > 100) this.period_times.pollFirst();
 				this.times.clear();
 			}
@@ -187,8 +182,9 @@ public class Timings {
 	}
 
 	public synchronized void stop() {
-		if(this.start == -1L) return;
-		
+		if(this.start == -1L){
+			return;
+		}
 		this.addTiming(System.nanoTime() - this.start);
 		this.start = -1L;
 		this.last = System.currentTimeMillis();
