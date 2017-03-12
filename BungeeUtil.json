@@ -19,8 +19,22 @@
 		}
 	},
 	  
-	"CurrentVersion": "2.3.0",
+	"CurrentVersion": "2.4.0",
 	"history": {
+		"2.4.0": {
+			"bugs": [],
+			"download": {
+				"sha1": "4A8B72E77ACE829A464275B5D6BD98EC3E8FCD6A",
+				"url": "${download.github}(version=2.4.0)",
+				"md5": "A922F9A7F70AC517A6505066DC2292CF"
+			},
+			"changelog": [
+				"Fixed AnvilGUI",
+				"Allowed to fill an Inventory with Items and not with ItemsStacks",
+				"Using now CachedPacketCreator as default to decrease heap usage",
+				"Using Unsafe#allocateInstance for class creation (Dont call the constructor)"
+			]
+		},
 		"2.3.0": {
 			"bugs": [],
 			"download": {
