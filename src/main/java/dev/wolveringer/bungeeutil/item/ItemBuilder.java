@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.Validate;
 
 import lombok.Getter;
+import net.md_5.bungee.api.ChatColor;
 
 @Getter
 public class ItemBuilder {
@@ -156,6 +157,11 @@ public class ItemBuilder {
 
 	public ItemBuilder name(String name) {
 		this.name = name;
+		return this;
+	}
+
+	public ItemBuilder noName(){
+		this.name = ChatColor.BLACK.toString();
 		return this;
 	}
 	
