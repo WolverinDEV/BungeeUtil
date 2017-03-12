@@ -117,7 +117,7 @@ public class AnvilGui {
 						String message = DefinedPacket.readString(packet.getCopiedbyteBuff());
 						
 						if(AnvilGui.this.curruntItemDisplayName.equals(message)) return;
-						if(System.currentTimeMillis() - last < 100) return;
+						if(System.currentTimeMillis() - last < Integer.getInteger("bungeeutil.inventory.anvil.writeDelay", 50)) return;
 						last = System.currentTimeMillis();
 						
 						if(AnvilGui.this.colorPrefix.length() > message.length()) message = AnvilGui.this.colorPrefix;
