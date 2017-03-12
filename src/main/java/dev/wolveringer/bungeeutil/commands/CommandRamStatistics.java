@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 import org.fusesource.jansi.AnsiConsole;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
+import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.chat.AnsiColorFormater;
 import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.packets.creator.CachedPacketCreator;
@@ -18,9 +19,9 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.command.ConsoleCommandSender;
 
-public class RamStatistics extends Command{
+public class CommandRamStatistics extends Command{
 
-	public RamStatistics() {
+	public CommandRamStatistics() {
 		super("ramstatistics",null,"rm");
 	}
 
@@ -28,18 +29,26 @@ public class RamStatistics extends Command{
 	@Override
 	public void execute(CommandSender cs, String[] args) {
 		if(!cs.hasPermission("bungeeutil.ramstats")){
-			cs.sendMessage(ChatColor.RED+"> Permission denied.");
+			cs.sendMessage(ChatColor.RED+"> Access denied (Insufficient permissions).");
+			return;
+		} else if(!Configuration.ramStatistics()){
+			cs.sendMessage(ChatColor.RED+"> Ram statistics are disabled. Enable it by changing the entry in the config.");
 			return;
 		}
+		
 		if(cs instanceof ConsoleCommandSender){
 			if(args.length == 1 && (args[0].equalsIgnoreCase("graph") || args[0].equalsIgnoreCase("g"))){
 				TerminalListener.getInstance().setTerminalEnabled(false);
 				TerminalGraph graph = BungeeUtil.getInstance().ramStatistiks.createGrath(120, 1024*1024);
 				graph.setYAxisName(new ColoredString(ChatColor.GREEN+"mb"));
 				graph.setXAxisName(new ColoredString(ChatColor.GREEN+"seconds"));
+				
+				StringBuilder sb = new StringBuilder();
 				for(ColoredString line : graph.buildLines(TerminalFactory.get().getWidth()-1, TerminalFactory.get().getHeight()-4, false)) {
-					AnsiConsole.out.print("\r"+AnsiColorFormater.getFormater().format(line.toString())+"\n");
+					//AnsiConsole.out.print("\r"+AnsiColorFormater.getFormater().format(line.toString())+"\n");
+					sb.append("\r"+AnsiColorFormater.getFormater().format(line.toString())+"\n");
 				}
+				AnsiConsole.out.print(sb.toString());
 				AnsiConsole.out.flush();
 				TerminalListener.getInstance().setTerminalEnabled(true);
 				return;

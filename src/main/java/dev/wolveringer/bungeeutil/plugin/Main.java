@@ -97,8 +97,7 @@ public class Main extends Plugin {
 					BungeeUtil.getInstance().setInformation(ChatColor.GREEN+"No update found. Version is up to date.");
 				}
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 

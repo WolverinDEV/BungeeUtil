@@ -8,7 +8,8 @@ import java.util.Date;
 
 import dev.wolveringer.bungeeutil.chat.AnsiColorFormater;
 import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
-import dev.wolveringer.bungeeutil.commands.BungeeTimings;
+import dev.wolveringer.bungeeutil.commands.CommandBungeeTimings;
+import dev.wolveringer.bungeeutil.commands.CommandRamStatistics;
 import dev.wolveringer.bungeeutil.injector.InjectFiles;
 import dev.wolveringer.bungeeutil.listener.InventoryResetListener;
 import dev.wolveringer.bungeeutil.netty.ChannelInizializer;
@@ -238,7 +239,7 @@ public final class BungeeUtil {
 			}
 
 			BungeeCord.getInstance().getPluginManager().registerListener(pluginInstance, new InventoryResetListener());
-			BungeeCord.getInstance().getPluginManager().registerCommand(pluginInstance, new BungeeTimings());
+			BungeeCord.getInstance().getPluginManager().registerCommand(pluginInstance, new CommandBungeeTimings());
 			BungeeCord.getInstance().getScheduler().runAsync(pluginInstance, ()->{
 				if(!Configuration.isQuietBoot()) {
 					this.sendMessage(ChatColor.YELLOW+"System.gc() -> Enabled: " + Configuration.isGCEnabled());
@@ -261,8 +262,8 @@ public final class BungeeUtil {
 				RamStatisticsPainter tsp = new RamStatisticsPainter();
 				TerminalListener.getInstance().getListener().add(tsp);
 				BungeeCord.getInstance().getScheduler().runAsync(pluginInstance, tsp);
-				BungeeCord.getInstance().getPluginManager().registerCommand(pluginInstance, new dev.wolveringer.bungeeutil.commands.RamStatistics());
 			}
+			BungeeCord.getInstance().getPluginManager().registerCommand(pluginInstance, new CommandRamStatistics());
 
 			if(!Configuration.isQuietBoot()){
 				this.displayedSleep(500);
