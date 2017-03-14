@@ -11,7 +11,7 @@
 	https://github.com/WolverinDEV/BungeeUtil/wiki/Features
 
 ##What is this BungeeUtil?
-	 BungeeUntil is a ProtocollLib and a combines a few practically applications.
+	 BungeeUtil is a ProtocollLib and a combines a few practically applications.
 	 By means of this Lib, you can e.g. open your inventory over your bungeecord or use an effect.
 
 ##How fast is BungeeUtil?
