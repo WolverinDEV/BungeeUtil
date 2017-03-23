@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>dev.wolveringer</groupId>
 	<artifactId>BungeeUtil</artifactId>
-	<version>2.3.0</version>
+	<version>2.4.0</version>
 	<packaging>jar</packaging>
 
 	<distributionManagement>
@@ -21,6 +21,10 @@
 		<repository>
 			<id>ossrh-snapshots</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</repository>
+		<repository>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
 	</repositories>
 
@@ -124,13 +128,13 @@
 		</dependency>
 		<!-- https://github.com/WolverinDEV/BungeeCord -->
 		<dependency>
-			<groupId>net.md-5</groupId>
+			<groupId>dev.wolveringer.bungee</groupId>
 			<artifactId>bungeecord-api</artifactId>
 			<version>${bungeecord.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.md-5</groupId>
+			<groupId>dev.wolveringer.bungee</groupId>
 			<artifactId>bungeecord-proxy</artifactId>
 			<version>${bungeecord.version}</version>
 			<scope>provided</scope>
@@ -171,6 +175,12 @@
 			<groupId>dev.wolveringer</groupId>
 			<artifactId>YamlConfiguration</artifactId>
 			<version>1.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bukkit</groupId>
+			<artifactId>bukkit</artifactId>
+			<version>1.11.2-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

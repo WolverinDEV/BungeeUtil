@@ -7,29 +7,24 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class PacketPlayOutUpdateSign extends Packet implements PacketPlayOut{
+@ToString
+public class PacketPlayOutOpenSign extends Packet implements PacketPlayOut{
 	private BlockPosition location;
-	private String[] lines;
-
+	
 	@Override
 	public void read(PacketDataSerializer s) {
-		this.lines = new String[4];
-		this.location = s.readBlockPosition();
-		this.lines = new String[4];
-		for(int i = 0;i<4;i++) {
-			this.lines[i] = s.readString(-1);
-		}
+		location = s.readBlockPosition();
 	}
+
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeBlockPosition(this.location);
-		for(int i = 0;i<4;i++) {
-			s.writeString(this.lines[i]);
-		}
+		s.writeBlockPosition(location);
 	}
+
 }

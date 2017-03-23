@@ -1,4 +1,4 @@
-##For what is a BungeeUntil?##
+##For what is BungeeUtil?##
 	BungeeUtil is a very big libary for packet handling and
 	a lots of cool stuff what you can do with Packets.
 	Okey what is this cool stuff? Well i think the
@@ -10,8 +10,8 @@
 	A list off all APIs or Libaries (included a documentation) can you find here:
 	https://github.com/WolverinDEV/BungeeUtil/wiki/Features
 
-##What is this BungeeUntil?
-	 BungeeUntil is a ProtocollLib and a combines a few practically applications.
+##What is this BungeeUtil?
+	 BungeeUtil is a ProtocollLib and combines a few practically applications.
 	 By means of this Lib, you can e.g. open your inventory over your bungeecord or use an effect.
 
 ##How fast is BungeeUtil?
@@ -26,14 +26,14 @@
 	The right way to get the best help is that you post the error in the discussion section of BungeeUtil
 	or create an issue on Github.com (https://github.com/WolverinDEV/BungeeUtil/issues)
 	If you posting the error please provide this informations above the error: 
-	(I cant help you 100% if i havnt this informations)
+	(I cant help you 100% if i don't have this information)
 	- BungeeUtil Version
 	- BungeeCord Version
 	- When this error happends
 	- The computer system and architecture
 
 ##BungeeUtils versions history:
-	If you want an other version of BungeeUtils you can download from here:
+	If you want an other version of BungeeUtils you can download those from here:
 	https://github.com/WolverinDEV/BungeeUtil/tree/jars/
 
 ##Compatibility for other Proxies:
@@ -41,7 +41,7 @@
 	If you have more compatibility questions, then you can ask on my gitter channel
 	(Click on the "get support" button on SpigotMC)
 
-##BungeeUtil 2.0 (Informations for Developer):
+##BungeeUtil 2.0 (Information for Developer):
 	I`m starting or better started a reordering of the packages in my plugin.
 	Thats mean that most (i think) all classes have moved and all plugin with
 	the dependency of BungeeUtil < 2.0 will not work on the 2.0 version.

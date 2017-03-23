@@ -3,6 +3,7 @@ package dev.wolveringer.bungeeutil.packets;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.position.BlockPosition;
+import dev.wolveringer.nbt.NBTTagCompound;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,24 +13,23 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class PacketPlayOutUpdateSign extends Packet implements PacketPlayOut{
+public class PacketPlayOutTileData extends Packet implements PacketPlayOut {
 	private BlockPosition location;
-	private String[] lines;
-
+	private int type;
+	private NBTTagCompound nbt;
+	
 	@Override
 	public void read(PacketDataSerializer s) {
-		this.lines = new String[4];
-		this.location = s.readBlockPosition();
-		this.lines = new String[4];
-		for(int i = 0;i<4;i++) {
-			this.lines[i] = s.readString(-1);
-		}
+		location = s.readBlockPosition();
+		type = s.readByte();
+		nbt = s.readNBT();
 	}
+
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeBlockPosition(this.location);
-		for(int i = 0;i<4;i++) {
-			s.writeString(this.lines[i]);
-		}
+		s.writeBlockPosition(location);
+		s.writeByte(type);
+		s.writeNBT(nbt);
 	}
+
 }

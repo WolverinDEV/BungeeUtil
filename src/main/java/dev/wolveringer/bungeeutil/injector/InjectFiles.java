@@ -15,7 +15,6 @@ import java.util.zip.ZipOutputStream;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
-import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import javassist.ClassPool;
 import javassist.CtClass;
 import net.md_5.bungee.BungeeCord;

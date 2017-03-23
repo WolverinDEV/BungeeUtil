@@ -8,7 +8,6 @@ public enum SoundEffect {
 
 	/**
 	 * @author essem
-	 *
 	 */
 
 	AMBIENT_CAVE,

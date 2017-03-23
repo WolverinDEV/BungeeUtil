@@ -1,10 +1,8 @@
 package dev.wolveringer.updater;
 
-import static org.junit.Assert.*;
+//import static org.junit.Assert.*;
 
 import org.junit.Test;
-
-import dev.wolveringer.bungeeutil.plugin.updater.UpdaterV2;
 
 public class UpdaterV2Test {
 

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.cache.UsedClassProcessing;
 import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.packets.Packet.ProtocollId;
@@ -123,7 +122,7 @@ public class CachedPacketCreator extends AbstractPacketCreator {
 				while (packet == null && avPackets.size() > 0) {
 					packet = avPackets.remove(0);
 				}
-				BungeeUtil.debug("Using cached packet (Packets left: "+avPackets.size()+") ("+packet+")");
+				//BungeeUtil.debug("Using cached packet (Packets left: "+avPackets.size()+") ("+packet+")");
 			}
 		}
 		if(packet != null){

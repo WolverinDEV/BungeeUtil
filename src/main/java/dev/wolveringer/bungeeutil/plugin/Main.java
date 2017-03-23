@@ -49,46 +49,55 @@ public class Main extends Plugin {
 		BungeeUtil.getInstance().setInformation("Loading update data");
 		try {
 			this.updater = new UpdaterV2("https://raw.githubusercontent.com/WolverinDEV/BungeeUtil/jars/BungeeUtil.json");
-			this.updater.loadData();
-			BungeeUtil.getInstance().displayedSleep(1000);
+			if(!Configuration.isUpdaterActive()){ //Check async if an update is avariable
+				//BungeeCord.getInstance().getScheduler().runAsync(this, ()->{
+					this.updater.loadData();
+					if(this.updater.isValid()){
+						if(this.updater.hasUpdate()){
+							BungeeUtil.getInstance().sendMessage(ChatColor.GOLD+"[UPDATER] A newer version is avariable (Version: "+updater.getNewestVersion().getVersion()+"). Enable the updater to update automaticly.");
+						}
+					}
+				//});
+			} else {
+				this.updater.loadData();
+				BungeeUtil.getInstance().displayedSleep(1000);
 
-			if(!this.updater.isValid()){
-				BungeeUtil.getInstance().sendMessage(ChatColor.RED+"Cant get versions informations.");
-				this.updater = null;
-			}
-			else
-			{
-				
-				update:
-				if (Configuration.isUpdaterActive() && this.updater.hasUpdate()) {
-					BungeeUtil.getInstance().setInformation(ChatColor.GREEN+"Update found. Updating.");
-					switch (this.updater.update()) {
-					case ALREDY_UP_TO_DATE:
-						break update;
-					case SUCCESSFULL:
-						BungeeUtil.getInstance().setInformation(ChatColor.GREEN+"Update was successful!");
-						break;
-					case FAILED_CHECKSUM:
-					case FAILED_DOWNLOAD:
-					case FAILED_NO_DATA:
-					case FAILED_UNKNOWN:
-					case FAILED_FILE:
-						BungeeUtil.getInstance().setInformation(ChatColor.RED+"Update failed.");
-					default:
-						break;
-					};
-					BungeeUtil.getInstance().setInformation(ChatColor.RED+"Restarting bungeecord");
-					BungeeUtil.getInstance().displayedSleep(1000);
-					BungeeUtil.getInstance().setInformation(null);
-					Configuration.setLastVersion(updater.getOwnVersion().getVersion());
-					System.exit(-1);
-					return;
+				if(!this.updater.isValid()){
+					BungeeUtil.getInstance().sendMessage(ChatColor.RED+"Cant get versions informations.");
+					this.updater = null;
 				}
-				if(Configuration.isUpdaterActive())
+				else
+				{
+					
+					update:
+					if (this.updater.hasUpdate()) {
+						BungeeUtil.getInstance().setInformation(ChatColor.GREEN+"Update found. Updating.");
+						switch (this.updater.update()) {
+						case ALREDY_UP_TO_DATE:
+							break update;
+						case SUCCESSFULL:
+							BungeeUtil.getInstance().setInformation(ChatColor.GREEN+"Update was successful!");
+							break;
+						case FAILED_CHECKSUM:
+						case FAILED_DOWNLOAD:
+						case FAILED_NO_DATA:
+						case FAILED_UNKNOWN:
+						case FAILED_FILE:
+							BungeeUtil.getInstance().setInformation(ChatColor.RED+"Update failed.");
+						default:
+							break;
+						};
+						BungeeUtil.getInstance().setInformation(ChatColor.RED+"Restarting bungeecord");
+						BungeeUtil.getInstance().displayedSleep(1000);
+						BungeeUtil.getInstance().setInformation(null);
+						Configuration.setLastVersion(updater.getOwnVersion().getVersion());
+						System.exit(-1);
+						return;
+					}
 					BungeeUtil.getInstance().setInformation(ChatColor.GREEN+"No update found. Version is up to date.");
+				}
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 

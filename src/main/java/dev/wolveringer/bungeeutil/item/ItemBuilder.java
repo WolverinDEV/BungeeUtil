@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.lang3.Validate;
 
 import lombok.Getter;
+import net.md_5.bungee.api.ChatColor;
 
 @Getter
 public class ItemBuilder {
@@ -58,10 +59,9 @@ public class ItemBuilder {
 
 	@SuppressWarnings("deprecation")
 	public Item build() {
-		Validate.validState(id >= 0, "Invalid item id ("+id+")");
 		Item i;
 		if (this.handle != null) {
-			if (this.id != 0) {
+			if (this.id > 0) {
 				this.handle.setTypeId(this.id);
 			}
 			if (this.metaId != -1) {
@@ -72,6 +72,7 @@ public class ItemBuilder {
 			}
 			i = this.handle;
 		} else {
+			Validate.validState(id >= 0, "Invalid item id ("+id+")");
 			i = new Item(this.id, this.amount == -1 ? 1 : this.amount, (short) (this.metaId == -1 ? 0 : this.metaId));
 		}
 		if (!this.listener.isEmpty()) {
@@ -102,11 +103,18 @@ public class ItemBuilder {
 		return this;
 	}
 
+	/*Spelling mistake */ //TODO Remove this
+	@Deprecated
 	public ItemBuilder durbility(int short_) {
 		this.metaId = short_;
 		return this;
 	}
 
+	public ItemBuilder durability(int short_) {
+		this.metaId = short_;
+		return this;
+	}
+	
 	public ItemBuilder glow() {
 		this.glow = true;
 		return this;
@@ -149,6 +157,11 @@ public class ItemBuilder {
 
 	public ItemBuilder name(String name) {
 		this.name = name;
+		return this;
+	}
+
+	public ItemBuilder noName(){
+		this.name = ChatColor.BLACK.toString();
 		return this;
 	}
 	

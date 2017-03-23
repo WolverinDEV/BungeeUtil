@@ -239,10 +239,15 @@ public class CachedArrayList<E> extends ArrayList<E> {
 	}
 
 	public void update() {
-		if (System.currentTimeMillis() > this.nextUpdate) {
+		update(false);
+	}
+	
+	public void update(boolean force) {
+		if (force || System.currentTimeMillis() > this.nextUpdate) {
 			this.updateTimes();
 		}
 	}
+	
 	private void updateTimes() {
 		long min = Long.MAX_VALUE;
 		long time = System.currentTimeMillis();

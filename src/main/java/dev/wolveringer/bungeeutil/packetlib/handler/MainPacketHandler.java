@@ -48,7 +48,7 @@ public class MainPacketHandler {
 			BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), () -> handleItemClick(player, is, c, sync, true, callbacks));
 			return;
 		}
-		Profiler.packet_handle.start("itemClickListener");
+		Profiler.PACKET_HANDLE.start("itemClickListener");
 		try {
 			 is.click(c);
 			 for(Callback<Click> cl : callbacks) {
@@ -71,7 +71,7 @@ public class MainPacketHandler {
 				break;
 			}
 		}
-		Profiler.packet_handle.stop("itemClickListener");
+		Profiler.PACKET_HANDLE.stop("itemClickListener");
 	}
 
 	@SuppressWarnings({ "unchecked", "deprecation" })
@@ -81,7 +81,7 @@ public class MainPacketHandler {
 		if (pack == null || player == null) {
 			return false;
 		}
-		Profiler.packet_handle.start("handleIntern");
+		Profiler.PACKET_HANDLE.start("handleIntern");
 		/**
 		 *
 		 * Location
@@ -107,7 +107,7 @@ public class MainPacketHandler {
 		 * Inventory
 		 */
 		if (pack instanceof PacketPlayInWindowClick) {
-			Profiler.packet_handle.start("handleWindowClick");
+			Profiler.PACKET_HANDLE.start("handleWindowClick");
 			final PacketPlayInWindowClick pl = (PacketPlayInWindowClick) pack;
 
 			byte mode = (byte) (pl.getMode() >> 4 & 0xF);
@@ -271,13 +271,13 @@ public class MainPacketHandler {
 
 				return false;
 			}
-			System.out.println("Player "+player+" inv: "+player.isInventoryOpened());
+			
 			if (player.isInventoryOpened()) {
 				player.sendPacket(new PacketPlayOutTransaction(Inventory.ID, pl.getActionNumber(), false));
 				player.sendPacket(new PacketPlayOutSetSlot(null, -1, 0));
 
 				if (pl.getSlot()>=player.getInventoryView().getSlots() || pl.getSlot() < 0) {
-					Profiler.packet_handle.stop("handleWindowClick");
+					Profiler.PACKET_HANDLE.stop("handleWindowClick");
 					e.setCancelled(true);
 					if(pl.getSlot()>=player.getInventoryView().getSlots()){
 						int slot = pl.getSlot()-e.getPlayer().getInventoryView().getSlots()+9;
@@ -287,19 +287,19 @@ public class MainPacketHandler {
 						player.getInventoryView().updateInventory();
 					return false;
 				}
-				final ItemStack is = player.getInventoryView().getItem(pl.getSlot());
+				final Item is = player.getInventoryView().getItem(pl.getSlot());
 				if (is == null) {
-					Profiler.packet_handle.stop("handleWindowClick");
+					Profiler.PACKET_HANDLE.stop("handleWindowClick");
 					e.setCancelled(true);
 					return false;
 				}
 				player.sendPacket(new PacketPlayOutSetSlot(player.getInventoryView().getContains()[pl.getSlot()], Inventory.ID, pl.getSlot()));
 				player.updateInventory();
-				if (player.getInventoryView().isClickable()){
+				if (player.getInventoryView().isClickable() && is instanceof ItemStack){
 					boolean sync = ((CraftItemMeta)is.getItemMeta()).isClickSync() || Configuration.isSyncInventoryClickActive();
-					handleItemClick(player,is,new Click(player, pl.getSlot(), player.getInventoryView(), pl.getItem(), pl.getMode(), sync),sync,false);
+					handleItemClick(player,(ItemStack) is,new Click(player, pl.getSlot(), player.getInventoryView(), pl.getItem(), pl.getMode(), sync),sync,false);
 				}
-				Profiler.packet_handle.stop("handleWindowClick");
+				Profiler.PACKET_HANDLE.stop("handleWindowClick");
 				e.setCancelled(true);
 				return false;
 			}

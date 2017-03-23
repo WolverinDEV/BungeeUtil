@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>dev.wolveringer</groupId>
   <artifactId>BungeeUtil</artifactId>
-  <version>2.3.0</version>
+  <version>2.4.0</version>
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
     <resources>
@@ -79,6 +79,10 @@
       <id>ossrh-snapshots</id>
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </repository>
+    <repository>
+      <id>spigot-repo</id>
+      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>
@@ -88,35 +92,39 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>net.md-5</groupId>
+      <groupId>dev.wolveringer.bungee</groupId>
       <artifactId>bungeecord-api</artifactId>
       <version>1.11-SNAPSHOT</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
           <artifactId>bungeecord-chat</artifactId>
-          <groupId>net.md-5</groupId>
+          <groupId>dev.wolveringer.bungee</groupId>
         </exclusion>
         <exclusion>
           <artifactId>bungeecord-config</artifactId>
-          <groupId>net.md-5</groupId>
+          <groupId>dev.wolveringer.bungee</groupId>
         </exclusion>
         <exclusion>
           <artifactId>bungeecord-event</artifactId>
-          <groupId>net.md-5</groupId>
+          <groupId>dev.wolveringer.bungee</groupId>
         </exclusion>
         <exclusion>
           <artifactId>bungeecord-protocol</artifactId>
-          <groupId>net.md-5</groupId>
+          <groupId>dev.wolveringer.bungee</groupId>
         </exclusion>
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>net.md-5</groupId>
+      <groupId>dev.wolveringer.bungee</groupId>
       <artifactId>bungeecord-proxy</artifactId>
       <version>1.11-SNAPSHOT</version>
       <scope>provided</scope>
       <exclusions>
+        <exclusion>
+          <artifactId>flow-nbt</artifactId>
+          <groupId>com.flowpowered</groupId>
+        </exclusion>
         <exclusion>
           <artifactId>netty-codec-http</artifactId>
           <groupId>io.netty</groupId>
@@ -127,15 +135,15 @@
         </exclusion>
         <exclusion>
           <artifactId>bungeecord-log</artifactId>
-          <groupId>net.md-5</groupId>
+          <groupId>dev.wolveringer.bungee</groupId>
         </exclusion>
         <exclusion>
           <artifactId>bungeecord-native</artifactId>
-          <groupId>net.md-5</groupId>
+          <groupId>dev.wolveringer.bungee</groupId>
         </exclusion>
         <exclusion>
           <artifactId>bungeecord-query</artifactId>
-          <groupId>net.md-5</groupId>
+          <groupId>dev.wolveringer.bungee</groupId>
         </exclusion>
         <exclusion>
           <artifactId>mysql-connector-java</artifactId>
@@ -147,7 +155,7 @@
         </exclusion>
         <exclusion>
           <artifactId>bungeecord-protocol</artifactId>
-          <groupId>net.md-5</groupId>
+          <groupId>dev.wolveringer.bungee</groupId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -156,6 +164,30 @@
       <artifactId>lombok</artifactId>
       <version>1.16.8</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.bukkit</groupId>
+      <artifactId>bukkit</artifactId>
+      <version>1.11.2-R0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>commons-lang</artifactId>
+          <groupId>commons-lang</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>json-simple</artifactId>
+          <groupId>com.googlecode.json-simple</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>gson</artifactId>
+          <groupId>com.google.code.gson</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>ebean</artifactId>
+          <groupId>org.avaje</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
   <distributionManagement>

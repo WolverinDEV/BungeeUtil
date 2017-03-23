@@ -130,7 +130,7 @@ public class UpdaterV1 implements Updater{
 					}
 					fout.write(data, 0, count);
 					readed += count;
-					String p = "000" + MathUtil.calculatePercent(readed, fileLength);
+					String p = "000" + MathUtil.calculatePercentExact(readed, fileLength);
 					p = p.substring(0, p.indexOf("."));
 					p = p.substring(p.length() - 3, p.length());
 					BungeeUtil.getInstance().setInformation(ChatColor.GREEN + "Downloading update " + ChatColor.GRAY + "[" + ChatColor.GREEN + p + "%" + ChatColor.GRAY+ "]");

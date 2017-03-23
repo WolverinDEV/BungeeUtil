@@ -80,10 +80,10 @@ public class Configuration {
 		return conf.getBoolean("terminal.colored");
 	}
 	public static boolean isTimingsActive(){
-		return conf.getBoolean(i18n.getString("configuration.timings"));
+		return conf.getBoolean("timings");
 	}
 	public static boolean isUpdaterActive(){
-		return conf.getBoolean(i18n.getString("configuration.updater"));
+		return conf.getBoolean("updater");
 	}
 	public static boolean ramStatistics() {
 		return conf.getBoolean("debug.ram-statistics");

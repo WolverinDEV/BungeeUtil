@@ -138,7 +138,6 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 	
 	@Override
 	public void disconnect0(BaseComponent... reason) {
-		// TODO Auto-generated method stub
 		super.disconnect0(reason);
 	}
 

@@ -79,8 +79,8 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 
 		Profiler.encoder_timings.start(PACKET_CREATION);
 		Packet packet = Packet.getPacket(this.clientVersion.getProtocollVersion(),this.protocoll, Direction.TO_CLIENT, encodedBuffer, this.initHandler.getPlayer());
-
 		Profiler.encoder_timings.stop(PACKET_CREATION);
+		
 		if(packet == null){
 			ByteBuffCreator.copy(encodedBuffer, out);
 			encodedBuffer.release();

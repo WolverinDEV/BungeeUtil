@@ -4,13 +4,21 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.StringJoiner;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
+import com.avaje.ebeaninternal.server.query.BaseFuture;
+
+import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.hastebin.HastebinPost;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
 import dev.wolveringer.bungeeutil.inventory.ScrolingInventory;
-import dev.wolveringer.bungeeutil.item.ItemStack;
+import dev.wolveringer.bungeeutil.item.Item;
+import dev.wolveringer.bungeeutil.item.ItemBuilder;
 import dev.wolveringer.bungeeutil.item.Material;
 import dev.wolveringer.bungeeutil.plugin.Main;
 import dev.wolveringer.nbt.NBTCompressedStreamTools;
@@ -18,20 +26,17 @@ import dev.wolveringer.nbt.NBTTagCompound;
 import dev.wolveringer.nbt.NBTTagList;
 import dev.wolveringer.nbt.NBTTagLong;
 import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.ChatColor;
 
 public class Profiler {
-	protected static final DecimalFormat TIME_FORMAT = new DecimalFormat("#.000000000");
-
-	private static int cachedBoolean = -1;
-
+	protected static final DecimalFormat TIME_FORMAT = new DecimalFormat("#00.000000");
 	private static ArrayList<Profiler> profilers = new ArrayList<Profiler>();
+	private static int cachedBoolean = -1;
+	
 	public static final Profiler decoder_timings = new Profiler("timings.decoder");
-
 	public static final Profiler encoder_timings = new Profiler("timings.encoder");
-
-	public static final Profiler profiler = new Profiler("timings.profiler");
-
-	public static final Profiler packet_handle = new Profiler("timings.handle");
+	public static final Profiler TIMINGS_PROFILER = new Profiler("timings.profiler");
+	public static final Profiler PACKET_HANDLE = new Profiler("timings.handle");
 
 	private static String details() {
 		NBTTagCompound nbt = new NBTTagCompound();
@@ -67,21 +72,20 @@ public class Profiler {
 		}
 	}
 
-	private static String format(String in, int length) {
-		while (in.length() < length){
-			in += " ";
-		}
-		return in;
+	private static String alignLeft(String in, int length) {
+		StringBuilder out = new StringBuilder(in);
+		while (out.length() < length) out.append(" ");
+		return out.toString();
 	}
 
-	private static String format(Timings in) {
-		String out = TIME_FORMAT.format(in.getAverageScore()).replaceAll(",", ".") + " Last 20 Timings: ";
-		out += " [";
-		Long[] x = in.getTimings();
-		for(int i = x.length - 1;i > (x.length - 20 > 0 ? x.length - 20 : 0);i--) {
-			out += " ," + TIME_FORMAT.format(x[i]).replaceAll(",", ".") + "";
-		}
-		return out.replaceFirst("\\[ ,", "\\[") + "]";
+	private static String formatTiming(Timings in) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(TIME_FORMAT.format(in.getAverageScore() / (double) 1000000)).append("  Last 20 Timings: ");
+		sb.append("[");
+		
+		StringJoiner joiner = new StringJoiner(", ");
+		Arrays.stream(in.getTimings()).limit(20).forEach(e -> joiner.add(TIME_FORMAT.format(e / (double) 1000000)));
+		return sb.append(joiner.toString()).append("]").toString();
 	}
 
 	private static String getHostAdress() {
@@ -91,19 +95,19 @@ public class Profiler {
 			return "underknown";
 		}
 	}
+	
+	
 
 	public static ArrayList<Profiler> getProfilers() {
 		return profilers;
 	}
 
 	public static boolean isEnabled() {
-		if(cachedBoolean == -1) {
-			cachedBoolean = Configuration.isTimingsActive() ? 1 : 0;
-		}
+		if(cachedBoolean == -1) cachedBoolean = Configuration.isTimingsActive() ? 1 : 0;
 		return cachedBoolean == 1;
 	}
 
-	public static String pushToHastebin() {
+	public static FutureTask<String> pasteToHastebin() {
 		long start = System.nanoTime();
 		HastebinPost post = new HastebinPost();
 		post.addLine("Timings for Bungeecord-Server  : " + getHostAdress());
@@ -117,10 +121,10 @@ public class Profiler {
 				post.addLine("  BungeeUtil version           :"+ Main.getMain().getDescription().getVersion() );
 				post.addLine("  Updater is disabled. Cant check for update status.");
 			} else {
-				if(Main.getMain().updater.hasUpdate()) {
+				if(!Main.getMain().updater.hasUpdate()) {
 					post.addLine("  BungeeUtil version           : " + Main.getMain().getDescription().getVersion() + " (up to date)");
 				} else {
-					post.addLine("  BungeeUtil version      	 : " + Main.getMain().getDescription().getVersion() + " (new version avariable: " + Main.getMain().updater.getNewestVersion() + ")");
+					post.addLine("  BungeeUtil version           : " + Main.getMain().getDescription().getVersion() + " (new version avariable: " + Main.getMain().updater.getNewestVersion().getVersion() + ")");
 				}
 			}
 		}else {
@@ -139,20 +143,18 @@ public class Profiler {
 		post.addLine("  Allowed Reservable Memory: " + runtime.maxMemory() / mb + "MB");
 
 		post.addLine("");
-		post.addLine("Profiler: (All times in NanoSeconds!)");
+		post.addLine("Profiler: (All times in Milliseconds!)");
 		for(Profiler p : getProfilers()){
 			post.addLine("  " + p.getName() + ":");
 			for(MethodProfiler m : p.getProfiles().values()){
 				post.addLine("    Method \"" + m.getName() + "\":");
+				
 				int max = 0;
+				for(Timings s : m.getTimings().values()) max = Math.max(s.getName().length(), max);
+				max+=2;
+				
 				for(Timings s : m.getTimings().values()){
-					if(s.getName().length() > max) {
-						max = s.getName().length();
-					}
-				}
-				max+=1;
-				for(Timings s : m.getTimings().values()){
-					post.addLine("      Timing \"" + format(s.getName()+"\"",max) + ": " + format(s));
+					post.addLine("      Timing \"" + alignLeft(s.getName()+"\"",max) + ": " + formatTiming(s));
 				}
 			}
 		}
@@ -164,8 +166,11 @@ public class Profiler {
 		}
 		post.addLine("");
 		long end = System.nanoTime() - start;
-		post.addLine("File created in " + TIME_FORMAT.format(end).replaceAll(",", ".") + " NanoSeconds (" + (int) (end / 1000000) + " MilliSeconds).");
-		return post.getTextUrl();
+		post.addLine("File created in " + TIME_FORMAT.format(end / (double) 1000000).replaceAll(",", ".") + " MilliSeconds.");
+		
+		FutureTask<String> task = new FutureTask<>(() -> post.getTextUrl());
+		BungeeCord.getInstance().getScheduler().runAsync(BungeeUtil.getPluginInstance(), task);
+		return task;
 	}
 	public static void reset() {
 		for(Profiler p : getProfilers()) {
@@ -174,6 +179,7 @@ public class Profiler {
 	}
 	public static void setEnabled(boolean enabled) {
 		Configuration.setTimingsActive(enabled);
+		cachedBoolean = enabled ? 1 : 0;
 	}
 	private HashMap<String, MethodProfiler> profiles = new HashMap<String, MethodProfiler>() {
 		/**
@@ -196,19 +202,15 @@ public class Profiler {
 	public Profiler(String name) {
 		profilers.add(this);
 		this.name = name;
-		String n = dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"aTimings "+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7("+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"5"+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"l" + this.getName() + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7)";
+		String n = ChatColor.GREEN+"Timings "+ChatColor.GRAY+"("+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"5"+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"l" + this.getName() + dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"7)";
 		this.inv = new ScrolingInventory(4, n);
 	}
 
-	private ItemStack buildMethodProfiler(final MethodProfiler profile) {
-		ItemStack is = new ItemStack(Material.COMPASS) {
-			@Override
-			public void click(Click p) {
-				p.getPlayer().openInventory(profile.getInventory());
-			}
-		};
-		is.getItemMeta().setDisplayName(dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"bMethode: "+dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"b" + profile.getName());
-		return is;
+	private Item buildMethodProfiler(final MethodProfiler profile) {
+		return ItemBuilder.create().material(Material.COMPASS).name(ChatColor.BLUE+"Timings: "+ChatColor.GREEN+profile.getName())
+		.listener(c -> {
+			c.getPlayer().openInventory(profile.getInventory());
+		}).build();
 	}
 
 	protected Inventory getInventory() {
@@ -272,7 +274,7 @@ public class Profiler {
 		if(!isEnabled()) {
 			return;
 		}
-		profiler.start("update");
+		TIMINGS_PROFILER.start("update");
 		this.inv.disableUpdate();
 		this.inv.clear();
 		for(MethodProfiler p : this.getProfiles().values()){
@@ -280,6 +282,6 @@ public class Profiler {
 			this.inv.addItem(this.buildMethodProfiler(p));
 		}
 		this.inv.enableUpdate();
-		profiler.stop("update");
+		TIMINGS_PROFILER.stop("update");
 	}
 }

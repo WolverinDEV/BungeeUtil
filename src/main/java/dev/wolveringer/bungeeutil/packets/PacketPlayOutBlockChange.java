@@ -12,24 +12,22 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class PacketPlayOutUpdateSign extends Packet implements PacketPlayOut{
-	private BlockPosition location;
-	private String[] lines;
-
+public class PacketPlayOutBlockChange extends Packet implements PacketPlayOut {
+	private BlockPosition position;
+	private int data;
+	
 	@Override
 	public void read(PacketDataSerializer s) {
-		this.lines = new String[4];
-		this.location = s.readBlockPosition();
-		this.lines = new String[4];
-		for(int i = 0;i<4;i++) {
-			this.lines[i] = s.readString(-1);
-		}
+		position = s.readBlockPosition();
+		data = s.readVarInt();
 	}
+
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeBlockPosition(this.location);
-		for(int i = 0;i<4;i++) {
-			s.writeString(this.lines[i]);
-		}
+		s.writeBlockPosition(position);
+		s.writeVarInt(data);
 	}
+
+	public int getTypeId(){ return data >> 4; }
+	public int getMetaId(){ return data & 0x0F; }
 }

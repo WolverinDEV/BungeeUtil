@@ -1,6 +1,6 @@
 name: BungeeUtil
 version: ${project.version}
-main: dev.wolveringer.BungeeUtil.bukkit.BukkitMain
+main: dev.wolveringer.bungeeutil.plugin.bukkit.BukkitMain
 
 commands:
   BungeeTimings:

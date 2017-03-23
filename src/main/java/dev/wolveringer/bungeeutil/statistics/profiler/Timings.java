@@ -1,15 +1,22 @@
 package dev.wolveringer.bungeeutil.statistics.profiler;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.stream.Collector;
+import java.util.stream.Stream;
+
+import javax.xml.ws.Holder;
 
 import org.apache.commons.lang3.ArrayUtils;
 
 import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
-import dev.wolveringer.bungeeutil.item.ItemStack;
+import dev.wolveringer.bungeeutil.item.Item;
+import dev.wolveringer.bungeeutil.item.ItemBuilder;
 import dev.wolveringer.bungeeutil.item.Material;
-import dev.wolveringer.bungeeutil.item.MultiClickItemStack;
+import lombok.Getter;
+import net.md_5.bungee.api.ChatColor;
 
 public class Timings {
 	private LinkedList<Long> times = new LinkedList<Long>();
@@ -22,7 +29,8 @@ public class Timings {
 	private String name;
 	@SuppressWarnings("unused")
 	private MethodProfiler profiler;
-	private ItemStack item;
+	@Getter
+	private Item item;
 
 	public Timings(String key, MethodProfiler p) {
 		this.name = key;
@@ -30,7 +38,7 @@ public class Timings {
 		for(int i = 0;i < 100;i++){
 			this.period_times.add(0L);
 		}
-		this.item = new MultiClickItemStack(Material.CAKE);
+		this.item = ItemBuilder.create(Material.CAKE).build();
 		this.rebuild();
 	}
 
@@ -54,48 +62,39 @@ public class Timings {
 		for(int i = steps - 1;i >= 0;i--){
 			if(count_step * i <= var) {
 				if(count_step * i + count_step * 0.5D <= var) {
-					out[i] = ChatColorUtils.COLOR_CHAR+"aX";//ChatColorUtils.COLOR_CHAR+"a▅";
+					out[i] = ChatColor.GREEN+"X";
 				}
 				else {
-					out[i] = ChatColorUtils.COLOR_CHAR+"aX";//ChatColorUtils.COLOR_CHAR+"a█";
+					out[i] = ChatColor.GREEN+"X";
 				}
 			}
 			else {
-				out[i] = ChatColorUtils.COLOR_CHAR+"0X";//ChatColorUtils.COLOR_CHAR+"0█";
+				out[i] = ChatColor.BLACK+"X";
 			}
 		}
 		ArrayUtils.reverse(out);
 		return out;
-		//PMINGLIU
 	}
 
-	private Long durchschnitt(LinkedList<Long> zahlen) {
-		if(zahlen.size() == 0) {
-			return 0L;
-		}
-		Long ges = 0L;
-		Iterator<Long> i = zahlen.iterator();
-		while (i.hasNext()){
-			ges += i.next();
-		}
-		return ges / zahlen.size();
+	private Long average(LinkedList<Long> zahlen, boolean countEmpty) {
+		if(zahlen.isEmpty()) return 0L;
+		
+		Stream<Long> stream = zahlen.stream().filter(e -> (countEmpty || e != 0)).parallel();
+		long count = stream.count();
+		if(count == 0) return 0L;
+		
+		Holder<BigDecimal> sum = new Holder<>(new BigDecimal(0));
+		stream.forEach(e -> sum.value = sum.value.add(new BigDecimal(e)));
+		
+		return sum.value.divide(new BigDecimal(count), BigDecimal.ROUND_HALF_UP).longValue();
 	}
 
 	private String fromat(double d) {
-		String out = Profiler.TIME_FORMAT.format(d).replaceAll(",", ".");
-		if(out.indexOf(".") != -1) {
-			out = out.substring(0, out.indexOf(".")) + ChatColorUtils.COLOR_CHAR+"c" + out.substring(out.indexOf("."), out.length());
-		}
-		return out;
+		return Profiler.TIME_FORMAT.format(d);
 	}
 
 	public Long getAverageScore() {
-		Long all = 0L;
-		ArrayList<Long> t = new ArrayList<>(this.period_times);
-		for(Long s : t) {
-			all += s;
-		}
-		return all / t.size();
+		return average(this.period_times, false);
 	}
 
 	private Long getHighestValue(Long[] in) {
@@ -106,10 +105,6 @@ public class Timings {
 			}
 		}
 		return high;
-	}
-
-	public ItemStack getItemStack() {
-		return this.item;
 	}
 
 	public Long getLastTiming() {
@@ -124,20 +119,20 @@ public class Timings {
 	}
 
 	public Long[] getSmalTimings() {
-		return this.times.toArray(new Long[0]);
+		return this.times.toArray(new Long[times.size()]);
 	}
 
 	public Long[] getTimings() {
-		return this.period_times.toArray(new Long[0]);
+		return this.period_times.toArray(new Long[period_times.size()]);
 	}
 
 	public void rebuild() {
 		int steps = 10;
-		this.item.getItemMeta().setDisplayName(ChatColorUtils.COLOR_CHAR+"bTiming: "+ChatColorUtils.COLOR_CHAR+"b" + this.getName());
+		this.item.getItemMeta().setDisplayName(ChatColor.BLUE+"Timing: "+ChatColor.YELLOW + this.getName());
 
 		Long max = this.getHighestValue(this.getTimings()) + 10;
 		Long min = 0L;
-		Long d = max - min;
+		Long difference = max - min;
 
 		//INIT ARRAYLIST
 		ArrayList<String> out = new ArrayList<String>();
@@ -146,12 +141,12 @@ public class Timings {
 		}
 
 		//COLLUM NUMBERS
-		ArrayList<String> a = new ArrayList<String>();
-		double count_step = d / steps;
+		ArrayList<String> collums = new ArrayList<String>();
+		double count_step = difference / steps;
 		for(int i = 0;i < steps;i++) {
-			a.add(ChatColorUtils.COLOR_CHAR+"c" + this.fromat(count_step * i) + " ms"+ChatColorUtils.COLOR_CHAR+"7: ");
+			collums.add(ChatColor.RED + this.fromat((count_step * i) / (double) 1000000) + " ms"+ChatColor.GRAY+": ");
 		}
-		String[] var1 = a.toArray(new String[a.size()]);
+		String[] var1 = collums.toArray(new String[collums.size()]);
 		ArrayUtils.reverse(var1);
 		this.addVertical(out, var1);
 
@@ -161,24 +156,25 @@ public class Timings {
 		this.item.getItemMeta().setLore(out);
 	}
 
-	private synchronized void recalculate() {
-		if(this.times.size() >= 100){
-			Long l = this.durchschnitt(this.times);
-			this.period_times.add(l);
-			if(this.period_times.size() > 100) {
-				this.period_times.pollFirst();
+	private void recalculate() {
+		synchronized (times) {
+			if(this.times.size() >= 100){
+				this.period_times.add(this.average(this.times, true));
+				while(this.period_times.size() > 100) this.period_times.pollFirst();
+				this.times.clear();
 			}
-			this.times.clear();
 		}
 	}
 
 	public void resetTimings() {
-		this.times.clear();
-		this.period_times.clear();
-		for(int i = 0;i < 100;i++){
-			this.period_times.add(0L);
+		synchronized (times) {
+			this.times.clear();
+			this.period_times.clear();
+			for(int i = 0;i < 100;i++){
+				this.period_times.add(0L);
+			}
+			this.rebuild();
 		}
-		this.rebuild();
 	}
 
 	public synchronized void start() {
@@ -186,7 +182,7 @@ public class Timings {
 	}
 
 	public synchronized void stop() {
-		if(this.start == -1L) {
+		if(this.start == -1L){
 			return;
 		}
 		this.addTiming(System.nanoTime() - this.start);

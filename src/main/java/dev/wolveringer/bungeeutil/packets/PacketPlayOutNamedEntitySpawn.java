@@ -14,13 +14,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.md_5.bungee.api.ChatColor;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutEntity implements PacketPlayOut{
-	private GameProfile p = new GameProfile(UUID.randomUUID(), dev.wolveringer.bungeeutil.chat.ChatColorUtils.COLOR_CHAR+"cProfile error");
+	private GameProfile p = new GameProfile(UUID.randomUUID(), ChatColor.RED+"Profile error");
 	private UUID uuid;
 	private Location loc;
 	private byte yaw; // yaw / 256*360
@@ -67,6 +68,7 @@ public class PacketPlayOutNamedEntitySpawn extends PacketPlayOutEntity implement
 	@SuppressWarnings("deprecation")
 	@Override
 	public void read(PacketDataSerializer paramPacketDataSerializer) {
+		if(p == null) p = new GameProfile(UUID.randomUUID(), ChatColor.RED+"Profile error");
 		this.setEntityId(paramPacketDataSerializer.readVarInt());
 		this.uuid = paramPacketDataSerializer.readUUID();
 		switch (this.getBigVersion()) {

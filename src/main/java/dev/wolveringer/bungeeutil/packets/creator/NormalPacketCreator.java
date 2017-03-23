@@ -14,18 +14,38 @@ import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.Player;
 import dev.wolveringer.bungeeutil.player.connection.ProtocollVersion;
 import io.netty.buffer.ByteBuf;
-import lombok.AllArgsConstructor;
+import io.netty.util.internal.shaded.org.jctools.util.UnsafeAccess;
 import lombok.Getter;
+import lombok.NonNull;
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
 
 public class NormalPacketCreator extends AbstractPacketCreator {
-	@AllArgsConstructor
 	@Getter
 	private static class PacketHolder<T extends Packet> {
+		private static final boolean USE_UNSAVE = testUnsave();
+		private static boolean testUnsave(){
+			boolean unsave = UnsafeAccess.SUPPORTS_GET_AND_SET && System.getProperty("bungeeutil.no_unsave") == null;
+			if(unsave)
+				if(BungeeUtil.getInstance() != null)
+					BungeeUtil.getInstance().sendMessage("§aUsing java unsafe for new packet class instances!");
+				else
+					System.out.println("Using java unsafe for new packet class instances!");
+			return unsave;
+		}
+		private final Class<T> clazz;
 		private Constructor<T> constuctor;
-
+		
+		public PacketHolder(@NonNull Class<T> clazz) throws NoSuchMethodException, SecurityException {
+			this.clazz = clazz;
+			if(!USE_UNSAVE)
+				this.constuctor = clazz.getConstructor();
+		}
+		
+		@SuppressWarnings({ "unchecked", "restriction" })
 		public T newInstance() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+			if(USE_UNSAVE)
+				return (T) UnsafeAccess.UNSAFE.allocateInstance(clazz);
 			return this.constuctor.newInstance();
 		}
 	}
@@ -114,15 +134,9 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		if (this.packetListChanged) {
 			this.registerPackets.clear();
 			for (PacketHolder<?> element : this.packetsId) {
-				if(element == null) {
-					continue;
-				}
-				Constructor<? extends Packet> constructor = element.getConstuctor();
-				if (constructor == null) {
-					continue;
-				}
-				if(!this.registerPackets.contains(constructor.getDeclaringClass())) {
-					this.registerPackets.add(constructor.getDeclaringClass());
+				if(element == null) continue;
+				if(!this.registerPackets.contains(element.getClazz())) {
+					this.registerPackets.add(element.getClazz());
 				}
 			}
 			this.packetListChanged = false;
@@ -144,11 +158,14 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		try {
 			for(ProtocollId id : ids) {
 				if(id != null && id.isValid()){
-					this.packetsId[this.loadPacket(id.getVersion(),p, d, id.getId(), clazz)] = new PacketHolder(clazz == null ? null : (Constructor<?>) clazz.getConstructor());
+					if(clazz != null)
+						this.packetsId[this.loadPacket(id.getVersion(),p, d, id.getId(), clazz)] = new PacketHolder(clazz);
+					else
+						this.packetsId[this.loadPacket(id.getVersion(),p, d, id.getId(), clazz)] = null;
 				}
 			}
 		}
-		catch (NoSuchMethodException | SecurityException ex) {
+		catch (SecurityException | NoSuchMethodException ex) {
 			System.out.println(clazz);
 			ex.printStackTrace();
 		}
