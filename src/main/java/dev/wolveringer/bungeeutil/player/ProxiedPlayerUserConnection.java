@@ -250,8 +250,13 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 
 	@Override
 	public void openInventory(Inventory inv) {
+		openInventory(inv, false);
+	}
+
+	@Override
+	public void openInventory(Inventory inv, boolean resetCoursor) {
 		if(this.isInventoryOpened()) {
-			this.closeInventory(true);
+			this.closeInventory(resetCoursor);
 		}
 		PacketPlayOutOpenWindow e = new PacketPlayOutOpenWindow(Inventory.ID, inv.getType().getType(this.getVersion()), inv.getName(), inv.getType() == InventoryType.Chest ? inv.getSlots() : inv.getType().getDefaultSlots(), false);
 		e.UTF_8 = true;
@@ -260,7 +265,7 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 		inv.unsave().getModificableViewerList().add(this);
 		this.inv = inv;
 	}
-
+	
 	@Override
 	public void performCommand(String command) {
 		this.sendPacketToServer(new PacketPlayInChat((command.startsWith("/") ? "" : "/") + command));

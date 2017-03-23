@@ -52,7 +52,8 @@ public interface Player extends ProxiedPlayer {
 	public boolean isInventoryOpened();
 
 	public void openInventory(Inventory inv);
-
+	public void openInventory(Inventory inv, boolean resetCoursor);
+	
 	public void performCommand(String command);
 
 
