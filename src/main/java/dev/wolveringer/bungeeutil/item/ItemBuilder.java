@@ -1,6 +1,8 @@
 package dev.wolveringer.bungeeutil.item;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang3.Validate;
@@ -149,7 +151,17 @@ public class ItemBuilder {
 		this.lore.add(lore);
 		return this;
 	}
+	
+	public ItemBuilder lore(String... lore) {
+		this.lore.addAll(Arrays.asList(lore));
+		return this;
+	}
 
+	public ItemBuilder lore(Collection<String> lore) {
+		this.lore.addAll(lore);
+		return this;
+	}
+	
 	public ItemBuilder material(Material m) {
 		this.id = m.getId();
 		return this;
