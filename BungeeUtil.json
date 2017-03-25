@@ -21,6 +21,17 @@
 	  
 	"CurrentVersion": "2.4.0",
 	"history": {
+		"2.4.1": {
+			"bugs": [],
+			"download": {
+				"sha1": "f05778e4e2470452ba0ba4868504059a4ddeb27c",
+				"url": "${download.github}(version=2.4.1)",
+				"md5": "88c5d29a80e6aef75ecc0d6e04cf2317"
+			},
+			"changelog": [
+				"Implement option for cursor reseting on opening new inventories"
+			]
+		},
 		"2.4.0": {
 			"bugs": [],
 			"download": {
