@@ -2,16 +2,12 @@ package dev.wolveringer.bungeeutil.statistics.profiler;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.stream.Collector;
-import java.util.stream.Stream;
 
 import javax.xml.ws.Holder;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
 import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.item.ItemBuilder;
 import dev.wolveringer.bungeeutil.item.Material;
@@ -79,12 +75,11 @@ public class Timings {
 	private Long average(LinkedList<Long> zahlen, boolean countEmpty) {
 		if(zahlen.isEmpty()) return 0L;
 		
-		Stream<Long> stream = zahlen.stream().filter(e -> (countEmpty || e != 0)).parallel();
-		long count = stream.count();
-		if(count == 0) return 0L;
+		int count;
+		if((count = (int) zahlen.stream().filter(e -> (countEmpty || e != 0)).count()) == 0) return 0L;
 		
 		Holder<BigDecimal> sum = new Holder<>(new BigDecimal(0));
-		stream.forEach(e -> sum.value = sum.value.add(new BigDecimal(e)));
+		zahlen.stream().filter(e -> (countEmpty || e != 0)).forEach(e -> sum.value = sum.value.add(new BigDecimal(e)));
 		
 		return sum.value.divide(new BigDecimal(count), BigDecimal.ROUND_HALF_UP).longValue();
 	}
