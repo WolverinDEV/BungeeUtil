@@ -1,7 +1,6 @@
 package dev.wolveringer.bungeeutil.plugin;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -38,12 +37,13 @@ public class StringParser {
 		}
 		
 		public String get(Map<String, String> values){
-			HashSet<Entry<String, String>> keys = new HashSet<>(values.entrySet());
-			if(defaults != null)
-				keys.addAll(defaults.entrySet());
+			HashMap<String, String> keys = new HashMap<>(values);
+			for(Entry<String, String> e : defaults.entrySet())
+				if(!keys.containsKey(e.getKey()))
+					keys.put(e.getKey(), e.getValue());
 			
 			String out = value;
-			for(Entry<String, String> e : keys)
+			for(Entry<String, String> e : keys.entrySet())
 				out = out.replace("%"+e.getKey()+"%", e.getValue());
 			return out;
 		}
@@ -76,6 +76,7 @@ public class StringParser {
 			lindex = m.end();
 			
 			String key = m.group(1);
+			
 			String next = original.substring(m.end());
 			
 			int index = -1;
@@ -96,8 +97,9 @@ public class StringParser {
 					int eindex = current.indexOf('=');
 					if(eindex == -1)
 						values.put(current, "");
-					else
+					else {
 						values.put(current.substring(0, eindex), current.substring(eindex+1));
+					}
 					current = "";
 					if(next.charAt(index) == ')')
 						break;
@@ -112,7 +114,6 @@ public class StringParser {
 			lindex += index + 1;
 			if(!current.isEmpty())
 				throw new RuntimeException("Invalid arguments in: "+next);
-			
 			out += getString(key, values);
 		}
 		if(lindex < original.length())
@@ -124,7 +125,7 @@ public class StringParser {
 		String last = "";
 		String current = original;
 		int deep = 0;
-		while (last != (current = getString(current)) && deep++ < maxDeep) {
+		while (!last.equalsIgnoreCase(current = getString(current)) && deep++ < maxDeep) {
 			last = current;
 		}
 		return current;
