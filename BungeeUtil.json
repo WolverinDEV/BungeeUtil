@@ -19,8 +19,21 @@
 		}
 	},
 	  
-	"CurrentVersion": "2.4.1",
+	"CurrentVersion": "2.4.2",
 	"history": {
+		"2.4.2": {
+			"bugs": [],
+			"download": {
+				"sha1": "32f41e495ee415357f71046174d8baf9b8dfc0c4",
+				"url": "${download.github}(version=2.4.2)",
+				"md5": "98856fc25a3d2575958500e1487f4722"
+			},
+			"changelog": [
+				"Fixed CachedPacketCreator bug for different Versions",
+				"Fixed timings (closed stream) bug",
+				"Dont print the ByteBuff on exception in debug mode when his length is over 1024 (avoid spaming)"
+			]
+		},
 		"2.4.1": {
 			"bugs": [],
 			"download": {
