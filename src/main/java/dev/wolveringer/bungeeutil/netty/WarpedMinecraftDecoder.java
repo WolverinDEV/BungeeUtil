@@ -143,7 +143,11 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 				BungeeUtil.debug("Having an exception while decoding a packet!");
 				BungeeUtil.debug(e);
 				BungeeUtil.debug("Buffer contains:");
-				BungeeUtil.debug(ByteBufUtil.prettyHexDump(in.resetReaderIndex()));
+				if(in.capacity() < 1024){
+					BungeeUtil.debug(ByteBufUtil.prettyHexDump(in, 0, in.capacity()));
+				} else {
+					BungeeUtil.debug("Buffer to large for a dump ("+in+")");
+				}
 				BungeeUtil.debug("");
 				in.skipBytes(in.readableBytes());
 				
