@@ -19,8 +19,19 @@
 		}
 	},
 	  
-	"CurrentVersion": "2.4.2",
+	"CurrentVersion": "2.4.3",
 	"history": {
+		"2.4.3": {
+			"bugs": [],
+			"download": {
+				"sha1": "71a80a2216d1597dfc1620ed17798bc8e0b106c2",
+				"url": "${download.github}(version=2.4.3)",
+				"md5": "8d0685ef48492acdea15f2a3705c980e"
+			},
+			"changelog": [
+				"Fixed StringParser"
+			]
+		},
 		"2.4.2": {
 			"bugs": [],
 			"download": {
