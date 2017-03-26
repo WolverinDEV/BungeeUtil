@@ -1,5 +1,6 @@
 package dev.wolveringer.bungeeutil.packets.creator;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,9 +73,10 @@ public class CachedPacketCreator extends AbstractPacketCreator {
 				continue;
 			}
 
-			int id = CachedPacketCreator.this.calculate(ProtocollVersion.Unsupported, packet.getProtocol(), packet.getDirection(), packet.getPacketId());
-			id = id & 0xFFFF;
-
+			int id = packet.getCompressedId(); /*CachedPacketCreator.this.calculate(ProtocollVersion.Unsupported, packet.getProtocol(), packet.getDirection(), packet.getPacketId())*/;
+			id = id/* & 0xFFFF*/;
+			if(id < 0) continue;
+			
 			UsedClassProcessing c = CachedPacketCreator.this.cleaner.get(packet.getClass());
 			c.processing(packet);
 			synchronized (CachedPacketCreator.this.newPackets) {
@@ -112,7 +114,7 @@ public class CachedPacketCreator extends AbstractPacketCreator {
 	@Override
 	public Packet getPacket0(ProtocollVersion version, Protocol protocol, Direction d, Integer id, ByteBuf b, Player p) {
 		int compressed = this.calculate(version, protocol, d, id);
-		int scompressed = compressed & 0xFFFF;
+		int scompressed = compressed/* & 0xFFFF*/;
 
 		Packet packet = null;
 		synchronized (this.newPackets) {

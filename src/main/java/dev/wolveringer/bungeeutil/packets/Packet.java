@@ -216,6 +216,7 @@ public abstract class Packet {
 	 * ------------------------------
 	 */
 
+	@Getter
 	private int compressedId = -1;
 	private transient ClientVersion version = ClientVersion.UnderknownVersion;
 	private ClientVersion readedVersion = ClientVersion.UnderknownVersion;
@@ -241,7 +242,7 @@ public abstract class Packet {
 	}
 
 	@Deprecated
-	protected BigClientVersion getBigVersion() {
+	public BigClientVersion getBigVersion() {
 		return this.version.getBigVersion();
 	}
 
