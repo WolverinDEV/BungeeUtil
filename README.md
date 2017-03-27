@@ -1,5 +1,5 @@
 # BungeeUtil
-## The Proxy-side PacketLib with build in futures like an Inventory API
+## The Proxy-Side PacketLib with build in futures like an Inventory API
 
 
 ### For what is BungeeUtil?
