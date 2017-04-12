@@ -35,11 +35,12 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		}
 		private final Class<T> clazz;
 		private Constructor<T> constuctor;
-		
-		public PacketHolder(@NonNull Class<T> clazz) throws NoSuchMethodException, SecurityException {
+		public PacketHolder(Class<T> clazz) throws NoSuchMethodException, SecurityException {
 			this.clazz = clazz;
-			if(!USE_UNSAVE)
-				this.constuctor = clazz.getConstructor();
+			if(clazz != null){
+				if(!USE_UNSAVE)
+					this.constuctor = clazz.getConstructor();
+			}
 		}
 		
 		@SuppressWarnings({ "unchecked", "restriction" })
@@ -47,6 +48,10 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 			if(USE_UNSAVE)
 				return (T) UnsafeAccess.UNSAFE.allocateInstance(clazz);
 			return this.constuctor.newInstance();
+		}
+	
+		public boolean isNull(){
+			return clazz == null || constuctor == null;
 		}
 	}
 
@@ -75,6 +80,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		if(cons == null) {
 			return null;
 		}
+		if(cons.isNull()) return null;
 		try {
 			Packet packet = cons.newInstance();
 			if (p == null || p.getVersion() == null){
@@ -94,6 +100,8 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		int compressed = this.calculate(version, protocol, d, id);
 		Packet packet = null;
 		if ((packet = this.getPacket0(compressed, p, b)) == null) {
+			if(this.packetsId[compressed] != null && this.packetsId[compressed].isNull()) return null; //special register
+			
 			if(version.getBasedVersion().getProtocollVersion() == version){ //Fallback (based version) (1.8-1.9)
 				return null;
 			}
@@ -161,7 +169,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 					if(clazz != null)
 						this.packetsId[this.loadPacket(id.getVersion(),p, d, id.getId(), clazz)] = new PacketHolder(clazz);
 					else
-						this.packetsId[this.loadPacket(id.getVersion(),p, d, id.getId(), clazz)] = null;
+						this.packetsId[this.loadPacket(id.getVersion(),p, d, id.getId(), clazz)] = new PacketHolder<>(null);
 				}
 			}
 		}
