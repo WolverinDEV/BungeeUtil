@@ -51,7 +51,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		}
 	
 		public boolean isNull(){
-			return clazz == null || constuctor == null;
+			return clazz == null || (constuctor == null && !USE_UNSAVE);
 		}
 	}
 
@@ -118,7 +118,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public int getPacketId(ProtocollVersion version,Class<? extends Packet> clazz) {
+	public int getPacketId(ProtocollVersion version,@NonNull Class<? extends Packet> clazz) {
 		if(version == ProtocollVersion.Unsupported){
 			throw new NullPointerException("Unsupported version!");
 		}
@@ -142,7 +142,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		if (this.packetListChanged) {
 			this.registerPackets.clear();
 			for (PacketHolder<?> element : this.packetsId) {
-				if(element == null) continue;
+				if(element == null || element.isNull()) continue;
 				if(!this.registerPackets.contains(element.getClazz())) {
 					this.registerPackets.add(element.getClazz());
 				}
