@@ -40,19 +40,21 @@ public class ItemBuilderExample {
 		ItemStack item = new ItemStack(1, 12,(byte) 0) { //Do the same stuff like with the item builder but in this time with the constructor
 			@SuppressWarnings("deprecation")
 			@Override
-			public void click(Click click) {
+			public void click(Click click) { //This methode will be called on every interaction with this item (In the Inventory)
 				click.getPlayer().sendMessage("Hey, you clicked me!");
 			}
 		};
-		item.getItemMeta().setDisplayName("§aHello world");
-		item.getItemMeta().setLore(Arrays.asList("First", "Second"));
-		item.getItemMeta().setGlow(true);
+		item.getItemMeta().setDisplayName("§aHello world"); //Set the item name
+		item.getItemMeta().setLore(Arrays.asList("First", "Second")); //Change the lore
+		item.getItemMeta().setGlow(true); //Enable item glowing
 		
-		if(item.getType() == Material.SKULL_ITEM){
-    		SkullMeta meta = (SkullMeta) item.getItemMeta();
-    		meta.setSkullOwner("WolverinDEV");
-    		meta.setSkin("WolverinDEV");
-    	}
+		if(item.getType() == Material.SKULL_ITEM){ 	//This is just an example so if the item is a Skull item,
+								//then you can change the Skull Owner and the Skin as well
+    			SkullMeta meta = (SkullMeta) item.getItemMeta();
+    			meta.setSkullOwner("WolverinDEV");
+    			meta.setSkin("WolverinDEV");
+    		}
+		
 		return item;
 	}
 }
