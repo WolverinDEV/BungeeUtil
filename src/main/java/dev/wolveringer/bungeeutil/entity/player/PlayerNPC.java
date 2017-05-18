@@ -15,7 +15,7 @@ import dev.wolveringer.bungeeutil.packets.PacketPlayInUseEntity.Action;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutEntityDestroy;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutEntityHeadRotation;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutEntityTeleport;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutNamedEntitySpawn;
+import dev.wolveringer.bungeeutil.packets.PacketPlayOutSpawnPlayer;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutPlayerInfo;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutPlayerInfo.EnumPlayerInfoAction;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardTeam;
@@ -244,7 +244,7 @@ public final class PlayerNPC {
 
 	private void sendSpawn(final Player p) {
 		p.sendPacket(new PacketPlayOutPlayerInfo(EnumPlayerInfoAction.ADD_PLAYER, new PlayerInfoData(this.profile, this.ping, 0, this.tabname)));
-		p.sendPacket(new PacketPlayOutNamedEntitySpawn(this.ID, this.profile, this.location, 0, this.datawatcher.getWatcher(p.getVersion().getBigVersion())));
+		p.sendPacket(new PacketPlayOutSpawnPlayer(this.ID, this.profile, this.location, 0, this.datawatcher.getWatcher(p.getVersion().getBigVersion())));
 
 		PacketPlayOutScoreboardTeam team = new PacketPlayOutScoreboardTeam();
 		team.setTeam(this.base_name);

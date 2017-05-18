@@ -51,6 +51,10 @@ public abstract class Packet {
 
 	private static AbstractPacketCreator creator;
 
+	private static ProtocollId[] _891011(int _8, int _9, int _10, int _11){
+		return new ProtocollId[]{new ProtocollId(BigClientVersion.v1_8, _8), new ProtocollId(BigClientVersion.v1_9, _9), new ProtocollId(BigClientVersion.v1_10, _10), new ProtocollId(BigClientVersion.v1_11, _11)};
+	}
+	
 	static {
 		registerPacket(Protocol.LOGIN, Direction.TO_CLIENT, PacketLoginDisconnect.class, new ProtocollId(BigClientVersion.v1_8, 0x00), new ProtocollId(BigClientVersion.v1_9, 0x00), new ProtocollId(BigClientVersion.v1_10, 0x00), new ProtocollId(BigClientVersion.v1_11, 0x00));
 
@@ -103,7 +107,7 @@ public abstract class Packet {
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutNamedSoundEffect.class, new ProtocollId(BigClientVersion.v1_8, 0x29), new ProtocollId(BigClientVersion.v1_9, 0x19), new ProtocollId(ProtocollVersion.v1_9_4, 0x19), new ProtocollId(BigClientVersion.v1_10, 0x19), new ProtocollId(BigClientVersion.v1_11, 0x19)); // Changed
 		//registerPacket(Protocol.GAME, Direction.TO_CLIENT, null, new ProtocollId(ProtocollVersion.v1_9_4, 0x19));
 
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutNamedEntitySpawn.class, new ProtocollId(BigClientVersion.v1_8, 0x0C), new ProtocollId(BigClientVersion.v1_9, 0x05), new ProtocollId(BigClientVersion.v1_10, 0x05), new ProtocollId(BigClientVersion.v1_11, 0x05));
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutSpawnPlayer.class, new ProtocollId(BigClientVersion.v1_8, 0x0C), new ProtocollId(BigClientVersion.v1_9, 0x05), new ProtocollId(BigClientVersion.v1_10, 0x05), new ProtocollId(BigClientVersion.v1_11, 0x05));
 		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutTitle.class, new ProtocollId(BigClientVersion.v1_8, 0x45), new ProtocollId(BigClientVersion.v1_9, 0x45), new ProtocollId(BigClientVersion.v1_10, 0x45), new ProtocollId(BigClientVersion.v1_11, 0x45));
 		// registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x21, PacketPlayOutMapChunk.class, new ProtocollId(BigClientVersion.v1_8, 0x00), new ProtocollId(BigClientVersion.v1_9, 0x00), new ProtocollId(BigClientVersion.v1_10, 0x00); //Request packet src on spigotmc via pm!
 		// registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x26, PacketPlayOutMapChunkBulk.class, new ProtocollId(BigClientVersion.v1_8, 0x00), new ProtocollId(BigClientVersion.v1_9, 0x00), new ProtocollId(BigClientVersion.v1_10, 0x00); //TODO Chunk Serelizer (Premium bungee src)
@@ -130,6 +134,10 @@ public abstract class Packet {
 		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInArmAnimation.class, new ProtocollId(BigClientVersion.v1_8, 0x0A), new ProtocollId(BigClientVersion.v1_9, 0x1A), new ProtocollId(BigClientVersion.v1_10, 0x1A), new ProtocollId(BigClientVersion.v1_11, 0x1A));
 		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInBlockPlace.class, new ProtocollId(BigClientVersion.v1_8, 0x08), new ProtocollId(BigClientVersion.v1_9, 0x1C), new ProtocollId(BigClientVersion.v1_10, 0x1C), new ProtocollId(BigClientVersion.v1_11, 0x1C));
 		// TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x12, PacketPlayInUpdateSign.class, new ProtocollId(BigClientVersion.v1_8, 0x00), new ProtocollId(BigClientVersion.v1_9, 0x00), new ProtocollId(BigClientVersion.v1_10, 0x00); //Changed from ChatComponent to String
+		
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutSpawnEntityObject.class, _891011(0x0E, 0x00, 0x00, 0x00));
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutSpawnGlobalObject.class, _891011(0x2C, 0x02, 0x02, 0x02));
+		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutSpawnLivingEntity.class, _891011(0x0F, 0x03, 0x03, 0x03));
 	}
 
 	public static int calculate(ProtocollVersion version, Protocol p, Direction d, Integer id) {
@@ -351,4 +359,16 @@ public abstract class Packet {
 		this.version = ClientVersion.UnderknownVersion;
 		return s;
 	}
+	
+	protected void testVersion(Runnable run, BigClientVersion... versions){
+		testVersion(run, false, versions);
+	}
+	protected void testVersion(Runnable run,boolean invert, BigClientVersion... versions){
+		for(BigClientVersion version : versions)
+			if((version == getBigVersion()) == !invert){
+				run.run();
+				return;
+			}
+	}
+	
 }

@@ -23,7 +23,7 @@ import dev.wolveringer.bungeeutil.packets.PacketPlayInCloseWindow;
 import dev.wolveringer.bungeeutil.packets.PacketPlayInFlying;
 import dev.wolveringer.bungeeutil.packets.PacketPlayInWindowClick;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutCloseWindow;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutNamedEntitySpawn;
+import dev.wolveringer.bungeeutil.packets.PacketPlayOutSpawnPlayer;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutOpenWindow;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutPlayerListHeaderFooter;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutPosition;
@@ -38,7 +38,7 @@ import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.Callback;
 
 public class MainPacketHandler {
-	static PacketPlayOutNamedEntitySpawn a;
+	static PacketPlayOutSpawnPlayer a;
 	static ArrayList<String> b = new ArrayList<String>();
 	//private static CachedHashMap<Player, Long> lastInventortyUpdate = new CachedHashMap<>(100, TimeUnit.MILLISECONDS);
 

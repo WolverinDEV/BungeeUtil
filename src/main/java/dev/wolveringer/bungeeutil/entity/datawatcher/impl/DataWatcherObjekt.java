@@ -1,6 +1,6 @@
 package dev.wolveringer.bungeeutil.entity.datawatcher.impl;
 
-import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
+import lombok.NonNull;
 
 public class DataWatcherObjekt {
 	private final Class<?> clazz;
@@ -8,7 +8,7 @@ public class DataWatcherObjekt {
 	private Object value;
 	private boolean update;
 
-	public DataWatcherObjekt(Class<?> clazz, int pos, Object object) {
+	public DataWatcherObjekt(@NonNull Class<?> clazz, int pos, Object object) {
 		this.pos = pos;
 		this.value = object;
 		this.clazz = clazz;
@@ -20,10 +20,6 @@ public class DataWatcherObjekt {
 
 	public Class<?> getType() {
 		return this.clazz;
-	}
-
-	public int getTypeId(BigClientVersion version) {
-		return 0;
 	}
 
 	public Object getValue() {
@@ -41,6 +37,6 @@ public class DataWatcherObjekt {
 
 	@Override
 	public String toString() {
-		return "[" + this.pos + "=" + this.value + " (" + this.value.getClass().getName().split("\\.")[this.value.getClass().getName().split("\\.").length - 1] + ")],";
+		return "[" + this.pos + "=" + this.value + " (" + this.clazz.getClass().getName().split("\\.")[this.clazz.getClass().getName().split("\\.").length - 1] + ")]";
 	}
 }

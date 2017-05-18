@@ -314,7 +314,6 @@ public class WarpedChannelWrapper extends ChannelWrapper {
 			// Delay 250ms to ensure that the protocol switch (if any) has
 			// definitely taken place.
 			ch.eventLoop().schedule(new Runnable() {
-
 				@Override
 				public void run() {
 					close(kick);

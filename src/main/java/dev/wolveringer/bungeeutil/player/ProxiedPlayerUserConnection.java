@@ -2,6 +2,7 @@ package dev.wolveringer.bungeeutil.player;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
@@ -18,6 +19,7 @@ import dev.wolveringer.bungeeutil.inventory.PlayerInventory;
 import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.netty.WarpedChannelFutureListener;
 import dev.wolveringer.bungeeutil.netty.WarpedChannelInitializer;
+import dev.wolveringer.bungeeutil.netty.WarpedChannelWrapper;
 import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.packets.PacketPlayInChat;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutCloseWindow;
@@ -46,9 +48,11 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.event.ServerConnectEvent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import net.md_5.bungee.connection.InitialHandler;
 import net.md_5.bungee.netty.ChannelWrapper;
 import net.md_5.bungee.netty.PipelineUtils;
+import net.md_5.bungee.protocol.packet.Kick;
 
 public class ProxiedPlayerUserConnection extends UserConnection implements Player {
 	private static final int CURSOR_ITEM_SLOT = 50;
@@ -138,8 +142,16 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 	
 	@Override
 	public void disconnect0(BaseComponent... reason) {
-		// TODO Auto-generated method stub
-		super.disconnect0(reason);
+		if (this.get("ch", WarpedChannelWrapper.class).isClosing())
+			return;
+		BungeeCord.getInstance().getLogger().log(Level.INFO, "[{0}] disconnected with: {1}", new Object[] { getName(), BaseComponent.toLegacyText(reason) });
+
+		this.get("ch", WarpedChannelWrapper.class).delayedClose(new Kick(ComponentSerializer.toString(reason)));
+
+		if (getServer() == null)
+			return;
+		getServer().setObsolete(true);
+		getServer().disconnect("Quitting");
 	}
 
 	private Object get(String a) {

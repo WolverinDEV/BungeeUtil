@@ -189,7 +189,7 @@ public class v1_8_DataWatcher extends DataWatcher{
 					objekt = new DataWatcherObjekt(getTypeId(type), position, new Vector3f(packetdataserializer.readFloat(), packetdataserializer.readFloat(), packetdataserializer.readFloat()));
 					break;
 				default:
-					System.out.println("Error 01");
+					throw new RuntimeException("Could not find DataWatcher-Type '"+type+"' -> "+this.toString());
 			}
 
 			arraylist.add(objekt);
@@ -262,7 +262,7 @@ public class v1_8_DataWatcher extends DataWatcher{
 				s.writeFloat(vector3f.getZ());
 				break;
 			default:
-				System.out.println("Error 02");
+				throw new RuntimeException("Could not find watcher type '"+o.getType()+"' "+toString());
 		}
 	}
 }
