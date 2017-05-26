@@ -32,6 +32,7 @@ public class PacketPlayInBlockPlace extends Packet implements PacketPlayIn {
 		this.location = s.readBlockPosition();
 
 		switch (this.getBigVersion()) {
+		case v1_12:
 		case v1_11:
 		case v1_10:
 		case v1_9:
@@ -50,6 +51,7 @@ public class PacketPlayInBlockPlace extends Packet implements PacketPlayIn {
 			this.location.setY(255);
 		}
 		switch (this.getBigVersion()) {
+		case v1_12:
 		case v1_11:
 			this.cursorPosition = new Vector3f(s.readFloat(), s.readFloat(), s.readFloat());
 			break;

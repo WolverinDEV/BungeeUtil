@@ -49,6 +49,7 @@ public class PacketPlayOutSpawnEntityObject extends Packet implements PacketPlay
 		case v1_9:
 		case v1_10:
 		case v1_11:
+		case v1_12:
 			location = new Location(s.readDouble(), s.readDouble(), s.readDouble(), s.readByte() * 360.f / 255.f, s.readByte() * 360.f / 255.f);
 			break;
 		}
@@ -75,6 +76,7 @@ public class PacketPlayOutSpawnEntityObject extends Packet implements PacketPlay
 		case v1_9:
 		case v1_10:
 		case v1_11:
+		case v1_12:
 			s.writeDouble(location.getX());
 			s.writeDouble(location.getY());
 			s.writeDouble(location.getZ());

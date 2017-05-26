@@ -32,6 +32,7 @@ public class PacketPlayOutEntityTeleport extends Packet implements PacketPlayOut
 		case v1_9:
 		case v1_10:
 		case v1_11:
+		case v1_12:
 			this.loc = new Location(s.readDouble(), s.readDouble(), s.readDouble(),s.readByte()/ 256.0F * 360.0F,s.readByte()/ 256.0F * 360.0F);
 			break;
 		case v1_8:
@@ -59,6 +60,7 @@ public class PacketPlayOutEntityTeleport extends Packet implements PacketPlayOut
 		case v1_9:
 		case v1_10:
 		case v1_11:
+		case v1_12:
 			s.writeDouble(this.loc.getX());
 			s.writeDouble(this.loc.getY());
 			s.writeDouble(this.loc.getZ());

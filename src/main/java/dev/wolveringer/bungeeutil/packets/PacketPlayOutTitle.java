@@ -32,6 +32,7 @@ public class PacketPlayOutTitle extends Packet{
 	@SuppressWarnings("deprecation")
 	private Action getAction(int index){
 		switch (this.getBigVersion()) {
+		case v1_12:
 		case v1_11:
 			return Action.values()[index];
 		case v1_10:
@@ -46,6 +47,7 @@ public class PacketPlayOutTitle extends Packet{
 	@SuppressWarnings("deprecation")
 	private int getActionId(Action action){
 		switch (this.getBigVersion()) {
+		case v1_12:
 		case v1_11:
 			return action.ordinal();
 		case v1_10:

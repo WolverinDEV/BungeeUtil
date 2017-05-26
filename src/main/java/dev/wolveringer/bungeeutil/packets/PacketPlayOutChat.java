@@ -37,6 +37,7 @@ public class PacketPlayOutChat extends Packet implements PacketPlayOut {
 	public void read(PacketDataSerializer s) {
 		this.rawMessage = s.readStringBytes();
 		switch (this.getBigVersion()) {
+		case v1_12:
 		case v1_11:
 		case v1_10:
 		case v1_9:
@@ -61,6 +62,7 @@ public class PacketPlayOutChat extends Packet implements PacketPlayOut {
 	public void write(PacketDataSerializer s) {
 		s.writeStringBytes(this.rawMessage);
 		switch (this.getBigVersion()) {
+		case v1_12:
 		case v1_11:
 		case v1_10:
 		case v1_9:

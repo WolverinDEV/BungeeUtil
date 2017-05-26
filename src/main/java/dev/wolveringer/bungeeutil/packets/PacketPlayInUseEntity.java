@@ -29,6 +29,7 @@ public class PacketPlayInUseEntity extends Packet implements PacketPlayIn {
 	@Override
 	public void read(PacketDataSerializer s) {
 		switch (this.getBigVersion()) {
+		case v1_12:
 		case v1_11:
 		case v1_10:
 		case v1_9:
@@ -61,6 +62,7 @@ public class PacketPlayInUseEntity extends Packet implements PacketPlayIn {
 	@Override
 	public void write(PacketDataSerializer s) {
 		switch (this.getBigVersion()) {
+		case v1_12:
 		case v1_11:
 		case v1_10:
 		case v1_9:
