@@ -96,6 +96,7 @@ public class PacketPlayInBlockPlace extends Packet implements PacketPlayIn {
 		}
 
 		switch (this.getBigVersion()) {
+		case v1_12:
 		case v1_11:
 			s.writeFloat(this.cursorPosition.getX());
 			s.writeFloat(this.cursorPosition.getY());
