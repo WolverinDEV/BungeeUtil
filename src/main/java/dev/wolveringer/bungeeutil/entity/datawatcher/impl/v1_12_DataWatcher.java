@@ -18,35 +18,34 @@ import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.position.BlockPosition;
 import dev.wolveringer.bungeeutil.position.Vector3f;
+import dev.wolveringer.nbt.NBTTagCompound;
 import gnu.trove.map.TObjectIntMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.md_5.bungee.api.chat.BaseComponent;
 
-@SuppressWarnings({ "rawtypes", "unchecked" })
-public class v1_10_DataWatcher extends DataWatcher {
-	private static final TObjectIntMap v1_10_classToId = new TObjectIntHashMap(10, 0.5F, -1);
+public class v1_12_DataWatcher extends DataWatcher {
+	private static final TObjectIntMap v1_12_classToId = new TObjectIntHashMap(10, 0.5F, -1);
 
 	static {
-		v1_10_classToId.put(Byte.class, 0);
-		v1_10_classToId.put(Integer.class, 1);
-		v1_10_classToId.put(Float.class, 2);
-		v1_10_classToId.put(String.class, 3);
-		v1_10_classToId.put(BaseComponent.class, 4);
-		v1_10_classToId.put(Item.class, 5);
-		v1_10_classToId.put(Boolean.class, 6);
-		v1_10_classToId.put(Vector3f.class, 7);
-		v1_10_classToId.put(BlockPosition.class, 8);
-		v1_10_classToId.put(OptionalBlockPosition.class, 9);
-		v1_10_classToId.put(Direction.class, 10);
-		v1_10_classToId.put(OptionalUUID.class, 11);
-		v1_10_classToId.put(BlockData.class, 12);
-
-		v1_10_classToId.put(Short.class, 13); //old
+		v1_12_classToId.put(Byte.class, 0);
+		v1_12_classToId.put(Integer.class, 1);
+		v1_12_classToId.put(Float.class, 2);
+		v1_12_classToId.put(String.class, 3);
+		v1_12_classToId.put(BaseComponent.class, 4);
+		v1_12_classToId.put(Item.class, 5);
+		v1_12_classToId.put(Boolean.class, 6);
+		v1_12_classToId.put(Vector3f.class, 7);
+		v1_12_classToId.put(BlockPosition.class, 8);
+		v1_12_classToId.put(OptionalBlockPosition.class, 9);
+		v1_12_classToId.put(Direction.class, 10);
+		v1_12_classToId.put(OptionalUUID.class, 11);
+		v1_12_classToId.put(BlockData.class, 12);
+		v1_12_classToId.put(NBTTagCompound.class, 13);
 	}
 
 	private static Class<?> getTypeId(int type) {
-			for (Object o : v1_10_classToId.keys()) {
-				if (v1_10_classToId.get(o) == type) {
+			for (Object o : v1_12_classToId.keys()) {
+				if (v1_12_classToId.get(o) == type) {
 					return (Class<?>) o;
 				}
 			}
@@ -89,10 +88,10 @@ public class v1_10_DataWatcher extends DataWatcher {
 		};
 	};
 
-	public v1_10_DataWatcher() {
+	public v1_12_DataWatcher() {
 	}
 
-	public v1_10_DataWatcher(PacketDataSerializer paramPacketDataSerializer) {
+	public v1_12_DataWatcher(PacketDataSerializer paramPacketDataSerializer) {
 		this();
 		if(paramPacketDataSerializer != null) {
 			this.objekts = this.read(paramPacketDataSerializer);
@@ -101,7 +100,7 @@ public class v1_10_DataWatcher extends DataWatcher {
 
 	@Override
 	public DataWatcher copy() {
-		v1_10_DataWatcher watcher = new v1_10_DataWatcher();
+		v1_12_DataWatcher watcher = new v1_12_DataWatcher();
 		watcher.objekts = new ArrayList<DataWatcherObjekt>(this.objekts);
 		return watcher;
 	}
@@ -142,11 +141,11 @@ public class v1_10_DataWatcher extends DataWatcher {
 	@Override
 	public <T extends EntityDataWatcher> T getSpecialDataWatcher(Class<T> clazz) {
 		if(clazz.isAssignableFrom(EntityDataWatcher.class)) {
-			clazz = (Class<T>) v1_10_EntityDataWatcher.class;
+			clazz = (Class<T>) v1_12_EntityDataWatcher.class;
 		} else if(clazz.isAssignableFrom(LivingEntityDataWatcher.class)) {
-			clazz = (Class<T>) v1_10_LivingEntityDataWatcher.class;
+			clazz = (Class<T>) v1_12_LivingEntityDataWatcher.class;
 		} else if(clazz.isAssignableFrom(HumanDataWatcher.class)) {
-			clazz = (Class<T>) v1_10_HumanEntityDataWatcher.class;
+			clazz = (Class<T>) v1_12_HumanEntityDataWatcher.class;
 		}
 		if (this.watchers.get(clazz) == null) {
 			try {
@@ -218,6 +217,9 @@ public class v1_10_DataWatcher extends DataWatcher {
 					case 12:
 						value = new BlockData(packetdataserializer.readVarInt());
 						break;
+					case 13:
+						value = packetdataserializer.readNBT();
+						break;
 				}
 				arraylist.add(new DataWatcherObjekt(getTypeId(type), pos, value));
 		}
@@ -235,7 +237,7 @@ public class v1_10_DataWatcher extends DataWatcher {
 
 	@Override
 	public String toString() {
-		return "DataWatcher [v1_10] [objekts=" + this.objekts + "]";
+		return "DataWatcher [v1_12] [objekts=" + this.objekts + "]";
 	}
 
 	@Override
@@ -253,12 +255,7 @@ public class v1_10_DataWatcher extends DataWatcher {
 
 	private void write(PacketDataSerializer s, DataWatcherObjekt o) {
 			s.writeByte(o.getPostition());
-			int typeId = v1_10_classToId.get(o.getType());
-			if (typeId == 13) {
-				s.writeByte(v1_10_classToId.get(Integer.class));
-			} else {
-				s.writeByte(typeId);
-			}
+			int typeId = v1_12_classToId.get(o.getType());
 
 			switch (typeId) {
 				case 0:
@@ -311,8 +308,8 @@ public class v1_10_DataWatcher extends DataWatcher {
 				case 12:
 					s.writeVarInt(((BlockData) o.getValue()).getData()); // Block
 					break; // Data
-				case 13: // Short will write as an interger
-					s.writeVarInt((Short) o.getValue());
+				case 13:
+					s.writeNBT((NBTTagCompound) o.getValue());
 					break;
 				default:
 					System.out.println("Type not found ("+typeId+") ("+o.getType()+")");
