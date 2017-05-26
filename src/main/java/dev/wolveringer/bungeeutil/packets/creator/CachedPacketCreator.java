@@ -174,6 +174,15 @@ public class CachedPacketCreator extends AbstractPacketCreator {
 		this.handle.registerPacket(p, d, clazz, ids);
 	}
 
+	@Override
+	public Direction getDirection(Class<? extends Packet> clazz) {
+		return this.handle.getDirection(clazz);
+	}
+	
+	public Protocol getProtocoll(Class<? extends Packet> clazz) {
+		return this.handle.getProtocoll(clazz);
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends Packet> void releasePacket(T packet) {

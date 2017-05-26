@@ -47,27 +47,27 @@ public abstract class Packet {
 
 	public ByteBuf getByteBuf(ClientVersion version) {
 		this.version = version;
-		this.compressedId = PacketRegistry.getPacketId(version.getProtocollVersion(), this.getClass());
+		this.compressedId = PacketRegistry.getCompressedId(version.getProtocollVersion(), this.getClass());
 		return this.writeToByteBuff(null, version);
 	}
 
 	public Direction getDirection(){
 		if (this.compressedId == -1) {
-			this.compressedId = PacketRegistry.getPacketId(this.version.getProtocollVersion(), this.getClass());
+			this.compressedId = PacketRegistry.getCompressedId(this.version.getProtocollVersion(), this.getClass());
 		}
 		return PacketRegistry.getDirection(this.compressedId);
 	}
 
 	public int getPacketId(){
 		if (this.compressedId == -1) {
-			this.compressedId = PacketRegistry.getPacketId(this.version.getProtocollVersion(), this.getClass());
+			this.compressedId = PacketRegistry.getCompressedId(this.version.getProtocollVersion(), this.getClass());
 		}
 		return PacketRegistry.getPacketId(this.compressedId);
 	}
 
 	public Protocol getProtocol() {
 		if (this.compressedId == -1) {
-			this.compressedId = PacketRegistry.getPacketId(this.version.getProtocollVersion(), this.getClass());
+			this.compressedId = PacketRegistry.getCompressedId(this.version.getProtocollVersion(), this.getClass());
 		}
 		return PacketRegistry.getProtocoll(this.compressedId);
 	}

@@ -1,7 +1,13 @@
 package dev.wolveringer.bungeeutil.packetlib;
 
+import java.io.DataInputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
+
+import org.apache.commons.lang3.StringUtils;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.CostumPrintStream;
@@ -95,98 +101,49 @@ public class PacketRegistry {
 	}
 
 	public static final AtomicLong classInstances = new AtomicLong();
-
+	public static final ProtocollVersion[] packetIdVersionsArray = new ProtocollVersion[]{ProtocollVersion.v1_8,
+			ProtocollVersion.v1_9, ProtocollVersion.v1_9_2, ProtocollVersion.v1_9_3, ProtocollVersion.v1_9_4,
+			ProtocollVersion.v1_10, ProtocollVersion.v1_11, ProtocollVersion.v1_12};
+	
 	private static AbstractPacketCreator creator;
 
-	private static ProtocollId[] _891011(int _8, int _9, int _10, int _11){
-		return new ProtocollId[]{new ProtocollId(BigClientVersion.v1_8, _8), new ProtocollId(BigClientVersion.v1_9, _9), new ProtocollId(BigClientVersion.v1_10, _10), new ProtocollId(BigClientVersion.v1_11, _11)};
+	static {
+		try {
+			InputStream is = ClassLoader.getSystemResourceAsStream("PacketMapping.data");
+			if(is == null) throw new Exception("Cant get packet mapping data.");
+			DataInputStream dis = new DataInputStream(is);
+			
+			String line = null;
+			while((line = dis.readLine()) != null){
+				line = line.trim();
+				if(line.isEmpty() || line.startsWith("#")) continue;
+				
+				String[] elements = line.split(" -> ");
+				if(elements[1].equalsIgnoreCase("UNDEFINED")) continue; //Protocoll
+				if(elements[2].equalsIgnoreCase("UNDEFINED")) continue; //Direction
+				
+				String className = elements[0].trim();
+				Class<? extends Packet> clazz = (Class<? extends Packet>) Class.forName(className);
+				Protocol protocoll = Protocol.valueOf(elements[1].trim());
+				Direction direction = Direction.valueOf(elements[2].trim());
+				ProtocollId[] protocollIds = new ProtocollId[packetIdVersionsArray.length];
+				
+				String[] protocollIdsString = elements[3].split(" ");
+				for(int i = 0; i < Math.min(protocollIdsString.length, protocollIds.length); i++){
+					if(!protocollIdsString[i].trim().equalsIgnoreCase("~NAN"))
+						protocollIds[i] = new ProtocollId(packetIdVersionsArray[i], Integer.decode(protocollIdsString[i].trim()));
+				}
+				//System.out.println("R");
+				registerPacket(protocoll, direction, clazz, protocollIds);
+			}
+			
+			is.close();
+		}catch (Exception e) {
+			e.printStackTrace();
+			BungeeUtil.getInstance().sendMessage("§cCant load packet mapping! Packet registry failed to setup!");
+		}
 	}
 	
-	static {
-		registerPacket(Protocol.LOGIN, Direction.TO_CLIENT, PacketLoginDisconnect.class, new ProtocollId(BigClientVersion.v1_8, 0x00), new ProtocollId(BigClientVersion.v1_9, 0x00), new ProtocollId(BigClientVersion.v1_10, 0x00), new ProtocollId(BigClientVersion.v1_11, 0x00));
-
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutChat.class, new ProtocollId(BigClientVersion.v1_8, 0x02), new ProtocollId(BigClientVersion.v1_9, 0x0F), new ProtocollId(BigClientVersion.v1_10, 0x0F), new ProtocollId(BigClientVersion.v1_11, 0x0F)); // ->0x0F
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutPlayerListHeaderFooter.class, new ProtocollId(BigClientVersion.v1_8, 0x47), new ProtocollId(BigClientVersion.v1_9, 0x48), new ProtocollId(ProtocollVersion.v1_9_4, 0x47), new ProtocollId(BigClientVersion.v1_10, 0x47), new ProtocollId(BigClientVersion.v1_11, 0x47));// ->0x48
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, null, new ProtocollId(ProtocollVersion.v1_9_4, 0x48));
-
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutPosition.class, new ProtocollId(BigClientVersion.v1_8, 0x08), new ProtocollId(BigClientVersion.v1_9, 0x2E), new ProtocollId(BigClientVersion.v1_10, 0x2E), new ProtocollId(BigClientVersion.v1_11, 0x2E)); // Changed -> 0x2E
-
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutEntityTeleport.class, new ProtocollId(BigClientVersion.v1_8, 0x18), new ProtocollId(BigClientVersion.v1_9, 0x4A), new ProtocollId(ProtocollVersion.v1_9_4, 0x49), new ProtocollId(BigClientVersion.v1_10, 0x49), new ProtocollId(BigClientVersion.v1_11, 0x49)); // Changed -> 0x2E | 1.9.4 other id!
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, null, new ProtocollId(ProtocollVersion.v1_9_4, 0x4A));
-
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutEntityHeadRotation.class, new ProtocollId(BigClientVersion.v1_8, 0x19), new ProtocollId(BigClientVersion.v1_9, 0x34), new ProtocollId(BigClientVersion.v1_10, 0x34), new ProtocollId(BigClientVersion.v1_11, 0x34));
-
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutTransaction.class, new ProtocollId(BigClientVersion.v1_8, 0x32), new ProtocollId(BigClientVersion.v1_9, 0x11), new ProtocollId(BigClientVersion.v1_10, 0x11), new ProtocollId(BigClientVersion.v1_11, 0x11)); // -> 0x11
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutCloseWindow.class, new ProtocollId(BigClientVersion.v1_8, 0x2E), new ProtocollId(BigClientVersion.v1_9, 0x12), new ProtocollId(BigClientVersion.v1_10, 0x12), new ProtocollId(BigClientVersion.v1_11, 0x12));// -> 0x12
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutOpenWindow.class, new ProtocollId(BigClientVersion.v1_8, 0x2D), new ProtocollId(BigClientVersion.v1_9, 0x13), new ProtocollId(BigClientVersion.v1_10, 0x13), new ProtocollId(BigClientVersion.v1_11, 0x13)); // -> 0x13
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutWindowItems.class, new ProtocollId(BigClientVersion.v1_8, 0x30), new ProtocollId(BigClientVersion.v1_9, 0x14), new ProtocollId(BigClientVersion.v1_10, 0x14), new ProtocollId(BigClientVersion.v1_11, 0x14));// -> 0x14
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutWindowData.class, new ProtocollId(BigClientVersion.v1_8, 0x31), new ProtocollId(BigClientVersion.v1_9, 0x15), new ProtocollId(BigClientVersion.v1_10, 0x15), new ProtocollId(BigClientVersion.v1_11, 0x15));// -> 0x15
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutSetSlot.class, new ProtocollId(BigClientVersion.v1_8, 0x2F), new ProtocollId(BigClientVersion.v1_9, 0x16), new ProtocollId(BigClientVersion.v1_10, 0x16), new ProtocollId(BigClientVersion.v1_11, 0x16)); // -> 0x16
-
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutPluginMessage.class, new ProtocollId(BigClientVersion.v1_8, 0x3F), new ProtocollId(BigClientVersion.v1_9, 0x18), new ProtocollId(BigClientVersion.v1_10, 0x18), new ProtocollId(BigClientVersion.v1_11, 0x18));
-
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutEntityEquipment.class, new ProtocollId(BigClientVersion.v1_8, 0x04), new ProtocollId(BigClientVersion.v1_9, 0x3C), new ProtocollId(BigClientVersion.v1_10, 0x3C), new ProtocollId(BigClientVersion.v1_11, 0x3C)); // Chaned
-
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutWorldParticles.class, new ProtocollId(BigClientVersion.v1_8, 0x2A), new ProtocollId(BigClientVersion.v1_9, 0x22), new ProtocollId(BigClientVersion.v1_10, 0x22), new ProtocollId(BigClientVersion.v1_11, 0x22));
-
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutDisconnect.class, new ProtocollId(BigClientVersion.v1_8, 0x40), new ProtocollId(BigClientVersion.v1_9, 0x1A), new ProtocollId(BigClientVersion.v1_10, 0x1A), new ProtocollId(BigClientVersion.v1_11, 0x1A)); // 0x1A
-
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutScoreboardTeam.class, new ProtocollId(BigClientVersion.v1_8, 0x3E), new ProtocollId(BigClientVersion.v1_9, 0x41), new ProtocollId(BigClientVersion.v1_10, 0x41), new ProtocollId(BigClientVersion.v1_11, 0x41)); // -> 0x41
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutScoreboardDisplayObjective.class, new ProtocollId(BigClientVersion.v1_8, 0x3D), new ProtocollId(BigClientVersion.v1_9, 0x38), new ProtocollId(BigClientVersion.v1_10, 0x38), new ProtocollId(BigClientVersion.v1_11, 0x38));// -> 0x38
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutScoreboardObjective.class, new ProtocollId(BigClientVersion.v1_8, 0x3B), new ProtocollId(BigClientVersion.v1_9, 0x3F), new ProtocollId(BigClientVersion.v1_10, 0x3F), new ProtocollId(BigClientVersion.v1_11, 0x3F)); // -> 0x3F
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutScoreboardScore.class, new ProtocollId(BigClientVersion.v1_8, 0x3C), new ProtocollId(BigClientVersion.v1_9, 0x42), new ProtocollId(BigClientVersion.v1_10, 0x42), new ProtocollId(BigClientVersion.v1_11, 0x42)); // -> 0x42
-
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutStatistic.class, new ProtocollId(BigClientVersion.v1_8, 0x37), new ProtocollId(BigClientVersion.v1_9, 0x07), new ProtocollId(BigClientVersion.v1_10, 0x07), new ProtocollId(BigClientVersion.v1_11, 0x07)); // -> 0x07
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutEntityDestroy.class, new ProtocollId(BigClientVersion.v1_8, 0x13), new ProtocollId(BigClientVersion.v1_9, 0x30), new ProtocollId(BigClientVersion.v1_10, 0x30), new ProtocollId(BigClientVersion.v1_11, 0x30));// -> 0x30
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutEntityEffect.class, new ProtocollId(BigClientVersion.v1_8, 0x1D), new ProtocollId(BigClientVersion.v1_9, 0x4C), new ProtocollId(ProtocollVersion.v1_9_4, 0x4B), new ProtocollId(BigClientVersion.v1_10, 0x4B), new ProtocollId(BigClientVersion.v1_11, 0x4B));// Changed ->
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, null, new ProtocollId(ProtocollVersion.v1_9_4, 0x4C));
-
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutRemoveEntityEffect.class, new ProtocollId(BigClientVersion.v1_8, 0x1E), new ProtocollId(BigClientVersion.v1_9, 0x31), new ProtocollId(BigClientVersion.v1_10, 0x31), new ProtocollId(BigClientVersion.v1_11, 0x31));
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutGameStateChange.class, new ProtocollId(BigClientVersion.v1_8, 0x2B), new ProtocollId(BigClientVersion.v1_9, 0x1E), new ProtocollId(BigClientVersion.v1_10, 0x1E), new ProtocollId(BigClientVersion.v1_11, 0x1E));// -> 0x31
-
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutPlayerInfo.class, new ProtocollId(BigClientVersion.v1_8, 0x38), new ProtocollId(BigClientVersion.v1_9, 0x2D), new ProtocollId(BigClientVersion.v1_10, 0x2D), new ProtocollId(BigClientVersion.v1_11, 0x2D));// -> 0x2D
-
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutHeldItemSlot.class, new ProtocollId(BigClientVersion.v1_8, 0x09), new ProtocollId(BigClientVersion.v1_9, 0x37), new ProtocollId(BigClientVersion.v1_10, 0x37), new ProtocollId(BigClientVersion.v1_11, 0x37));// -> 0x37
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutUpdateSign.class, new ProtocollId(BigClientVersion.v1_8, 0x33)); // 1.9 -> TitleEntityNBTData ;)
-
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutBossBar.class, new ProtocollId(BigClientVersion.v1_9, 0x0C), new ProtocollId(BigClientVersion.v1_10, 0x0C), new ProtocollId(BigClientVersion.v1_11, 0x0C));
-
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutNamedSoundEffect.class, new ProtocollId(BigClientVersion.v1_8, 0x29), new ProtocollId(BigClientVersion.v1_9, 0x19), new ProtocollId(ProtocollVersion.v1_9_4, 0x19), new ProtocollId(BigClientVersion.v1_10, 0x19), new ProtocollId(BigClientVersion.v1_11, 0x19)); // Changed
-		//registerPacket(Protocol.GAME, Direction.TO_CLIENT, null, new ProtocollId(ProtocollVersion.v1_9_4, 0x19));
-
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutSpawnPlayer.class, new ProtocollId(BigClientVersion.v1_8, 0x0C), new ProtocollId(BigClientVersion.v1_9, 0x05), new ProtocollId(BigClientVersion.v1_10, 0x05), new ProtocollId(BigClientVersion.v1_11, 0x05));
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutTitle.class, new ProtocollId(BigClientVersion.v1_8, 0x45), new ProtocollId(BigClientVersion.v1_9, 0x45), new ProtocollId(BigClientVersion.v1_10, 0x45), new ProtocollId(BigClientVersion.v1_11, 0x45));
-		// registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x21, PacketPlayOutMapChunk.class, new ProtocollId(BigClientVersion.v1_8, 0x00), new ProtocollId(BigClientVersion.v1_9, 0x00), new ProtocollId(BigClientVersion.v1_10, 0x00); //Request packet src on spigotmc via pm!
-		// registerPacket(Protocol.GAME, Direction.TO_CLIENT, 0x26, PacketPlayOutMapChunkBulk.class, new ProtocollId(BigClientVersion.v1_8, 0x00), new ProtocollId(BigClientVersion.v1_9, 0x00), new ProtocollId(BigClientVersion.v1_10, 0x00); //TODO Chunk Serelizer (Premium bungee src)
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutBlockChange.class, new ProtocollId(BigClientVersion.v1_8, 0x23)/*, new ProtocollId(BigClientVersion.v1_9, 0x37), new ProtocollId(BigClientVersion.v1_10, 0x37), new ProtocollId(BigClientVersion.v1_11, 0x37)*/); //TODO
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutTileData.class, new ProtocollId(BigClientVersion.v1_8, 0x35)/*, new ProtocollId(BigClientVersion.v1_9, 0x37), new ProtocollId(BigClientVersion.v1_10, 0x37), new ProtocollId(BigClientVersion.v1_11, 0x37)*/); //TODO
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutOpenSign.class, new ProtocollId(BigClientVersion.v1_8, 0x36)/*, new ProtocollId(BigClientVersion.v1_9, 0x37), new ProtocollId(BigClientVersion.v1_10, 0x37), new ProtocollId(BigClientVersion.v1_11, 0x37)*/); //TODO
-		
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInClientState.class, new ProtocollId(BigClientVersion.v1_8, 0x16), new ProtocollId(BigClientVersion.v1_9, 0x03), new ProtocollId(BigClientVersion.v1_10, 0x03), new ProtocollId(BigClientVersion.v1_11, 0x03)); // Changed
-		//
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInPluginMessage.class,new ProtocollId(BigClientVersion.v1_8, 0x17),  new ProtocollId(BigClientVersion.v1_9, 0x09), new ProtocollId(BigClientVersion.v1_10, 0x09), new ProtocollId(BigClientVersion.v1_11, 0x09));
-
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInChat.class, new ProtocollId(BigClientVersion.v1_8, 0x01), new ProtocollId(BigClientVersion.v1_9, 0x02), new ProtocollId(BigClientVersion.v1_10, 0x02), new ProtocollId(BigClientVersion.v1_11, 0x02)); // -> 0x02
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInUseEntity.class, new ProtocollId(BigClientVersion.v1_8, 0x02), new ProtocollId(BigClientVersion.v1_9, 0x0A), new ProtocollId(BigClientVersion.v1_10, 0x0A), new ProtocollId(BigClientVersion.v1_11, 0x0A)); // -> changed
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInHeldItemSlot.class, new ProtocollId(BigClientVersion.v1_8, 0x09), new ProtocollId(BigClientVersion.v1_9, 0x17), new ProtocollId(BigClientVersion.v1_10, 0x17), new ProtocollId(BigClientVersion.v1_11, 0x17));// -> 0x17
-
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInPosition.class, new ProtocollId(BigClientVersion.v1_8, 0x04), new ProtocollId(BigClientVersion.v1_9, 0x0C), new ProtocollId(BigClientVersion.v1_10, 0x0C), new ProtocollId(BigClientVersion.v1_11, 0x0C));// -> 0x0C
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInPositionLook.class, new ProtocollId(BigClientVersion.v1_8, 0x06), new ProtocollId(BigClientVersion.v1_9, 0x0D), new ProtocollId(BigClientVersion.v1_10, 0x0D), new ProtocollId(BigClientVersion.v1_11, 0x0D));// -> 0x0D
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInLook.class, new ProtocollId(BigClientVersion.v1_8, 0x05), new ProtocollId(BigClientVersion.v1_9, 0x0E), new ProtocollId(BigClientVersion.v1_10, 0x0E), new ProtocollId(BigClientVersion.v1_11, 0x0E));// -> 0x0E
-
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInWindowClick.class, new ProtocollId(BigClientVersion.v1_8, 0x0E), new ProtocollId(BigClientVersion.v1_9, 0x07), new ProtocollId(BigClientVersion.v1_10, 0x07), new ProtocollId(BigClientVersion.v1_11, 0x07)); // 0x07
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInCloseWindow.class, new ProtocollId(BigClientVersion.v1_8, 0x0D), new ProtocollId(BigClientVersion.v1_9, 0x08), new ProtocollId(BigClientVersion.v1_10, 0x08), new ProtocollId(BigClientVersion.v1_11, 0x08)); // 0x08
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInBlockDig.class, new ProtocollId(BigClientVersion.v1_8, 0x07), new ProtocollId(BigClientVersion.v1_9, 0x13), new ProtocollId(BigClientVersion.v1_10, 0x13), new ProtocollId(BigClientVersion.v1_11, 0x13)); // 0x13
-
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInArmAnimation.class, new ProtocollId(BigClientVersion.v1_8, 0x0A), new ProtocollId(BigClientVersion.v1_9, 0x1A), new ProtocollId(BigClientVersion.v1_10, 0x1A), new ProtocollId(BigClientVersion.v1_11, 0x1A));
-		registerPacket(Protocol.GAME, Direction.TO_SERVER, PacketPlayInBlockPlace.class, new ProtocollId(BigClientVersion.v1_8, 0x08), new ProtocollId(BigClientVersion.v1_9, 0x1C), new ProtocollId(BigClientVersion.v1_10, 0x1C), new ProtocollId(BigClientVersion.v1_11, 0x1C));
-		// TODO Make it working! registerPacket(Protocol.GAME, Direction.TO_SERVER, 0x12, PacketPlayInUpdateSign.class, new ProtocollId(BigClientVersion.v1_8, 0x00), new ProtocollId(BigClientVersion.v1_9, 0x00), new ProtocollId(BigClientVersion.v1_10, 0x00); //Changed from ChatComponent to String
-		
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutSpawnEntityObject.class, _891011(0x0E, 0x00, 0x00, 0x00));
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutSpawnGlobalObject.class, _891011(0x2C, 0x02, 0x02, 0x02));
-		registerPacket(Protocol.GAME, Direction.TO_CLIENT, PacketPlayOutSpawnLivingEntity.class, _891011(0x0F, 0x03, 0x03, 0x03));
-	}
-
 	public static int calculate(ProtocollVersion version, Protocol p, Direction d, Integer id) {
 		return getCreator().calculate(version, p, d, id);
 	}
@@ -199,9 +156,9 @@ public class PacketRegistry {
 		if (creator == null) {
 			if(System.getProperty("bungeeutil.packet.no_cache") != null){
 				creator = new NormalPacketCreator();
-				BungeeUtil.getInstance().sendMessage("§6Dont use CachedPacketCreator!");
+				if(BungeeUtil.getInstance() != null) BungeeUtil.getInstance().sendMessage("§6Dont use CachedPacketCreator!");
 			} else {
-				BungeeUtil.getInstance().sendMessage("§aUsing CachedPacketCreator!");
+				if(BungeeUtil.getInstance() != null) BungeeUtil.getInstance().sendMessage("§aUsing CachedPacketCreator!");
 				creator = new CachedPacketCreator(new NormalPacketCreator(), Integer.getInteger("bungeeutil.packet.cache_threads", Runtime.getRuntime().availableProcessors() * 2));
 			}
 		}
@@ -212,6 +169,10 @@ public class PacketRegistry {
 		return getCreator().getDirection(base);
 	}
 
+	public static Direction getDirection(Class<? extends Packet> clazz) {
+		return getCreator().getDirection(clazz);
+	}
+	
 	public static Packet getPacket(ProtocollVersion version, Protocol s, Direction d, ByteBuf b, Player p) {
 		return getCreator().getPacket(version, s, d, b, p);
 	}
@@ -220,12 +181,16 @@ public class PacketRegistry {
 		return getCreator().getPacketId(base);
 	}
 
-	public static int getPacketId(ProtocollVersion version, Class<? extends Packet> clazz) {
+	public static int getCompressedId(ProtocollVersion version, Class<? extends Packet> clazz) {
 		return getCreator().getPacketId(version, clazz);
 	}
 
 	public static Protocol getProtocoll(int base) {
 		return getCreator().getProtocoll(base);
+	}
+	
+	public static Protocol getProtocoll(Class<? extends Packet> clazz) {
+		return getCreator().getProtocoll(clazz);
 	}
 
 	public static List<Class<? extends Packet>> getRegisteredPackets() {
@@ -250,5 +215,90 @@ public class PacketRegistry {
 
 	public static void unregisterPacket(ProtocollVersion version, Protocol p, Direction d, Integer id) {
 		getCreator().unregisterPacket(version, p, d, id);
+	}
+	
+	//Generate Mapping file for 1.8-1.12
+	public static void main(String[] args) {
+		List<Class<? extends Packet>> packets = getCreator().getRegisteredPackets();
+		ProtocollVersion[] version = new ProtocollVersion[]{ProtocollVersion.v1_8,
+				ProtocollVersion.v1_9, ProtocollVersion.v1_9_2, ProtocollVersion.v1_9_3, ProtocollVersion.v1_9_4,
+				ProtocollVersion.v1_10, ProtocollVersion.v1_11, ProtocollVersion.v1_12};
+		
+		List<String> lines = new ArrayList<>();
+		lines.add("#<Class> -> <protocoll> -> <direction> -> <1.8> <1.9> <1.9.2> <1.9.3> <1.9.4> <1.10> <1.11> <1.12>");
+		lines.add("");
+		
+		int classNameWidth = packets.stream().map(e -> e.getName().toString().length()).max(Integer::compare).orElse(20);
+		int protocollNameWidth = Arrays.stream(Protocol.values()).map(e -> e.toString().length()).max(Integer::compare).orElse(10);
+		
+		for(Class<? extends Packet> clazz : packets){
+			StringBuilder line = new StringBuilder();
+			line.append(StringUtils.rightPad(clazz.getName().toString(), classNameWidth));
+			line.append(" -> ");
+			
+			Protocol protocoll = getCreator().getProtocoll(clazz);
+			String sprotocoll = protocoll == null ? "UNDEFINED" : protocoll.toString();
+			line.append(StringUtils.rightPad(sprotocoll, protocollNameWidth)+" -> ");
+			
+			//TO_CLIENT
+			//TO_SERVER
+			//UNDEFINED
+			Direction direction = getDirection(clazz);
+			if(direction == null){
+				line.append("UNDEFINED");
+			} else {
+				line.append(direction.toString());
+			}
+			line.append(" -> ");
+			
+			for(ProtocollVersion ver : version){
+				int id = getPacketId(getCompressedId(ver, clazz));
+				//Create mapping vor 1.12
+				if(ver == ProtocollVersion.v1_12){
+					id = getPacketId(getCompressedId(ProtocollVersion.v1_11, clazz));
+					if(id < 0 || id == 0xFF){
+						line.append("~NAN");
+						line.append(" ");
+						continue;
+					}
+					
+					if(protocoll == Protocol.GAME){
+						if(direction == Direction.TO_SERVER){
+							if(id >= 0x01 && id <= 0x15){
+								id += 1;
+							} else if(id == 0x16){
+								id += 2;
+							} else {
+								id += 3;
+							}
+						} else if(direction == Direction.TO_CLIENT){
+							if(id == 0x28)
+								id = 0x25;
+							else if(id >= 0x25 && id <= 0x27)
+								id += 1;
+							else if(id >= 0x30 && id <= 0x34)
+								id += 1;
+							else if(id >= 0x35 && id <= 0x49)
+								id += 2;
+							else if(id >= 0x4A)
+								id += 3;
+						}
+					}
+				}
+				if(id < 0 || id == 0xFF){
+					line.append("~NAN");
+				} else {
+					String hex = Integer.toHexString(id);
+					if(hex.length() == 1) hex = "0" + hex;
+					hex = "0x" + StringUtils.upperCase(hex);
+					line.append(hex);
+				}
+				line.append(" ");
+			}
+			
+			lines.add(line.toString());
+		}
+		
+		lines.forEach(System.out::println);
 	}
 }

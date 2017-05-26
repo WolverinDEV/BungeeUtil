@@ -41,6 +41,8 @@ public abstract class AbstractPacketCreator {
 		return Direction.values()[size];
 	}
 
+	public abstract Direction getDirection(Class<? extends Packet> clazz);
+	
 	public Packet getPacket(ProtocollVersion version, Protocol s, Direction d, ByteBuf buffer, Player p) {
 		if (buffer.readableBytes() < 1) {
 			return null;
@@ -66,6 +68,8 @@ public abstract class AbstractPacketCreator {
 	public Protocol getProtocoll(int base) {
 		return Protocol.values()[base >> 12 & 0x0F];
 	}
+	
+	public abstract Protocol getProtocoll(Class<? extends Packet> clazz);
 
 	public abstract List<Class<? extends Packet>> getRegisteredPackets();
 

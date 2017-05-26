@@ -136,6 +136,29 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		}
 		return this.classToId[version.ordinal()].get(clazz);
 	}
+	
+	@Override
+	public Direction getDirection(Class<? extends Packet> clazz) {
+		for(int pindex = 0;pindex < this.classToId.length; pindex++)
+			if(this.classToId[pindex].containsKey(clazz))
+				return getDirection(this.classToId[pindex].get(clazz));
+		/*
+		for(int index = 0; index < this.packetsId.length; index++){
+			PacketHolder<?> element = this.packetsId[index];
+			if(element == null || element.isNull()) continue;
+			if(element.clazz == clazz) return getDirection(index);
+		}
+		*/
+		return null;
+	}
+	
+	@Override
+	public Protocol getProtocoll(Class<? extends Packet> clazz) {
+		for(int pindex = 0;pindex < this.classToId.length; pindex++)
+			if(this.classToId[pindex].containsKey(clazz))
+				return getProtocoll(this.classToId[pindex].get(clazz));
+		return null;
+	}
 
 	@Override
 	public List<Class<? extends Packet>> getRegisteredPackets() {
