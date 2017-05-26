@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
-import dev.wolveringer.bungeeutil.entity.datawatcher.HumanDataWatcher;
+import dev.wolveringer.bungeeutil.entity.datawatcher.HumanEntityDataWatcher;
 import dev.wolveringer.bungeeutil.packetlib.PacketHandleEvent;
 import dev.wolveringer.bungeeutil.packetlib.PacketHandler;
 import dev.wolveringer.bungeeutil.packetlib.PacketLib;
@@ -174,7 +174,7 @@ public final class PlayerNPC {
 		super.finalize();
 	}
 
-	public HumanDataWatcher getDatawatcher() {
+	public HumanEntityDataWatcher getDatawatcher() {
 		return this.datawatcher;
 	}
 

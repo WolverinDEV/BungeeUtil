@@ -2,67 +2,19 @@ package dev.wolveringer.bungeeutil.packetlib;
 
 import java.io.DataInputStream;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.jar.JarFile;
 
 import org.apache.commons.lang3.StringUtils;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.CostumPrintStream;
 import dev.wolveringer.bungeeutil.packets.Packet;
-import dev.wolveringer.bungeeutil.packets.PacketLoginDisconnect;
-import dev.wolveringer.bungeeutil.packets.PacketPlayInArmAnimation;
-import dev.wolveringer.bungeeutil.packets.PacketPlayInBlockDig;
-import dev.wolveringer.bungeeutil.packets.PacketPlayInBlockPlace;
-import dev.wolveringer.bungeeutil.packets.PacketPlayInChat;
-import dev.wolveringer.bungeeutil.packets.PacketPlayInClientState;
-import dev.wolveringer.bungeeutil.packets.PacketPlayInCloseWindow;
-import dev.wolveringer.bungeeutil.packets.PacketPlayInHeldItemSlot;
-import dev.wolveringer.bungeeutil.packets.PacketPlayInLook;
-import dev.wolveringer.bungeeutil.packets.PacketPlayInPluginMessage;
-import dev.wolveringer.bungeeutil.packets.PacketPlayInPosition;
-import dev.wolveringer.bungeeutil.packets.PacketPlayInPositionLook;
-import dev.wolveringer.bungeeutil.packets.PacketPlayInUseEntity;
-import dev.wolveringer.bungeeutil.packets.PacketPlayInWindowClick;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutBlockChange;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutBossBar;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutChat;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutCloseWindow;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutDisconnect;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutEntityDestroy;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutEntityEffect;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutEntityEquipment;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutEntityHeadRotation;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutEntityTeleport;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutGameStateChange;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutHeldItemSlot;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutNamedSoundEffect;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutOpenSign;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutOpenWindow;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutPlayerInfo;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutPlayerListHeaderFooter;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutPluginMessage;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutPosition;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutRemoveEntityEffect;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardDisplayObjective;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardObjective;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardScore;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardTeam;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutSetSlot;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutSpawnEntityObject;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutSpawnGlobalObject;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutSpawnLivingEntity;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutSpawnPlayer;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutStatistic;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutTileData;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutTitle;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutTransaction;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutUpdateSign;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutWindowData;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutWindowItems;
-import dev.wolveringer.bungeeutil.packets.PacketPlayOutWorldParticles;
 import dev.wolveringer.bungeeutil.packets.creator.AbstractPacketCreator;
 import dev.wolveringer.bungeeutil.packets.creator.CachedPacketCreator;
 import dev.wolveringer.bungeeutil.packets.creator.NormalPacketCreator;
@@ -109,8 +61,10 @@ public class PacketRegistry {
 
 	static {
 		try {
-			InputStream is = ClassLoader.getSystemResourceAsStream("PacketMapping.data");
-			if(is == null) throw new Exception("Cant get packet mapping data.");
+			Enumeration<URL> mappingFiles = PacketRegistry.class.getClassLoader().getResources("PacketMapping.data");
+			if(!mappingFiles.hasMoreElements()) throw new Exception("Cant resolve packet mapping file");
+			
+			InputStream is = mappingFiles.nextElement().openStream();
 			DataInputStream dis = new DataInputStream(is);
 			
 			String line = null;
@@ -133,7 +87,7 @@ public class PacketRegistry {
 					if(!protocollIdsString[i].trim().equalsIgnoreCase("~NAN"))
 						protocollIds[i] = new ProtocollId(packetIdVersionsArray[i], Integer.decode(protocollIdsString[i].trim()));
 				}
-				//System.out.println("R");
+				
 				registerPacket(protocoll, direction, clazz, protocollIds);
 			}
 			

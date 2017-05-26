@@ -84,6 +84,7 @@ public class PacketPlayOutSpawnLivingEntity extends Packet implements PacketPlay
 			s.writeDouble(location.getZ());
 			break;
 		}
+		
 		s.writeByte((byte) Math.floor(location.getYaw() * 255.f / 306.f));
 		s.writeByte((byte) Math.floor(location.getPitch() * 255.f / 306.f));
 		s.writeByte((byte) Math.floor(headPitch * 255.f / 306.f));

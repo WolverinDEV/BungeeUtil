@@ -3,24 +3,31 @@ package dev.wolveringer.bungeeutil.entity.player;
 import com.google.common.base.Function;
 
 import dev.wolveringer.bungeeutil.entity.datawatcher.DataWatcher;
-import dev.wolveringer.bungeeutil.entity.datawatcher.HumanDataWatcher;
+import dev.wolveringer.bungeeutil.entity.datawatcher.HumanEntityDataWatcher;
 import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
 
-public class MultiVersionPlayerDatawatcher implements HumanDataWatcher {
-	private HumanDataWatcher v1_8;
-	private HumanDataWatcher v1_9;
-	private HumanDataWatcher v1_10;
-
+public class MultiVersionPlayerDatawatcher implements HumanEntityDataWatcher {
+	//TODO mutch better?
+	private HumanEntityDataWatcher v1_8;
+	private HumanEntityDataWatcher v1_9;
+	private HumanEntityDataWatcher v1_10;
+	private HumanEntityDataWatcher v1_11;
+	private HumanEntityDataWatcher v1_12;
+	
 	public MultiVersionPlayerDatawatcher() {
-		this.v1_8 = DataWatcher.createDataWatcher(BigClientVersion.v1_8).getSpecialDataWatcher(HumanDataWatcher.class);
-		this.v1_9 = DataWatcher.createDataWatcher(BigClientVersion.v1_9).getSpecialDataWatcher(HumanDataWatcher.class);
-		this.v1_10 = DataWatcher.createDataWatcher(BigClientVersion.v1_10).getSpecialDataWatcher(HumanDataWatcher.class);
+		this.v1_8 = DataWatcher.createDataWatcher(BigClientVersion.v1_8).getSpecialDataWatcher(HumanEntityDataWatcher.class);
+		this.v1_9 = DataWatcher.createDataWatcher(BigClientVersion.v1_9).getSpecialDataWatcher(HumanEntityDataWatcher.class);
+		this.v1_10 = DataWatcher.createDataWatcher(BigClientVersion.v1_10).getSpecialDataWatcher(HumanEntityDataWatcher.class);
+		this.v1_11 = DataWatcher.createDataWatcher(BigClientVersion.v1_11).getSpecialDataWatcher(HumanEntityDataWatcher.class);
+		this.v1_12 = DataWatcher.createDataWatcher(BigClientVersion.v1_12).getSpecialDataWatcher(HumanEntityDataWatcher.class);
 	}
 
-	private void applay(Function<HumanDataWatcher, Void> c) {
+	private void applay(Function<HumanEntityDataWatcher, Void> c) {
 		c.apply(this.v1_8);
 		c.apply(this.v1_9);
 		c.apply(this.v1_10);
+		c.apply(this.v1_11);
+		c.apply(this.v1_12);
 	}
 
 	@Override
@@ -62,32 +69,28 @@ public class MultiVersionPlayerDatawatcher implements HumanDataWatcher {
 	public byte getSkinFlag() {
 		return this.v1_8.getSkinFlag();
 	}
-
-	public HumanDataWatcher getV1_10() {
-		return this.v1_10;
-	}
-
-	public HumanDataWatcher getV1_8() {
-		return this.v1_8;
-	}
-
-	public HumanDataWatcher getV1_9() {
-		return this.v1_9;
-	}
-
+	
 	@Override
 	public DataWatcher getWatcher() {
 		return null;
 	}
 
 	public DataWatcher getWatcher(BigClientVersion bigVersion) {
-		if (bigVersion == BigClientVersion.v1_10) {
+		switch (bigVersion) {
+		case v1_12:
+			return this.v1_12.getWatcher();
+		case v1_11:
+			return this.v1_11.getWatcher();
+		case v1_10:
 			return this.v1_10.getWatcher();
-		} else if (bigVersion == BigClientVersion.v1_9) {
+		case v1_9:
 			return this.v1_9.getWatcher();
-		} else {
+		case v1_8:
 			return this.v1_8.getWatcher();
+		default:
+			break;
 		}
+		return null;
 	}
 
 	@Override
@@ -101,9 +104,11 @@ public class MultiVersionPlayerDatawatcher implements HumanDataWatcher {
 	}
 
 	@Override
-	public HumanDataWatcher injektDefault() {
+	public HumanEntityDataWatcher injektDefault() {
 		this.v1_9.injektDefault();
 		this.v1_10.injektDefault();
+		this.v1_11.injektDefault();
+		this.v1_12.injektDefault();
 		return this.v1_8.injektDefault();
 	}
 

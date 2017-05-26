@@ -80,6 +80,7 @@ public class PacketPlayInBlockPlace extends Packet implements PacketPlayIn {
 		s.writeBlockPosition(this.location);
 
 		switch (this.getBigVersion()) {
+		case v1_12:
 		case v1_11:
 		case v1_10:
 		case v1_9:
