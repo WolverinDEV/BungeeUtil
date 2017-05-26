@@ -1,22 +1,22 @@
 package dev.wolveringer.bungeeutil.entity.datawatcher.impl;
 
-import java.util.ArrayList;
-
 import dev.wolveringer.bungeeutil.entity.datawatcher.DataWatcher;
-import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 
-public class v1_11_DataWatcher extends v1_10_DataWatcher{
-	public v1_11_DataWatcher() {
-	}
-
-	public v1_11_DataWatcher(PacketDataSerializer paramPacketDataSerializer) {
-		super(paramPacketDataSerializer);
+public class v1_11_DataWatcher extends v1_09_DataWatcher {
+	static {
+		v1_09_DataWatcher.register(v1_11_DataWatcher.class);
 	}
 	
+	public v1_11_DataWatcher() {
+		super();
+	}
+
+	public v1_11_DataWatcher(AbstractDataWatcher ref) {
+		super(ref);
+	}
+
 	@Override
 	public DataWatcher copy() {
-		v1_11_DataWatcher watcher = new v1_11_DataWatcher();
-		watcher.objekts = new ArrayList<DataWatcherObjekt>(this.objekts);
-		return watcher;
+		return new v1_11_DataWatcher(this);
 	}
 }

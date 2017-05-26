@@ -1,46 +1,28 @@
 package dev.wolveringer.bungeeutil.entity.datawatcher;
 
-import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
+import lombok.Getter;
+import lombok.NonNull;
 
+@Getter
 public class DataWatcherObjekt {
-	private final Class<?> clazz;
-	private final int pos;
+	private final Class<?> type;
+	private final int position;
 	private Object value;
-	private boolean update;
+	private boolean dirty;
 
-	public DataWatcherObjekt(Class<?> clazz, int pos, Object object) {
-		this.pos = pos;
+	public DataWatcherObjekt(@NonNull Class<?> clazz, int pos, Object object) {
+		this.position = pos;
 		this.value = object;
-		this.clazz = clazz;
-	}
-
-	public int getPostition() {
-		return this.pos;
-	}
-
-	public Class<?> getType() {
-		return this.clazz;
-	}
-
-	public int getTypeId(BigClientVersion version) {
-		return 0;
-	}
-
-	public Object getValue() {
-		return this.value;
-	}
-
-	public boolean hasUpdate() {
-		return this.update;
+		this.type = clazz;
 	}
 
 	public void setValue(Object object) {
 		this.value = object;
-		this.update = true;
+		this.dirty = true;
 	}
 
 	@Override
 	public String toString() {
-		return "[" + this.pos + "=" + this.value + " (" + this.value.getClass().getName().split("\\.")[this.value.getClass().getName().split("\\.").length - 1] + ")],";
+		return "[" + this.position + "=" + this.value + " (" + this.value.getClass().getName().split("\\.")[this.value.getClass().getName().split("\\.").length - 1] + ")],";
 	}
 }

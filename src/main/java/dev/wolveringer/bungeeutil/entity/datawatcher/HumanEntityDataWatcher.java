@@ -1,6 +1,6 @@
 package dev.wolveringer.bungeeutil.entity.datawatcher;
 
-public interface HumanDataWatcher extends LivingEntityDataWatcher {
+public interface HumanEntityDataWatcher extends LivingEntityDataWatcher {
 	public float getAbsorptionHearts();
 
 	public int getScore();
@@ -8,7 +8,7 @@ public interface HumanDataWatcher extends LivingEntityDataWatcher {
 	public byte getSkinFlag();
 
 	@Override
-	public HumanDataWatcher injektDefault();
+	public HumanEntityDataWatcher injektDefault();
 
 	public boolean isCapeActive();
 
