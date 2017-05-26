@@ -248,20 +248,6 @@ public class PacketRegistry {
 		getCreator().registerPacket(p, d, clazz, ids);
 	}
 
-	@Deprecated
-	public static void registerPacket(Protocol p, Direction d, Integer v1_8_id, Integer v1_9_id, Class<? extends Packet> clazz) {
-		if (v1_8_id == null && v1_9_id == null) {
-			throw new RuntimeException("All packet ids are null!");
-		}
-		if (v1_8_id == null) {
-			v1_8_id = -1;
-		}
-		if (v1_9_id == null) {
-			v1_9_id = -1;
-		}
-		registerPacket(p, d, clazz, new ProtocollId(BigClientVersion.v1_8, v1_8_id), new ProtocollId(BigClientVersion.v1_9, v1_9_id));
-	}
-
 	public static void unregisterPacket(ProtocollVersion version, Protocol p, Direction d, Integer id) {
 		getCreator().unregisterPacket(version, p, d, id);
 	}
