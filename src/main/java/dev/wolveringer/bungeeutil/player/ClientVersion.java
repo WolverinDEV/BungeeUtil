@@ -39,7 +39,10 @@ public enum ClientVersion {
 	v1_10_0(210, BigClientVersion.v1_10, ProtocollVersion.v1_10),
 
 	v1_11_0(315, BigClientVersion.v1_11, ProtocollVersion.v1_11),
-	v1_11_2(316, BigClientVersion.v1_11, ProtocollVersion.v1_11);
+	v1_11_2(316, BigClientVersion.v1_11, ProtocollVersion.v1_11),
+	
+	//TODO update to 1.12 and not snapshot anymore
+	v1_12_P5(332, BigClientVersion.v1_12, ProtocollVersion.v1_12);
 
 	public static enum BigClientVersion {
 		UnderknownVersion(0),
@@ -47,7 +50,9 @@ public enum ClientVersion {
 		v1_8(2),
 		v1_9(3),
 		v1_10(7),
-		v1_11(8);
+		v1_11(8),
+		@Deprecated
+		v1_12(9);
 
 		private ProtocollVersion protocollVersion;
 		private int protocollVersionInt;
