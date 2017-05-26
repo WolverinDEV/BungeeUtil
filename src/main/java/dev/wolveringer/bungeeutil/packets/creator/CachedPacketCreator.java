@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import dev.wolveringer.bungeeutil.cache.UsedClassProcessing;
+import dev.wolveringer.bungeeutil.packetlib.PacketRegistry.ProtocollId;
 import dev.wolveringer.bungeeutil.packets.Packet;
-import dev.wolveringer.bungeeutil.packets.Packet.ProtocollId;
 import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.Player;
 import dev.wolveringer.bungeeutil.player.connection.ProtocollVersion;

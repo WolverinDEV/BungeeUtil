@@ -13,6 +13,7 @@ import dev.wolveringer.bungeeutil.commands.CommandRamStatistics;
 import dev.wolveringer.bungeeutil.injector.InjectFiles;
 import dev.wolveringer.bungeeutil.listener.InventoryResetListener;
 import dev.wolveringer.bungeeutil.netty.ChannelInizializer;
+import dev.wolveringer.bungeeutil.packetlib.PacketRegistry;
 import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.player.ProxiedPlayerUserConnection;
 import dev.wolveringer.bungeeutil.player.connection.IIInitialHandler;
@@ -270,12 +271,12 @@ public final class BungeeUtil {
 				this.setInformation(ChatColor.GREEN+"Register packets");
 				this.sendMessage(ChatColor.GREEN+"Register packets");
 			}
-			Packet.countPackets();
+			PacketRegistry.countPackets();
 
 			if(!Configuration.isQuietBoot()){
 				this.displayedSleep(500);
 				this.setInformation(ChatColor.GREEN+"Packets registered");
-				this.sendMessage(ChatColor.GREEN+"Packets registered ("+Packet.countPackets()+" packets are registered)");
+				this.sendMessage(ChatColor.GREEN+"Packets registered ("+PacketRegistry.countPackets()+" packets are registered)");
 			}
 			this.sendMessage(ChatColor.GREEN+"BungeeUtil successfully loaded!");
 			this.displayedSleep(500);

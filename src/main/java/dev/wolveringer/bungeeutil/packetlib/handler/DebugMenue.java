@@ -25,6 +25,7 @@ import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.item.ItemBuilder;
 import dev.wolveringer.bungeeutil.item.ItemStack;
 import dev.wolveringer.bungeeutil.item.Material;
+import dev.wolveringer.bungeeutil.packetlib.PacketRegistry;
 import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutBossBar.BarColor;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutBossBar.BarDivision;
@@ -289,7 +290,7 @@ public class DebugMenue {
 			}
 		};
 		final ArrayList<String> out = new ArrayList<String>();
-		Packet.listPackets(new CostumPrintStream() {
+		PacketRegistry.listPackets(new CostumPrintStream() {
 			@Override
 			public void print(String s) {
 				out.add(s);

@@ -94,9 +94,6 @@ public class PacketLib {
 	};
 
 	private static HashMap<Class<? extends Packet>, ArrayList<Class<? extends Packet>>> superclazzes = new HashMap<Class<? extends Packet>, ArrayList<Class<? extends Packet>>>() {
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -109,7 +106,7 @@ public class PacketLib {
 					BungeeUtil.getInstance();
 					BungeeUtil.debug("Sarching for subinstances of "+c);
 					if(c != Packet.class) {
-						for(Class<? extends Packet> clazz : Packet.getRegisteredPackets()){
+						for(Class<? extends Packet> clazz : PacketRegistry.getRegisteredPackets()){
 							if(c.isAssignableFrom(clazz)){
 								list.add(clazz);
 							}
