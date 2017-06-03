@@ -55,6 +55,7 @@ public enum ClientVersion {
 		v1_12(9);
 
 		private ProtocollVersion protocollVersion;
+		@Getter
 		private int protocollVersionInt;
 		private ProtocollVersion[] protocollVersions;
 
