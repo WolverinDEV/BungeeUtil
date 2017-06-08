@@ -556,6 +556,9 @@ public enum SoundEffect {
 	RECORD_WAIT,
 	RECORD_WARD,
 	UI_BUTTON_CLICK,
+	UI_TOAST_CHALLENGE_COMPLETE,
+	UI_TOAST_IN,
+	UI_TOAST_OUT,
 	WEATHER_RAIN,
 	WEATHER_RAIN_ABOVE;
 	//...
@@ -563,7 +566,7 @@ public enum SoundEffect {
 	static {
 		//Good Source: https://hub.spigotmc.org/stash/projects/SPIGOT/repos/craftbukkit/browse/src/main/java/org/bukkit/craftbukkit/CraftSound.java
 		
-		//1.12
+		//1.12 pre6
 		addSoundFromNow(BLOCK_END_PORTAL_FRAME_FILL, BigClientVersion.v1_12, "block.end_portal_frame.fill");
 		addSoundFromNow(BLOCK_END_PORTAL_SPAWN, BigClientVersion.v1_12, "block.end_portal.spawn");
 		
@@ -625,9 +628,13 @@ public enum SoundEffect {
 		addSoundFromNow(ENTITY_PLAYER_HURT_DROWN, BigClientVersion.v1_12, "entity.player.hurt_drown");
 		addSoundFromNow(ENTITY_PLAYER_HURT_ON_FIRE, BigClientVersion.v1_12, "entity.player.hurt_on_fire");
 		
+		//1.12
+		addSoundFromNow(UI_TOAST_CHALLENGE_COMPLETE, BigClientVersion.v1_12, "ui.toast.challenge_complete");
+		addSoundFromNow(UI_TOAST_IN, BigClientVersion.v1_12, "ui.toast.in");
+		addSoundFromNow(UI_TOAST_OUT, BigClientVersion.v1_12, "ui.toast.out");
+		
 		
 		//1.11
-
 		addSoundFromNow(BLOCK_SHULKER_BOX_CLOSE, BigClientVersion.v1_11, "block.shulker_box.close");
 		addSoundFromNow(BLOCK_SHULKER_BOX_OPEN, BigClientVersion.v1_11, "block.shulker_box.open");
 		
