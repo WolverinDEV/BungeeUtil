@@ -180,5 +180,11 @@
 			<version>1.11.2-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/javassist/javassist -->
+		<dependency>
+		    <groupId>javassist</groupId>
+		    <artifactId>javassist</artifactId>
+		    <version>3.12.0.GA</version>
+		</dependency>
 	</dependencies>
 </project>
