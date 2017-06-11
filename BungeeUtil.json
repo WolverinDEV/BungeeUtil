@@ -19,8 +19,19 @@
 		}
 	},
 	  
-	"CurrentVersion": "2.4.3",
+	"CurrentVersion": "2.5",
 	"history": {
+		"2.5": {
+			"bugs": [],
+			"download": {
+				"sha1": "9b2a54d071a9f090df4f8409319581162aaacf47",
+				"url": "${download.github}(version=2.5)",
+				"md5": "bb83f3af01b5ca659d1f8e546756f779"
+			},
+			"changelog": [
+				"Released BungeeUtil for MInecraft 1.12 and several other updates :)"
+			]
+		},
 		"2.4.3": {
 			"bugs": [],
 			"download": {
