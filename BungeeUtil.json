@@ -21,6 +21,17 @@
 	  
 	"CurrentVersion": "2.5",
 	"history": {
+		"2.5.1": {
+			"bugs": [],
+			"download": {
+				"sha1": "1ceef9e3478aa47e1b06ec0c19f9013e8047074f",
+				"url": "${download.github}(version=2.5.1)",
+				"md5": "52bc643c98356afbae1ebebea9af1939"
+			},
+			"changelog": [
+				"Fixed some bugs"
+			]
+		},
 		"2.5": {
 			"bugs": [],
 			"download": {
