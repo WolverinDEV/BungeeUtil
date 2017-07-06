@@ -11,8 +11,8 @@ import java.util.Map.Entry;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.CostumPrintStream;
 import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
+import dev.wolveringer.bungeeutil.packetlib.PacketRegistry.ProtocollId;
 import dev.wolveringer.bungeeutil.packets.Packet;
-import dev.wolveringer.bungeeutil.packets.Packet.ProtocollId;
 import dev.wolveringer.bungeeutil.player.Player;
 import dev.wolveringer.bungeeutil.player.connection.ProtocollVersion;
 import dev.wolveringer.terminal.string.ColoredChar;
@@ -41,6 +41,8 @@ public abstract class AbstractPacketCreator {
 		return Direction.values()[size];
 	}
 
+	public abstract Direction getDirection(Class<? extends Packet> clazz);
+	
 	public Packet getPacket(ProtocollVersion version, Protocol s, Direction d, ByteBuf buffer, Player p) {
 		if (buffer.readableBytes() < 1) {
 			return null;
@@ -66,6 +68,8 @@ public abstract class AbstractPacketCreator {
 	public Protocol getProtocoll(int base) {
 		return Protocol.values()[base >> 12 & 0x0F];
 	}
+	
+	public abstract Protocol getProtocoll(Class<? extends Packet> clazz);
 
 	public abstract List<Class<? extends Packet>> getRegisteredPackets();
 

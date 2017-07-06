@@ -8,6 +8,7 @@ import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.packetlib.PacketHandleEvent;
 import dev.wolveringer.bungeeutil.packetlib.PacketLib;
+import dev.wolveringer.bungeeutil.packetlib.PacketRegistry;
 import dev.wolveringer.bungeeutil.packetlib.handler.MainPacketHandler;
 import dev.wolveringer.bungeeutil.packetlib.reader.ByteBuffCreator;
 import dev.wolveringer.bungeeutil.packets.Packet;
@@ -94,7 +95,7 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 			Packet packet = null;
 			try{
 				Profiler.decoder_timings.start(PACKET_CREATION);
-				packet = Packet.getPacket(this.clientVersion.getProtocollVersion(), this.getProtocol(), this.direction, in, this.initHandler.getPlayer());
+				packet = PacketRegistry.getPacket(this.clientVersion.getProtocollVersion(), this.getProtocol(), this.direction, in, this.initHandler.getPlayer());
 				Profiler.decoder_timings.stop(PACKET_CREATION);
 				
 				if(packet != null){

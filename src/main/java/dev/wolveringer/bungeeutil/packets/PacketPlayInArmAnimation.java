@@ -34,6 +34,7 @@ public class PacketPlayInArmAnimation extends Packet implements PacketPlayIn {
 		case v1_9:
 		case v1_10:
 		case v1_11:
+		case v1_12:
 			this.type = s.readVarInt();
 			break;
 		default:
@@ -60,6 +61,7 @@ public class PacketPlayInArmAnimation extends Packet implements PacketPlayIn {
 		case v1_9:
 		case v1_10:
 		case v1_11:
+		case v1_12:
 			s.writeVarInt(this.type);
 			break;
 		default:

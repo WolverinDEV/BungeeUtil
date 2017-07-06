@@ -28,6 +28,7 @@ public class PacketPlayOutNamedSoundEffect extends Packet implements PacketPlayO
 	@Override
 	public void read(PacketDataSerializer s) {
 		switch (this.getBigVersion()) {
+		case v1_12:
 		case v1_11:
 		case v1_10:
 		case v1_9:
@@ -52,6 +53,7 @@ public class PacketPlayOutNamedSoundEffect extends Packet implements PacketPlayO
 	@Override
 	public void write(PacketDataSerializer s) {
 		switch (this.getBigVersion()) {
+		case v1_12:
 		case v1_11:
 		case v1_10:
 		case v1_9:

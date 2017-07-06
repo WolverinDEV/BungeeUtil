@@ -13,7 +13,7 @@ import dev.wolveringer.bungeeutil.animations.inventory.InventoryViewChangeAnimat
 import dev.wolveringer.bungeeutil.animations.inventory.LimetedScheduller;
 import dev.wolveringer.bungeeutil.bossbar.BossBarManager.BossBar;
 import dev.wolveringer.bungeeutil.chat.ChatColorUtils;
-import dev.wolveringer.bungeeutil.entity.datawatcher.HumanDataWatcher;
+import dev.wolveringer.bungeeutil.entity.datawatcher.HumanEntityDataWatcher;
 import dev.wolveringer.bungeeutil.entity.player.InteractListener;
 import dev.wolveringer.bungeeutil.entity.player.PlayerNPC;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
@@ -25,6 +25,7 @@ import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.item.ItemBuilder;
 import dev.wolveringer.bungeeutil.item.ItemStack;
 import dev.wolveringer.bungeeutil.item.Material;
+import dev.wolveringer.bungeeutil.packetlib.PacketRegistry;
 import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutBossBar.BarColor;
 import dev.wolveringer.bungeeutil.packets.PacketPlayOutBossBar.BarDivision;
@@ -134,7 +135,7 @@ public class DebugMenue {
 		                "eyJ0aW1lc3RhbXAiOjE0NTg0NTMxNjM3MDksInByb2ZpbGVJZCI6ImNhZWZmYmFhMzdhZDRhYjI5Mjg5NGQxZDEzOTk4YTg5IiwicHJvZmlsZU5hbWUiOiJ3YXlfX3plciIsInNpZ25hdHVyZVJlcXVpcmVkIjp0cnVlLCJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmQzYzdmN2E3ZjIyZTU5NDIxYzRkZDI3NjY2ZDVlZTlmYzc4MTEwODE3MTU3MmQxYzRlMzZkMzhmMjZjOWQzIn19fQ==",
 		                "ofNqZSqPhaWL4b8mHRUpv+vUVw3bqXH1mhvoZzyaxXOTE4TqXfapJRTmct4KV5r25ezW9in9zryaadGX4yueERYZzUkVj5MJqduI44z/rqc1oy4NSTqRAHzaka6PWD/DZyG8kySKhDXBhwEKKeGTHUAeohbLtyfvs3FRLxMf6GkyEzibM32hj65eln9itaqKH6uU9l7bzjPfNx3RlLOg2LbmdBIajXffSDQBgklSOg/v/7OiD5fXYREWzYPNex5Iiw8id0NFTTpQE4Dvrv31ijXcnWsS4Mp62+zPYponsloPynZ9AqQaXVeuLJQhSwJktkavThqz9dfaS9+IGn1Ko7AUhFyLxWjqbet6M7sKd29sqlWbdxB8LMh6I+RMNb9Tx4yKa0EeedFHXfYMaURs2TdPMO2QtiM3nG+IieaXaZwh64wyf/u3iuu3sNd4/s1JmOM9nVYvVaIQVsT80HW/NQwz/N+ufJOh4L7unTt/Jlwm4DkldaTKzUiuVLB4ypYON2/Pa1dXBgRZbU7dCwjXuAL/Cox1UKqYcq3uEuCKhBWYFdEe2p7NDNTuFhjX38MP+h94SlFjbfaSpzDegjr92qO8r41JqpcyewQYI2fkwk8Ju9AJDMTpeoA6ofHEzAMhajXkViKvUPoPbl4HUDvtRBZu5k8dggWKQ83v1UXsDxQ="));
 		        npc.getProfile().setProperties(pm);
-		        HumanDataWatcher dw = npc.getDatawatcher();
+		        HumanEntityDataWatcher dw = npc.getDatawatcher();
 		        dw.setParicelColor(1224755642);
 		        dw.setSkinFlags((byte) 127);
 		        npc.setName("§c神奇的NPC");
@@ -289,7 +290,7 @@ public class DebugMenue {
 			}
 		};
 		final ArrayList<String> out = new ArrayList<String>();
-		Packet.listPackets(new CostumPrintStream() {
+		PacketRegistry.listPackets(new CostumPrintStream() {
 			@Override
 			public void print(String s) {
 				out.add(s);

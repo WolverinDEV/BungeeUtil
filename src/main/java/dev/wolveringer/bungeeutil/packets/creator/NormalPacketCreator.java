@@ -8,8 +8,8 @@ import java.util.List;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.ExceptionUtils;
+import dev.wolveringer.bungeeutil.packetlib.PacketRegistry.ProtocollId;
 import dev.wolveringer.bungeeutil.packets.Packet;
-import dev.wolveringer.bungeeutil.packets.Packet.ProtocollId;
 import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.Player;
 import dev.wolveringer.bungeeutil.player.connection.ProtocollVersion;
@@ -135,6 +135,29 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 			}
 		}
 		return this.classToId[version.ordinal()].get(clazz);
+	}
+	
+	@Override
+	public Direction getDirection(Class<? extends Packet> clazz) {
+		for(int pindex = 0;pindex < this.classToId.length; pindex++)
+			if(this.classToId[pindex].containsKey(clazz))
+				return getDirection(this.classToId[pindex].get(clazz));
+		/*
+		for(int index = 0; index < this.packetsId.length; index++){
+			PacketHolder<?> element = this.packetsId[index];
+			if(element == null || element.isNull()) continue;
+			if(element.clazz == clazz) return getDirection(index);
+		}
+		*/
+		return null;
+	}
+	
+	@Override
+	public Protocol getProtocoll(Class<? extends Packet> clazz) {
+		for(int pindex = 0;pindex < this.classToId.length; pindex++)
+			if(this.classToId[pindex].containsKey(clazz))
+				return getProtocoll(this.classToId[pindex].get(clazz));
+		return null;
 	}
 
 	@Override

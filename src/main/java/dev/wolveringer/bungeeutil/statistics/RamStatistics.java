@@ -80,7 +80,7 @@ public class RamStatistics {
 	}
 
 	public RamStatistic getLastState(){
-		return this.last.getLast();
+		return this.last.size() > 0 ? this.last.getLast() : new RamStatistic(this, System.currentTimeMillis(), 0, 0, 0);
 	}
 
 	protected RamStatistic getPreviousStatistic(RamStatistic currunt){

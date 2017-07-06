@@ -56,24 +56,55 @@ public interface Player extends ProxiedPlayer {
 	
 	public void performCommand(String command);
 
-
+	/**
+	 * @param effect
+	 * 
+	 * Make sure to check if the client can actually play the sound with 
+	 * SoundEffect.<Sound>.isAvariable(<player>.getVersion().getBigVersion())
+	 */
 	public void playSound(SoundEffect effect);
 
-	public void playSound(SoundEffect effect,float volume);
-
-
-	public void playSound(SoundEffect effect,float volume,float pitch);
+	/**
+	 * @param effect
+	 * @param volume
+	 * 
+	 * Make sure to check if the client can actually play the sound with 
+	 * SoundEffect.<Sound>.isAvariable(<player>.getVersion().getBigVersion())
+	 */
+	public void playSound(SoundEffect effect, float volume);
+	
+	/**
+	 * @param effect
+	 * @param volume
+	 * @param pitch (0-360)
+	 * 
+	 * Make sure to check if the client can actually play the sound with 
+	 * SoundEffect.<Sound>.isAvariable(<player>.getVersion().getBigVersion())
+	 */
+	public void playSound(SoundEffect effect, float volume, float pitch);
 
 	/**
 	 * @param effect
 	 * @param location
 	 * @param volume
 	 * @param pitch (0-360)
+	 * 
+	 * Make sure to check if the client can actually play the sound with 
+	 * SoundEffect.<Sound>.isAvariable(<player>.getVersion().getBigVersion())
 	 */
-	public void playSound(SoundEffect effect, Location location,float volume,float pitch);
-
-
-	public void playSound(SoundEffect effect, SoundCategory blocks, Location location, float f, float g);
+	public void playSound(SoundEffect effect, Location location, float volume, float pitch);
+	
+	/**
+	 * @param effect
+	 * @param soundcategory
+	 * @param location
+	 * @param volume
+	 * @param pitch (0-360)
+	 * 
+	 * Make sure to check if the client can actually play the sound with 
+	 * SoundEffect.<Sound>.isAvariable(<player>.getVersion().getBigVersion())
+	 */
+	public void playSound(SoundEffect effect, SoundCategory soundcategory, Location location, float volume, float pitch);
 
 	public void sendPacket(PacketPlayOut packet);
 

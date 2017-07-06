@@ -51,6 +51,7 @@ public class PacketPlayOutSpawnLivingEntity extends Packet implements PacketPlay
 		case v1_9:
 		case v1_10:
 		case v1_11:
+		case v1_12:
 			location = new Location(s.readDouble(), s.readDouble(), s.readDouble(), s.readByte() * 360.f / 255.f, s.readByte() * 360.f / 255.f);
 			break;
 		}
@@ -77,11 +78,13 @@ public class PacketPlayOutSpawnLivingEntity extends Packet implements PacketPlay
 		case v1_9:
 		case v1_10:
 		case v1_11:
+		case v1_12:
 			s.writeDouble(location.getX());
 			s.writeDouble(location.getY());
 			s.writeDouble(location.getZ());
 			break;
 		}
+		
 		s.writeByte((byte) Math.floor(location.getYaw() * 255.f / 306.f));
 		s.writeByte((byte) Math.floor(location.getPitch() * 255.f / 306.f));
 		s.writeByte((byte) Math.floor(headPitch * 255.f / 306.f));

@@ -1,11 +1,11 @@
 package dev.wolveringer.bungeeutil.entity.datawatcher.impl;
 
 import dev.wolveringer.bungeeutil.entity.datawatcher.DataWatcher;
-import dev.wolveringer.bungeeutil.entity.datawatcher.HumanDataWatcher;
+import dev.wolveringer.bungeeutil.entity.datawatcher.HumanEntityDataWatcher;
 
-public class v1_8_HumanEntityDataWatcher extends v1_8_LivingEntityDataWatcher implements HumanDataWatcher{
+public class v1_08_HumanEntityDataWatcher extends v1_08_LivingEntityDataWatcher implements HumanEntityDataWatcher{
 
-	public v1_8_HumanEntityDataWatcher(DataWatcher watcher) {
+	public v1_08_HumanEntityDataWatcher(DataWatcher watcher) {
 		super(watcher);
 	}
 
@@ -25,7 +25,7 @@ public class v1_8_HumanEntityDataWatcher extends v1_8_LivingEntityDataWatcher im
 	}
 
 	@Override
-	public v1_8_HumanEntityDataWatcher injektDefault() {
+	public v1_08_HumanEntityDataWatcher injektDefault() {
 		super.injektDefault();
 		if(this.watcher.get(10) == null) {
 			this.watcher.setValue(10, (byte) 0);

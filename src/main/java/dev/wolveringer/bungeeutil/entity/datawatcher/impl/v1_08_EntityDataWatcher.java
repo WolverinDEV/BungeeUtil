@@ -3,22 +3,22 @@ package dev.wolveringer.bungeeutil.entity.datawatcher.impl;
 import dev.wolveringer.bungeeutil.entity.datawatcher.DataWatcher;
 import dev.wolveringer.bungeeutil.entity.datawatcher.EntityDataWatcher;
 
-public class v1_9_EntityDataWatcher implements EntityDataWatcher{
+public class v1_08_EntityDataWatcher implements EntityDataWatcher{
 
 	protected DataWatcher watcher;
 
-	protected v1_9_EntityDataWatcher(DataWatcher dataWatcher) {
+	protected v1_08_EntityDataWatcher(DataWatcher dataWatcher) {
 		this.watcher = dataWatcher;
 	}
 
 	@Override
 	public int getAir() {
-		return this.watcher.getInt(1);
+		throw new RuntimeException("Methode not implimented in 1.8");
 	}
 
 	@Override
 	public String getCostumName() {
-		return this.watcher.getString(2);
+		throw new RuntimeException("Methode not implimented in 1.8");
 	}
 
 	private boolean getPropety(int pos) {
@@ -41,53 +41,44 @@ public class v1_9_EntityDataWatcher implements EntityDataWatcher{
 			this.watcher.setValue(0, Byte.valueOf((byte) 0));
 		}
 		if (this.watcher.get(1) == null) {
-			this.watcher.setValue(1, 300);
-		}
-		if (this.watcher.get(2) == null) {
-			this.watcher.setValue(2, "");
-		}
-		if (this.watcher.get(3) == null) {
-			this.watcher.setValue(3,false);
-		}
-		if (this.watcher.get(4) == null) {
-			this.watcher.setValue(4,false);
+			this.watcher.setValue(1, Short.valueOf((short) 300));
 		}
 		return this;
 	}
 
 	@Override
 	public boolean isBlocking() {
-		return this.getPropety(3);
+		throw new RuntimeException("Methode not implimented in 1.8");
 	}
 
 	@Override
 	public boolean isCostumNameVisiable() {
-		return (boolean) this.watcher.get(3);
+		throw new RuntimeException("Methode not implimented in 1.8");
 	}
 
 	@Override
 	public boolean isElytra() {
-		return this.getPropety(7);
+		throw new RuntimeException("Methode not implimented in 1.8");
 	}
 
 	@Override
 	public boolean isGlowing() {
-		return this.getPropety(6);
+		throw new RuntimeException("Methode not implimented in 1.8");
 	}
 
 	@Override
 	public boolean isInvisible() {
-		return this.getPropety(4);
+		return this.getPropety(5);
 	}
 
 	@Override
 	public boolean isOnFire() {
-		return this.getPropety(0);
+		throw new RuntimeException("Methode not implimented in 1.8");
 	}
 
 	@Override
 	public boolean isSlient() {
-		return (boolean) this.watcher.get(4);
+		throw new RuntimeException("Methode not implimented in 1.8");
 	}
 
 	@Override
@@ -97,12 +88,12 @@ public class v1_9_EntityDataWatcher implements EntityDataWatcher{
 
 	@Override
 	public boolean isSprinting() {
-		return this.getPropety(2);
+		return this.getPropety(3);
 	}
 
 	@Override
 	public void setAir(int air) {
-		this.watcher.setValue(1, air);
+		throw new RuntimeException("Methode not implimented in 1.8");
 	}
 
 	@Override
@@ -110,37 +101,37 @@ public class v1_9_EntityDataWatcher implements EntityDataWatcher{
 
 	@Override
 	public void setBlocking(boolean block) {
-		this.setPropety(3, block);
+		throw new RuntimeException("Methode not implimented in 1.8");
 	}
 
 	@Override
 	public void setCostumName(String name) {
-		this.watcher.setValue(2, name);
+		throw new RuntimeException("Methode not implimented in 1.8");
 	}
 
 	@Override
 	public void setCostumNameVisiable(boolean flag) {
-		this.watcher.setValue(3, flag);
+		throw new RuntimeException("Methode not implimented in 1.8");
 	}
 
 	@Override
 	public void setElytra(boolean elytra) {
-		this.setPropety(7, elytra);
+		throw new RuntimeException("Methode not implimented in 1.8");
 	}
 
 	@Override
 	public void setGlowing(boolean glow) {
-		this.setPropety(6, glow);
+		throw new RuntimeException("Methode not implimented in 1.8");
 	}
 
 	@Override
 	public void setInvisible(boolean flag) {
-		this.setPropety(4, flag);
+		this.setPropety(5, flag);
 	}
 
 	@Override
 	public void setOnFire(boolean fire) {
-		this.setPropety(0, fire);
+		throw new RuntimeException("Methode not implimented in 1.8");
 	}
 
 	private void setPropety(int pos, boolean flag) {
@@ -158,7 +149,7 @@ public class v1_9_EntityDataWatcher implements EntityDataWatcher{
 
 	@Override
 	public void setSlient(boolean flag) {
-		this.watcher.setValue(4, flag);
+		throw new RuntimeException("Methode not implimented in 1.8");
 	}
 
 	@Override
@@ -167,6 +158,6 @@ public class v1_9_EntityDataWatcher implements EntityDataWatcher{
 	}
 	@Override
 	public void setSprinting(boolean flag) {
-		this.setPropety(2, flag);
+		this.setPropety(3, flag);
 	}
 }

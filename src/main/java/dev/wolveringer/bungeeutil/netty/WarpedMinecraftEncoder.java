@@ -4,6 +4,7 @@ import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.i18n;
 import dev.wolveringer.bungeeutil.packetlib.PacketHandleEvent;
 import dev.wolveringer.bungeeutil.packetlib.PacketLib;
+import dev.wolveringer.bungeeutil.packetlib.PacketRegistry;
 import dev.wolveringer.bungeeutil.packetlib.handler.MainPacketHandler;
 import dev.wolveringer.bungeeutil.packetlib.reader.ByteBuffCreator;
 import dev.wolveringer.bungeeutil.packets.Packet;
@@ -78,7 +79,7 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 		super.encode(ctx, msg, encodedBuffer = Unpooled.buffer());
 
 		Profiler.encoder_timings.start(PACKET_CREATION);
-		Packet packet = Packet.getPacket(this.clientVersion.getProtocollVersion(),this.protocoll, Direction.TO_CLIENT, encodedBuffer, this.initHandler.getPlayer());
+		Packet packet = PacketRegistry.getPacket(this.clientVersion.getProtocollVersion(),this.protocoll, Direction.TO_CLIENT, encodedBuffer, this.initHandler.getPlayer());
 		Profiler.encoder_timings.stop(PACKET_CREATION);
 		
 		if(packet == null){

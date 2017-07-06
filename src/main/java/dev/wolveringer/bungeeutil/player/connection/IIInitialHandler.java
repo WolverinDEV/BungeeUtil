@@ -134,8 +134,8 @@ public class IIInitialHandler extends IInitialHandler {
 				}
 				String className = je.getName().substring(0, je.getName().length() - 6);
 				className = className.replace('/', '.');
-				if(!className.startsWith("com.ea") && 
-						!className.startsWith("dev.wolveringer.bungeeutil.plugin.bukkit")) {
+				if(!className.startsWith("com.ea") && !className.startsWith("dev.wolveringer.bungeeutil.plugin.bukkit") && 
+						!className.startsWith("com.google.common")) { //Having trouble with the newest BungeeCord (class com.google.common.base.CharMatcher$10 cannot access its superclass com.google.common.base.CharMatcher$FastMatcher)
 					pool.insertClassPath(new ClassClassPath(cl.loadClass(className)));
 				}
 			}

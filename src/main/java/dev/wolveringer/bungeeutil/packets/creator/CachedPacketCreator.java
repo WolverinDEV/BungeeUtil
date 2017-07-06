@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import dev.wolveringer.bungeeutil.cache.UsedClassProcessing;
+import dev.wolveringer.bungeeutil.packetlib.PacketRegistry.ProtocollId;
 import dev.wolveringer.bungeeutil.packets.Packet;
-import dev.wolveringer.bungeeutil.packets.Packet.ProtocollId;
 import dev.wolveringer.bungeeutil.player.ClientVersion;
 import dev.wolveringer.bungeeutil.player.Player;
 import dev.wolveringer.bungeeutil.player.connection.ProtocollVersion;
@@ -174,6 +174,15 @@ public class CachedPacketCreator extends AbstractPacketCreator {
 		this.handle.registerPacket(p, d, clazz, ids);
 	}
 
+	@Override
+	public Direction getDirection(Class<? extends Packet> clazz) {
+		return this.handle.getDirection(clazz);
+	}
+	
+	public Protocol getProtocoll(Class<? extends Packet> clazz) {
+		return this.handle.getProtocoll(clazz);
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends Packet> void releasePacket(T packet) {

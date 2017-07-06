@@ -53,6 +53,7 @@ public class PacketPlayOutSpawnPlayer extends PacketPlayOutEntity implements Pac
 		this.setEntityId(paramPacketDataSerializer.readVarInt());
 		this.uuid = paramPacketDataSerializer.readUUID();
 		switch (this.getBigVersion()) {
+		case v1_12:
 		case v1_11:
 		case v1_10:
 		case v1_9:
@@ -81,6 +82,7 @@ public class PacketPlayOutSpawnPlayer extends PacketPlayOutEntity implements Pac
 		case v1_9:
 		case v1_10:
 		case v1_11:
+		case v1_12:
 			paramPacketDataSerializer.writeDouble(this.loc.getX());
 			paramPacketDataSerializer.writeDouble(this.loc.getY());
 			paramPacketDataSerializer.writeDouble(this.loc.getZ());

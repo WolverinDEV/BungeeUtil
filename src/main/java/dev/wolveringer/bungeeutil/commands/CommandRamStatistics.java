@@ -7,6 +7,7 @@ import org.fusesource.jansi.AnsiConsole;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
 import dev.wolveringer.bungeeutil.chat.AnsiColorFormater;
+import dev.wolveringer.bungeeutil.packetlib.PacketRegistry;
 import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.packets.creator.CachedPacketCreator;
 import dev.wolveringer.bungeeutil.statistics.RamStatistics.RamStatistic;
@@ -64,8 +65,8 @@ public class CommandRamStatistics extends Command{
 		cs.sendMessage(ChatColor.GREEN+"Allowed Memory: "+ChatColor.GRAY+(int)(last.getMaxMemory()/mb)+"M");
 		cs.sendMessage("");
 
-		if(Packet.getCreator() instanceof CachedPacketCreator){
-			CachedPacketCreator c = (CachedPacketCreator) Packet.getCreator();
+		if(PacketRegistry.getCreator() instanceof CachedPacketCreator){
+			CachedPacketCreator c = (CachedPacketCreator) PacketRegistry.getCreator();
 			cs.sendMessage("");
 			cs.sendMessage(ChatColor.GREEN+"Packet Heap Statistics:");
 			cs.sendMessage("  "+ChatColor.GREEN+"Waiting for processing: "+ChatColor.GRAY+c.getPacketsToProcessing());

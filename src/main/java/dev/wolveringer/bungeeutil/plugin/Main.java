@@ -4,6 +4,7 @@ import java.util.List;
 
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.Configuration;
+import dev.wolveringer.bungeeutil.packetlib.PacketRegistry;
 import dev.wolveringer.bungeeutil.packets.Packet;
 import dev.wolveringer.bungeeutil.plugin.updater.Updater;
 import dev.wolveringer.bungeeutil.plugin.updater.UpdaterV2;
@@ -147,7 +148,7 @@ public class Main extends Plugin {
 
 		if(!Configuration.isQuietBoot()){
 			BungeeUtil.getInstance().sendMessage(ChatColor.GREEN+"Registered packets:");
-			Packet.listPackets();
+			PacketRegistry.listPackets();
 		}
 	}
 

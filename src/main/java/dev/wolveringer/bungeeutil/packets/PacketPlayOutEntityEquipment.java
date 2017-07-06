@@ -28,6 +28,7 @@ public class PacketPlayOutEntityEquipment extends Packet implements PacketPlayOu
 	public void read(PacketDataSerializer s) {
 		this.eid = s.readVarInt();
 		switch (this.getBigVersion()) {
+		case v1_12:
 		case v1_11:
 		case v1_10:
 		case v1_9:
@@ -47,6 +48,7 @@ public class PacketPlayOutEntityEquipment extends Packet implements PacketPlayOu
 	public void write(PacketDataSerializer s) {
 		s.writeVarInt(this.eid);
 		switch (this.getBigVersion()) {
+		case v1_12:
 		case v1_11:
 		case v1_10:
 		case v1_9:

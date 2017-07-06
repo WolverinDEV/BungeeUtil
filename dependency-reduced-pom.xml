@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>dev.wolveringer</groupId>
   <artifactId>BungeeUtil</artifactId>
-  <version>2.4.3</version>
+  <version>2.5.1</version>
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
     <resources>
@@ -11,12 +11,10 @@
         <filtering>true</filtering>
         <directory>src/main/resources</directory>
         <includes>
-          <include>bungee.yml</include>
-          <include>plugin.yml</include>
+          <include>*.yml</include>
+          <include>Messages.properties</include>
+          <include>PacketMapping.data</include>
         </includes>
-      </resource>
-      <resource>
-        <directory>src/main/resources</directory>
       </resource>
     </resources>
     <plugins>
