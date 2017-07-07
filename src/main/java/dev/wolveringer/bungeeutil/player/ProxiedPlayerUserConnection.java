@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-import org.jsoup.helper.Validate;
+import org.apache.commons.lang3.Validate;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
