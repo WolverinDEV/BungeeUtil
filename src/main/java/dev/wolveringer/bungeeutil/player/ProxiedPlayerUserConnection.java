@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
+import org.jsoup.helper.Validate;
+
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 
@@ -31,6 +33,7 @@ import dev.wolveringer.bungeeutil.packets.types.PacketPlayIn;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
 import dev.wolveringer.bungeeutil.position.Location;
+import dev.wolveringer.bungeeutil.profile.Skin;
 import dev.wolveringer.bungeeutil.scoreboard.Scoreboard;
 import dev.wolveringer.bungeeutil.sound.SoundCategory;
 import dev.wolveringer.bungeeutil.sound.SoundEffect;
@@ -50,6 +53,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.md_5.bungee.connection.InitialHandler;
+import net.md_5.bungee.connection.LoginResult;
 import net.md_5.bungee.netty.ChannelWrapper;
 import net.md_5.bungee.netty.PipelineUtils;
 import net.md_5.bungee.protocol.packet.Kick;
@@ -379,5 +383,11 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 		}
 		*/
 		this.sendPacket(new PacketPlayOutWindowItems(0, items));
+	}
+	
+	@Override
+	public void setSkin(Skin skin) {
+		Validate.notNull(skin, "skin may not be null");
+		((InitialHandler)getPendingConnection()).getLoginProfile().setProperties(new LoginResult.Property[]{new LoginResult.Property("textures", skin.getRawData(), skin.getSignature())});
 	}
 }
