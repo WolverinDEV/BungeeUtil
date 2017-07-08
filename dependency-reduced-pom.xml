@@ -92,7 +92,7 @@
     <dependency>
       <groupId>dev.wolveringer.bungee</groupId>
       <artifactId>bungeecord-api</artifactId>
-      <version>1.11-SNAPSHOT</version>
+      <version>1.12-SNAPSHOT</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -116,12 +116,16 @@
     <dependency>
       <groupId>dev.wolveringer.bungee</groupId>
       <artifactId>bungeecord-proxy</artifactId>
-      <version>1.11-SNAPSHOT</version>
+      <version>1.12-SNAPSHOT</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
           <artifactId>flow-nbt</artifactId>
           <groupId>com.flowpowered</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>netty-codec-haproxy</artifactId>
+          <groupId>io.netty</groupId>
         </exclusion>
         <exclusion>
           <artifactId>netty-codec-http</artifactId>
@@ -146,10 +150,6 @@
         <exclusion>
           <artifactId>mysql-connector-java</artifactId>
           <groupId>mysql</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>javassist</artifactId>
-          <groupId>org.javassist</groupId>
         </exclusion>
         <exclusion>
           <artifactId>bungeecord-protocol</artifactId>
@@ -199,7 +199,7 @@
     </snapshotRepository>
   </distributionManagement>
   <properties>
-    <bungeecord.version>1.11-SNAPSHOT</bungeecord.version>
+    <bungeecord.version>1.12-SNAPSHOT</bungeecord.version>
     <bungeeyml.location>src/main/resources/bungee.yml</bungeeyml.location>
   </properties>
 </project>
