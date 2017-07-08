@@ -109,7 +109,7 @@
 
 	<properties>
 		<bungeeyml.location>src/main/resources/bungee.yml</bungeeyml.location>
-		<bungeecord.version>1.11-SNAPSHOT</bungeecord.version>
+		<bungeecord.version>1.12-SNAPSHOT</bungeecord.version>
 	</properties>
 
 	<dependencies>
