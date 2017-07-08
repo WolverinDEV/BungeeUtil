@@ -19,8 +19,20 @@
 		}
 	},
 	  
-	"CurrentVersion": "2.5.1",
+	"CurrentVersion": "2.5.2",
 	"history": {
+		"2.5.2": {
+			"bugs": [],
+			"download": {
+				"sha1": "aef2a990e2f1fe370d817d5ad6e8db6919942ae9",
+				"url": "${download.github}(version=2.5.2)",
+				"md5": "544f9780bcfbb6e06de2ad63df6b39af"
+			},
+			"changelog": [
+				"Bring BungeeUtil up to date with the newest BungeeCord",
+				"Supporting not the Proxy Protocll too :)"
+			]
+		},
 		"2.5.1": {
 			"bugs": [],
 			"download": {
