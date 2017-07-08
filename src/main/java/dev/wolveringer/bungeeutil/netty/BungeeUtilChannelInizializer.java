@@ -12,6 +12,7 @@ import io.netty.channel.ChannelException;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.codec.MessageToMessageEncoder;
+import io.netty.handler.codec.haproxy.HAProxyMessageDecoder;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,15 +33,16 @@ import net.md_5.bungee.protocol.Varint21FrameDecoder;
 import net.md_5.bungee.protocol.Varint21LengthFieldPrepender;
 import net.md_5.bungee.protocol.packet.LoginSuccess;
 
-public class BungeeUtilChannelInizializer <T extends InitialHandler> extends ChannelInizializer {
+public class BungeeUtilChannelInizializer<T extends InitialHandler> extends ChannelInizializer {
 	@NoArgsConstructor
 	@Setter
 	private static class LoginSuccessListener extends MessageToMessageEncoder<DefinedPacket> {
 		private IInitialHandler handler;
+
 		@Override
 		protected void encode(ChannelHandlerContext arg0, DefinedPacket arg1, List<Object> arg2) throws Exception {
-			if(arg1 instanceof LoginSuccess){
-				if(this.handler != null) {
+			if (arg1 instanceof LoginSuccess) {
+				if (this.handler != null) {
 					this.handler.isConnected = true;
 				}
 				arg0.pipeline().remove(this);
@@ -56,14 +58,13 @@ public class BungeeUtilChannelInizializer <T extends InitialHandler> extends Cha
 	private Constructor<? extends InitialHandler> cons;
 
 	public BungeeUtilChannelInizializer(Class<T> handler) {
-		if(handler == null) {
+		if (handler == null) {
 			throw new NullPointerException();
 		}
 		try {
 			this.initFramePrender();
 			this.cons = handler.getConstructor(new Class[] { ProxyServer.class, ListenerInfo.class, WarpedMinecraftDecoder.class, WarpedMinecraftEncoder.class });
-		}
-		catch (NoSuchMethodException | SecurityException e) {
+		} catch (NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
 		}
 	}
@@ -76,8 +77,7 @@ public class BungeeUtilChannelInizializer <T extends InitialHandler> extends Cha
 	public void initBaseChannel(Channel ch) {
 		try {
 			ch.config().setOption(ChannelOption.IP_TOS, Integer.valueOf(24));
-		}
-		catch (ChannelException ex) {
+		} catch (ChannelException ex) {
 		}
 		ch.config().setAllocator(PooledByteBufAllocator.DEFAULT);
 		ch.pipeline().addLast("timeout", new ReadTimeoutHandler(BungeeCord.getInstance().config.getTimeout(), java.util.concurrent.TimeUnit.MILLISECONDS));
@@ -90,11 +90,9 @@ public class BungeeUtilChannelInizializer <T extends InitialHandler> extends Cha
 		Field f = null;
 		try {
 			f = PipelineUtils.class.getDeclaredField("framePrepender");
-		}
-		catch (NoSuchFieldException e1) {
+		} catch (NoSuchFieldException e1) {
 			e1.printStackTrace();
-		}
-		catch (SecurityException e1) {
+		} catch (SecurityException e1) {
 			e1.printStackTrace();
 		}
 		f.setAccessible(true);
@@ -123,9 +121,12 @@ public class BungeeUtilChannelInizializer <T extends InitialHandler> extends Cha
 
 			InitialHandler handler;
 			ch.pipeline().get(HandlerBoss.class).setHandler(handler = this.createInitialHandler(ch, b, a));
-			listener.setHandler((IInitialHandler)handler);
-		}
-		catch (Throwable e) {
+			listener.setHandler((IInitialHandler) handler);
+
+			if (ch.attr(PipelineUtils.LISTENER).get().isProxyProtocol()) {
+				ch.pipeline().addFirst(new HAProxyMessageDecoder());
+			}
+		} catch (Throwable e) {
 			if (e instanceof NoClassDefFoundError) {
 				this.throwClassNotFoundError((ClassNotFoundException) e);
 				return;
@@ -144,23 +145,22 @@ public class BungeeUtilChannelInizializer <T extends InitialHandler> extends Cha
 
 	@SuppressWarnings("deprecation")
 	public void throwClassNotFoundError(ClassNotFoundException exception) {
-		BungeeCord.getInstance().getConsole().sendMessage(ChatColor.COLOR_CHAR+"7[BungeeUntil"+ChatColor.COLOR_CHAR+"7] "+ChatColor.COLOR_CHAR+"cBungeeUntil cant load some Classes!");
-		BungeeCord.getInstance().getConsole().sendMessage(ChatColor.COLOR_CHAR+"7[BungeeUntil"+ChatColor.COLOR_CHAR+"7] "+ChatColor.COLOR_CHAR+"cDisable BungeeUntil!");
+		BungeeCord.getInstance().getConsole().sendMessage(ChatColor.COLOR_CHAR + "7[BungeeUntil" + ChatColor.COLOR_CHAR + "7] " + ChatColor.COLOR_CHAR + "cBungeeUntil cant load some Classes!");
+		BungeeCord.getInstance().getConsole().sendMessage(ChatColor.COLOR_CHAR + "7[BungeeUntil" + ChatColor.COLOR_CHAR + "7] " + ChatColor.COLOR_CHAR + "cDisable BungeeUntil!");
 		try {
 			this.setStaticFinalValue(PipelineUtils.class.getDeclaredField("SERVER_CHILD"), dinti);
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			ex.printStackTrace();
-			BungeeCord.getInstance().getConsole().sendMessage(ChatColor.COLOR_CHAR+"7[BungeeUntil"+ChatColor.COLOR_CHAR+"7] "+ChatColor.COLOR_CHAR+"cError while setting default ConnectionHandler.");
-			BungeeCord.getInstance().getConsole().sendMessage(ChatColor.COLOR_CHAR+"7[BungeeUntil"+ChatColor.COLOR_CHAR+"7] "+ChatColor.COLOR_CHAR+"cRestarting BungeeCord!");
+			BungeeCord.getInstance().getConsole().sendMessage(ChatColor.COLOR_CHAR + "7[BungeeUntil" + ChatColor.COLOR_CHAR + "7] " + ChatColor.COLOR_CHAR + "cError while setting default ConnectionHandler.");
+			BungeeCord.getInstance().getConsole().sendMessage(ChatColor.COLOR_CHAR + "7[BungeeUntil" + ChatColor.COLOR_CHAR + "7] " + ChatColor.COLOR_CHAR + "cRestarting BungeeCord!");
 			BungeeCord.getInstance().stop();
 			return;
 		}
 		BungeeCord.getInstance().getPluginManager().unregisterListeners(BungeeUtil.getPluginInstance());
 		BungeeUtil.getInstance().disable();
 		for (ProxiedPlayer p : BungeeCord.getInstance().getPlayers()) {
-			p.disconnect(ChatColor.COLOR_CHAR+"cBungeeUntil Class error");
+			p.disconnect(ChatColor.COLOR_CHAR + "cBungeeUntil Class error");
 		}
-		BungeeCord.getInstance().getConsole().sendMessage(ChatColor.COLOR_CHAR+"7[BungeeUntil"+ChatColor.COLOR_CHAR+"7] "+ChatColor.COLOR_CHAR+"cBungeeUntil is disabled!");
+		BungeeCord.getInstance().getConsole().sendMessage(ChatColor.COLOR_CHAR + "7[BungeeUntil" + ChatColor.COLOR_CHAR + "7] " + ChatColor.COLOR_CHAR + "cBungeeUntil is disabled!");
 	}
 }
