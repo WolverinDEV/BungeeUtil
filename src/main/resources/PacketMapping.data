@@ -1,5 +1,4 @@
-#<Class> -> <protocoll> -> <direction> -> <1.8> <1.9> <1.9.2> <1.9.3> <1.9.4> <1.10> <1.11> <1.12>
-
+#<Class>                                                                   -> <prot>    -> <direc>   -> 1.8  1.9  .9.2 .9.3 .9.4 1.10 1.11 1.12
 dev.wolveringer.bungeeutil.packets.PacketPlayOutChat                       -> GAME      -> TO_CLIENT -> 0x02 0x0F 0x0F 0x0F 0x0F 0x0F 0x0F 0x0F 
 dev.wolveringer.bungeeutil.packets.PacketPlayOutEntityEquipment            -> GAME      -> TO_CLIENT -> 0x04 0x3C 0x3C 0x3C 0x3C 0x3C 0x3C 0x3E 
 dev.wolveringer.bungeeutil.packets.PacketPlayOutPosition                   -> GAME      -> TO_CLIENT -> 0x08 0x2E 0x2E 0x2E 0x2E 0x2E 0x2E 0x2E 
@@ -8,7 +7,7 @@ dev.wolveringer.bungeeutil.packets.PacketPlayOutSpawnPlayer                -> GA
 dev.wolveringer.bungeeutil.packets.PacketPlayOutSpawnEntityObject          -> GAME      -> TO_CLIENT -> 0x0E 0x00 0x00 0x00 0x00 0x00 0x00 0x00 
 dev.wolveringer.bungeeutil.packets.PacketPlayOutSpawnLivingEntity          -> GAME      -> TO_CLIENT -> 0x0F 0x03 0x03 0x03 0x03 0x03 0x03 0x03 
 dev.wolveringer.bungeeutil.packets.PacketPlayOutEntityDestroy              -> GAME      -> TO_CLIENT -> 0x13 0x30 0x30 0x30 0x30 0x30 0x30 0x31 
-dev.wolveringer.bungeeutil.packets.PacketPlayOutEntityTeleport             -> GAME      -> TO_CLIENT -> 0x18 0x4A 0x4A 0x4A 0x49 0x49 0x49 0x4B 
+dev.wolveringer.bungeeutil.packets.PacketPlayOutEntityTeleport             -> GAME      -> TO_CLIENT -> 0x18 0x4A 0x4A 0x4A 0x4A 0x49 0x49 0x4B 
 dev.wolveringer.bungeeutil.packets.PacketPlayOutEntityHeadRotation         -> GAME      -> TO_CLIENT -> 0x19 0x34 0x34 0x34 0x34 0x34 0x34 0x35 
 dev.wolveringer.bungeeutil.packets.PacketPlayOutEntityEffect               -> GAME      -> TO_CLIENT -> 0x1D 0x4C 0x4C 0x4C 0x4B 0x4B 0x4B 0x4E 
 dev.wolveringer.bungeeutil.packets.PacketPlayOutRemoveEntityEffect         -> GAME      -> TO_CLIENT -> 0x1E 0x31 0x31 0x31 0x31 0x31 0x31 0x32 
