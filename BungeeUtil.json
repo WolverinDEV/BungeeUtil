@@ -21,6 +21,17 @@
 	  
 	"CurrentVersion": "2.5.2",
 	"history": {
+		"2.5.3": {
+			"bugs": [],
+			"download": {
+				"sha1": "9e37fc6a360796fa25887b43cd558e368cf1c6bf",
+				"url": "${download.github}(version=2.5.3)",
+				"md5": "4ba049a8e099687dada2041a699df3af"
+			},
+			"changelog": [
+				"Fixed 2 bugs (reported on github.com)"
+			]
+		},
 		"2.5.2": {
 			"bugs": [],
 			"download": {
