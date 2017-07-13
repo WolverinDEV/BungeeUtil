@@ -382,6 +382,7 @@ public class MainPacketHandler {
 			else { //Sots of inv - Player inventory
 				int equipmentSize = -1;
 				switch (e.getPlayer().getVersion().getBigVersion()) {
+				case v1_12:
 				case v1_11:
 				case v1_10:
 				case v1_9:
