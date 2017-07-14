@@ -31,9 +31,9 @@ public enum ClientVersion {
 	v1_8_10(47, BigClientVersion.v1_8, ProtocollVersion.v1_8),
 	// Skip snapshots
 	v1_9_0(107, BigClientVersion.v1_9, ProtocollVersion.v1_9),
-	v1_9_1(107, BigClientVersion.v1_9, ProtocollVersion.v1_9),
-	v1_9_2(108, BigClientVersion.v1_9, ProtocollVersion.v1_9_2),
-	v1_9_3(109, BigClientVersion.v1_9, ProtocollVersion.v1_9_3),
+	v1_9_1(108, BigClientVersion.v1_9, ProtocollVersion.v1_9),
+	v1_9_2(109, BigClientVersion.v1_9, ProtocollVersion.v1_9_2),
+	v1_9_3(110, BigClientVersion.v1_9, ProtocollVersion.v1_9_3),
 	v1_9_4(110, BigClientVersion.v1_9, ProtocollVersion.v1_9_4),
 	v1_9_5(110, BigClientVersion.v1_9, ProtocollVersion.v1_9_4),
 	v1_10_0(210, BigClientVersion.v1_10, ProtocollVersion.v1_10),
