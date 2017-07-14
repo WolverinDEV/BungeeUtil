@@ -19,8 +19,20 @@
 		}
 	},
 	  
-	"CurrentVersion": "2.5.2",
+	"CurrentVersion": "2.5.4",
 	"history": {
+		"2.5.4": {
+			"bugs": [],
+			"download": {
+				"sha1": "4baa845cd00249e8e3ad4c46b7f5813596e27061",
+				"url": "${download.github}(version=2.5.4)",
+				"md5": "c23b054b65d8be9dc6f2b498f7a51db8"
+			},
+			"changelog": [
+				"Fixed PacketPlayOutEntityTeleport bug (wrong packet ids)",
+				"Fixed invalid 1.9.1-1.9.3 network protocoll ids in the ClientVersion enum"
+			]
+		},
 		"2.5.3": {
 			"bugs": [],
 			"download": {
