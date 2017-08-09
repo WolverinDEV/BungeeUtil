@@ -15,6 +15,7 @@ import dev.wolveringer.bungeeutil.listener.InventoryResetListener;
 import dev.wolveringer.bungeeutil.netty.ChannelInizializer;
 import dev.wolveringer.bungeeutil.packetlib.PacketRegistry;
 import dev.wolveringer.bungeeutil.packets.Packet;
+import dev.wolveringer.bungeeutil.player.Player;
 import dev.wolveringer.bungeeutil.player.ProxiedPlayerUserConnection;
 import dev.wolveringer.bungeeutil.player.connection.IIInitialHandler;
 import dev.wolveringer.bungeeutil.statistics.RamStatistics;
