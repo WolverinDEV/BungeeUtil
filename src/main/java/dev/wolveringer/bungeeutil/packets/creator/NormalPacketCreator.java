@@ -102,7 +102,7 @@ public class NormalPacketCreator extends AbstractPacketCreator {
 		if ((packet = this.getPacket0(compressed, p, b)) == null) {
 			if(this.packetsId[compressed] != null && this.packetsId[compressed].isNull()) return null; //special register
 			
-			if(version.getBasedVersion().getProtocollVersion() == version){ //Fallback (based version) (1.8-1.9)
+			if(!version.isBaseVersionFallback() || version.getBasedVersion().getProtocollVersion() == version){ //Fallback (based version) (1.8-1.9)
 				return null;
 			}
 			else{

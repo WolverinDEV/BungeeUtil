@@ -36,7 +36,14 @@ public class PacketPlayInBlockDig extends Packet implements PacketPlayIn {
 			this.state = State.values()[s.readVarInt()];
 		}
 		this.location = s.readBlockPosition();
-		this.face = s.readUnsignedByte();
+		switch (getBigVersion()) {
+		case v1_12:
+			this.face = s.readVarInt();
+			break;
+		default:
+			this.face = s.readUnsignedByte();
+			break;
+		}
 	}
 
 	@Override
@@ -53,6 +60,13 @@ public class PacketPlayInBlockDig extends Packet implements PacketPlayIn {
 			s.writeVarInt(this.state.ordinal());
 		}
 		s.writeBlockPosition(this.location);
-		s.writeByte(this.face);
+		switch (getBigVersion()) {
+		case v1_12:
+			s.writeVarInt(this.face);
+			break;
+		default:
+			s.writeByte(this.face);
+			break;
+		}
 	}
 }

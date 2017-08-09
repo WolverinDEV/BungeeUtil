@@ -55,7 +55,7 @@ public class PacketRegistry {
 	public static final AtomicLong classInstances = new AtomicLong();
 	public static final ProtocollVersion[] packetIdVersionsArray = new ProtocollVersion[]{ProtocollVersion.v1_8,
 			ProtocollVersion.v1_9, ProtocollVersion.v1_9_2, ProtocollVersion.v1_9_3, ProtocollVersion.v1_9_4,
-			ProtocollVersion.v1_10, ProtocollVersion.v1_11, ProtocollVersion.v1_12};
+			ProtocollVersion.v1_10, ProtocollVersion.v1_11, ProtocollVersion.v1_12, ProtocollVersion.v1_12_1};
 	
 	private static AbstractPacketCreator creator;
 
@@ -171,15 +171,15 @@ public class PacketRegistry {
 		getCreator().unregisterPacket(version, p, d, id);
 	}
 	
-	//Generate Mapping file for 1.8-1.12
+	//Generate Mapping file for 1.8-1.12.1
 	public static void main(String[] args) {
 		List<Class<? extends Packet>> packets = getCreator().getRegisteredPackets();
 		ProtocollVersion[] version = new ProtocollVersion[]{ProtocollVersion.v1_8,
 				ProtocollVersion.v1_9, ProtocollVersion.v1_9_2, ProtocollVersion.v1_9_3, ProtocollVersion.v1_9_4,
-				ProtocollVersion.v1_10, ProtocollVersion.v1_11, ProtocollVersion.v1_12};
+				ProtocollVersion.v1_10, ProtocollVersion.v1_11, ProtocollVersion.v1_12, ProtocollVersion.v1_12_1};
 		
 		List<String> lines = new ArrayList<>();
-		lines.add("#<Class> -> <protocoll> -> <direction> -> <1.8> <1.9> <1.9.2> <1.9.3> <1.9.4> <1.10> <1.11> <1.12>");
+		lines.add("#<Class> -> <protocoll> -> <direction> -> <1.8> <1.9> <1.9.2> <1.9.3> <1.9.4> <1.10> <1.11> <1.12> <1.12.1>");
 		lines.add("");
 		
 		int classNameWidth = packets.stream().map(e -> e.getName().toString().length()).max(Integer::compare).orElse(20);
@@ -208,6 +208,7 @@ public class PacketRegistry {
 			for(ProtocollVersion ver : version){
 				int id = getPacketId(getCompressedId(ver, clazz));
 				//Create mapping vor 1.12
+				/*
 				if(ver == ProtocollVersion.v1_12){
 					id = getPacketId(getCompressedId(ProtocollVersion.v1_11, clazz));
 					if(id < 0 || id == 0xFF){
@@ -236,6 +237,22 @@ public class PacketRegistry {
 								id += 2;
 							else if(id >= 0x4A)
 								id += 3;
+						}
+					}
+				}
+				*/
+				if(ver == ProtocollVersion.v1_12_1){
+					id = getPacketId(getCompressedId(ProtocollVersion.v1_12, clazz));
+					if(id < 0 || id == 0xFF){
+						line.append("~NAN");
+						line.append(" ");
+						continue;
+					}
+					if(protocoll == Protocol.GAME){
+						if(direction == Direction.TO_SERVER){
+							if(id >= 0x02) id -= 1;
+						} else if(direction == Direction.TO_CLIENT){
+							if(id >= 0x2B && id <= 0x12) id += 1;
 						}
 					}
 				}
