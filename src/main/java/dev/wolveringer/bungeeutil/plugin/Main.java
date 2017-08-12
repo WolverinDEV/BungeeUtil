@@ -38,7 +38,7 @@ public class Main extends Plugin {
 		}
 
 		if(BungeeCord.getInstance().getPluginManager().getPlugin("ViaVersion") != null){
-			BungeeUtil.getInstance().sendMessage(ChatColor.COLOR_CHAR+"7------------------------------ "+ChatColor.COLOR_CHAR+"c"+ChatColor.COLOR_CHAR+"nAttantion:"+ChatColor.COLOR_CHAR+"r ------------------------------");
+			BungeeUtil.getInstance().sendMessage(ChatColor.COLOR_CHAR+"7------------------------------ "+ChatColor.COLOR_CHAR+"c"+ChatColor.COLOR_CHAR+"nAttention:"+ChatColor.COLOR_CHAR+"r ------------------------------");
 			BungeeUtil.getInstance().sendMessage("           "+ChatColor.COLOR_CHAR+"5BungeeUtil detected ViaVersion (Bungee).");
 			BungeeUtil.getInstance().sendMessage("           "+ChatColor.COLOR_CHAR+"5BungeeUtil may have conflicts with ViaVersion.");
 			BungeeUtil.getInstance().sendMessage("           "+ChatColor.COLOR_CHAR+"5Any bugs/errors with ViaVersion installed will be ignored.");
