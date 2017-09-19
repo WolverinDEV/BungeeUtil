@@ -19,8 +19,19 @@
 		}
 	},
 	  
-	"CurrentVersion": "2.5.5",
+	"CurrentVersion": "2.6",
 	"history": {
+		"2.6": {
+			"bugs": [],
+			"download": {
+				"sha1": "cde05e2e055cb331c2baae4310229fae328f8cd5",
+				"url": "${download.github}(version=2.6)",
+				"md5": "1a4822fcad9f58d5f287464ec186b66a"
+			},
+			"changelog": [
+				"Added Minecraft 1.12.2 support"
+			]
+		},
 		"2.5.5": {
 			"bugs": [],
 			"download": {
