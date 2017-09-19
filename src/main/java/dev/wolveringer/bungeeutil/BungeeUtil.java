@@ -37,7 +37,7 @@ public final class BungeeUtil {
 			if(System.getProperty("bungeetil.instance") == null){
 				System.setProperty("bungeetil.instance", "WolverinDEV");
 			} else {
-				throw new RuntimeException("BungeeUtil have alredy an instance!");
+				throw new RuntimeException("BungeeUtil has already an instance!");
 			}
 			pluginInstance = plugin;
 			instance = new BungeeUtil();
@@ -46,7 +46,7 @@ public final class BungeeUtil {
 	}
 
 	public static void debug(Exception e) {
-		debug(e, "An error happed. "+e.getClass().getName().substring(e.getClass().getName().lastIndexOf('.'))+" message -> " + e.getMessage());
+		debug(e, "An error happend. "+e.getClass().getName().substring(e.getClass().getName().lastIndexOf('.'))+" message -> " + e.getMessage());
 	}
 	public static void debug(Exception e, String otherMessage) {
 		if (pluginInstance == null || Configuration.isDebugEnabled()) {
@@ -189,11 +189,11 @@ public final class BungeeUtil {
 
 			if(!Configuration.isQuietBoot()){
 				this.displayedSleep(500);
-				this.setInformation(ChatColor.GREEN+"AsyncCatcher successfull loaded");
-				this.sendMessage(ChatColor.GREEN+"AsyncCatcher successfull loaded");
+				this.setInformation(ChatColor.GREEN+"AsyncCatcher successful loaded");
+				this.sendMessage(ChatColor.GREEN+"AsyncCatcher successful loaded");
 				this.displayedSleep(500);
-				this.setInformation(ChatColor.GREEN+"Loading ChannelInizializer");
-				this.sendMessage(ChatColor.GREEN+"Loading ChannelInizializer");
+				this.setInformation(ChatColor.GREEN+"Loading ChannelInitializer");
+				this.sendMessage(ChatColor.GREEN+"Loading ChannelInitializer");
 			}
 
 			boolean flag = true;
@@ -202,8 +202,8 @@ public final class BungeeUtil {
 			} catch (Exception e) {
 				flag = false;
 				e.printStackTrace();
-				this.sendMessage(ChatColor.COLOR_CHAR + "7[" + ChatColor.COLOR_CHAR + "eBungeeUntil" + ChatColor.COLOR_CHAR + "7] " + ChatColor.COLOR_CHAR + "cError while loading ProtocolLIB " + ChatColor.COLOR_CHAR + "4Code: 002");
-				this.sendMessage(ChatColor.COLOR_CHAR + "7[" + ChatColor.COLOR_CHAR + "eBungeeUntil" + ChatColor.COLOR_CHAR + "7] " + ChatColor.COLOR_CHAR + "cDisable ProtocolLIB");
+				this.sendMessage(ChatColor.RED + "Error while loading ProtocolLIB " + ChatColor.DARK_RED + "Code: 002");
+				this.sendMessage(ChatColor.RED + "Disable ProtocolLIB");
 			}
 
 			if(!Configuration.isQuietBoot()) {
