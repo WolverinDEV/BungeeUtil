@@ -1,7 +1,4 @@
-/doc/
 /target/
-/bin/
-.settings/
-#.classpath
-#.project
-dependecy-reduced-pom.xml
+.idea/
+BungeeUtil.iml
+dependency-reduced-pom.xml
