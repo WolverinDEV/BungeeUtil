@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
+import lombok.NonNull;
 import org.apache.commons.lang3.Validate;
 
 import com.google.common.base.Objects;
@@ -386,8 +387,9 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 	}
 	
 	@Override
-	public void setSkin(Skin skin) {
-		Validate.notNull(skin, "skin may not be null");
-		((InitialHandler)getPendingConnection()).getLoginProfile().setProperties(new LoginResult.Property[]{new LoginResult.Property("textures", skin.getRawData(), skin.getSignature())});
+	public void setSkin(@NonNull Skin skin) {
+		Validate.notNull(getPendingConnection(), "No prending connection found!");
+		Validate.notNull(getPendingConnection().getLoginProfile(), "No valid login profile found! (Please wait until join)");
+		getPendingConnection().getLoginProfile().setProperties(new LoginResult.Property[]{new LoginResult.Property("textures", skin.getRawData(), skin.getSignature())});
 	}
 }
