@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public abstract class PacketPlayXXXHeldItemSlot extends Packet{
+public abstract class PacketPlayXXXHeldItemSlot extends Packet {
 	private int slot;
 }
