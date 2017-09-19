@@ -42,7 +42,8 @@ public enum ClientVersion {
 	v1_11_2(316, BigClientVersion.v1_11, ProtocollVersion.v1_11),
 	
 	v1_12_0(335, BigClientVersion.v1_12, ProtocollVersion.v1_12),
-	v1_12_1(338, BigClientVersion.v1_12, ProtocollVersion.v1_12_1);
+	v1_12_1(338, BigClientVersion.v1_12, ProtocollVersion.v1_12_1),
+	v1_12_2(340, BigClientVersion.v1_12, ProtocollVersion.v1_12_2);
 	
 	public static enum BigClientVersion {
 		UnderknownVersion(0),

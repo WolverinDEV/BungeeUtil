@@ -2,23 +2,25 @@ package dev.wolveringer.bungeeutil.packets;
 
 import dev.wolveringer.bungeeutil.packetlib.reader.PacketDataSerializer;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import dev.wolveringer.bungeeutil.player.connection.ProtocollVersion;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PacketPlayOutKeepAlive extends Packet implements PacketPlayOut{
-	private int id;
+@ToString
+public class PacketPlayOutKeepAlive extends Packet implements PacketPlayOut {
+	private long id;
+
 	@Override
 	public void read(PacketDataSerializer s) {
-		this.id = s.readVarInt();
+		if(getVersion().getVersion() >= ProtocollVersion.v1_12_2.getBasedVersionInt()) this.id = s.readLong();
+		else this.id = s.readVarInt();
 	}
 	@Override
 	public void write(PacketDataSerializer s) {
-		s.writeVarInt(this.id);
+		if(getVersion().getVersion() >= ProtocollVersion.v1_12_2.getBasedVersionInt()) s.writeLong(id);
+		else s.writeVarInt((int) this.id);
 	}
 }

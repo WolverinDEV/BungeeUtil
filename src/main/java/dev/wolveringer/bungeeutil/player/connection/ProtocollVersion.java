@@ -15,7 +15,8 @@ public enum ProtocollVersion {
 	v1_10(4, 210, true, true),
 	v1_11(5, 315, true, true),
 	v1_12(6, 335, true, true),
-	v1_12_1(6, 338, true, false);
+	v1_12_1(6, 338, true, false),
+	v1_12_2(6, 340, true, false);
 
 	private int basedVersionInt;
 	private BigClientVersion basedVersion;
