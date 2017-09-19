@@ -9,6 +9,7 @@ import dev.wolveringer.bungeeutil.packets.types.PacketPlayIn;
 import dev.wolveringer.bungeeutil.packets.types.PacketPlayOut;
 import dev.wolveringer.bungeeutil.player.connection.IInitialHandler;
 import dev.wolveringer.bungeeutil.position.Location;
+import dev.wolveringer.bungeeutil.profile.Skin;
 import dev.wolveringer.bungeeutil.scoreboard.Scoreboard;
 import dev.wolveringer.bungeeutil.sound.SoundCategory;
 import dev.wolveringer.bungeeutil.sound.SoundEffect;
@@ -105,6 +106,17 @@ public interface Player extends ProxiedPlayer {
 	 * SoundEffect.<Sound>.isAvariable(<player>.getVersion().getBigVersion())
 	 */
 	public void playSound(SoundEffect effect, SoundCategory soundcategory, Location location, float volume, float pitch);
+	
+	/**
+	 * @param skin
+	 * 
+	 * Note: The player need to switch servers to make the skin visible.
+	 * Skin will reset when the player disconnect form bungee.
+	 * If you use this method on {@see PostLoginEvent} the player don't need to reconnect.
+	 * You can provide the original skin for the player to reset it.
+	 * If you provide null it will throw a NullPointerException
+	 */
+	public void setSkin(Skin skin);
 
 	public void sendPacket(PacketPlayOut packet);
 
