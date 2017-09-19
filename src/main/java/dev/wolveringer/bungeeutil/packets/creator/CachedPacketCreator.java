@@ -1,6 +1,5 @@
 package dev.wolveringer.bungeeutil.packets.creator;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
