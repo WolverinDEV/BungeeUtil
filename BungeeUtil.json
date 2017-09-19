@@ -25,7 +25,7 @@
 			"bugs": [],
 			"download": {
 				"sha1": "691a4a212f2dd5bd18f3af15e656dcb5a2fb3f2f",
-				"url": "${download.github}(version=2.5.5c)",
+				"url": "${download.github}(version=2.5.5)",
 				"md5": "f2f85f8a78b6370371a964d67332db9c"
 			},
 			"changelog": [
