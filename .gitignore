@@ -1,3 +1,7 @@
 /doc/
 /target/
 /bin/
+/.idea/
+BungeeUtil.iml
+dependency-reduced-pom.xml
+.idea/
