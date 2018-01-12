@@ -2,8 +2,11 @@ package dev.wolveringer.bungeeutil.item.meta;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
+import de.essem.bukkit.flags.ItemFlag;
 import dev.wolveringer.bungeeutil.BungeeUtil;
 import dev.wolveringer.bungeeutil.UtilReflection;
 import dev.wolveringer.bungeeutil.inventory.Inventory;
@@ -11,6 +14,7 @@ import dev.wolveringer.bungeeutil.item.Item;
 import dev.wolveringer.bungeeutil.item.ItemStack;
 import dev.wolveringer.bungeeutil.item.ItemStack.Click;
 import dev.wolveringer.bungeeutil.item.SyncHandle;
+import dev.wolveringer.nbt.NBTTagByte;
 import dev.wolveringer.nbt.NBTTagCompound;
 import dev.wolveringer.nbt.NBTTagInt;
 import dev.wolveringer.nbt.NBTTagList;
@@ -194,6 +198,50 @@ public class CraftItemMeta implements ItemMeta {
 		}
 		this.getTag().getCompound("display").set("Lore", l);
 		this.fireUpdate();
+	}
+	
+	private byte getFlagsRaw() {
+		return this.getTag().getByte("HideFlags");
+	}
+	
+	private void setFlagsRaw(byte flags) {
+		this.getTag().set("HideFlags", new NBTTagByte(flags));
+		this.fireUpdate();
+	}
+	
+	private byte getBitModifier(ItemFlag hideFlag) {
+		return (byte) (1 << hideFlag.ordinal());
+	}
+	
+	@Override
+	public boolean hasItemFlag(ItemFlag flag) {
+		int bitModifier = getBitModifier(flag);
+		return (getFlagsRaw() & bitModifier) == bitModifier;
+	}
+	
+	@Override
+	public Set<ItemFlag> getItemFlags() {
+		Set<ItemFlag> currentFlags = EnumSet.noneOf(ItemFlag.class);
+		for(ItemFlag f : ItemFlag.values()) {
+			if(hasItemFlag(f)) {
+				currentFlags.add(f);
+			}
+		}
+		return currentFlags;
+	}
+	
+	@Override
+	public void removeItemFlags(ItemFlag[] hideFlags) {
+		for(ItemFlag f : hideFlags) {
+			this.setFlagsRaw((byte) (this.getFlagsRaw() & (getBitModifier(f) ^ 0xFFFFFFFF)));
+		}
+	}
+
+	@Override
+	public void addItemFlags(ItemFlag[] hideFlags) {
+		for (ItemFlag f : hideFlags) {
+			this.setFlagsRaw((byte)(this.getFlagsRaw() | getBitModifier(f)));
+		}
 	}
 
 	@Override
