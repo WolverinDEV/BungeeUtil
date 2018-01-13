@@ -176,12 +176,16 @@ public class CraftItemMeta implements ItemMeta {
 				NBTTagList list;
 				this.getTag().set("ench", list = new NBTTagList());
 				list.add(new NBTTagCompound());
-				
-				this.getTag().set("HideFlags", new NBTTagInt(1));
+				if(!hasItemFlag(ItemFlag.HIDE_ENCHANTS)) {
+					addItemFlags(ItemFlag.HIDE_ENCHANTS);
+				}
 			}
 		} else if (!flag) {
 			if (this.getTag().hasKey("ench")) {
 				this.getTag().remove("ench");
+				if(hasItemFlag(ItemFlag.HIDE_ENCHANTS)) {
+					removeItemFlags(ItemFlag.HIDE_ENCHANTS);
+				}
 			}
 		}
 		this.fireUpdate();
@@ -231,14 +235,14 @@ public class CraftItemMeta implements ItemMeta {
 	}
 	
 	@Override
-	public void removeItemFlags(ItemFlag[] hideFlags) {
+	public void removeItemFlags(ItemFlag ... hideFlags) {
 		for(ItemFlag f : hideFlags) {
 			this.setFlagsRaw((byte) (this.getFlagsRaw() & (getBitModifier(f) ^ 0xFFFFFFFF)));
 		}
 	}
 
 	@Override
-	public void addItemFlags(ItemFlag[] hideFlags) {
+	public void addItemFlags(ItemFlag ... hideFlags) {
 		for (ItemFlag f : hideFlags) {
 			this.setFlagsRaw((byte)(this.getFlagsRaw() | getBitModifier(f)));
 		}

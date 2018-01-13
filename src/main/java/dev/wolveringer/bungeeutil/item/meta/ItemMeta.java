@@ -73,8 +73,8 @@ public interface ItemMeta extends Cloneable {
 	void setLore(List<String> lore);
 	
 	public Set<ItemFlag> getItemFlags();
-	public void removeItemFlags(ItemFlag[] hideFlags);
-	public void addItemFlags(ItemFlag[] hideFlags);
+	public void removeItemFlags(ItemFlag ... hideFlags);
+	public void addItemFlags(ItemFlag ... hideFlags);
 	public boolean hasItemFlag(ItemFlag flag);
 
 }
