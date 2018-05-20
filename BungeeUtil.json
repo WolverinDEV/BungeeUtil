@@ -19,8 +19,19 @@
 		}
 	},
 	  
-	"CurrentVersion": "2.6",
+	"CurrentVersion": "2.6.1",
 	"history": {
+		"2.6.1": {
+			"bugs": [],
+			"download": {
+				"sha1": "961f45b372e20cc4946c2061d47be2959bc1b1dc",
+				"url": "${download.github}(version=2.6.1)",
+				"md5": "bea31c7536b6fe7ee5e50a2f12e5b427"
+			},
+			"changelog": [
+				"Fixed incompatibility with the newest BungeeCord. Should work now"
+			]
+		},
 		"2.6": {
 			"bugs": [],
 			"download": {
