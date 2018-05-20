@@ -46,7 +46,7 @@
 	(Click on the "get support" button on SpigotMC)
 
 ### BungeeUtil 2.0 (Information for Developer):
-	I`m starting or better started a reordering of the packages in my plugin.
+	I'm starting or better started a reordering of the packages in my plugin.
 	Thats mean that most (i think) all classes have moved and all plugin with
 	the dependency of BungeeUtil < 2.0 will not work on the 2.0 version.
 	I also will not updating futures on the 1.0 version. I only will do some hot fixes.
