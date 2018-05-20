@@ -162,7 +162,7 @@ public class DebugMenue {
 		final ItemStack is = new ItemStack(Material.WATCH, 1, (short) 0) {
 			@Override
 			public void click(final Click p) {
-				final Scoreboard s = p.getPlayer().getScoreboard();
+				final Scoreboard s = p.getPlayer().getMutableScoreboard();
 				if (s.getObjektive("test") == null) {
 					s.createObjektive("test", Type.INTEGER);
 					s.getObjektive("test").setScore("§a-----------", -1);

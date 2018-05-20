@@ -4,7 +4,7 @@
 
 ### For what is BungeeUtil?
 	BungeeUtil is a very big libary for packet handling and
-	a lots of cool stuff what you can do with Packets.
+	a lots of cool stuff what you can do with packets.
 	Okey what is this cool stuff? Well i think the
 	best of all is the huge Inventory API.
 	BungeeUtil includes many Inventory types from Anvi-Gui
@@ -19,7 +19,7 @@
 	 By means of this Lib, you can e.g. open your inventory over your bungeecord or use an effect.
 
 ### How fast is BungeeUtil?
-	 You dont have a realy big delay. The normal deley is only 0.02MS.
+	 You dont have a really big delay. The normal delay is only 0.02MS.
 	 You can watch your delays and timings with the coammand "/bungeetimings"
 
 ### Documentation:
@@ -46,7 +46,7 @@
 	(Click on the "get support" button on SpigotMC)
 
 ### BungeeUtil 2.0 (Information for Developer):
-	I'm starting or better started a reordering of the packages in my plugin.
-	Thats mean that most (i think) all classes have moved and all plugin with
-	the dependency of BungeeUtil < 2.0 will not work on the 2.0 version.
-	I also will not updating futures on the 1.0 version. I only will do some hot fixes.
+	I'm starting or better started a reordering of the packages within my plugin.
+	Thats mean that most (i think) all classes have moved and all plugin which
+	depends on BungeeUtil < 2.0 will not work anymore with 2.0.
+	Also i wount maintin the first version (1.0) anymore.

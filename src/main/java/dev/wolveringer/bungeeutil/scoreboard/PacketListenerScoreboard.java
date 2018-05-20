@@ -32,13 +32,13 @@ public final class PacketListenerScoreboard implements PacketHandler<Packet> {
 	@Override
 	public void handle(PacketHandleEvent<Packet> e) {
 		if (e.getPacket() instanceof PacketPlayOutScoreboardDisplayObjective) {
-			Scoreboard board = e.getPlayer().getScoreboard();
+			Scoreboard board = e.getPlayer().getMutableScoreboard();
 			PacketPlayOutScoreboardDisplayObjective out = (PacketPlayOutScoreboardDisplayObjective) e.getPacket();
 			Objektive o = board.getObjektive(out.getName());
 			o.pos = out.getPosition();
 		}
 		else if (e.getPacket() instanceof PacketPlayOutScoreboardObjective) {
-			Scoreboard board = e.getPlayer().getScoreboard();
+			Scoreboard board = e.getPlayer().getMutableScoreboard();
 			PacketPlayOutScoreboardObjective out = (PacketPlayOutScoreboardObjective) e.getPacket();
 			if (out.getAction() == Action.CREATE) {
 				Objektive obj;
@@ -60,7 +60,7 @@ public final class PacketListenerScoreboard implements PacketHandler<Packet> {
 			}
 		}
 		else if (e.getPacket() instanceof PacketPlayOutScoreboardScore) {
-			Scoreboard board = e.getPlayer().getScoreboard();
+			Scoreboard board = e.getPlayer().getMutableScoreboard();
 			PacketPlayOutScoreboardScore out = (PacketPlayOutScoreboardScore) e.getPacket();
 			if (out.getAction() == dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardScore.Action.CREATE || out.getAction() == dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardScore.Action.UPDATE) {
 				Objektive obj = board.getObjektive(out.getObjectiveName());
@@ -83,7 +83,6 @@ public final class PacketListenerScoreboard implements PacketHandler<Packet> {
 			else if (out.getAction() == dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardScore.Action.REMOVE) {
 				Objektive obj = board.getObjektive(out.getObjectiveName());
 				if (obj == null) {
-					BungeeUtil.getInstance();
 					BungeeUtil.debug("ScoreboardObjective " + out.getObjectiveName() + " for the player " + e.getPlayer().getName() + " not found");
 					return;
 				}
@@ -100,7 +99,7 @@ public final class PacketListenerScoreboard implements PacketHandler<Packet> {
 			}
 		}
 		else if (e.getPacket() instanceof PacketPlayOutScoreboardTeam) {
-			Scoreboard board = e.getPlayer().getScoreboard();
+			Scoreboard board = e.getPlayer().getMutableScoreboard();
 			PacketPlayOutScoreboardTeam out = (PacketPlayOutScoreboardTeam) e.getPacket();
 			if (out.getAction() == dev.wolveringer.bungeeutil.packets.PacketPlayOutScoreboardTeam.Action.CREATE) {
 				Team t = new Team(board, out.getTeam());

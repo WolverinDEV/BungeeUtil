@@ -31,8 +31,7 @@ public class WarpedChannelHandler extends HandlerBoss {
 	private ChannelWrapper channel;
 	private PacketHandler handler;
 
-	public WarpedChannelHandler() {
-	}
+	WarpedChannelHandler() { }
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {

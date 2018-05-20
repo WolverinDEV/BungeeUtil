@@ -23,7 +23,7 @@ public abstract class ChannelInizializer extends ChannelInitializer<Channel> {
 	@SuppressWarnings("deprecation")
 	public static void init() {
 		if(init == null) {
-			setChannelInitializer(new BungeeUtilChannelInizializer<IIInitialHandler>(IIInitialHandler.class));
+			setChannelInitializer(new BungeeUtilChannelInitializer<IIInitialHandler>(IIInitialHandler.class));
 		}
 		try {
 			setStaticFinalValue(PipelineUtils.class.getDeclaredField("SERVER_CHILD"), new ChannelInizializer() {

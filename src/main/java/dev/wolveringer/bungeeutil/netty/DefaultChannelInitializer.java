@@ -14,7 +14,7 @@ import net.md_5.bungee.protocol.MinecraftDecoder;
 import net.md_5.bungee.protocol.MinecraftEncoder;
 import net.md_5.bungee.protocol.Protocol;
 
-public class DefaultChannelInizializer extends ChannelInizializer {
+public class DefaultChannelInitializer extends ChannelInizializer {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void initialize(Channel ch) throws Exception {

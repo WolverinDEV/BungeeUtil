@@ -42,7 +42,7 @@ public interface Player extends ProxiedPlayer {
 	public Item getOffHandItem();
 	public PlayerInventory getPlayerInventory();
 
-	public Scoreboard getScoreboard();
+	public Scoreboard getMutableScoreboard();
 
 	public int getSelectedSlot();
 

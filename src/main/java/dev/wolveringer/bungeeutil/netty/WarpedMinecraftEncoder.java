@@ -92,7 +92,6 @@ public class WarpedMinecraftEncoder extends MinecraftEncoder {
 		packet.use();
 		encodedBuffer.release();
 
-
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		PacketHandleEvent<?> e = new PacketHandleEvent(packet, this.initHandler.getPlayer());
 		Profiler.encoder_timings.start(HANDLE_INTERN);

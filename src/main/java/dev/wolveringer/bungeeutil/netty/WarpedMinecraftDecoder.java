@@ -28,6 +28,7 @@ import net.md_5.bungee.protocol.MinecraftDecoder;
 import net.md_5.bungee.protocol.PacketWrapper;
 import net.md_5.bungee.protocol.Protocol;
 import net.md_5.bungee.protocol.ProtocolConstants.Direction;
+import net.md_5.bungee.protocol.packet.Title;
 
 public class WarpedMinecraftDecoder extends MinecraftDecoder {
 	private final static String DECODING;
@@ -73,7 +74,7 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
 		if(this.initHandler == null){
-			System.out.println("Missing inithandler in WarpedMinecraftDecoder instance ("+super.toString()+"; initHandler="+this.initHandler+")");
+			System.out.println("Missing initial handler in WarpedMinecraftDecoder instance ("+super.toString()+"; initHandler="+this.initHandler+")");
 			super.decode(ctx, in, out);
 			return;
 		}
@@ -92,7 +93,7 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 
 		Profiler.decoder_timings.start(DECODING);
 		try{
-			Packet packet = null;
+			Packet packet;
 			try{
 				Profiler.decoder_timings.start(PACKET_CREATION);
 				packet = PacketRegistry.getPacket(this.clientVersion.getProtocollVersion(), this.getProtocol(), this.direction, in, this.initHandler.getPlayer());
@@ -131,15 +132,15 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 						System.err.println("");
 						System.err.println("");
 						System.err.println("-----------------------------------------------------------------------------------------------");
-						System.err.println("                      Missing inital class! Shuting down BungeeUtils!");
-						if(ChannelInizializer.getChannelInitializer() instanceof BungeeUtilChannelInizializer){
-							BungeeUtilChannelInizializer channelInit = (BungeeUtilChannelInizializer) ChannelInizializer.getChannelInitializer();
+						System.err.println("                      Missing initial class! Shutting down BungeeUtils!");
+						if(ChannelInizializer.getChannelInitializer() instanceof BungeeUtilChannelInitializer){
+							BungeeUtilChannelInitializer channelInit = (BungeeUtilChannelInitializer) ChannelInizializer.getChannelInitializer();
 							channelInit.throwClassNotFoundError((ClassNotFoundException) e);
 						}
 						System.err.println("-----------------------------------------------------------------------------------------------");
 					}
 				}
-				
+
 				BungeeUtil.debug("");
 				BungeeUtil.debug("Having an exception while decoding a packet!");
 				BungeeUtil.debug(e);
@@ -168,9 +169,7 @@ public class WarpedMinecraftDecoder extends MinecraftDecoder {
 
 			Protocol.DirectionData prot = this.isServer() ? this.getProtocol().TO_SERVER : this.getProtocol().TO_CLIENT;
 			ByteBuf copy = packet == null ? in.copy() : packet.writeToByteBuff(ByteBuffCreator.createByteBuff(),this.clientVersion);
-			if(packet != null) {
-				packet.unuse();
-			}
+			if(packet != null) packet.unuse();
 
 			try{
 				int packetId = DefinedPacket.readVarInt(in);

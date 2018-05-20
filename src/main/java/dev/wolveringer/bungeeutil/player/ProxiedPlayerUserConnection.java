@@ -109,31 +109,41 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 	}
 
 	@Override
-	public void connect(ServerInfo info, Callback<Boolean> callback, boolean retry) {
-		this.connect0(info, callback, retry);
+	public void connect(ServerInfo info, final Callback<Boolean> callback, final boolean retry, ServerConnectEvent.Reason reason) {
+		this.connect0(info, callback, retry, reason);
 	}
 
-	public void connect0(ServerInfo info, final Callback<Boolean> callback, final boolean retry) {
+	public void connect0(ServerInfo info, final Callback<Boolean> callback, final boolean retry, ServerConnectEvent.Reason reason) {
 		Preconditions.checkNotNull(info, "info");
 
 		ServerConnectEvent event = new ServerConnectEvent(this, info);
 		if(BungeeCord.getInstance().getPluginManager().callEvent(event).isCancelled()){
-			return;
+            if (callback != null)
+                callback.done( false, null );
+
+            if (getServer() == null && !this.get("channel", ChannelWrapper.class).isClosing()) {
+                throw new IllegalStateException( "Cancelled ServerConnectEvent with no server or disconnect." );
+            }
+            return;
 		}
 
 		final BungeeServerInfo target = (BungeeServerInfo) event.getTarget();
 		if(this.getServer() != null && Objects.equal(this.getServer().getInfo(), target)){
-			this.sendMessage(BungeeCord.getInstance().getTranslation("already_connected", new Object[0]));
+            if (callback != null)
+                callback.done( false, null );
+			this.sendMessage(BungeeCord.getInstance().getTranslation("already_connected"));
 			return;
 		}
 		if(this.getPendingConnects().contains(target)){
-			this.sendMessage(BungeeCord.getInstance().getTranslation("already_connecting", new Object[0]));
+            if (callback != null)
+                callback.done( false, null );
+			this.sendMessage(BungeeCord.getInstance().getTranslation("already_connecting"));
 			return;
 		}
 		this.getPendingConnects().add(target);
 		ChannelInitializer<Channel> initializer = new WarpedChannelInitializer(this.getUserconnection(), target);
 		ChannelFutureListener listener = new WarpedChannelFutureListener(callback, this.getUserconnection(), target, retry);
-		Bootstrap b = new Bootstrap().channel(PipelineUtils.getChannel()).group(this.get("ch", ChannelWrapper.class).getHandle().eventLoop()).handler(initializer).option(ChannelOption.CONNECT_TIMEOUT_MILLIS, Integer.valueOf(5000)).remoteAddress(target.getAddress());
+		Bootstrap b = new Bootstrap().channel(PipelineUtils.getChannel()).group(this.get("ch", ChannelWrapper.class).getHandle().eventLoop()).handler(initializer).option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000).remoteAddress(target.getAddress());
 		if(this.getPendingConnection().getListener().isSetLocalAddress() && !PlatformDependent.isWindows()){
 			b.localAddress(this.getPendingConnection().getListener().getHost().getHostString(), 0);
 		}
@@ -229,7 +239,7 @@ public class ProxiedPlayerUserConnection extends UserConnection implements Playe
 	}
 
 	@Override
-	public Scoreboard getScoreboard() {
+	public Scoreboard getMutableScoreboard() {
 		if(Configuration.isScoreboardhandleEnabled()) {
 			return this.board;
 		}

@@ -290,7 +290,7 @@ public class IIInitialHandler extends IInitialHandler {
 		
 		String encodedHash = URLEncoder.encode(new BigInteger(sha.digest()).toString(16), "UTF-8");
 
-		String authURL = new StringBuilder().append("https://sessionserver.mojang.com/session/minecraft/hasJoined?username=").append(encName).append("&serverId=").append(encodedHash).toString();
+		String authURL = "https://sessionserver.mojang.com/session/minecraft/hasJoined?username=" + encName + "&serverId=" + encodedHash;
 
 		Callback<String> handler = (result, error) -> {
 			if(error == null){

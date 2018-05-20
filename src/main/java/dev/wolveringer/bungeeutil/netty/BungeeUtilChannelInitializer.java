@@ -33,7 +33,7 @@ import net.md_5.bungee.protocol.Varint21FrameDecoder;
 import net.md_5.bungee.protocol.Varint21LengthFieldPrepender;
 import net.md_5.bungee.protocol.packet.LoginSuccess;
 
-public class BungeeUtilChannelInizializer<T extends InitialHandler> extends ChannelInizializer {
+public class BungeeUtilChannelInitializer<T extends InitialHandler> extends ChannelInizializer {
 	@NoArgsConstructor
 	@Setter
 	private static class LoginSuccessListener extends MessageToMessageEncoder<DefinedPacket> {
@@ -52,18 +52,18 @@ public class BungeeUtilChannelInizializer<T extends InitialHandler> extends Chan
 
 	}
 
-	public static final DefaultChannelInizializer dinti = new DefaultChannelInizializer();
+	public static final DefaultChannelInitializer dinti = new DefaultChannelInitializer();
 	protected Varint21LengthFieldPrepender framePrepender;
 
 	private Constructor<? extends InitialHandler> cons;
 
-	public BungeeUtilChannelInizializer(Class<T> handler) {
+	public BungeeUtilChannelInitializer(Class<T> handler) {
 		if (handler == null) {
 			throw new NullPointerException();
 		}
 		try {
 			this.initFramePrender();
-			this.cons = handler.getConstructor(new Class[] { ProxyServer.class, ListenerInfo.class, WarpedMinecraftDecoder.class, WarpedMinecraftEncoder.class });
+			this.cons = handler.getConstructor(ProxyServer.class, ListenerInfo.class, WarpedMinecraftDecoder.class, WarpedMinecraftEncoder.class);
 		} catch (NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
 		}
@@ -76,7 +76,7 @@ public class BungeeUtilChannelInizializer<T extends InitialHandler> extends Chan
 
 	public void initBaseChannel(Channel ch) {
 		try {
-			ch.config().setOption(ChannelOption.IP_TOS, Integer.valueOf(24));
+			ch.config().setOption(ChannelOption.IP_TOS, 24);
 		} catch (ChannelException ex) {
 		}
 		ch.config().setAllocator(PooledByteBufAllocator.DEFAULT);
@@ -90,11 +90,10 @@ public class BungeeUtilChannelInizializer<T extends InitialHandler> extends Chan
 		Field f = null;
 		try {
 			f = PipelineUtils.class.getDeclaredField("framePrepender");
-		} catch (NoSuchFieldException e1) {
-			e1.printStackTrace();
-		} catch (SecurityException e1) {
+		} catch (NoSuchFieldException | SecurityException e1) {
 			e1.printStackTrace();
 		}
+		assert f != null;
 		f.setAccessible(true);
 		try {
 			this.framePrepender = (Varint21LengthFieldPrepender) f.get(null);
@@ -117,7 +116,7 @@ public class BungeeUtilChannelInizializer<T extends InitialHandler> extends Chan
 
 			LoginSuccessListener listener;
 			ch.pipeline().addAfter("frame-prepender", "login-listener", listener = new LoginSuccessListener());
-			ch.pipeline().addAfter("frame-prepender", "packet-encoder", b = new WarpedMinecraftEncoder(Protocol.HANDSHAKE, true, ProxyServer.getInstance().getProtocolVersion(), null));
+			ch.pipeline().addAfter("frame-prepender", "packet-encoder", b = new WarpedMinecraftEncoder(Protocol.HANDSHAKE, true, ProxyServer.getInstance().getProtocolVersion(), null)); //Encode bungeecords defined packets :)
 
 			InitialHandler handler;
 			ch.pipeline().get(HandlerBoss.class).setHandler(handler = this.createInitialHandler(ch, b, a));
