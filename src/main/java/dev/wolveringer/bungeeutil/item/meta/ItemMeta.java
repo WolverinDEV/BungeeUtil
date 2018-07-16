@@ -1,6 +1,7 @@
 package dev.wolveringer.bungeeutil.item.meta;
 
 import java.util.List;
+import java.util.Set;
 
 import dev.wolveringer.nbt.NBTTagCompound;
 
@@ -70,5 +71,10 @@ public interface ItemMeta extends Cloneable {
 	 *            the lore that will be set
 	 */
 	void setLore(List<String> lore);
+	
+	public Set<ItemFlag> getItemFlags();
+	public void removeItemFlags(ItemFlag ... hideFlags);
+	public void addItemFlags(ItemFlag ... hideFlags);
+	public boolean hasItemFlag(ItemFlag flag);
 
 }
