@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import dev.wolveringer.bungeeutil.player.ClientVersion.BigClientVersion;
 
-@SuppressWarnings("deprecation")
 public enum SoundEffect {
 
 	/**
@@ -12,6 +11,14 @@ public enum SoundEffect {
 	 */
 
 	AMBIENT_CAVE,
+	
+    AMBIENT_UNDERWATER_ENTER,
+    AMBIENT_UNDERWATER_EXIT,
+    AMBIENT_UNDERWATER_LOOP,
+    AMBIENT_UNDERWATER_LOOP_ADDITIONS,
+    AMBIENT_UNDERWATER_LOOP_ADDITIONS_RARE,
+    AMBIENT_UNDERWATER_LOOP_ADDITIONS_ULTRA_RARE,
+	
 	BLOCK_ANVIL_BREAK,
 	BLOCK_ANVIL_DESTROY,
 	BLOCK_ANVIL_FALL,
@@ -20,7 +27,20 @@ public enum SoundEffect {
 	BLOCK_ANVIL_PLACE,
 	BLOCK_ANVIL_STEP,
 	BLOCK_ANVIL_USE,
+	
+    BLOCK_BEACON_ACTIVATE,
+    BLOCK_BEACON_AMBIENT,
+    BLOCK_BEACON_DEACTIVATE,
+    BLOCK_BEACON_POWER_SELECT,
+	
 	BLOCK_BREWING_STAND_BREW,
+	
+    BLOCK_BUBBLE_COLUMN_BUBBLE_POP,
+    BLOCK_BUBBLE_COLUMN_UPWARDS_AMBIENT,
+    BLOCK_BUBBLE_COLUMN_UPWARDS_INSIDE,
+    BLOCK_BUBBLE_COLUMN_WHIRLPOOL_AMBIENT,
+    BLOCK_BUBBLE_COLUMN_WHIRLPOOL_INSIDE,
+	
 	BLOCK_CHEST_CLOSE,
 	BLOCK_CHEST_LOCKED,
 	BLOCK_CHEST_OPEN,
@@ -32,6 +52,18 @@ public enum SoundEffect {
 	BLOCK_CLOTH_PLACE,
 	BLOCK_CLOTH_STEP,
 	BLOCK_COMPARATOR_CLICK,
+	
+    BLOCK_CONDUIT_ACTIVATE,
+    BLOCK_CONDUIT_AMBIENT,
+    BLOCK_CONDUIT_AMBIENT_SHORT,
+    BLOCK_CONDUIT_ATTACK_TARGET,
+    BLOCK_CONDUIT_DEACTIVATE,
+    BLOCK_CORAL_BLOCK_BREAK,
+    BLOCK_CORAL_BLOCK_FALL,
+    BLOCK_CORAL_BLOCK_HIT,
+    BLOCK_CORAL_BLOCK_PLACE,
+    BLOCK_CORAL_BLOCK_STEP,
+	
 	BLOCK_DISPENSER_DISPENSE,
 	BLOCK_DISPENSER_FAIL,
 	BLOCK_DISPENSER_LAUNCH,
@@ -97,6 +129,9 @@ public enum SoundEffect {
 	BLOCK_PORTAL_AMBIENT,
 	BLOCK_PORTAL_TRAVEL,
 	BLOCK_PORTAL_TRIGGER,
+	
+	BLOCK_PUMPKIN_CARVE,
+	
 	BLOCK_REDSTONE_TORCH_BURNOUT,
 	BLOCK_SAND_BREAK,
 	BLOCK_SAND_FALL,
@@ -129,6 +164,13 @@ public enum SoundEffect {
 	BLOCK_TRIPWIRE_CLICK_ON,
 	BLOCK_TRIPWIRE_DETACH,
 	BLOCK_WATER_AMBIENT,
+	
+    BLOCK_WET_GRASS_BREAK,
+    BLOCK_WET_GRASS_FALL,
+    BLOCK_WET_GRASS_HIT,
+    BLOCK_WET_GRASS_PLACE,
+    BLOCK_WET_GRASS_STEP,
+	
 	BLOCK_WATERLILY_PLACE,
 	BLOCK_WOOD_BREAK,
 	BLOCK_WOOD_BUTTON_CLICK_OFF,
@@ -163,9 +205,11 @@ public enum SoundEffect {
 	ENTITY_BLAZE_SHOOT,
 	ENTITY_BOAT_PADDLE_LAND,
 	ENTITY_BOAT_PADDLE_WATER,
+	
 	ENTITY_BOBBER_RETRIEVE,
 	ENTITY_BOBBER_SPLASH,
 	ENTITY_BOBBER_THROW,
+	
 	ENTITY_CAT_AMBIENT,
 	ENTITY_CAT_DEATH,
 	ENTITY_CAT_HISS,
@@ -177,6 +221,12 @@ public enum SoundEffect {
 	ENTITY_CHICKEN_EGG,
 	ENTITY_CHICKEN_HURT,
 	ENTITY_CHICKEN_STEP,
+	
+    ENTITY_COD_AMBIENT,
+    ENTITY_COD_DEATH,
+    ENTITY_COD_FLOP,
+    ENTITY_COD_HURT,
+	
 	ENTITY_COW_AMBIENT,
 	ENTITY_COW_DEATH,
 	ENTITY_COW_HURT,
@@ -185,11 +235,35 @@ public enum SoundEffect {
 	ENTITY_CREEPER_DEATH,
 	ENTITY_CREEPER_HURT,
 	ENTITY_CREEPER_PRIMED,
+	
+    ENTITY_DOLPHIN_AMBIENT,
+    ENTITY_DOLPHIN_AMBIENT_WATER,
+    ENTITY_DOLPHIN_ATTACK,
+    ENTITY_DOLPHIN_DEATH,
+    ENTITY_DOLPHIN_EAT,
+    ENTITY_DOLPHIN_HURT,
+    ENTITY_DOLPHIN_JUMP,
+    ENTITY_DOLPHIN_PLAY,
+    ENTITY_DOLPHIN_SPLASH,
+    ENTITY_DOLPHIN_SWIM,
+	
 	ENTITY_DONKEY_AMBIENT,
 	ENTITY_DONKEY_ANGRY,
 	ENTITY_DONKEY_CHEST,
 	ENTITY_DONKEY_DEATH,
 	ENTITY_DONKEY_HURT,
+	
+    ENTITY_DRAGON_FIREBALL_EXPLODE,
+    ENTITY_DROWNED_AMBIENT,
+    ENTITY_DROWNED_AMBIENT_WATER,
+    ENTITY_DROWNED_DEATH,
+    ENTITY_DROWNED_DEATH_WATER,
+    ENTITY_DROWNED_HURT,
+    ENTITY_DROWNED_HURT_WATER,
+    ENTITY_DROWNED_SHOOT,
+    ENTITY_DROWNED_STEP,
+    ENTITY_DROWNED_SWIM,
+	
 	ENTITY_EGG_THROW,
 	ENTITY_ELDER_GUARDIAN_AMBIENT,
 	ENTITY_ELDER_GUARDIAN_AMBIENT_LAND,
@@ -229,6 +303,9 @@ public enum SoundEffect {
     ENTITY_EVOCATION_ILLAGER_PREPARE_WOLOLO,
 	ENTITY_EXPERIENCE_BOTTLE_THROW,
 	ENTITY_EXPERIENCE_ORB_PICKUP,
+	
+    ENTITY_FISH_SWIM,
+    
 	ENTITY_EXPERIENCE_ORB_TOUCH,
 	ENTITY_FIREWORK_BLAST,
 	ENTITY_FIREWORK_BLAST_FAR,
@@ -283,6 +360,9 @@ public enum SoundEffect {
 	ENTITY_HOSTILE_SPLASH,
 	ENTITY_HOSTILE_SWIM,
 	ENTITY_HUSK_AMBIENT,
+	
+    ENTITY_HUSK_CONVERTED_TO_ZOMBIE,
+    
 	ENTITY_HUSK_DEATH,
 	ENTITY_HUSK_HURT,
 	ENTITY_HUSK_STEP,
@@ -318,10 +398,15 @@ public enum SoundEffect {
     ENTITY_LLAMA_SPIT,
     ENTITY_LLAMA_STEP,
     ENTITY_LLAMA_SWAG,
+    
 	ENTITY_MAGMACUBE_DEATH,
+	ENTITY_MAGMA_CUBE_DEATH_SMALL,
 	ENTITY_MAGMACUBE_HURT,
+	ENTITY_MAGMA_CUBE_HURT_SMALL,
 	ENTITY_MAGMACUBE_JUMP,
 	ENTITY_MAGMACUBE_SQUISH,
+	ENTITY_MAGMA_CUBE_SQUISH_SMALL,
+	
 	ENTITY_MINECART_INSIDE,
 	ENTITY_MINECART_RIDING,
 	ENTITY_MOOSHROOM_SHEAR,
@@ -338,6 +423,9 @@ public enum SoundEffect {
     ENTITY_PARROT_HURT,
     ENTITY_PARROT_IMITATE_BLAZE,
     ENTITY_PARROT_IMITATE_CREEPER,
+    
+    ENTITY_PARROT_IMITATE_DROWNED,
+    
     ENTITY_PARROT_IMITATE_ELDER_GUARDIAN,
     ENTITY_PARROT_IMITATE_ENDERDRAGON,
     ENTITY_PARROT_IMITATE_ENDERMAN,
@@ -347,6 +435,9 @@ public enum SoundEffect {
     ENTITY_PARROT_IMITATE_HUSK,
     ENTITY_PARROT_IMITATE_ILLUSION_ILLAGER,
     ENTITY_PARROT_IMITATE_MAGMACUBE,
+    
+    ENTITY_PARROT_IMITATE_PHANTOM,
+    
     ENTITY_PARROT_IMITATE_POLAR_BEAR,
     ENTITY_PARROT_IMITATE_SHULKER,
     ENTITY_PARROT_IMITATE_SILVERFISH,
@@ -364,6 +455,14 @@ public enum SoundEffect {
     ENTITY_PARROT_IMITATE_ZOMBIE_PIGMAN,
     ENTITY_PARROT_IMITATE_ZOMBIE_VILLAGER,
     ENTITY_PARROT_STEP,
+    
+    ENTITY_PHANTOM_AMBIENT,
+    ENTITY_PHANTOM_BITE,
+    ENTITY_PHANTOM_DEATH,
+    ENTITY_PHANTOM_FLAP,
+    ENTITY_PHANTOM_HURT,
+    ENTITY_PHANTOM_SWOOP,
+    
 	ENTITY_PIG_AMBIENT,
 	ENTITY_PIG_DEATH,
 	ENTITY_PIG_HURT,
@@ -385,6 +484,9 @@ public enum SoundEffect {
 	ENTITY_PLAYER_LEVELUP,
 	ENTITY_PLAYER_SMALL_FALL,
 	ENTITY_PLAYER_SPLASH,
+	
+	ENTITY_PLAYER_SPLASH_HIGH_SPEED,
+	
 	ENTITY_PLAYER_SWIM,
 	ENTITY_POLAR_BEAR_AMBIENT,
 	ENTITY_POLAR_BEAR_BABY_AMBIENT,
@@ -392,11 +494,26 @@ public enum SoundEffect {
 	ENTITY_POLAR_BEAR_HURT,
 	ENTITY_POLAR_BEAR_STEP,
 	ENTITY_POLAR_BEAR_WARNING,
+	
+    ENTITY_PUFFER_FISH_AMBIENT,
+    ENTITY_PUFFER_FISH_BLOW_OUT,
+    ENTITY_PUFFER_FISH_BLOW_UP,
+    ENTITY_PUFFER_FISH_DEATH,
+    ENTITY_PUFFER_FISH_FLOP,
+    ENTITY_PUFFER_FISH_HURT,
+    ENTITY_PUFFER_FISH_STING,
+	
 	ENTITY_RABBIT_AMBIENT,
 	ENTITY_RABBIT_ATTACK,
 	ENTITY_RABBIT_DEATH,
 	ENTITY_RABBIT_HURT,
 	ENTITY_RABBIT_JUMP,
+	
+    ENTITY_SALMON_AMBIENT,
+    ENTITY_SALMON_DEATH,
+    ENTITY_SALMON_FLOP,
+    ENTITY_SALMON_HURT,
+	
 	ENTITY_SHEEP_AMBIENT,
 	ENTITY_SHEEP_DEATH,
 	ENTITY_SHEEP_HURT,
@@ -418,24 +535,30 @@ public enum SoundEffect {
 	ENTITY_SILVERFISH_STEP,
 	ENTITY_SKELETON_AMBIENT,
 	ENTITY_SKELETON_DEATH,
+	
 	ENTITY_SKELETON_HORSE_AMBIENT,
+	ENTITY_SKELETON_HORSE_AMBIENT_WATER,
 	ENTITY_SKELETON_HORSE_DEATH,
+	ENTITY_SKELETON_HORSE_GALLOP_WATER,
 	ENTITY_SKELETON_HORSE_HURT,
+    ENTITY_SKELETON_HORSE_JUMP_WATER,
+    ENTITY_SKELETON_HORSE_STEP_WATER,
+    ENTITY_SKELETON_HORSE_SWIM,
+	
 	ENTITY_SKELETON_HURT,
 	ENTITY_SKELETON_SHOOT,
 	ENTITY_SKELETON_STEP,
+	
 	ENTITY_SLIME_ATTACK,
 	ENTITY_SLIME_DEATH,
+	ENTITY_SLIME_DEATH_SMALL,
 	ENTITY_SLIME_HURT,
+	ENTITY_SLIME_HURT_SMALL,
 	ENTITY_SLIME_JUMP,
+	ENTITY_SLIME_JUMP_SMALL,
 	ENTITY_SLIME_SQUISH,
-	ENTITY_SMALL_MAGMACUBE_DEATH,
-	ENTITY_SMALL_MAGMACUBE_HURT,
-	ENTITY_SMALL_MAGMACUBE_SQUISH,
-	ENTITY_SMALL_SLIME_DEATH,
-	ENTITY_SMALL_SLIME_HURT,
-	ENTITY_SMALL_SLIME_JUMP,
-	ENTITY_SMALL_SLIME_SQUISH,
+	ENTITY_SLIME_SQUISH_SMALL,
+	
 	ENTITY_SNOWBALL_THROW,
 	ENTITY_SNOWMAN_AMBIENT,
 	ENTITY_SNOWMAN_DEATH,
@@ -450,11 +573,32 @@ public enum SoundEffect {
 	ENTITY_SQUID_AMBIENT,
 	ENTITY_SQUID_DEATH,
 	ENTITY_SQUID_HURT,
+	
+	ENTITY_SQUID_SQUIRT,
+	
 	ENTITY_STRAY_AMBIENT,
 	ENTITY_STRAY_DEATH,
 	ENTITY_STRAY_HURT,
 	ENTITY_STRAY_STEP,
 	ENTITY_TNT_PRIMED,
+	
+    ENTITY_TROPICAL_FISH_AMBIENT,
+    ENTITY_TROPICAL_FISH_DEATH,
+    ENTITY_TROPICAL_FISH_FLOP,
+    ENTITY_TROPICAL_FISH_HURT,
+    ENTITY_TURTLE_AMBIENT_LAND,
+    ENTITY_TURTLE_DEATH,
+    ENTITY_TURTLE_DEATH_BABY,
+    ENTITY_TURTLE_EGG_BREAK,
+    ENTITY_TURTLE_EGG_CRACK,
+    ENTITY_TURTLE_EGG_HATCH,
+    ENTITY_TURTLE_HURT,
+    ENTITY_TURTLE_HURT_BABY,
+    ENTITY_TURTLE_LAY_EGG,
+    ENTITY_TURTLE_SHAMBLE,
+    ENTITY_TURTLE_SHAMBLE_BABY,
+    ENTITY_TURTLE_SWIM,
+	
     ENTITY_VEX_AMBIENT,
     ENTITY_VEX_CHARGE,
     ENTITY_VEX_DEATH,
@@ -496,7 +640,13 @@ public enum SoundEffect {
 	ENTITY_ZOMBIE_ATTACK_DOOR_WOOD,
 	ENTITY_ZOMBIE_ATTACK_IRON_DOOR,
 	ENTITY_ZOMBIE_BREAK_DOOR_WOOD,
+	
+	ENTITY_ZOMBIE_CONVERTED_TO_DROWNED,
+	
 	ENTITY_ZOMBIE_DEATH,
+	
+	ENTITY_ZOMBIE_DESTROY_EGG,
+	
 	ENTITY_ZOMBIE_HORSE_AMBIENT,
 	ENTITY_ZOMBIE_HORSE_DEATH,
 	ENTITY_ZOMBIE_HORSE_HURT,
@@ -520,12 +670,22 @@ public enum SoundEffect {
 	ITEM_ARMOR_EQUIP_GOLD,
 	ITEM_ARMOR_EQUIP_IRON,
 	ITEM_ARMOR_EQUIP_LEATHER,
+	
+    ITEM_ARMOR_EQUIP_TURTLE,
+    ITEM_AXE_STRIP,
+	
 	ITEM_BOTTLE_EMPTY,
 	ITEM_BOTTLE_FILL,
 	ITEM_BOTTLE_FILL_DRAGONBREATH,
 	ITEM_BUCKET_EMPTY,
+	
+	ITEM_BUCKET_EMPTY_FISH,
+	
 	ITEM_BUCKET_EMPTY_LAVA,
 	ITEM_BUCKET_FILL,
+	
+	ITEM_BUCKET_FILL_FISH,
+	
 	ITEM_BUCKET_FILL_LAVA,
 	ITEM_CHORUS_FRUIT_TELEPORT,
 	ITEM_ELYTRA_FLYING,
@@ -536,6 +696,16 @@ public enum SoundEffect {
 	ITEM_SHIELD_BREAK,
 	ITEM_SHOVEL_FLATTEN,
 	ITEM_TOTEM_USE,
+	
+    ITEM_TRIDENT_HIT,
+    ITEM_TRIDENT_HIT_GROUND,
+    ITEM_TRIDENT_RETURN,
+    ITEM_TRIDENT_RIPTIDE_1,
+    ITEM_TRIDENT_RIPTIDE_2,
+    ITEM_TRIDENT_RIPTIDE_3,
+    ITEM_TRIDENT_THROW,
+    ITEM_TRIDENT_THUNDER,
+	
 	MUSIC_CREATIVE,
 	MUSIC_CREDITS,
 	MUSIC_DRAGON,
@@ -555,6 +725,9 @@ public enum SoundEffect {
 	RECORD_STRAD,
 	RECORD_WAIT,
 	RECORD_WARD,
+	
+	MUSIC_UNDER_WATER,
+	
 	UI_BUTTON_CLICK,
 	UI_TOAST_CHALLENGE_COMPLETE,
 	UI_TOAST_IN,
@@ -565,6 +738,314 @@ public enum SoundEffect {
 
 	static {
 		//Good Source: https://hub.spigotmc.org/stash/projects/SPIGOT/repos/craftbukkit/browse/src/main/java/org/bukkit/craftbukkit/CraftSound.java
+		
+		//1.13 pre7
+		addSoundFromNow(AMBIENT_UNDERWATER_ENTER, BigClientVersion.v1_13, "ambient.underwater.enter");
+		addSoundFromNow(AMBIENT_UNDERWATER_EXIT, BigClientVersion.v1_13, "ambient.underwater.exit");
+		addSoundFromNow(AMBIENT_UNDERWATER_LOOP, BigClientVersion.v1_13, "ambient.underwater.loop");
+		addSoundFromNow(AMBIENT_UNDERWATER_LOOP_ADDITIONS, BigClientVersion.v1_13, "ambient.underwater.loop.additions");
+		addSoundFromNow(AMBIENT_UNDERWATER_LOOP_ADDITIONS_RARE, BigClientVersion.v1_13, "ambient.underwater.loop.additions.rare");
+		addSoundFromNow(AMBIENT_UNDERWATER_LOOP_ADDITIONS_ULTRA_RARE, BigClientVersion.v1_13, "ambient.underwater.loop.additions.ultra_rare");
+		
+		addSoundFromNow(BLOCK_BEACON_ACTIVATE, BigClientVersion.v1_13, "block.beacon.activate");
+		addSoundFromNow(BLOCK_BEACON_AMBIENT, BigClientVersion.v1_13, "block.beacon.ambient");
+		addSoundFromNow(BLOCK_BEACON_DEACTIVATE, BigClientVersion.v1_13, "block.beacon.deactivate");
+		addSoundFromNow(BLOCK_BEACON_POWER_SELECT, BigClientVersion.v1_13, "block.beacon.power_select");
+		
+		addSoundFromNow(BLOCK_BUBBLE_COLUMN_BUBBLE_POP, BigClientVersion.v1_13, "block.bubble_column.bubble_pop");
+		addSoundFromNow(BLOCK_BUBBLE_COLUMN_UPWARDS_AMBIENT, BigClientVersion.v1_13, "block.bubble_column.upwards_ambient");
+		addSoundFromNow(BLOCK_BUBBLE_COLUMN_UPWARDS_INSIDE, BigClientVersion.v1_13, "block.bubble_column.upwards_inside");
+		addSoundFromNow(BLOCK_BUBBLE_COLUMN_WHIRLPOOL_AMBIENT, BigClientVersion.v1_13, "block.bubble_column.whirlpool_ambient");
+		addSoundFromNow(BLOCK_BUBBLE_COLUMN_WHIRLPOOL_INSIDE, BigClientVersion.v1_13, "block.bubble_column.whirlpool_inside");
+		
+		addSoundFromNow(BLOCK_CONDUIT_ACTIVATE, BigClientVersion.v1_13, "block.conduit.activate");
+		addSoundFromNow(BLOCK_CONDUIT_AMBIENT, BigClientVersion.v1_13, "block.conduit.ambient");
+		addSoundFromNow(BLOCK_CONDUIT_AMBIENT_SHORT, BigClientVersion.v1_13, "block.conduit.ambient.short");
+		addSoundFromNow(BLOCK_CONDUIT_ATTACK_TARGET, BigClientVersion.v1_13, "block.conduit.attack.target");
+		addSoundFromNow(BLOCK_CONDUIT_DEACTIVATE, BigClientVersion.v1_13, "block.conduit.deactivate");
+		addSoundFromNow(BLOCK_CORAL_BLOCK_BREAK, BigClientVersion.v1_13, "block.coral_block.break");
+		addSoundFromNow(BLOCK_CORAL_BLOCK_FALL, BigClientVersion.v1_13, "block.coral_block.fall");
+		addSoundFromNow(BLOCK_CORAL_BLOCK_HIT, BigClientVersion.v1_13, "block.coral_block.hit");
+		addSoundFromNow(BLOCK_CORAL_BLOCK_PLACE, BigClientVersion.v1_13, "block.coral_block.place");
+	    addSoundFromNow(BLOCK_CORAL_BLOCK_STEP, BigClientVersion.v1_13, "block.coral_block.step");
+	    
+	    changeSoundFromNow(BLOCK_CLOTH_BREAK, BigClientVersion.v1_13, "block.wool.break");
+	    changeSoundFromNow(BLOCK_CLOTH_FALL, BigClientVersion.v1_13, "block.wool.fall");
+	    changeSoundFromNow(BLOCK_CLOTH_HIT, BigClientVersion.v1_13, "block.wool.hit");
+	    changeSoundFromNow(BLOCK_CLOTH_PLACE, BigClientVersion.v1_13, "block.wool.place");
+	    changeSoundFromNow(BLOCK_CLOTH_STEP, BigClientVersion.v1_13, "block.wool.step");
+	    
+	    changeSoundFromNow(BLOCK_ENDERCHEST_CLOSE, BigClientVersion.v1_13, "block.ender_chest.close");
+	    changeSoundFromNow(BLOCK_ENDERCHEST_OPEN, BigClientVersion.v1_13, "block.ender_chest.open");
+	    
+	    changeSoundFromNow(BLOCK_METAL_PRESSUREPLATE_CLICK_OFF, BigClientVersion.v1_13, "block.metal_pressure_plate.click_off");
+	    changeSoundFromNow(BLOCK_METAL_PRESSUREPLATE_CLICK_ON, BigClientVersion.v1_13, "block.metal_pressure_plate.click_on");
+	    
+	    changeSoundFromNow(BLOCK_NOTE_BASEDRUM, BigClientVersion.v1_13, "block.note_block.basedrum");
+	    changeSoundFromNow(BLOCK_NOTE_BASS, BigClientVersion.v1_13, "block.note_block.bass");
+	    changeSoundFromNow(BLOCK_NOTE_BELL, BigClientVersion.v1_13, "block.note_block.bell");
+	    changeSoundFromNow(BLOCK_NOTE_CHIME, BigClientVersion.v1_13, "block.note_block.chime");
+	    changeSoundFromNow(BLOCK_NOTE_FLUTE, BigClientVersion.v1_13, "block.note_block.flute");
+	    changeSoundFromNow(BLOCK_NOTE_GUITAR, BigClientVersion.v1_13, "block.note_block.guitar");
+	    changeSoundFromNow(BLOCK_NOTE_HARP, BigClientVersion.v1_13, "block.note_block.harp");
+	    changeSoundFromNow(BLOCK_NOTE_HAT, BigClientVersion.v1_13, "block.note_block.hat");
+	    changeSoundFromNow(BLOCK_NOTE_PLING, BigClientVersion.v1_13, "block.note_block.pling");
+	    changeSoundFromNow(BLOCK_NOTE_SNARE, BigClientVersion.v1_13, "block.note_block.snare");
+	    changeSoundFromNow(BLOCK_NOTE_XYLOPHONE, BigClientVersion.v1_13, "block.note_block.xylophone");
+	    
+	    addSoundFromNow(BLOCK_PUMPKIN_CARVE, BigClientVersion.v1_13, "block.pumpkin.carve");
+	    
+	    changeSoundFromNow(BLOCK_SLIME_BREAK, BigClientVersion.v1_13, "block.slime_block.break");
+	    changeSoundFromNow(BLOCK_SLIME_FALL, BigClientVersion.v1_13, "block.slime_block.fall");
+	    changeSoundFromNow(BLOCK_SLIME_HIT, BigClientVersion.v1_13, "block.slime_block.hit");
+	    changeSoundFromNow(BLOCK_SLIME_PLACE, BigClientVersion.v1_13, "block.slime_block.place");
+	    changeSoundFromNow(BLOCK_SLIME_STEP, BigClientVersion.v1_13, "block.slime_block.step");
+	    
+	    changeSoundFromNow(BLOCK_STONE_PRESSUREPLATE_CLICK_OFF, BigClientVersion.v1_13, "block.stone_pressureplate.click_off");
+	    changeSoundFromNow(BLOCK_STONE_PRESSUREPLATE_CLICK_ON, BigClientVersion.v1_13, "block.stone_pressureplate.click_on");
+	    
+	    changeSoundFromNow(BLOCK_WATERLILY_PLACE, BigClientVersion.v1_13, "block.lily_pad.place");
+	    
+	    addSoundFromNow(BLOCK_WET_GRASS_BREAK, BigClientVersion.v1_13, "block.wet_grass.break");
+	    addSoundFromNow(BLOCK_WET_GRASS_FALL, BigClientVersion.v1_13, "block.wet_grass.fall");
+	    addSoundFromNow(BLOCK_WET_GRASS_HIT, BigClientVersion.v1_13, "block.wet_grass.hit");
+	    addSoundFromNow(BLOCK_WET_GRASS_PLACE, BigClientVersion.v1_13, "block.wet_grass.place");
+	    addSoundFromNow(BLOCK_WET_GRASS_STEP, BigClientVersion.v1_13, "block.wet_grass.step");
+		
+	    changeSoundFromNow(BLOCK_WOOD_BUTTON_CLICK_OFF, BigClientVersion.v1_13, "block.wooden_button.click_off");
+	    changeSoundFromNow(BLOCK_WOOD_BUTTON_CLICK_ON, BigClientVersion.v1_13, "block.wooden_button.click_on");
+	    
+	    changeSoundFromNow(BLOCK_WOOD_PRESSUREPLATE_CLICK_OFF, BigClientVersion.v1_13, "block.wooden_pressure_plate.click_off");
+	    changeSoundFromNow(BLOCK_WOOD_PRESSUREPLATE_CLICK_ON, BigClientVersion.v1_13, "block.wooden_pressure_plate.click_on");
+	    
+	    changeSoundFromNow(ENTITY_ARMORSTAND_BREAK, BigClientVersion.v1_13, "entity.armor_stand.break");
+	    changeSoundFromNow(ENTITY_ARMORSTAND_FALL, BigClientVersion.v1_13, "entity.armor_stand.fall");
+	    changeSoundFromNow(ENTITY_ARMORSTAND_HIT, BigClientVersion.v1_13, "entity.armor_stand.hit");
+	    changeSoundFromNow(ENTITY_ARMORSTAND_PLACE, BigClientVersion.v1_13, "entity.armor_stand.place");
+	    
+	    addSoundFromNow(ENTITY_COD_AMBIENT, BigClientVersion.v1_13, "entity.cod.ambient");
+	    addSoundFromNow(ENTITY_COD_DEATH, BigClientVersion.v1_13, "entity.cod.death");
+	    addSoundFromNow(ENTITY_COD_FLOP, BigClientVersion.v1_13, "entity.cod.flop");
+	    addSoundFromNow(ENTITY_COD_HURT, BigClientVersion.v1_13, "entity.cod.hurt");
+	    
+	    addSoundFromNow(ENTITY_DOLPHIN_AMBIENT, BigClientVersion.v1_13, "entity.dolphin.ambient");
+	    addSoundFromNow(ENTITY_DOLPHIN_AMBIENT_WATER, BigClientVersion.v1_13, "entity.dolphin.ambient_water");
+	    addSoundFromNow(ENTITY_DOLPHIN_ATTACK, BigClientVersion.v1_13, "entity.dolphin.attack");
+	    addSoundFromNow(ENTITY_DOLPHIN_DEATH, BigClientVersion.v1_13, "entity.dolphin.death");
+	    addSoundFromNow(ENTITY_DOLPHIN_EAT, BigClientVersion.v1_13, "entity.dolphin.eat");
+	    addSoundFromNow(ENTITY_DOLPHIN_HURT, BigClientVersion.v1_13, "entity.dolphin.hurt");
+	    addSoundFromNow(ENTITY_DOLPHIN_JUMP, BigClientVersion.v1_13, "entity.dolphin.jump");
+	    addSoundFromNow(ENTITY_DOLPHIN_PLAY, BigClientVersion.v1_13, "entity.dolphin.play");
+	    addSoundFromNow(ENTITY_DOLPHIN_SPLASH, BigClientVersion.v1_13, "entity.dolphin.splash");
+	    addSoundFromNow(ENTITY_DOLPHIN_SWIM, BigClientVersion.v1_13, "entity.dolphin.swim");
+	    
+	    addSoundFromNow(ENTITY_DRAGON_FIREBALL_EXPLODE, BigClientVersion.v1_13, "entity.dragon_fireball.explode");
+	    addSoundFromNow(ENTITY_DROWNED_AMBIENT, BigClientVersion.v1_13, "entity.drowned.ambient");
+	    addSoundFromNow(ENTITY_DROWNED_AMBIENT_WATER, BigClientVersion.v1_13, "entity.drowned.ambient_water");
+	    addSoundFromNow(ENTITY_DROWNED_DEATH, BigClientVersion.v1_13, "entity.drowned.death");
+	    addSoundFromNow(ENTITY_DROWNED_DEATH_WATER, BigClientVersion.v1_13, "entity.drowned.death_water");
+	    addSoundFromNow(ENTITY_DROWNED_HURT, BigClientVersion.v1_13, "entity.drowned.hurt");
+	    addSoundFromNow(ENTITY_DROWNED_HURT_WATER, BigClientVersion.v1_13, "entity.drowned.hurt_water");
+	    addSoundFromNow(ENTITY_DROWNED_SHOOT, BigClientVersion.v1_13, "entity.drowned.shoot");
+	    addSoundFromNow(ENTITY_DROWNED_STEP, BigClientVersion.v1_13, "entity.drowned.step");
+	    addSoundFromNow(ENTITY_DROWNED_SWIM, BigClientVersion.v1_13, "entity.drowned.swim");
+	    
+	    changeSoundFromNow(ENTITY_ENDERDRAGON_AMBIENT, BigClientVersion.v1_13, "entity.ender_dragon.ambient");
+	    changeSoundFromNow(ENTITY_ENDERDRAGON_DEATH, BigClientVersion.v1_13, "entity.ender_dragon.death");
+	    
+//	    changeSoundFromNow(ENTITY_ENDERDRAGON_FIREBALL_EXPLODE, BigClientVersion.v1_13, ""); //missing?
+	    removeSoundFromNow(ENTITY_ENDERDRAGON_FIREBALL_EXPLODE, BigClientVersion.v1_13);
+	    
+	    changeSoundFromNow(ENTITY_ENDERDRAGON_FLAP, BigClientVersion.v1_13, "entity.ender_dragon.flap");
+	    changeSoundFromNow(ENTITY_ENDERDRAGON_GROWL, BigClientVersion.v1_13, "entity.ender_dragon.growl");
+	    changeSoundFromNow(ENTITY_ENDERDRAGON_HURT, BigClientVersion.v1_13, "entity.ender_dragon.hurt");
+	    changeSoundFromNow(ENTITY_ENDERDRAGON_SHOOT, BigClientVersion.v1_13, "entity.ender_dragon.shoot");
+	    
+	    changeSoundFromNow(ENTITY_ENDEREYE_DEATH, BigClientVersion.v1_13, "entity.ender_eye.death");
+	    changeSoundFromNow(ENTITY_ENDEREYE_LAUNCH, BigClientVersion.v1_13, "entity.ender_eye.launch");
+	    
+	    changeSoundFromNow(ENTITY_ENDERMEN_AMBIENT, BigClientVersion.v1_13, "entity.enderman.ambient");
+	    changeSoundFromNow(ENTITY_ENDERMEN_DEATH, BigClientVersion.v1_13, "entity.enderman.death");
+	    changeSoundFromNow(ENTITY_ENDERMEN_HURT, BigClientVersion.v1_13, "entity.enderman.hurt");
+	    changeSoundFromNow(ENTITY_ENDERMEN_SCREAM, BigClientVersion.v1_13, "entity.enderman.scream");
+	    changeSoundFromNow(ENTITY_ENDERMEN_STARE, BigClientVersion.v1_13, "entity.enderman.stare");
+	    changeSoundFromNow(ENTITY_ENDERMEN_TELEPORT, BigClientVersion.v1_13, "entity.enderman.teleport");
+	    
+	    changeSoundFromNow(ENTITY_ENDERPEARL_THROW, BigClientVersion.v1_13, "entity.ender_pearl.throw");
+	    
+	    changeSoundFromNow(ENTITY_EVOCATION_FANGS_ATTACK, BigClientVersion.v1_13, "entity.evoker_fangs.attack");
+	    changeSoundFromNow(ENTITY_EVOCATION_ILLAGER_AMBIENT, BigClientVersion.v1_13, "entity.evoker.ambient");
+	    changeSoundFromNow(ENTITY_EVOCATION_ILLAGER_CAST_SPELL, BigClientVersion.v1_13, "entity.evoker.cast_spell");
+	    changeSoundFromNow(ENTITY_EVOCATION_ILLAGER_DEATH, BigClientVersion.v1_13, "entity.evoker.death");
+	    changeSoundFromNow(ENTITY_EVOCATION_ILLAGER_HURT, BigClientVersion.v1_13, "entity.evoker.hurt");
+	    changeSoundFromNow(ENTITY_EVOCATION_ILLAGER_PREPARE_ATTACK, BigClientVersion.v1_13, "entity.evoker.prepare_attack");
+	    changeSoundFromNow(ENTITY_EVOCATION_ILLAGER_PREPARE_SUMMON, BigClientVersion.v1_13, "entity.evoker.prepare_summon");
+	    changeSoundFromNow(ENTITY_EVOCATION_ILLAGER_PREPARE_WOLOLO, BigClientVersion.v1_13, "entity.evoker.prepare_wololo");
+	    
+	    changeSoundFromNow(ENTITY_FIREWORK_BLAST, BigClientVersion.v1_13, "entity.firework_rocket.blast");
+	    changeSoundFromNow(ENTITY_FIREWORK_BLAST_FAR, BigClientVersion.v1_13, "entity.firework_rocket.blast_far");
+	    changeSoundFromNow(ENTITY_FIREWORK_LARGE_BLAST, BigClientVersion.v1_13, "entity.firework_rocket.large_blast");
+	    changeSoundFromNow(ENTITY_FIREWORK_LARGE_BLAST_FAR, BigClientVersion.v1_13, "entity.firework_rocket.large_blast_far");
+	    changeSoundFromNow(ENTITY_FIREWORK_LAUNCH, BigClientVersion.v1_13, "entity.firework_rocket.launch");
+	    changeSoundFromNow(ENTITY_FIREWORK_SHOOT, BigClientVersion.v1_13, "entity.firework_rocket.shoot");
+	    changeSoundFromNow(ENTITY_FIREWORK_TWINKLE, BigClientVersion.v1_13, "entity.firework_rocket.twinkle");
+	    changeSoundFromNow(ENTITY_FIREWORK_TWINKLE_FAR, BigClientVersion.v1_13, "entity.firework_rocket.twinkle_far");
+	    
+	    changeSoundFromNow(ENTITY_BOBBER_RETRIEVE, BigClientVersion.v1_13, "entity.fishing_bobber.retrieve");
+	    changeSoundFromNow(ENTITY_BOBBER_SPLASH, BigClientVersion.v1_13, "entity.fishing_bobber.splash");
+	    changeSoundFromNow(ENTITY_BOBBER_THROW, BigClientVersion.v1_13, "entity.fishing_bobber.throw");
+	    
+	    addSoundFromNow(ENTITY_FISH_SWIM, BigClientVersion.v1_13, "entity.fish.swim");
+	    
+	    addSoundFromNow(ENTITY_HUSK_CONVERTED_TO_ZOMBIE, BigClientVersion.v1_13, "entity.husk.converted_to_zombie");
+	    
+	    changeSoundFromNow(ENTITY_ILLUSION_ILLAGER_AMBIENT, BigClientVersion.v1_13, "entity.illusioner.ambient");
+	    changeSoundFromNow(ENTITY_ILLUSION_ILLAGER_CAST_SPELL, BigClientVersion.v1_13, "entity.illusioner.cast_spell");
+	    changeSoundFromNow(ENTITY_ILLUSION_ILLAGER_DEATH, BigClientVersion.v1_13, "entity.illusioner.death");
+	    changeSoundFromNow(ENTITY_ILLUSION_ILLAGER_HURT, BigClientVersion.v1_13, "entity.illusioner.hurt");
+	    changeSoundFromNow(ENTITY_ILLUSION_ILLAGER_MIRROR_MOVE, BigClientVersion.v1_13, "entity.illusioner.mirror_move");
+	    changeSoundFromNow(ENTITY_ILLUSION_ILLAGER_PREPARE_BLINDNESS, BigClientVersion.v1_13, "entity.illusioner.prepare_blindness");
+	    changeSoundFromNow(ENTITY_ILLUSION_ILLAGER_PREPARE_MIRROR, BigClientVersion.v1_13, "entity.illusioner.prepare_mirror");
+	    
+	    changeSoundFromNow(ENTITY_IRONGOLEM_ATTACK, BigClientVersion.v1_13, "entity.iron_golem.attack");
+	    changeSoundFromNow(ENTITY_IRONGOLEM_DEATH, BigClientVersion.v1_13, "entity.iron_golem.death");
+	    changeSoundFromNow(ENTITY_IRONGOLEM_HURT, BigClientVersion.v1_13, "entity.iron_golem.hurt");
+	    changeSoundFromNow(ENTITY_IRONGOLEM_STEP, BigClientVersion.v1_13, "entity.iron_golem.step");
+	    
+	    changeSoundFromNow(ENTITY_ITEMFRAME_ADD_ITEM, BigClientVersion.v1_13, "entity.item_frame.add_item");
+	    changeSoundFromNow(ENTITY_ITEMFRAME_BREAK, BigClientVersion.v1_13, "entity.item_frame.break");
+	    changeSoundFromNow(ENTITY_ITEMFRAME_PLACE, BigClientVersion.v1_13, "entity.item_frame.place");
+	    changeSoundFromNow(ENTITY_ITEMFRAME_REMOVE_ITEM, BigClientVersion.v1_13, "entity.item_frame.remove_item");
+	    changeSoundFromNow(ENTITY_ITEMFRAME_ROTATE_ITEM, BigClientVersion.v1_13, "entity.item_frame.rotate_item");
+	    
+	    changeSoundFromNow(ENTITY_LEASHKNOT_BREAK, BigClientVersion.v1_13, "entity.leash_knot.break");
+	    changeSoundFromNow(ENTITY_LEASHKNOT_PLACE, BigClientVersion.v1_13, "entity.leash_knot.place");
+	    changeSoundFromNow(ENTITY_LIGHTNING_IMPACT, BigClientVersion.v1_13, "entity.lightning_bolt.impact");
+	    changeSoundFromNow(ENTITY_LIGHTNING_THUNDER, BigClientVersion.v1_13, "entity.lightning_bolt.thunder");
+	    changeSoundFromNow(ENTITY_LINGERINGPOTION_THROW, BigClientVersion.v1_13, "entity.lingering_potion.throw");
+	    
+	    changeSoundFromNow(ENTITY_MAGMACUBE_DEATH, BigClientVersion.v1_13, "entity.magma_cube.death");
+	    changeSoundFromNow(ENTITY_MAGMACUBE_HURT, BigClientVersion.v1_13, "entity.magma_cube.hurt");
+	    changeSoundFromNow(ENTITY_MAGMACUBE_JUMP, BigClientVersion.v1_13, "entity.magma_cube.jump");
+	    changeSoundFromNow(ENTITY_MAGMACUBE_SQUISH, BigClientVersion.v1_13, "entity.magma_cube.squish");
+	    
+	    addSoundFromNow(ENTITY_MAGMA_CUBE_DEATH_SMALL, BigClientVersion.v1_13, "entity.magma_cube.death_small");
+	    addSoundFromNow(ENTITY_MAGMA_CUBE_HURT_SMALL, BigClientVersion.v1_13, "entity.magma_cube.hurt_small");
+	    addSoundFromNow(ENTITY_MAGMA_CUBE_SQUISH_SMALL, BigClientVersion.v1_13, "entity.magma_cube.squish_small");
+	    
+	    addSoundFromNow(ENTITY_PARROT_IMITATE_DROWNED, BigClientVersion.v1_13, "entity.parrot.imitate.drowned");
+	    changeSoundFromNow(ENTITY_PARROT_IMITATE_ENDERDRAGON, BigClientVersion.v1_13, "entity.parrot.imitate.ender_dragon");
+	    changeSoundFromNow(ENTITY_PARROT_IMITATE_EVOCATION_ILLAGER, BigClientVersion.v1_13, "entity.parrot.imitate.evoker");
+	    
+	    changeSoundFromNow(ENTITY_PARROT_IMITATE_ILLUSION_ILLAGER, BigClientVersion.v1_13, "entity.parrot.imitate.illusioner");
+	    changeSoundFromNow(ENTITY_PARROT_IMITATE_MAGMACUBE, BigClientVersion.v1_13, "entity.parrot.imitate.magma_cube");
+		addSoundFromNow(ENTITY_PARROT_IMITATE_PHANTOM, BigClientVersion.v1_13, "entity.parrot.imitate.phantom");
+		changeSoundFromNow(ENTITY_PARROT_IMITATE_VINDICATION_ILLAGER, BigClientVersion.v1_13, "entity.parrot.imitate.vindicator");
+	    
+		addSoundFromNow(ENTITY_PHANTOM_AMBIENT, BigClientVersion.v1_13, "entity.phantom.ambient");
+		addSoundFromNow(ENTITY_PHANTOM_BITE, BigClientVersion.v1_13, "entity.phantom.bite");
+		addSoundFromNow(ENTITY_PHANTOM_DEATH, BigClientVersion.v1_13, "entity.phantom.death");
+		addSoundFromNow(ENTITY_PHANTOM_FLAP, BigClientVersion.v1_13, "entity.phantom.flap");
+		addSoundFromNow(ENTITY_PHANTOM_HURT, BigClientVersion.v1_13, "entity.phantom.hurt");
+		addSoundFromNow(ENTITY_PHANTOM_SWOOP, BigClientVersion.v1_13, "entity.phantom.swoop");
+		
+		addSoundFromNow(ENTITY_PLAYER_SPLASH_HIGH_SPEED, BigClientVersion.v1_13, "entity.player.splash.high_speed");
+		changeSoundFromNow(ENTITY_POLAR_BEAR_BABY_AMBIENT, BigClientVersion.v1_13, "entity.polar_bear.ambient_baby");
+		
+		addSoundFromNow(ENTITY_PUFFER_FISH_AMBIENT, BigClientVersion.v1_13, "entity.puffer_fish.ambient");
+		addSoundFromNow(ENTITY_PUFFER_FISH_BLOW_OUT, BigClientVersion.v1_13, "entity.puffer_fish.blow_out");
+		addSoundFromNow(ENTITY_PUFFER_FISH_BLOW_UP, BigClientVersion.v1_13, "entity.puffer_fish.blow_up");
+		addSoundFromNow(ENTITY_PUFFER_FISH_DEATH, BigClientVersion.v1_13, "entity.puffer_fish.death");
+		addSoundFromNow(ENTITY_PUFFER_FISH_FLOP, BigClientVersion.v1_13, "entity.puffer_fish.flop");
+		addSoundFromNow(ENTITY_PUFFER_FISH_HURT, BigClientVersion.v1_13, "entity.puffer_fish.hurt");
+		addSoundFromNow(ENTITY_PUFFER_FISH_STING, BigClientVersion.v1_13, "entity.puffer_fish.sting");
+		
+		addSoundFromNow(ENTITY_SALMON_AMBIENT, BigClientVersion.v1_13, "entity.salmon.ambient");
+		addSoundFromNow(ENTITY_SALMON_DEATH, BigClientVersion.v1_13, "entity.salmon.death");
+		addSoundFromNow(ENTITY_SALMON_FLOP, BigClientVersion.v1_13, "entity.salmon.flop");
+		addSoundFromNow(ENTITY_SALMON_HURT, BigClientVersion.v1_13, "entity.salmon.hurt");
+		
+		addSoundFromNow(ENTITY_SKELETON_HORSE_AMBIENT_WATER, BigClientVersion.v1_13, "entity.skeleton_horse.ambient_water");
+		addSoundFromNow(ENTITY_SKELETON_HORSE_GALLOP_WATER, BigClientVersion.v1_13, "entity.skeleton_horse.gallop_water");
+		addSoundFromNow(ENTITY_SKELETON_HORSE_JUMP_WATER, BigClientVersion.v1_13, "entity.skeleton_horse.jump_water");
+		addSoundFromNow(ENTITY_SKELETON_HORSE_STEP_WATER, BigClientVersion.v1_13, "entity.skeleton_horse.step_water");
+		addSoundFromNow(ENTITY_SKELETON_HORSE_SWIM, BigClientVersion.v1_13, "entity.skeleton_horse.swim");
+		
+		changeSoundFromNow(ENTITY_SLIME_SQUISH_SMALL, BigClientVersion.v1_13, "entity.slime.squish_small");
+		changeSoundFromNow(ENTITY_SLIME_DEATH_SMALL, BigClientVersion.v1_13, "entity.slime.death_small");
+		changeSoundFromNow(ENTITY_SLIME_HURT_SMALL, BigClientVersion.v1_13, "entity.slime.hurt_small");
+		changeSoundFromNow(ENTITY_SLIME_JUMP_SMALL, BigClientVersion.v1_13, "entity.slime.jump_small");
+		
+		changeSoundFromNow(ENTITY_SNOWMAN_AMBIENT, BigClientVersion.v1_13, "entity.snow_golem.ambient");
+		changeSoundFromNow(ENTITY_SNOWMAN_DEATH, BigClientVersion.v1_13, "entity.snow_golem.death");
+		changeSoundFromNow(ENTITY_SNOWMAN_HURT, BigClientVersion.v1_13, "entity.snow_golem.hurt");
+		changeSoundFromNow(ENTITY_SNOWMAN_SHOOT, BigClientVersion.v1_13, "entity.snow_golem.shoot");
+		
+		addSoundFromNow(ENTITY_SQUID_SQUIRT, BigClientVersion.v1_13, "entity.squid.squirt");
+		
+		addSoundFromNow(ENTITY_TROPICAL_FISH_AMBIENT, BigClientVersion.v1_13, "entity.tropical_fish.ambient");
+		addSoundFromNow(ENTITY_TROPICAL_FISH_DEATH, BigClientVersion.v1_13, "entity.tropical_fish.death");
+		addSoundFromNow(ENTITY_TROPICAL_FISH_FLOP, BigClientVersion.v1_13, "entity.tropical_fish.flop");
+		addSoundFromNow(ENTITY_TROPICAL_FISH_HURT, BigClientVersion.v1_13, "entity.tropical_fish.hurt");
+		
+		addSoundFromNow(ENTITY_TURTLE_AMBIENT_LAND, BigClientVersion.v1_13, "entity.turtle.ambient_land");
+		addSoundFromNow(ENTITY_TURTLE_DEATH, BigClientVersion.v1_13, "entity.turtle.death");
+		addSoundFromNow(ENTITY_TURTLE_DEATH_BABY, BigClientVersion.v1_13, "entity.turtle.death_baby");
+		addSoundFromNow(ENTITY_TURTLE_EGG_BREAK, BigClientVersion.v1_13, "entity.turtle.egg_break");
+		addSoundFromNow(ENTITY_TURTLE_EGG_CRACK, BigClientVersion.v1_13, "entity.turtle.egg_crack");
+		addSoundFromNow(ENTITY_TURTLE_EGG_HATCH, BigClientVersion.v1_13, "entity.turtle.egg_hatch");
+		addSoundFromNow(ENTITY_TURTLE_HURT, BigClientVersion.v1_13, "entity.turtle.hurt");
+		addSoundFromNow(ENTITY_TURTLE_HURT_BABY, BigClientVersion.v1_13, "entity.turtle.hurt_baby");
+		addSoundFromNow(ENTITY_TURTLE_LAY_EGG, BigClientVersion.v1_13, "entity.turtle.lay_egg");
+		addSoundFromNow(ENTITY_TURTLE_SHAMBLE, BigClientVersion.v1_13, "entity.turtle.shamble");
+		addSoundFromNow(ENTITY_TURTLE_SHAMBLE_BABY, BigClientVersion.v1_13, "entity.turtle.shamble_baby");
+		addSoundFromNow(ENTITY_TURTLE_SWIM, BigClientVersion.v1_13, "entity.turtle.swim");
+		
+		changeSoundFromNow(ENTITY_VILLAGER_TRADING, BigClientVersion.v1_13, "entity.villager.trade");
+		
+		changeSoundFromNow(ENTITY_VINDICATION_ILLAGER_AMBIENT, BigClientVersion.v1_13, "entity.vindicator.ambient");
+		changeSoundFromNow(ENTITY_VINDICATION_ILLAGER_DEATH, BigClientVersion.v1_13, "entity.vindicator.death");
+		changeSoundFromNow(ENTITY_VINDICATION_ILLAGER_HURT, BigClientVersion.v1_13, "entity.vindicator.hurt");
+		
+		addSoundFromNow(ENTITY_ZOMBIE_DESTROY_EGG, BigClientVersion.v1_13, "entity.zombie.destroy_egg");
+		addSoundFromNow(ENTITY_ZOMBIE_CONVERTED_TO_DROWNED, BigClientVersion.v1_13, "entity.zombie.converted_to_drowned");
+		
+		changeSoundFromNow(ENTITY_ZOMBIE_ATTACK_DOOR_WOOD, BigClientVersion.v1_13, "entity.zombie.attack_wooden_door");
+		changeSoundFromNow(ENTITY_ZOMBIE_BREAK_DOOR_WOOD, BigClientVersion.v1_13, "entity.zombie.break_wooden_door");
+		
+		changeSoundFromNow(ENTITY_ZOMBIE_PIG_AMBIENT, BigClientVersion.v1_13, "entity.zombie_pigman.ambient");
+		changeSoundFromNow(ENTITY_ZOMBIE_PIG_ANGRY, BigClientVersion.v1_13, "entity.zombie_pigman.angry");
+		changeSoundFromNow(ENTITY_ZOMBIE_PIG_DEATH, BigClientVersion.v1_13, "entity.zombie_pigman.death");
+		changeSoundFromNow(ENTITY_ZOMBIE_PIG_HURT, BigClientVersion.v1_13, "entity.zombie_pigman.hurt");
+		
+		addSoundFromNow(ITEM_ARMOR_EQUIP_TURTLE, BigClientVersion.v1_13, "item.armor.equip_turtle");
+		addSoundFromNow(ITEM_AXE_STRIP, BigClientVersion.v1_13, "item.axe.strip");
+		addSoundFromNow(ITEM_BUCKET_EMPTY_FISH, BigClientVersion.v1_13, "item.bucket.empty_fish");
+		addSoundFromNow(ITEM_BUCKET_FILL_FISH, BigClientVersion.v1_13, "item.bucket.fill_fish");
+		
+		addSoundFromNow(ITEM_TRIDENT_HIT, BigClientVersion.v1_13, "item.trident.hit");
+		addSoundFromNow(ITEM_TRIDENT_HIT_GROUND, BigClientVersion.v1_13, "item.trident.hit_ground");
+		addSoundFromNow(ITEM_TRIDENT_RETURN, BigClientVersion.v1_13, "item.trident.return");
+		addSoundFromNow(ITEM_TRIDENT_RIPTIDE_1, BigClientVersion.v1_13, "item.trident.riptide_1");
+		addSoundFromNow(ITEM_TRIDENT_RIPTIDE_2, BigClientVersion.v1_13, "item.trident.riptide_2");
+		addSoundFromNow(ITEM_TRIDENT_RIPTIDE_3, BigClientVersion.v1_13, "item.trident.riptide_3");
+		addSoundFromNow(ITEM_TRIDENT_THROW, BigClientVersion.v1_13, "item.trident.throw");
+		addSoundFromNow(ITEM_TRIDENT_THUNDER, BigClientVersion.v1_13, "item.trident.thunder");
+		
+		changeSoundFromNow(RECORD_11, BigClientVersion.v1_13, "music_disc.11");
+		changeSoundFromNow(RECORD_13, BigClientVersion.v1_13, "music_disc.13");
+		changeSoundFromNow(RECORD_BLOCKS, BigClientVersion.v1_13, "music_disc.blocks");
+		changeSoundFromNow(RECORD_CAT, BigClientVersion.v1_13, "music_disc.cat");
+		changeSoundFromNow(RECORD_CHIRP, BigClientVersion.v1_13, "music_disc.chirp");
+		changeSoundFromNow(RECORD_FAR, BigClientVersion.v1_13, "music_disc.far");
+		changeSoundFromNow(RECORD_MALL, BigClientVersion.v1_13, "music_disc.mall");
+		changeSoundFromNow(RECORD_MELLOHI, BigClientVersion.v1_13, "music_disc.mellohi");
+		changeSoundFromNow(RECORD_STAL, BigClientVersion.v1_13, "music_disc.stal");
+		changeSoundFromNow(RECORD_STRAD, BigClientVersion.v1_13, "music_disc.strad");
+		changeSoundFromNow(RECORD_WAIT, BigClientVersion.v1_13, "music_disc.wait");
+		changeSoundFromNow(RECORD_WARD, BigClientVersion.v1_13, "music_disc.ward");
+		
+		addSoundFromNow(MUSIC_UNDER_WATER, BigClientVersion.v1_13, "music.under_water");
 		
 		//1.12 pre6
 		addSoundFromNow(BLOCK_END_PORTAL_FRAME_FILL, BigClientVersion.v1_12, "block.end_portal_frame.fill");
